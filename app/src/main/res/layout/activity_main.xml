@@ -7,23 +7,56 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.giacomoceribelli.clothapp.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <include layout="@layout/toolbar"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="50dp">
 
-    </android.support.design.widget.AppBarLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/form_intro"
+            android:layout_marginTop="15dip"
+            android:layout_marginBottom="25dip"
+            />
 
-    <include layout="@layout/content_main" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:layout_marginLeft="10dp" />
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
 
-    <android.support.design.widget.FloatingActionButton
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lastname"
+            android:layout_marginTop="15dip"
+            android:layout_marginLeft="10dp" />
+        <EditText
+            android:id="@+id/edit_lastname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
+
+        <Button
+            android:id="@+id/form_button"
+            android:layout_height="wrap_content"
+            android:text="@string/form_button_label"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="30dp" />
+
+    </LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,4 +64,12 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_email" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/centro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_dialog_alert" />
+    -->
 </android.support.design.widget.CoordinatorLayout>

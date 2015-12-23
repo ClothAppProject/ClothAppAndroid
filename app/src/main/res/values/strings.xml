@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">ClothApp</string>
     <string name="action_settings">Settings</string>
+    <string name="form_intro">Invia il form premendo sul pulsante di invio.</string>
+    <string name="name">Inserisci il tuo nome</string>
+    <string name="lastname">Inserisci il tuo cognome</string>
+    <string name="form_button_label">Invia</string>
+    <string name="back_button_label">Indietro</string>
+    <string name="label_form_name">Nome Inserito:</string>
+    <string name="label_form_lastname">Cognome Inserito:</string>
 </resources>
