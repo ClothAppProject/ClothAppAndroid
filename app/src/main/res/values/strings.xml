@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">ClothApp</string>
     <string name="action_settings">Settings</string>
-    <string name="form_intro">Invia il form premendo sul pulsante di invio.</string>
-    <string name="name">Inserisci il tuo nome</string>
-    <string name="lastname">Inserisci il tuo cognome</string>
+
+
+    <string name="form_intro">Registrati o Esegui il Login</string>
+    <string name="form_login">Inserisci Username e Password:</string>
+
+    <string name="form_register">Inserisci i tuoi dati:</string>
+    <string name="username">Username</string>
+    <string name="mail">Email</string>
+    <string name="name">Nome</string>
+    <string name="lastname">Cognome</string>
+    <string name="password">Password</string>
+    <string name="password_confirm">Conferma Password</string>
+
+    <string name="login_button">Login</string>
+    <string name="register_button">Registrati</string>
+    <string name="barra_separatrice">____________________________________________</string>
     <string name="form_button_label">Invia</string>
     <string name="back_button_label">Indietro</string>
     <string name="label_form_name">Nome Inserito:</string>

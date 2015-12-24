@@ -27,19 +27,30 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-        Button button = (Button) findViewById(R.id.form_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button login = (Button) findViewById(R.id.login_button);
+        Button register = (Button) findViewById(R.id.register_button);
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 switch (v.getId()) {
-                    case R.id.form_button:
-                        final EditText edit_name = (EditText) findViewById(R.id.edit_name);
-                        final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
+                    case R.id.login_button:
                         Bundle bundle = new Bundle();
-                        bundle.putString("name", edit_name.getText().toString());
-                        bundle.putString("lastname", edit_lastname.getText().toString());
-                        Intent form_intent = new Intent(getApplicationContext(), Risultato.class);
+                        Intent form_intent = new Intent(getApplicationContext(), Login.class);
+                        form_intent.putExtras(bundle);
+                        startActivity(form_intent);
+                        break;
+                }
+            }
+        });
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                switch (v.getId()) {
+                    case R.id.register_button:
+                        Bundle bundle = new Bundle();
+                        Intent form_intent = new Intent(getApplicationContext(), Register.class);
                         form_intent.putExtras(bundle);
                         startActivity(form_intent);
                         break;
