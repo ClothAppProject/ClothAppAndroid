@@ -58,11 +58,11 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) { //listener sul bottone
                 switch (v.getId()) {
                     case R.id.form_register_button:
-                        if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString()))   {
+                        if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_SHORT)
-                             .setAction("Action", null).show();
-                        }else {
+                                    .setAction("Action", null).show();
+                        } else {
 
                             //altrimenti ficco nel bundle e invio l'intent alla nuova attività
                             /*Bundle bundle = new Bundle();
@@ -78,22 +78,39 @@ public class Register extends AppCompatActivity {
 
                             //creazione canale
                             try {
-                                //preparazione della connessione
+                                //creazione parametri
+                                String dataUrlParameters = "username=" + edit_username.getText().toString();
 
-                                System.out.println("creazione connessione");
+                                // Create connection
                                 URL url = new URL("http://192.168.1.2:3000/reg");
                                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                connection.setRequestMethod("POST");
-                                connection.setDoInput(false);
+                                connection.setRequestMethod("GET");
+                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                                connection.setRequestProperty("Content-Length", "" + Integer.toString(dataUrlParameters.getBytes().length));
+                                connection.setRequestProperty("Content-Language", "en-US");
+                                connection.setUseCaches(false);
+                                connection.setDoInput(true);
                                 connection.setDoOutput(true);
 
+                                // Send request
+                                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+                                wr.writeBytes(dataUrlParameters);
+                                wr.flush();
+                                wr.close();
 
-                                /*HashMap<String , String> postDataParams = new HashMap<String, String>();
+                                // Get Response
+                                InputStream is = connection.getInputStream();
+                                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                                String line;
+                                StringBuffer response = new StringBuffer();
+                                while ((line = rd.readLine()) != null) {
+                                    response.append(line);
+                                    response.append('\r');
+                                }
+                                rd.close();
+                                String responseStr = response.toString();
+                                Log.d("Server response", responseStr);
 
-                                postDataParams.put("username", edit_username.getText().toString());
-
-                                performPostCall("http://192.168.1.2:3000/reg", postDataParams);
-*/
                                 System.out.println("creata connessione");
                                 //inserisco tutti i parametri nella stringa da inziare via post
                                 String data = "username=" + URLEncoder.encode(edit_username.getText().toString()) +
@@ -103,23 +120,13 @@ public class Register extends AppCompatActivity {
                                         "&lastname=" + URLEncoder.encode(edit_lastname.getText().toString()) +
                                         "&date=" + URLEncoder.encode(edit_date.getText().toString());
 
-
-                                connection.getOutputStream().write(data.getBytes("UTF8"));
-                                System.out.println("Dati inviati");
-                                //preparo un output sul quale inserisco i dati e lo invio
-                                /*
-                                DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-                                System.out.println("preparati dati");
-                                out.writeBytes(data);
-                                out.flush();
-                                out.close();
-                                System.out.println("chiuso stream dati");
-                                //leggo risposta della connesione
-
+                                //stampa codice di risposta
                                 int response_code = connection.getResponseCode();
                                 System.out.println(response_code);
-                                */
-                            }catch (Exception e)  {
+
+                                //chiusura connessione
+                                connection.disconnect();
+                            } catch (Exception e) {
                                 System.out.println("Errore nell'invio dei dati");
                             }
                         }
@@ -130,80 +137,15 @@ public class Register extends AppCompatActivity {
     }
 
     //funzione per controllare le 2 password siano uguali e non nulle
-    private boolean checkPassWordAndConfirmPassword(String password,String confirmPassword)
-    {
+    private boolean checkPassWordAndConfirmPassword(String password, String confirmPassword) {
         boolean pstatus = true;
-        if (confirmPassword != null && password != null)
-        {
-            if (password.equals(confirmPassword))
-            {
+        if (confirmPassword != null && password != null) {
+            if (password.equals(confirmPassword)) {
                 pstatus = false;
             }
         }
         return pstatus;
     }
-    public String performPostCall(String requestURL,
-                                  HashMap<String, String> postDataParams) {
-
-        URL url;
-        String response = "";
-        try {
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
-
-            writer.flush();
-            writer.close();
-            os.close();
-            int responseCode=conn.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                    response+=line;
-
-                    Log.e("Res:", response);
-                }
-            }
-            else {
-                response="";
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return response;
-    }
-
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
-
 
 
 }
