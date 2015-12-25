@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.giacomoceribelli.clothapp">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -9,26 +9,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.giacomoceribelli.clothapp.SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        </activity>
         <activity
-            android:name=".Login"
+            android:name="com.example.giacomoceribelli.clothapp.MainActivity"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".Register"
+            android:name="com.example.giacomoceribelli.clothapp.Login"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".Risultato"
+            android:name="com.example.giacomoceribelli.clothapp.Register"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="com.example.giacomoceribelli.clothapp.Risultato"
             android:label="@string/app_name">
         </activity>
         <meta-data

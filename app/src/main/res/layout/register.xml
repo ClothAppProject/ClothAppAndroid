@@ -77,13 +77,29 @@
             android:text=""
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/birthday"
+            android:layout_marginTop="15dip"
+            android:layout_marginLeft="10dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="datetime"
+            android:ems="10"
+            android:id="@+id/edit_date"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/password"
             android:layout_marginTop="15dip"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:text="@string/password" />
+
         <EditText
             android:id="@+id/edit_password"
             android:layout_width="fill_parent"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="257dp"
+        android:layout_height="310dp"
+        android:id="@+id/logo_splash"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/logo"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="ClothApp"
+        android:id="@+id/text_splash"
+        android:textSize="50dp"
+        android:textAlignment="center" />
+</LinearLayout>
