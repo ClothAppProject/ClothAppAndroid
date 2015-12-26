@@ -71,7 +71,7 @@ public class Register extends AppCompatActivity {
                             bundle.putString("name", edit_username.getText().toString());
                             bundle.putString("lastname", edit_username.getText().toString());
                             bundle.putString("password", edit_password.getText().toString());
-                            Intent form_intent = new Intent(getApplicationContext(), Risultato.class);
+                            Intent form_intent = new Intent(getApplicationContext(), HomePage.class);
                             form_intent.putExtras(bundle);
                             startActivity(form_intent);*/
 

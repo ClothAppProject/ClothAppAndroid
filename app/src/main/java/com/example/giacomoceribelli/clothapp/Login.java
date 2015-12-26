@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
                             Bundle bundle = new Bundle();
                             bundle.putString("username", edit_username.getText().toString());
                             bundle.putString("password", edit_password.getText().toString());
-                            Intent form_intent = new Intent(getApplicationContext(), Risultato.class);
+                            Intent form_intent = new Intent(getApplicationContext(), Register.class);
                             form_intent.putExtras(bundle);
                             startActivity(form_intent);
                         }
