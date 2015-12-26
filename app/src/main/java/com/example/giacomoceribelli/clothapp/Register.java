@@ -1,39 +1,13 @@
 package com.example.giacomoceribelli.clothapp;
 
-import android.app.DownloadManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.giacomoceribelli.clothapp.R;
-import com.google.android.gms.appdatasearch.GetRecentContextCall;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.lang.reflect.Array;
 
 
 public class Register extends AppCompatActivity {
@@ -64,7 +38,7 @@ public class Register extends AppCompatActivity {
                                     .setAction("Action", null).show();
                         } else {
 
-                            //altrimenti ficco nel bundle e invio l'intent alla nuova attività
+                            //Ficco nel bundle e invio l'intent alla nuova attività
                             /*Bundle bundle = new Bundle();
                             bundle.putString("username", edit_username.getText().toString());
                             bundle.putString("mail", edit_mail.getText().toString());
@@ -75,60 +49,29 @@ public class Register extends AppCompatActivity {
                             form_intent.putExtras(bundle);
                             startActivity(form_intent);
                             */
+                            //Inserisco in una stringa da passare via post tutti i parametri...
+                            int n_parametri = 6;
+                            String indirizzo = "http://www.ceribbo.com/server.php";
 
-                            //creazione canale
-                            try {
-                                //creazione parametri
-                                String dataUrlParameters = "username=" + edit_username.getText().toString();
+                            String[] param_post = new String[2*n_parametri+1];
+                            param_post[0] = indirizzo;
+                            param_post[1] = "username";
+                            param_post[2] = edit_username.getText().toString();
+                            param_post[3] = "password";
+                            param_post[4] = edit_password.getText().toString();
+                            param_post[5] = "mail";
+                            param_post[6] = edit_mail.getText().toString();
+                            param_post[7] = "name";
+                            param_post[8] = edit_name.getText().toString();
+                            param_post[9] = "lastname";
+                            param_post[10] = edit_lastname.getText().toString();
+                            param_post[11] = "date";
+                            param_post[12] = edit_date.getText().toString();
+                            System.out.println(new Post().execute(param_post));
 
-                                // Create connection
-                                URL url = new URL("http://192.168.22.9:3000/reg");
-                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                connection.setRequestMethod("GET");
-                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                connection.setRequestProperty("Content-Length", "" + Integer.toString(dataUrlParameters.getBytes().length));
-                                connection.setRequestProperty("Content-Language", "en-US");
-                                connection.setUseCaches(false);
-                                connection.setDoInput(true);
-                                connection.setDoOutput(true);
 
-                                // Send request
-                                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                                wr.writeBytes(dataUrlParameters);
-                                wr.flush();
-                                wr.close();
+                            //System.out.println(new Get().execute("http://testone-1161.appspot.com"));
 
-                                // Get Response
-                                InputStream is = connection.getInputStream();
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                                String line;
-                                StringBuffer response = new StringBuffer();
-                                while ((line = rd.readLine()) != null) {
-                                    response.append(line);
-                                    response.append('\r');
-                                }
-                                rd.close();
-                                String responseStr = response.toString();
-                                Log.d("Server response", responseStr);
-
-                                System.out.println("creata connessione");
-                                //inserisco tutti i parametri nella stringa da inziare via post
-                                String data = "username=" + URLEncoder.encode(edit_username.getText().toString()) +
-                                        "&mail=" + URLEncoder.encode(edit_mail.getText().toString()) +
-                                        "&password=" + URLEncoder.encode(edit_username.getText().toString()) +
-                                        "&name=" + URLEncoder.encode(edit_name.getText().toString()) +
-                                        "&lastname=" + URLEncoder.encode(edit_lastname.getText().toString()) +
-                                        "&date=" + URLEncoder.encode(edit_date.getText().toString());
-
-                                //stampa codice di risposta
-                                int response_code = connection.getResponseCode();
-                                System.out.println(response_code);
-
-                                //chiusura connessione
-                                connection.disconnect();
-                            } catch (Exception e) {
-                                System.out.println("Errore nell'invio dei dati");
-                            }
                         }
                         break;
                 }
@@ -145,6 +88,7 @@ public class Register extends AppCompatActivity {
             }
         }
         return pstatus;
+
     }
 
 
