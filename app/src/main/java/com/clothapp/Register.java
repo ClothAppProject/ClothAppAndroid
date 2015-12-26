@@ -1,5 +1,7 @@
 package com.clothapp;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.clothapp.Get;
-import com.clothapp.Post;
-import com.clothapp.R;
 
 
 public class Register extends AppCompatActivity {
+    final String info= "Log-Info"; //name of the sharedPreference file. It shows whether the user is logged or not
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,9 @@ public class Register extends AppCompatActivity {
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_SHORT)
                                     .setAction("Action", null).show();
-                        } else {
+                        }
+                        //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
+                        else {
 
                             //altrimenti ficco nel bundle e invio l'intent alla nuova attività
                             /*Bundle bundle = new Bundle();
@@ -59,16 +61,29 @@ public class Register extends AppCompatActivity {
                             data[1] = "username";
                             data[2] = edit_username.getText().toString();
                             data[3] = "name";
-                            data[4] = edit_username.getText().toString();
+                            data[4] = edit_name.getText().toString();
                             data[5] = "lastname";
-                            data[6] = edit_username.getText().toString();
+                            data[6] = edit_lastname.getText().toString();
                             data[7] = "password";
-                            data[8] = edit_username.getText().toString();
+                            data[8] = edit_password.getText().toString();
                             data[9] = "mail";
-                            data[10] = edit_username.getText().toString();
-                            data[11] = "data";
-                            data[12] = edit_username.getText().toString();
-                            System.out.println(new Post().execute(data));
+                            data[10] = edit_mail.getText().toString();
+                            data[11] = "date";
+                            data[12] = edit_date.getText().toString();
+                            AsyncTask result = new Post().execute(data);
+                            if (result.toString()=="")   {
+                                System.out.println("nessuna risposta dal server");
+                            }else{
+                                //inseriti nel db, inserisco dati nello sharedPref e metto variabile logged a true
+                                SharedPreferences userInformation = getSharedPreferences(info, MODE_PRIVATE);
+                                userInformation.edit().putString("username",data[2]).commit();
+                                userInformation.edit().putString("name",data[4]).commit();
+                                userInformation.edit().putString("lastname",data[6]).commit();
+                                userInformation.edit().putString("password",data[8]).commit();
+                                userInformation.edit().putString("mail",data[10]).commit();
+                                userInformation.edit().putString("date",data[12]).commit();
+                                //userInformation.edit().putBoolean("isLogged",true).commit();
+                            }
 
                             //prova di una get
                             System.out.println(new Get().execute("http://testone-1161.appspot.com/"));

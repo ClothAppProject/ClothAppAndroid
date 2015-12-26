@@ -2,7 +2,6 @@ package com.clothapp;
 
 import android.os.AsyncTask;
 
-import org.apache.http.client.ClientProtocolException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

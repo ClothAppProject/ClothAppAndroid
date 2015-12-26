@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.clothapp.Homepage;
 import com.clothapp.R;
 
 
