@@ -68,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
                 }
 
             }*/
-
+            System.out.println("I just downloaded all the images from the server!!");
             return null;
         }
 

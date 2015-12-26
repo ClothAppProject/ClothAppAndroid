@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.giacomoceribelli.clothapp">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -9,30 +11,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.giacomoceribelli.clothapp.SplashScreen"
+            android:name=".Launcher_Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.giacomoceribelli.clothapp.MainActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
         <activity
-            android:name="com.example.giacomoceribelli.clothapp.Login"
-            android:label="@string/app_name">
-        </activity>
+            android:name=".Login"
+            android:label="@string/app_name" />
         <activity
-            android:name="com.example.giacomoceribelli.clothapp.Register"
-            android:label="@string/app_name">
-        </activity>
+            android:name=".Homepage"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".Register"
+            android:label="@string/app_name" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+<!--
+        <activity android:name=".Launcher_Activity" />
+        <activity android:name=".Homepage"></activity>
+    -->
+
     </application>
 
 </manifest>
