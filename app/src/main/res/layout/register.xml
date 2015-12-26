@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.giacomoceribelli.clothapp.Register"
+    tools:context="com.clothapp.Register"
     android:orientation="vertical">
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"

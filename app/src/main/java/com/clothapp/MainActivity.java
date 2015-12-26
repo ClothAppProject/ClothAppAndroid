@@ -1,4 +1,4 @@
-package com.example.giacomoceribelli.clothapp;
+package com.clothapp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.giacomoceribelli.clothapp.R;
+import com.clothapp.R;
 
 
 public class MainActivity extends AppCompatActivity {

@@ -1,13 +1,15 @@
-package com.example.giacomoceribelli.clothapp;
+package com.clothapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.clothapp.R;
+
 public class Launcher_Activity extends AppCompatActivity {
 
-    final String info= "Log-Info"; //   name of the sharedPreference file. It shows whether the user is logged or not
+    final String info= "Log-Info"; //name of the sharedPreference file. It shows whether the user is logged or not
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,6 @@ public class Launcher_Activity extends AppCompatActivity {
         SharedPreferences userInformation = getSharedPreferences(info, MODE_PRIVATE);
 
         //controllo se esiste il valore isLogged nelle sharedPreferences, se non esiste o è false ritorna false
-
         return userInformation.getBoolean("isLogged",false);
     }
 }

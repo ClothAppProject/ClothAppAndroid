@@ -1,4 +1,4 @@
-package com.example.giacomoceribelli.clothapp;
+package com.clothapp;
 
 import android.os.AsyncTask;
 

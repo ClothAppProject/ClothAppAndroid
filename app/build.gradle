@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.example.giacomoceribelli.clothapp"
+        applicationId "com.clothapp"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1

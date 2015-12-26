@@ -1,9 +1,11 @@
-package com.example.giacomoceribelli.clothapp;
+package com.clothapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.content.Intent;
+
+import com.clothapp.R;
 
 public class SplashScreen extends AppCompatActivity {
 
