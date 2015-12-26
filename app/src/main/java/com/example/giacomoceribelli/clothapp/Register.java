@@ -73,62 +73,29 @@ public class Register extends AppCompatActivity {
                             bundle.putString("password", edit_password.getText().toString());
                             Intent form_intent = new Intent(getApplicationContext(), Risultato.class);
                             form_intent.putExtras(bundle);
-                            startActivity(form_intent);
-                            */
+                            startActivity(form_intent);*/
 
-                            //creazione canale
-                            try {
-                                //creazione parametri
-                                String dataUrlParameters = "username=" + edit_username.getText().toString();
+                            //prova di una post
+                            int dim_param = 6;
+                            String indirizzo = "http://www.ceribbo.com/server.php";
+                            String[] data = new String[2*dim_param+1];
+                            data[0] = indirizzo;
+                            data[1] = "username";
+                            data[2] = edit_username.getText().toString();
+                            data[3] = "name";
+                            data[4] = edit_username.getText().toString();
+                            data[5] = "lastname";
+                            data[6] = edit_username.getText().toString();
+                            data[7] = "password";
+                            data[8] = edit_username.getText().toString();
+                            data[9] = "mail";
+                            data[10] = edit_username.getText().toString();
+                            data[11] = "data";
+                            data[12] = edit_username.getText().toString();
+                            System.out.println(new Post().execute(data));
 
-                                // Create connection
-                                URL url = new URL("http://192.168.22.9:3000/reg");
-                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                                connection.setRequestMethod("GET");
-                                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                                connection.setRequestProperty("Content-Length", "" + Integer.toString(dataUrlParameters.getBytes().length));
-                                connection.setRequestProperty("Content-Language", "en-US");
-                                connection.setUseCaches(false);
-                                connection.setDoInput(true);
-                                connection.setDoOutput(true);
-
-                                // Send request
-                                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                                wr.writeBytes(dataUrlParameters);
-                                wr.flush();
-                                wr.close();
-
-                                // Get Response
-                                InputStream is = connection.getInputStream();
-                                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-                                String line;
-                                StringBuffer response = new StringBuffer();
-                                while ((line = rd.readLine()) != null) {
-                                    response.append(line);
-                                    response.append('\r');
-                                }
-                                rd.close();
-                                String responseStr = response.toString();
-                                Log.d("Server response", responseStr);
-
-                                System.out.println("creata connessione");
-                                //inserisco tutti i parametri nella stringa da inziare via post
-                                String data = "username=" + URLEncoder.encode(edit_username.getText().toString()) +
-                                        "&mail=" + URLEncoder.encode(edit_mail.getText().toString()) +
-                                        "&password=" + URLEncoder.encode(edit_username.getText().toString()) +
-                                        "&name=" + URLEncoder.encode(edit_name.getText().toString()) +
-                                        "&lastname=" + URLEncoder.encode(edit_lastname.getText().toString()) +
-                                        "&date=" + URLEncoder.encode(edit_date.getText().toString());
-
-                                //stampa codice di risposta
-                                int response_code = connection.getResponseCode();
-                                System.out.println(response_code);
-
-                                //chiusura connessione
-                                connection.disconnect();
-                            } catch (Exception e) {
-                                System.out.println("Errore nell'invio dei dati");
-                            }
+                            //prova di una get
+                            System.out.println(new Get().execute("http://testone-1161.appspot.com/"));
                         }
                         break;
                 }
