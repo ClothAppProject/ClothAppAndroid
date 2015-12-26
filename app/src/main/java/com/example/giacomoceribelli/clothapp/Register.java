@@ -82,7 +82,7 @@ public class Register extends AppCompatActivity {
                                 String dataUrlParameters = "username=" + edit_username.getText().toString();
 
                                 // Create connection
-                                URL url = new URL("http://192.168.22.9:3000/reg");
+                                URL url = new URL("http://testone-1161.appspot.com");
                                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                                 connection.setRequestMethod("GET");
                                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
