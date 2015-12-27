@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
@@ -34,7 +35,7 @@ public class Homepage extends AppCompatActivity {
                         userInformation.edit().putString("date","").commit();
                         userInformation.edit().putBoolean("isLogged",false).commit();
                         System.out.println("debug: logout eseguito");
-                        Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent form_intent = new Intent(getApplicationContext(), LauncherActivity.class);
                         startActivity(form_intent);
                         finish();
                         break;

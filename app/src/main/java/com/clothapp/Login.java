@@ -20,7 +20,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         Button button = (Button) findViewById(R.id.form_login_button);
         button.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click

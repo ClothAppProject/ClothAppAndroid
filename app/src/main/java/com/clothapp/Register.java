@@ -22,7 +22,7 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.activity_register);
 
         //prendo tutti valori
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
@@ -71,18 +71,6 @@ public class Register extends AppCompatActivity {
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
                                     if (e==null)    {
-                                        /*ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
-                                        query.whereEqualTo("username", "cicciolina");
-                                        query.getFirstInBackground(new GetCallback<ParseUser>() {
-                                            public void done(ParseUser object, ParseException e) {
-                                                if (object == null) {
-                                                    System.out.println("debug: errore nella query= "+e.getMessage());
-                                                } else {
-                                                    System.out.println(object.getObjectId().toString());
-                                                }
-                                            }
-                                        });*/
-
 
                                         //caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                         System.out.println("debug: registrazione eseguita corretttamente");
@@ -94,7 +82,7 @@ public class Register extends AppCompatActivity {
                                         userInformation.edit().putString("email",edit_email.getText().toString()).commit();
                                         userInformation.edit().putString("date",edit_date.getText().toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
-                                        Intent form_intent = new Intent(Register.this, Homepage.class);
+                                        Intent form_intent = new Intent(getApplicationContext(), Homepage.class);
                                         startActivity(form_intent);
                                         finish();
                                     }else {

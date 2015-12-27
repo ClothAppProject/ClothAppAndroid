@@ -12,16 +12,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splashscreen);
+        setContentView(R.layout.activity_splashscreen);
 
-        //controllo se utente è sloggato
-        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-        if (!userInformation.getBoolean("isLogged",true)) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            // close this activity
-            finish();
-        }
         /**
          * Showing splashscreen while making network calls to download necessary
          * data before launching the app Will use AsyncTask to make http call
@@ -87,13 +79,9 @@ public class SplashScreen extends AppCompatActivity {
             super.onPostExecute(result);
 
             // After completing http call
-            // will close this activity and lauch main activity
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-
+            // will close this activity and lauch homepage activity
+            Intent i = new Intent(getApplicationContext(), Homepage.class);
             SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-            if (userInformation.getBoolean("isLogged",false))   {
-                i = new Intent(getApplicationContext(), Homepage.class);
-            }
             startActivity(i);
 
             // close this activity

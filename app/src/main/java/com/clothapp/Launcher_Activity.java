@@ -28,7 +28,7 @@ public class Launcher_Activity extends AppCompatActivity {
         } else {
             System.out.println("debug: not logged");
             // redirecting the user to the main activity where he can decides to log in or sign up
-            Intent i = new Intent(getApplicationContext(), SplashScreen.class);
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
             finish();
         }
