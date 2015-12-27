@@ -1,6 +1,7 @@
 package com.clothapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.clothapp.R;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 
 public class Login extends AppCompatActivity {
@@ -31,7 +35,16 @@ public class Login extends AppCompatActivity {
                         if (checknull(edit_password.getText().toString(),edit_username.getText().toString())) {
                             Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_SHORT)
                                     .setAction("Action", null).show();
-                        }else {
+                        }else{
+                            try {
+                                ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
+                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                userInformation.edit().putBoolean("isLogged",true);
+                                System.out.println("Login eseguito correttamente");
+                            }catch (ParseException e) {
+                                new ExceptionCheck().check(e.getCode(),v,e.getMessage());
+                            }
+
                             Bundle bundle = new Bundle();
                             bundle.putString("username", edit_username.getText().toString());
                             bundle.putString("password", edit_password.getText().toString());

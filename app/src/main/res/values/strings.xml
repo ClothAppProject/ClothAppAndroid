@@ -17,6 +17,7 @@
 
     <string name="login_button">Login</string>
     <string name="register_button">Registrati</string>
+    <string name="logout_button">Logout</string>
     <string name="barra_separatrice">____________________________________________</string>
     <string name="form_button_label">Invia</string>
     <string name="back_button_label">Indietro</string>
@@ -24,5 +25,6 @@
     <string name="label_form_lastname">Cognome Inserito:</string>
 
     <string name="finale">You Won!</string>
+    <string name="info">Log-Info</string>
 
 </resources>

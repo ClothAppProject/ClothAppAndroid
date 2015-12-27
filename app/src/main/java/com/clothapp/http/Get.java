@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.http;
 
 import android.os.AsyncTask;
 

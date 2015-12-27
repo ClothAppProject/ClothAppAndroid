@@ -2,7 +2,6 @@ package com.clothapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,24 +9,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class Register extends AppCompatActivity {
-    final String info= "Log-Info"; //name of the sharedPreference file. It shows whether the user is logged or not
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+
         //prendo tutti valori
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
@@ -41,37 +37,73 @@ public class Register extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //listener sul bottone
+                final View vi = v;
                 switch (v.getId()) {
                     case R.id.form_register_button:
                         if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
+                            //va inserito controllo su password con almeno 1 numero e una lettera e lunga almento tot
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_SHORT)
                                     .setAction("Action", null).show();
                             System.out.println("debug: le password non coincidono");
-                        }
-                        //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
-                        else {
+                        }else if(!isValidEmailAddress(edit_email.getText().toString())) {
+                            //nel caso in cui la mail non sia valida
+                            Snackbar.make(v, "La mail inserita non è valida", Snackbar.LENGTH_SHORT)
+                                    .setAction("Action", null).show();
+                            System.out.println("debug: la mail inserita è sbagliata");
+                        }else if(edit_lastname.getText().toString()==""||edit_name.getText().toString()=="")  {
+                            //nel caso in cui la mail non sia valida
+                            Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_SHORT)
+                                    .setAction("Action", null).show();
+                            System.out.println("debug: nome o cognome non posssono essere vuoti");
+                        }else{
+                            //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
                             ParseUser.logOut();
                             ParseUser user = new ParseUser();
                             user.setUsername(edit_username.getText().toString());
                             user.setPassword(edit_password.getText().toString());
                             user.setEmail(edit_email.getText().toString());
+                            user.put("name",edit_name.getText().toString());
+                            user.put("lastname",edit_lastname.getText().toString());
+
+                            System.out.println("debug: userID= "+user.getObjectId());
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
-                                    if (e == null) {
-                                        System.out.println("debug: chiamata eseguita correttamente");
-                                    } else {
-                                        System.out.println("debug: errore= "+e.getMessage());
+                                    if (e==null)    {
+                                        /*ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
+                                        query.whereEqualTo("username", "cicciolina");
+                                        query.getFirstInBackground(new GetCallback<ParseUser>() {
+                                            public void done(ParseUser object, ParseException e) {
+                                                if (object == null) {
+                                                    System.out.println("debug: errore nella query= "+e.getMessage());
+                                                } else {
+                                                    System.out.println(object.getObjectId().toString());
+                                                }
+                                            }
+                                        });*/
 
-                                        SharedPreferences userInformation = getSharedPreferences(info, MODE_PRIVATE);
+
+                                        //caso in cui registrazione è andata a buon fine e non ci sono eccezioni
+                                        System.out.println("debug: registrazione eseguita corretttamente");
+                                        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                        userInformation.edit().putString("username",edit_username.getText().toString()).commit();
+                                        userInformation.edit().putString("name",edit_name.getText().toString()).commit();
+                                        userInformation.edit().putString("lastname",edit_lastname.getText().toString()).commit();
+                                        //userInformation.edit().putString("password",edit_password.getText().toString()).commit();
+                                        userInformation.edit().putString("email",edit_email.getText().toString()).commit();
+                                        userInformation.edit().putString("date",edit_date.getText().toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
-                                        Intent i = new Intent(Register.this, Homepage.class);
-                                        startActivity(i);
+                                        Intent form_intent = new Intent(Register.this, Homepage.class);
+                                        startActivity(form_intent);
                                         finish();
+                                    }else {
+                                        //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                        new ExceptionCheck().check(e.getCode(),vi,e.getMessage());
                                     }
                                 }
                             });
+
 
                             /*
                             //prova di una post
@@ -95,21 +127,10 @@ public class Register extends AppCompatActivity {
                             AsyncTask result = new Post().execute(data);
                             if (result.toString()=="")   {
                                 System.out.println("nessuna risposta dal server");
-                            }else{
-                                //inseriti nel db, inserisco dati nello sharedPref e metto variabile logged a true
-                                SharedPreferences userInformation = getSharedPreferences(info, MODE_PRIVATE);
-                                userInformation.edit().putString("username",data[2]).commit();
-                                userInformation.edit().putString("name",data[4]).commit();
-                                userInformation.edit().putString("lastname",data[6]).commit();
-                                userInformation.edit().putString("password",data[8]).commit();
-                                userInformation.edit().putString("email",data[10]).commit();
-                                userInformation.edit().putString("date",data[12]).commit();
-                                //userInformation.edit().putBoolean("isLogged",true).commit();
-                            }*/
-
-
+                            }
                             //prova di una get
                             //System.out.println(new Get().execute("http://www.clothapp.it/users"));
+                            */
                         }
                         break;
                 }
@@ -126,6 +147,14 @@ public class Register extends AppCompatActivity {
             }
         }
         return pstatus;
+    }
+    //funzione per controllare che sia indirizzo mail valido
+    private boolean isValidEmailAddress(String email) {
+        if (email == "") return false;
+        String regex = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 
