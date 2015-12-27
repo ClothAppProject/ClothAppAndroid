@@ -16,6 +16,11 @@ public class Launcher_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
+
+        //inizializzo parse
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this);
+
         if(checkIfLogged()) {
             System.out.println("debug: logged");
             //  redirecting user to splash screen to fetch the images and then go to the homepage

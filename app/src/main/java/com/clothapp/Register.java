@@ -14,6 +14,8 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class Register extends AppCompatActivity {
@@ -22,9 +24,6 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //inizializzo parse
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
@@ -52,18 +51,28 @@ public class Register extends AppCompatActivity {
                         //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
                         else {
 
+                            ParseUser user = new ParseUser();
+                            user.setUsername("ceribbo");
+                            user.setPassword("password");
+                            user.setEmail("email@example.com");
 
-                            ParseObject utente = new ParseObject("User");
-                            utente.put("username", "ceribbo");
-                            utente.put("email", "giacomo@ceribbo.com");
-                            utente.put("password", "password");
-                            utente.saveInBackground();
+                            user.signUpInBackground(new SignUpCallback() {
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        System.out.println("debug: ok");
+                                        // Ok, tutto a posto.
+                                    } else {
+                                        System.out.println("debug: errore");
+                                        // Registrazione fallita. Vedi messaggio di e per capire cosa è andato storto.
+                                    }
+                                }
+                            });
 
                             /*
                             //prova di una post
                             int dim_param = 6;
                             //String indirizzo = "http://ceribbo.com/server.php";
-                            String indirizzo = "http://clothapp.parseapp.com/user/signup";
+                            String indirizzo = "http://www.clothapp.it/user/signup";
                             String[] data = new String[2*dim_param+1];
                             data[0] = indirizzo;
                             data[1] = "username";
@@ -91,10 +100,11 @@ public class Register extends AppCompatActivity {
                                 userInformation.edit().putString("email",data[10]).commit();
                                 userInformation.edit().putString("date",data[12]).commit();
                                 //userInformation.edit().putBoolean("isLogged",true).commit();
-                            }
-*/
+                            }*/
+
+
                             //prova di una get
-                            //System.out.println(new Get().execute("http://testone-1161.appspot.com/"));
+                            //System.out.println(new Get().execute("http://www.clothapp.it/users"));
                         }
                         break;
                 }
