@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 
 public class Register extends AppCompatActivity {
@@ -16,9 +21,13 @@ public class Register extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //inizializzo parse
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-
         //prendo tutti valori
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
@@ -38,21 +47,19 @@ public class Register extends AppCompatActivity {
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_SHORT)
                                     .setAction("Action", null).show();
+                            System.out.println("debug: le password non coincidono");
                         }
                         //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
                         else {
 
-                            //altrimenti ficco nel bundle e invio l'intent alla nuova attività
-                            /*Bundle bundle = new Bundle();
-                            bundle.putString("username", edit_username.getText().toString());
-                            bundle.putString("mail", edit_mail.getText().toString());
-                            bundle.putString("name", edit_username.getText().toString());
-                            bundle.putString("lastname", edit_username.getText().toString());
-                            bundle.putString("password", edit_password.getText().toString());
-                            Intent form_intent = new Intent(getApplicationContext(), HomePage.class);
-                            form_intent.putExtras(bundle);
-                            startActivity(form_intent);*/
 
+                            ParseObject utente = new ParseObject("User");
+                            utente.put("username", "ceribbo");
+                            utente.put("email", "giacomo@ceribbo.com");
+                            utente.put("password", "password");
+                            utente.saveInBackground();
+
+                            /*
                             //prova di una post
                             int dim_param = 6;
                             //String indirizzo = "http://ceribbo.com/server.php";
@@ -85,7 +92,7 @@ public class Register extends AppCompatActivity {
                                 userInformation.edit().putString("date",data[12]).commit();
                                 //userInformation.edit().putBoolean("isLogged",true).commit();
                             }
-
+*/
                             //prova di una get
                             //System.out.println(new Get().execute("http://testone-1161.appspot.com/"));
                         }

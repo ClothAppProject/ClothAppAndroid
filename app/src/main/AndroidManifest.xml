@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clothapp">
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,6 +10,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- meta-data per parse -->
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8" />
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk" />
+        <!---->
+
         <activity
             android:name="com.clothapp.Launcher_Activity"
             android:label="@string/app_name"

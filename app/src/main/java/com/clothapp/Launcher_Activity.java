@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.clothapp.R;
+import com.parse.Parse;
 
 public class Launcher_Activity extends AppCompatActivity {
 
