@@ -50,20 +50,18 @@ public class Register extends AppCompatActivity {
                         }
                         //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
                         else {
-
+                            ParseUser.logOut();
                             ParseUser user = new ParseUser();
-                            user.setUsername("ceribbo");
-                            user.setPassword("password");
-                            user.setEmail("email@example.com");
+                            user.setUsername(edit_username.getText().toString());
+                            user.setPassword(edit_password.getText().toString());
+                            user.setEmail(edit_email.getText().toString());
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {
-                                        System.out.println("debug: ok");
-                                        // Ok, tutto a posto.
+                                        System.out.println("debug: chiamata eseguita correttamente");
                                     } else {
-                                        System.out.println("debug: errore");
-                                        // Registrazione fallita. Vedi messaggio di e per capire cosa è andato storto.
+                                        System.out.println("debug: errore= "+e.getMessage());
                                     }
                                 }
                             });
