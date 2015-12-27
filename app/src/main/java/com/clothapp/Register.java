@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +63,12 @@ public class Register extends AppCompatActivity {
                                         System.out.println("debug: chiamata eseguita correttamente");
                                     } else {
                                         System.out.println("debug: errore= "+e.getMessage());
+
+                                        SharedPreferences userInformation = getSharedPreferences(info, MODE_PRIVATE);
+                                        userInformation.edit().putBoolean("isLogged",true).commit();
+                                        Intent i = new Intent(Register.this, Homepage.class);
+                                        startActivity(i);
+                                        finish();
                                     }
                                 }
                             });
