@@ -23,7 +23,7 @@ public class Register extends AppCompatActivity {
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
         final EditText edit_username = (EditText) findViewById(R.id.edit_username);
-        final EditText edit_mail = (EditText) findViewById(R.id.edit_mail);
+        final EditText edit_email = (EditText) findViewById(R.id.edit_email);
         final EditText edit_name = (EditText) findViewById(R.id.edit_name);
         final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
         final EditText edit_date = (EditText) findViewById(R.id.edit_date);
@@ -55,19 +55,20 @@ public class Register extends AppCompatActivity {
 
                             //prova di una post
                             int dim_param = 6;
-                            String indirizzo = "http://www.ceribbo.com/server.php";
+                            //String indirizzo = "http://ceribbo.com/server.php";
+                            String indirizzo = "http://clothapp.parseapp.com/user/signup";
                             String[] data = new String[2*dim_param+1];
                             data[0] = indirizzo;
                             data[1] = "username";
                             data[2] = edit_username.getText().toString();
-                            data[3] = "name";
-                            data[4] = edit_name.getText().toString();
-                            data[5] = "lastname";
-                            data[6] = edit_lastname.getText().toString();
-                            data[7] = "password";
-                            data[8] = edit_password.getText().toString();
-                            data[9] = "mail";
-                            data[10] = edit_mail.getText().toString();
+                            data[3] = "password";
+                            data[4] = edit_password.getText().toString();
+                            data[5] = "email";
+                            data[6] = edit_email.getText().toString();
+                            data[7] = "name";
+                            data[8] = edit_name.getText().toString();
+                            data[9] = "lastname";
+                            data[10] = edit_lastname.getText().toString();
                             data[11] = "date";
                             data[12] = edit_date.getText().toString();
                             AsyncTask result = new Post().execute(data);
@@ -80,13 +81,13 @@ public class Register extends AppCompatActivity {
                                 userInformation.edit().putString("name",data[4]).commit();
                                 userInformation.edit().putString("lastname",data[6]).commit();
                                 userInformation.edit().putString("password",data[8]).commit();
-                                userInformation.edit().putString("mail",data[10]).commit();
+                                userInformation.edit().putString("email",data[10]).commit();
                                 userInformation.edit().putString("date",data[12]).commit();
                                 //userInformation.edit().putBoolean("isLogged",true).commit();
                             }
 
                             //prova di una get
-                            System.out.println(new Get().execute("http://testone-1161.appspot.com/"));
+                            //System.out.println(new Get().execute("http://testone-1161.appspot.com/"));
                         }
                         break;
                 }

@@ -21,7 +21,7 @@ class Get extends AsyncTask<String, String, String> {
             URL url = new URL(uri[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
-                System.out.println("connesso");
+                System.out.println("connesso (GET)");
             } else {
                 System.out.println("errore di connessione"); // See documentation for more info on response handling
             }
