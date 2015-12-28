@@ -88,14 +88,56 @@
             android:layout_marginTop="15dip"
             android:layout_marginLeft="10dp" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
         <EditText
-            android:id="@+id/edit_date"
+            android:id="@+id/edit_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:inputType="numberSigned"
+            android:ems="2"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="1dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/separator"
+                android:layout_marginTop="5dip"
+                android:layout_marginLeft="10dp"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/edit_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:ems="2"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="1dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/separator"
+                android:layout_marginTop="5dip"
+                android:layout_marginLeft="10dp"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/edit_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:ems="3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="1dp" />
+
+        </LinearLayout>
 
         <TextView
             android:text="@string/password"
@@ -125,7 +167,8 @@
             android:text=""
             android:inputType="textPassword"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:imeOptions="actionSend"/>
 
         <Button
             android:id="@+id/form_register_button"

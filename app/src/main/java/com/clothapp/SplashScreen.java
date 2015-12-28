@@ -9,15 +9,21 @@ import android.content.Intent;
 
 public class SplashScreen extends AppCompatActivity {
 
+    //  ms to wait for the splash screen
+    private final int TIME_TO_WAIT = 8000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splashscreen);
 
         /**
          * Showing splashscreen while making network calls to download necessary
          * data before launching the app Will use AsyncTask to make http call
          */
+
+        //  calling the class to fetch the images
         new PrefetchData().execute();
 
     }
@@ -70,7 +76,22 @@ public class SplashScreen extends AppCompatActivity {
                 }
 
             }*/
-            System.out.println("I just downloaded all the images from the server!!");
+
+            //  faking the fetching phase
+            Thread t = new Thread(){
+                public void run(){
+
+                    try {
+                        sleep(TIME_TO_WAIT);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            t.start();
+
+            System.out.println("Debug: I just downloaded all the images from the server!!");
             return null;
         }
 

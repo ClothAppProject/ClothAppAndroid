@@ -17,7 +17,11 @@ public class Homepage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        //  just a sample button it does nothing when clicked
         Button button_final = (Button) findViewById(R.id.final_button);
+
+        //  logout button
         Button button_logout = (Button) findViewById(R.id.form_logout_button);
         button_logout.setOnClickListener(new View.OnClickListener() { //metto bottone logout in ascolto del click
             @Override
@@ -35,7 +39,7 @@ public class Homepage extends AppCompatActivity {
                         userInformation.edit().putString("date","").commit();
                         userInformation.edit().putBoolean("isLogged",false).commit();
                         System.out.println("debug: logout eseguito");
-                        Intent form_intent = new Intent(getApplicationContext(), LauncherActivity.class);
+                        Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(form_intent);
                         finish();
                         break;

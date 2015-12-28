@@ -9,6 +9,7 @@ import java.text.ParseException;
  * Created by giacomoceribelli on 27/12/15.
  */
 public class ExceptionCheck {
+
     public void check(int code,View vi,String message) {
 
         System.out.println("debug: errore = " + message);
@@ -43,7 +44,7 @@ public class ExceptionCheck {
                 output = "Errore nella registrazione: "+message;
                 break;
         }
-        Snackbar.make(vi, output, Snackbar.LENGTH_SHORT)
+        Snackbar.make(vi, output, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 }

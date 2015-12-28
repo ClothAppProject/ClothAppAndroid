@@ -31,7 +31,9 @@ public class Register extends AppCompatActivity {
         final EditText edit_email = (EditText) findViewById(R.id.edit_email);
         final EditText edit_name = (EditText) findViewById(R.id.edit_name);
         final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
-        final EditText edit_date = (EditText) findViewById(R.id.edit_date);
+        final EditText edit_day = (EditText) findViewById(R.id.edit_day);
+        final EditText edit_month = (EditText) findViewById(R.id.edit_month);
+        final EditText edit_year = (EditText) findViewById(R.id.edit_year);
 
         Button button = (Button) findViewById(R.id.form_register_button); //inizializzo bottone registrati
         button.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,11 @@ public class Register extends AppCompatActivity {
                             Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_SHORT)
                                     .setAction("Action", null).show();
                             System.out.println("debug: nome o cognome non posssono essere vuoti");
+                        }else if(!isValidBirtday(Integer.parseInt(edit_day.getText().toString()) ,Integer.parseInt(edit_month.getText().toString()),
+                                Integer.parseInt(edit_year.getText().toString()) )){
+                            Snackbar.make(v, "Inserire una data valida", Snackbar.LENGTH_SHORT)
+                                    .setAction("Action",null).show();
+                            System.out.println("debug: la data inserita non e' valida");
                         }else{
                             //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
                             ParseUser.logOut();
@@ -66,7 +73,7 @@ public class Register extends AppCompatActivity {
                             user.put("name",edit_name.getText().toString());
                             user.put("lastname",edit_lastname.getText().toString());
 
-                            System.out.println("debug: userID= "+user.getObjectId());
+                            System.out.println("debug: userID = "+user.getObjectId());
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
@@ -80,9 +87,10 @@ public class Register extends AppCompatActivity {
                                         userInformation.edit().putString("lastname",edit_lastname.getText().toString()).commit();
                                         //userInformation.edit().putString("password",edit_password.getText().toString()).commit();
                                         userInformation.edit().putString("email",edit_email.getText().toString()).commit();
-                                        userInformation.edit().putString("date",edit_date.getText().toString()).commit();
+                                        //TODO x Giacomo ho commentato la linea subito dopo
+                                        //userInformation.edit().putString("date",edit_date.getText().toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
-                                        Intent form_intent = new Intent(getApplicationContext(), Homepage.class);
+                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                         startActivity(form_intent);
                                         finish();
                                     }else {
@@ -143,6 +151,39 @@ public class Register extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    //  it returns true if it is a valid birthday, else false
+    private boolean isValidBirtday (int day, int month, int year) {
+
+        boolean flag = false;
+
+        if (day <= 0 || month <= 0) return flag;
+
+        switch (month) {
+
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                if (day <= 31) flag = true;
+                break;
+
+            case 4: case 6: case 9: case 11: if(day <= 30)
+                flag = true;
+                break;
+
+            case 2:
+                if(day <=28) flag = true;
+                else if(isBisestle(year) && day == 29) flag = true;
+                break;
+        }
+
+        return flag;
+    }
+
+    //   checking if the n parameter representing the year is bisestle
+    //   it returns true if it is
+    private boolean isBisestle(int n) {
+        if((n % 4 == 0 && n % 100 != 0) || n % 400 == 0) return true;
+        return false;
     }
 
 

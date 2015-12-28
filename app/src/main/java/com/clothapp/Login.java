@@ -39,16 +39,21 @@ public class Login extends AppCompatActivity {
                             try {
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
                                 SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                userInformation.edit().putBoolean("isLogged",true);
+                                userInformation.edit().putBoolean("isLogged",true).commit();
+                                // TODO Per Ceribbo: ti eri scordato il commit alla riga precedente
                                 System.out.println("Login eseguito correttamente");
                             }catch (ParseException e) {
                                 new ExceptionCheck().check(e.getCode(),v,e.getMessage());
                             }
 
+                            //  setting isLogged to true
+                            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                            userInformation.edit().putBoolean("isLogged",true).commit();
+
                             Bundle bundle = new Bundle();
                             bundle.putString("username", edit_username.getText().toString());
                             bundle.putString("password", edit_password.getText().toString());
-                            Intent form_intent = new Intent(getApplicationContext(), Homepage.class);
+                            Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                             form_intent.putExtras(bundle);
                             startActivity(form_intent);
                             finish();
