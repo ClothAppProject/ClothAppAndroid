@@ -32,8 +32,9 @@ public class ExceptionCheck {
                 output = "Errore, impossibile connettersi al server";
                 break;
             case 101:
-                //nel caso in cui l'oggetto non è stato trovato
-                output = "Oggeto non trovato";
+                ////nel caso in cui i parametri de login siano sbagliati
+                //nel caso in cui l'oggetto di ricerca non è stato trovato
+                output = "Oggetto non trovato";
                 break;
             case 102:
                 //nel caso in cui la query non sia valida

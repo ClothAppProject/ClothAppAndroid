@@ -47,9 +47,6 @@ public class Login extends AppCompatActivity {
                                 //"ceribbo " invece di "ceribbo" e riporta l'errore
 
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
-                                final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                userInformation.edit().putBoolean("isLogged",true).commit();
-                                userInformation.edit().putString("username",edit_username.getText().toString()).commit();
                                 //TODO inserire queste altre informazioni nelle sharedPref
                                 /*
                                 ParseQuery<ParseUser> query = ParseQuery.getQuery("GameScore");
@@ -69,17 +66,24 @@ public class Login extends AppCompatActivity {
                                 });*/
 
                                 System.out.println("debug: Login eseguito correttamente");
+                                //  setting isLogged to true
+                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                userInformation.edit().putBoolean("isLogged",true).commit();
+                                userInformation.edit().putString("username",edit_username.getText().toString()).commit();
+
+                                Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                startActivity(form_intent);
+                                finish();
                             }catch (ParseException e) {
-                                new ExceptionCheck().check(e.getCode(),v,e.getMessage());
+                                if (e.getCode()==101)   {
+                                    //siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
+                                    System.out.println("debug: errore = " +e.getMessage());
+                                    Snackbar.make(v, "Username o Password errati", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }else {
+                                    new ExceptionCheck().check(e.getCode(), v, e.getMessage());
+                                }
                             }
-
-                            //  setting isLogged to true
-                            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                            userInformation.edit().putBoolean("isLogged",true).commit();
-
-                            Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
-                            startActivity(form_intent);
-                            finish();
                         }
                         break;
                 }
