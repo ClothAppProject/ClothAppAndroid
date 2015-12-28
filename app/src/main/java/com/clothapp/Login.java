@@ -10,9 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.clothapp.R;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 
 public class Login extends AppCompatActivity {
@@ -29,6 +34,7 @@ public class Login extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 switch (v.getId()) {
                     case R.id.form_login_button:
+                        final View vi = v;
                         //prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
                         final EditText edit_username = (EditText) findViewById(R.id.edit_username);
                         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
@@ -37,9 +43,31 @@ public class Login extends AppCompatActivity {
                                     .setAction("Action", null).show();
                         }else{
                             try {
+                                //TODO bisogna eseguire la modifica dell'username che se è lasciato uno spazio per poi la stringa sarebbe
+                                //"ceribbo " invece di "ceribbo" e riporta l'errore
+
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
-                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                                 userInformation.edit().putBoolean("isLogged",true).commit();
+                                userInformation.edit().putString("username",edit_username.getText().toString()).commit();
+                                //TODO inserire queste altre informazioni nelle sharedPref
+                                /*
+                                ParseQuery<ParseUser> query = ParseQuery.getQuery("GameScore");
+                                query.whereEqualTo("username", edit_username.getText().toString());
+                                query.findInBackground(new FindCallback<ParseUser>() {
+                                    public void done(List<ParseUser> uth, ParseException ex) {
+                                        if (ex == null) {
+                                            ParseUser utente = uth.get(0);
+                                            userInformation.edit().putString("name",utente.get("name").toString()).commit();
+                                            userInformation.edit().putString("lastname",utente.get("lastname").toString()).commit();
+                                            userInformation.edit().putString("date",utente.getDate("date").toString()).commit();
+                                            userInformation.edit().putString("email",utente.getEmail().toString()).commit();
+                                        } else {
+                                            new ExceptionCheck().check(ex.getCode(),vi,ex.getMessage());
+                                        }
+                                    }
+                                });*/
+
                                 System.out.println("debug: Login eseguito correttamente");
                             }catch (ParseException e) {
                                 new ExceptionCheck().check(e.getCode(),v,e.getMessage());
@@ -49,11 +77,7 @@ public class Login extends AppCompatActivity {
                             SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                             userInformation.edit().putBoolean("isLogged",true).commit();
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString("username", edit_username.getText().toString());
-                            bundle.putString("password", edit_password.getText().toString());
                             Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
-                            form_intent.putExtras(bundle);
                             startActivity(form_intent);
                             finish();
                         }
