@@ -13,6 +13,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,36 +44,50 @@ public class Register extends AppCompatActivity {
                 final View vi = v;
                 switch (v.getId()) {
                     case R.id.form_register_button:
-                        if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
-                            //va inserito controllo su password con almeno 1 numero e una lettera e lunga almento tot
+                        //TODO va inserito controllo su password con almeno 1 numero e una lettera e lunga almento tot
+                        if (edit_username.getText().toString()=="") {
+                            //nel caso in cui l'username è lasciato in bianco
+                            Snackbar.make(v, "L'username non può essere vuoto", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            System.out.println("debug: il campo username è vuoto");
+                        }else if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
+
                             //nel caso in cui le password non coincidano
-                            Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: le password non coincidono");
                         }else if(!isValidEmailAddress(edit_email.getText().toString())) {
                             //nel caso in cui la mail non sia valida
-                            Snackbar.make(v, "La mail inserita non è valida", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(v, "La mail inserita non è valida", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: la mail inserita è sbagliata");
                         }else if(edit_lastname.getText().toString()==""||edit_name.getText().toString()=="")  {
                             //nel caso in cui la mail non sia valida
-                            Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: nome o cognome non posssono essere vuoti");
                         }else if(!isValidBirtday(Integer.parseInt(edit_day.getText().toString()) ,Integer.parseInt(edit_month.getText().toString()),
                                 Integer.parseInt(edit_year.getText().toString()) )){
-                            Snackbar.make(v, "Inserire una data valida", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(v, "Inserire una data valida", Snackbar.LENGTH_LONG)
                                     .setAction("Action",null).show();
                             System.out.println("debug: la data inserita non e' valida");
                         }else{
-                            //vanno inserite altre verifiche: su mail, data, username già esistente ecc..
-                            ParseUser.logOut();
+                            final String edit_date = edit_year.getText().toString()+"-"+edit_month.getText().toString()+"-"+edit_day.getText().toString();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = null;
+                            try {
+                                 date = sdf.parse(edit_date);
+                            } catch (java.text.ParseException e) {
+                                e.printStackTrace();
+                            }
+
                             ParseUser user = new ParseUser();
                             user.setUsername(edit_username.getText().toString());
                             user.setPassword(edit_password.getText().toString());
                             user.setEmail(edit_email.getText().toString());
                             user.put("name",edit_name.getText().toString());
                             user.put("lastname",edit_lastname.getText().toString());
+                            user.put("date",date);
 
                             System.out.println("debug: userID = "+user.getObjectId());
 
@@ -88,7 +104,7 @@ public class Register extends AppCompatActivity {
                                         //userInformation.edit().putString("password",edit_password.getText().toString()).commit();
                                         userInformation.edit().putString("email",edit_email.getText().toString()).commit();
                                         //TODO x Giacomo ho commentato la linea subito dopo
-                                        //userInformation.edit().putString("date",edit_date.getText().toString()).commit();
+                                        userInformation.edit().putString("date",edit_date.toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
                                         Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                         startActivity(form_intent);

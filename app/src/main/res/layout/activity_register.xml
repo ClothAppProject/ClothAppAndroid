@@ -91,13 +91,15 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
 
 
         <EditText
             android:id="@+id/edit_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="gg"
             android:inputType="numberSigned"
             android:ems="2"
             android:layout_marginLeft="5dp"
@@ -115,6 +117,7 @@
                 android:id="@+id/edit_month"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="mm"
                 android:inputType="numberSigned"
                 android:ems="2"
                 android:layout_marginLeft="5dp"
@@ -132,6 +135,7 @@
                 android:id="@+id/edit_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="yyyy"
                 android:inputType="numberSigned"
                 android:ems="3"
                 android:layout_marginLeft="5dp"

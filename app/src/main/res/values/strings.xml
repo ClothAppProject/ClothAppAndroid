@@ -23,7 +23,7 @@
     <string name="back_button_label">Indietro</string>
     <string name="label_form_name">Nome Inserito:</string>
     <string name="label_form_lastname">Cognome Inserito:</string>
-    <string name="separator">/</string>
+    <string name="separator">-</string>
 
 
 

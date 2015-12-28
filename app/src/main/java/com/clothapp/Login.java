@@ -33,15 +33,14 @@ public class Login extends AppCompatActivity {
                         final EditText edit_username = (EditText) findViewById(R.id.edit_username);
                         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
                         if (checknull(edit_password.getText().toString(),edit_username.getText().toString())) {
-                            Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }else{
                             try {
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
                                 SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                                 userInformation.edit().putBoolean("isLogged",true).commit();
-                                // TODO Per Ceribbo: ti eri scordato il commit alla riga precedente
-                                System.out.println("Login eseguito correttamente");
+                                System.out.println("debug: Login eseguito correttamente");
                             }catch (ParseException e) {
                                 new ExceptionCheck().check(e.getCode(),v,e.getMessage());
                             }
