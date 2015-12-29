@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,8 +15,9 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
-
+import static com.clothapp.ExceptionCheck.*;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * Created by giacomoceribelli on 29/12/15.
@@ -35,6 +37,7 @@ public class Upload extends AppCompatActivity {
 
         //invocazione della fotocamera
         if (first) {  //altrimenti l'activity si ripete
+
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -83,7 +86,7 @@ public class Upload extends AppCompatActivity {
                             System.out.println("debug: immagine inviata correttamente");
                         } else {
                             //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                            new ExceptionCheck().check(e.getCode(), vi, e.getMessage());
+                            check(e.getCode(), vi, e.getMessage());
                         }
                     }
                 });
@@ -99,5 +102,15 @@ public class Upload extends AppCompatActivity {
             imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
         }
+    }
+    private File createTemporaryFile(String part, String ext) throws Exception
+    {
+        File tempDir= Environment.getExternalStorageDirectory();
+        tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
+        if(!tempDir.exists())
+        {
+            tempDir.mkdir();
+        }
+        return File.createTempFile(part, ext, tempDir);
     }
 }
