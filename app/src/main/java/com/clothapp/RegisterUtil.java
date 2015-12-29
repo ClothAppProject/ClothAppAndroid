@@ -32,7 +32,8 @@ public class RegisterUtil {
     static boolean isValidBirthday (int day, int month, int year) {
 
         boolean flag = false;
-        if(year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR)) return flag;
+        Calendar c = Calendar.getInstance();
+        if(year < 1900 || year>c.get(Calendar.YEAR)) return flag;
         if (day <= 0 || month <= 0) return flag;
 
         switch (month) {
@@ -50,7 +51,13 @@ public class RegisterUtil {
                 else if(isBisestle(year) && day == 29) flag = true;
                 break;
         }
-
+        if(year==c.get(Calendar.YEAR)){
+            if(month>c.get(Calendar.MONTH)) return false;
+            if(month<c.get(Calendar.MONTH)) return true;
+            else{
+                if(day>c.get(Calendar.DAY_OF_MONTH)) return false;
+            }
+        }
         return flag;
     }
 
