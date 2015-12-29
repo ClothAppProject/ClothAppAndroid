@@ -49,7 +49,6 @@ public class RegisterUtil {
     //  it returns true if it is a valid birthday, else false
     static boolean isValidBirthday (int day, int month, int year) {
 
-        //TODO aggiungere il controllo sull'anno in corso
         boolean flag = false;
         if(year < 1900 || year > 2015) return flag;
         if (day <= 0 || month <= 0) return flag;
