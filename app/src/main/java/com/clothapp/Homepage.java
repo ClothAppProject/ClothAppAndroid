@@ -24,7 +24,7 @@ public class Homepage extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view_upload) {
-                // redirecting the user to the main activity where he can decides to log in or sign up
+                // redirecting the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), Upload.class);
                 startActivity(i);
                 finish();
