@@ -8,16 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import static com.clothapp.ExceptionCheck.*;
 
-import com.clothapp.R;
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.List;
 
 
 public class Login extends AppCompatActivity {
@@ -57,7 +51,7 @@ public class Login extends AppCompatActivity {
                                             userInformation.edit().putString("date",utente.getDate("date").toString()).commit();
                                             userInformation.edit().putString("email",utente.getEmail().toString()).commit();
                                         } else {
-                                            new ExceptionCheck().check(ex.getCode(),vi,ex.getMessage());
+                                            check(ex.getCode(),vi,ex.getMessage());
                                         }
                                     }
                                 });*/
@@ -78,7 +72,7 @@ public class Login extends AppCompatActivity {
                                     Snackbar.make(v, "Username o Password errati", Snackbar.LENGTH_LONG)
                                             .setAction("Action", null).show();
                                 }else {
-                                    new ExceptionCheck().check(e.getCode(), v, e.getMessage());
+                                    check(e.getCode(), v, e.getMessage());
                                 }
                             }
                         }

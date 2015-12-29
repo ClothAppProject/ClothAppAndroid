@@ -15,8 +15,7 @@ import com.parse.SignUpCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static com.clothapp.ExceptionCheck.*;
 import static com.clothapp.RegisterUtil.*;
 
 
@@ -106,6 +105,7 @@ public class Register extends AppCompatActivity {
                                     break;
                             }
                         }else{
+                            //formatto data
                             final String edit_date = edit_year.getText().toString()+"-"+edit_month.getText().toString()+"-"+edit_day.getText().toString();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             Date date = null;
@@ -146,7 +146,7 @@ public class Register extends AppCompatActivity {
                                         finish();
                                     }else {
                                         //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                        new ExceptionCheck().check(e.getCode(),vi,e.getMessage());
+                                        check(e.getCode(),vi,e.getMessage());
                                     }
                                 }
                             });

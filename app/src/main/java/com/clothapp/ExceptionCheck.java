@@ -10,7 +10,7 @@ import java.text.ParseException;
  */
 public class ExceptionCheck {
 
-    public void check(int code,View vi,String message) {
+    static void check(int code,View vi,String message) {
 
         System.out.println("debug: errore = " + message);
         String output = "";
@@ -158,7 +158,7 @@ public class ExceptionCheck {
                 break;
             default:
                 //in qualsiasi altro caso di errore
-                output = "Errore nella registrazione: "+message;
+                output = "Errore: "+message;
                 break;
         }
         Snackbar.make(vi, output, Snackbar.LENGTH_LONG)
