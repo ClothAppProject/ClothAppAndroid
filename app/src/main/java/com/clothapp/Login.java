@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
                                 //TODO inserire queste altre informazioni nelle sharedPref
                                 /*
-                                ParseQuery<ParseUser> query = ParseQuery.getQuery("GameScore");
+                                ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
                                 query.whereEqualTo("username", edit_username.getText().toString());
                                 query.findInBackground(new FindCallback<ParseUser>() {
                                     public void done(List<ParseUser> uth, ParseException ex) {

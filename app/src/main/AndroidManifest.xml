@@ -39,6 +39,9 @@
             android:name="com.clothapp.Homepage"
             android:label="@string/app_name" />
         <activity
+            android:name="com.clothapp.Upload"
+            android:label="@string/app_name" />
+        <activity
             android:name="com.clothapp.SplashScreen"
             android:label="@string/app_name" />
         <activity
