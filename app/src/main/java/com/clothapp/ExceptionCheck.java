@@ -57,9 +57,9 @@ public class ExceptionCheck {
                 output ="Valore del limite non valido";
                 break;
             case 117:
-            //nel caso in cui manca la dimensione del file
-            output ="Dimensione del file non specificata";
-            break;
+                //nel caso in cui manca la dimensione del file
+                output ="Dimensione del file non specificata";
+                break;
             case 120:
                 //nel caso di cacheMiss del server
                 output ="Errore di cache miss del server";

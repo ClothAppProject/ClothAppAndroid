@@ -51,7 +51,6 @@ public class Register extends AppCompatActivity {
                                     .setAction("Action", null).show();
                             System.out.println("debug: il campo username è vuoto");
                         }else if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
-
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
@@ -66,17 +65,51 @@ public class Register extends AppCompatActivity {
                             Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: nome o cognome non posssono essere vuoti");
-                        }else if(!isValidBirtday(Integer.parseInt(edit_day.getText().toString()) ,Integer.parseInt(edit_month.getText().toString()),
+                        }else if(!isValidBirthday(Integer.parseInt(edit_day.getText().toString()) ,Integer.parseInt(edit_month.getText().toString()),
                                 Integer.parseInt(edit_year.getText().toString()) )){
                             Snackbar.make(v, "Inserire una data valida", Snackbar.LENGTH_LONG)
                                     .setAction("Action",null).show();
                             System.out.println("debug: la data inserita non e' valida");
+                        }else if(!checkPswdLength(edit_password.getText().toString())) {
+                            Snackbar.make(v, "La password deve essere lunga almeno 6 caratteri e non più di 12", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            System.out.println("debug: lunghezza pswd sbagliata");
+                        }else if(passWordChecker(edit_password.getText().toString()) != 0){
+                            String pswd = edit_password.getText().toString();
+                            int result = passWordChecker(pswd);
+                            switch (result){
+                                case -1:
+                                    Snackbar.make(v, "La password deve contenere almeno 1 lettera maiuscola", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    System.out.println("debug: password non contiene lettera maiuscola");
+                                    break;
+                                case -2:
+                                    Snackbar.make(v, "La password deve contenere almeno 1 lettera minuscola", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    System.out.println("debug: password non contiene lettera minuscola");
+                                    break;
+                                case -3:
+                                    Snackbar.make(v, "La password deve contenere almeno un numeo", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    System.out.println("debug: password non contiene nessun numero");
+                                    break;
+                                case -4:
+                                    Snackbar.make(v, "La password non può contenere spazi o caratteri tab e new line", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    System.out.println("debug: password contiene spazi o tab o new line");
+                                    break;
+                                case -5:
+                                    Snackbar.make(v, "La password non può contenere caratteri speciali", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    System.out.println("debug: password contiene caratteri speciali");
+                                    break;
+                            }
                         }else{
                             final String edit_date = edit_year.getText().toString()+"-"+edit_month.getText().toString()+"-"+edit_day.getText().toString();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             Date date = null;
                             try {
-                                 date = sdf.parse(edit_date);
+                                date = sdf.parse(edit_date);
                             } catch (java.text.ParseException e) {
                                 e.printStackTrace();
                             }
@@ -90,6 +123,8 @@ public class Register extends AppCompatActivity {
                             user.put("date",date);
 
                             System.out.println("debug: userID = "+user.getObjectId());
+
+                            System.out.println("debug: pswd is: "+edit_password.getText().toString());
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
@@ -170,10 +205,10 @@ public class Register extends AppCompatActivity {
     }
 
     //  it returns true if it is a valid birthday, else false
-    private boolean isValidBirtday (int day, int month, int year) {
+    private boolean isValidBirthday (int day, int month, int year) {
 
         boolean flag = false;
-
+        if(year < 1900 || year > 2015) return flag;
         if (day <= 0 || month <= 0) return flag;
 
         switch (month) {
@@ -202,5 +237,43 @@ public class Register extends AppCompatActivity {
         return false;
     }
 
+    //  checking pswd lenght is greater than 6
+    private boolean checkPswdLength(String a){
+        return a.length() >= 6 && a.length() <= 12;
+    }
 
+    /*
+ *  PASSWORD MUST CONTAIN:
+ *  At least one capital letter, one non capital letter and one digit character.
+ *  Special characters except the dot are not allowed
+ *
+ *  check if the password is solid
+ *  it returns:
+ *   0 if everything is fine
+ *  -1 if there are no capital letters
+ *  -2 if there are no non capital letters
+ *  -3 if there are no digits characters
+ *  -4 if there space characters (tab new line ecc)
+ *  -5 if there are other special characters (like comma, question mark ecc)
+ */
+    private int passWordChecker (String input) {
+        Pattern[] passwordRegexes = new Pattern[3];
+        passwordRegexes[0] = Pattern.compile(".*[A-Z].*"); //   capital letters
+        passwordRegexes[1] = Pattern.compile(".*[a-z].*"); //   non capital letters
+        passwordRegexes[2] = Pattern.compile(".*\\d.*");   //   numbers
+
+        for (int i = 0; i < passwordRegexes.length; i++) {
+            if (!passwordRegexes[i].matcher(input).matches()) return -(i+1);
+        }
+
+        Pattern spacePattern = Pattern.compile(".*\\s.*"); //   tab, space, new line ecc
+        if(spacePattern.matcher(input).matches()) return -(passwordRegexes.length+1);
+        Pattern specialChars = Pattern.compile(".*[^a-zA-Z0-9].*"); //  special characters
+        input.replaceAll(".","");
+        if(specialChars.matcher(input).matches()) {
+            System.out.println("debug: funzione de merda");
+            return -(passwordRegexes.length+2);
+        }
+        return 0;
+    }
 }

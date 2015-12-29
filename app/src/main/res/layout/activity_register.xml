@@ -99,7 +99,7 @@
             android:id="@+id/edit_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="gg"
+            android:hint="dd"
             android:inputType="numberSigned"
             android:ems="2"
             android:layout_marginLeft="5dp"
