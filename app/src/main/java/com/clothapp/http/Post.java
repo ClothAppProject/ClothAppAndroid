@@ -119,4 +119,33 @@ class Post extends AsyncTask<String, String, String>{
         super.onPostExecute(result);
         System.out.println(result);
     }
+
+    //Prova post
+/*
+                            //prova di una post
+                            int dim_param = 6;
+                            //String indirizzo = "http://ceribbo.com/server.php";
+                            String indirizzo = "http://www.clothapp.it/user/signup";
+                            String[] data = new String[2*dim_param+1];
+                            data[0] = indirizzo;
+                            data[1] = "username";
+                            data[2] = edit_username.getText().toString();
+                            data[3] = "password";
+                            data[4] = edit_password.getText().toString();
+                            data[5] = "email";
+                            data[6] = edit_email.getText().toString();
+                            data[7] = "name";
+                            data[8] = edit_name.getText().toString();
+                            data[9] = "lastname";
+                            data[10] = edit_lastname.getText().toString();
+                            data[11] = "date";
+                            data[12] = edit_date.getText().toString();
+                            AsyncTask result = new Post().execute(data);
+                            if (result.toString()=="")   {
+                                System.out.println("nessuna risposta dal server");
+                            }
+                            //prova di una get
+                            //System.out.println(new Get().execute("http://www.clothapp.it/users"));
+*/
+
 }

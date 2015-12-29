@@ -43,9 +43,6 @@ public class Login extends AppCompatActivity {
                                     .setAction("Action", null).show();
                         }else{
                             try {
-                                //TODO bisogna eseguire la modifica dell'username che se è lasciato uno spazio per poi la stringa sarebbe
-                                //"ceribbo " invece di "ceribbo" e riporta l'errore
-
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
                                 //TODO inserire queste altre informazioni nelle sharedPref
                                 /*
