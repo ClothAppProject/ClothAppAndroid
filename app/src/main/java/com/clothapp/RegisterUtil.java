@@ -95,9 +95,24 @@ public class RegisterUtil {
         Pattern specialChars = Pattern.compile(".*[^a-zA-Z0-9].*"); //  special characters
         input.replaceAll(".","");
         if(specialChars.matcher(input).matches()) {
-            System.out.println("debug: funzione de merda");
             return -(passwordRegexes.length+2);
         }
         return 0;
+    }
+
+    static String cryptoPswd(String a){
+        String finale = "";
+        int length = a.length();
+        for (int i = 0; i<length; i++){
+            finale += (a.charAt(i)*13+11)%7;
+        }
+        return finale;
+    }
+
+    //TODO funzione che decripta la pswd
+    private static String deCryptoPswd(String a){
+        String finale = "";
+        int length = a.length();
+        return finale;
     }
 }
