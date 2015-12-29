@@ -1,13 +1,31 @@
 package com.clothapp;
 
-import java.util.Calendar;
+import android.content.Intent;
+import android.content.SharedPreferences;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import static com.clothapp.ExceptionCheck.check;
 
 /**
  * Created by Roberto on 29/12/15.
  */
 public class RegisterUtil {
+
 
     //funzione per controllare le 2 password siano uguali e non nulle
     static boolean checkPassWordAndConfirmPassword(String password, String confirmPassword) {
@@ -31,9 +49,9 @@ public class RegisterUtil {
     //  it returns true if it is a valid birthday, else false
     static boolean isValidBirthday (int day, int month, int year) {
 
+        //TODO aggiungere il controllo sull'anno in corso
         boolean flag = false;
-        Calendar c = Calendar.getInstance();
-        if(year < 1900 || year>c.get(Calendar.YEAR)) return flag;
+        if(year < 1900 || year > 2015) return flag;
         if (day <= 0 || month <= 0) return flag;
 
         switch (month) {
@@ -51,13 +69,7 @@ public class RegisterUtil {
                 else if(isBisestle(year) && day == 29) flag = true;
                 break;
         }
-        if(year==c.get(Calendar.YEAR)){
-            if(month>c.get(Calendar.MONTH)) return false;
-            if(month<c.get(Calendar.MONTH)) return true;
-            else{
-                if(day>c.get(Calendar.DAY_OF_MONTH)) return false;
-            }
-        }
+
         return flag;
     }
 

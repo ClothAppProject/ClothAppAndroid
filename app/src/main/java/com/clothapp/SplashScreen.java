@@ -1,6 +1,7 @@
 package com.clothapp;
 
 import android.content.SharedPreferences;
+import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -10,7 +11,7 @@ import android.content.Intent;
 public class SplashScreen extends AppCompatActivity {
 
     //  ms to wait for the splash screen
-    private final int TIME_TO_WAIT = 8000;
+    private final int TIME_TO_WAIT = 48000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +23,38 @@ public class SplashScreen extends AppCompatActivity {
          * Showing splashscreen while making network calls to download necessary
          * data before launching the app Will use AsyncTask to make http call
          */
+        //  faking the fetching phase
+
 
         //  calling the class to fetch the images
         new PrefetchData().execute();
+        System.out.println("debug: finito prefetch data");
+        Runnable r = new Runnable(){
+            public void run(){
+                try{
+                    Thread.sleep(TIME_TO_WAIT);
+                    System.out.println("debug: finito di aspettare");
+                }
+                catch (InterruptedException e){
+                    System.out.println("debug: eccezioe");
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread t = new Thread(r);
+        System.out.println("debug: sto per fare .start");
+        t.start();
+
+        System.out.println("debug: finito sto per passare altra activity");
+
+        // After completing http call
+        // will close this activity and lauch homepage activity
+        Intent i = new Intent(getApplicationContext(), Homepage.class);
+        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+        startActivity(i);
+
+        // close this activity
+        finish();
 
     }
 
@@ -76,21 +106,6 @@ public class SplashScreen extends AppCompatActivity {
                 }
 
             }*/
-
-            //  faking the fetching phase
-            Thread t = new Thread(){
-                public void run(){
-
-                    try {
-                        sleep(TIME_TO_WAIT);
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            t.start();
-
             System.out.println("Debug: I just downloaded all the images from the server!!");
             return null;
         }
@@ -99,14 +114,7 @@ public class SplashScreen extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            // After completing http call
-            // will close this activity and lauch homepage activity
-            Intent i = new Intent(getApplicationContext(), Homepage.class);
-            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-            startActivity(i);
 
-            // close this activity
-            finish();
         }
 
     }
