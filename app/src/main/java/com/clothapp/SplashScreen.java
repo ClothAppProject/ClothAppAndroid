@@ -11,7 +11,7 @@ import android.content.Intent;
 public class SplashScreen extends AppCompatActivity {
 
     //  ms to wait for the splash screen
-    private final int TIME_TO_WAIT = 48000;
+    private final int TIME_TO_WAIT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,30 +23,35 @@ public class SplashScreen extends AppCompatActivity {
          * Showing splashscreen while making network calls to download necessary
          * data before launching the app Will use AsyncTask to make http call
          */
-        //  faking the fetching phase
-
 
         //  calling the class to fetch the images
         new PrefetchData().execute();
+
         System.out.println("debug: finito prefetch data");
+
+        //  faking the fetching phase
         Runnable r = new Runnable(){
             public void run(){
                 try{
                     Thread.sleep(TIME_TO_WAIT);
-                    System.out.println("debug: finito di aspettare");
+                    Intent i = new Intent(getApplicationContext(), Homepage.class);
+                    SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                    startActivity(i);
+                    // close this activity
+                    finish();
+
+                    // close this activity
+                    finish();
                 }
                 catch (InterruptedException e){
-                    System.out.println("debug: eccezioe");
                     e.printStackTrace();
                 }
             }
         };
         Thread t = new Thread(r);
-        System.out.println("debug: sto per fare .start");
         t.start();
 
-        System.out.println("debug: finito sto per passare altra activity");
-
+/*
         // After completing http call
         // will close this activity and lauch homepage activity
         Intent i = new Intent(getApplicationContext(), Homepage.class);
@@ -55,7 +60,7 @@ public class SplashScreen extends AppCompatActivity {
 
         // close this activity
         finish();
-
+*/
     }
 
     /**

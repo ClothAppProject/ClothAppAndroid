@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.RotateAnimation;
@@ -23,6 +24,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
+
+import static android.support.v4.graphics.BitmapCompat.*;
 import static com.clothapp.ExceptionCheck.*;
 
 import java.io.ByteArrayOutputStream;
@@ -34,18 +37,25 @@ import java.util.Date;
  * Created by giacomoceribelli on 29/12/15.
  */
 public class Upload extends AppCompatActivity {
-    boolean first=true;
-    final String directoryName = "ClothApp";
+
+    // static fields
+    /* --------------------------------------- */
+    final static long mb5 = (long) (5 * 10e9);
+    final static long mb1 = (long) (1 * 10e9);
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
     //qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
     // del personaggio di Finn nell'ultimo Star Wars episodio VII prima di diventare un dei "buoni"
     //inoltre 2187 corrisponde anche al numero di cella dove è stata rinchiusa la pricipessa Leia dopo essere stata catturata
     //da Dart Vather in una delle prima scene di Star Wars episodio IV
+
+    /* --------------------------------------- */
+    boolean first=true;
+    final String directoryName = "ClothApp";
     String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'").format(new Date());
     Uri takenPhotoUri;
     ImageView imageView = null;
     Bitmap imageBitmap = null;
-
+    /* --------------------------------------- */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +81,7 @@ public class Upload extends AppCompatActivity {
             System.out.println("debug: è il first");
             // creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //TODO check if getPhotoFileUri returns null
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
 
             // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
@@ -93,10 +104,16 @@ public class Upload extends AppCompatActivity {
 
                 System.out.println("debug: compressione immagine");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                //TODO decidere per la compressione dell'immagine da 0 a 100, dove 100 significa dimensione originale
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                //TODO uniche modifiche fatte sono dalla riga seguente fino a
+                // e la funzione a fine file checkToCompress()
+
+                int toCompress = checkToCompress(imageBitmap);
+                System.out.println("debug: toCompress = " + toCompress);
+
+                //TODO qui
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                 byte[] byteImg = stream.toByteArray();
-                System.out.println("debug: dimensione del byteImg"+byteImg.length);
+                System.out.println("debug: dimensione del byteImg "+byteImg.length);
 
                 //creazione di un ParseFile
                 System.out.println("debug: creazione di un ParseFile");
@@ -160,6 +177,11 @@ public class Upload extends AppCompatActivity {
             //TODO ci sono problemi con l'orientamento dell'immagine nel textview
         } else { // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            System.out.println("debug: immagine non è stata scattata");
+            // redirecting the user to the homepage activity
+            Intent i = new Intent(getApplicationContext(), Homepage.class);
+            startActivity(i);
+            finish();
         }
     }
 
@@ -181,7 +203,7 @@ public class Upload extends AppCompatActivity {
         // Continua solamente se la memoria SD è montata
         if (isExternalStorageAvailable()) {
             // Get safe storage directory for photos
-            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), directoryName);
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
             // Creo la directory di storage se non esiste
             if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
                 System.out.println("debug: impossibile creare cartella");
@@ -210,5 +232,14 @@ public class Upload extends AppCompatActivity {
         rotateAnim.setDuration(0);
         rotateAnim.setFillAfter(true);
         imageView.startAnimation(rotateAnim);
+    }
+
+    //  returns the parameter to pass to the compression method
+    //  it takes the photo to compress
+    private int checkToCompress(Bitmap photo){
+        System.out.println("photo to compress is: "+getAllocationByteCount(photo));
+        if(getAllocationByteCount(photo) > mb5) return 40;
+        else if(getAllocationByteCount(photo) > mb1) return 60;
+        else return 0;
     }
 }
