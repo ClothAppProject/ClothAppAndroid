@@ -9,7 +9,7 @@ import android.content.Intent;
 
 
 public class SplashScreen extends AppCompatActivity {
-    //aggiungo un commento di prova
+
     //  ms to wait for the splash screen
     private final int TIME_TO_WAIT = 3000;
 
