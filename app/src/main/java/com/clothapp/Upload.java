@@ -240,6 +240,6 @@ public class Upload extends AppCompatActivity {
         System.out.println("photo to compress is: "+getAllocationByteCount(photo));
         if(getAllocationByteCount(photo) > mb5) return 40;
         else if(getAllocationByteCount(photo) > mb1) return 60;
-        else return 0;
+        else return 100;
     }
 }

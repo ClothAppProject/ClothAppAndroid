@@ -19,6 +19,19 @@ public class Homepage extends AppCompatActivity {
         //  just a sample button it does nothing when clicked
         Button button_final = (Button) findViewById(R.id.final_button);
 
+        button_final.setOnClickListener(new View.OnClickListener(){
+
+
+            @Override
+            public void onClick(View v) {
+                switch(v.getId()) {
+                    case R.id.final_button:
+                        System.out.println("debug: premuto you won");
+                        break;
+                }
+            }
+        });
+
         //button upload a new photo
         FloatingActionButton upload = (FloatingActionButton) findViewById(R.id.upload_button);
         upload.setOnClickListener(new View.OnClickListener(){
