@@ -40,8 +40,8 @@ public class Upload extends AppCompatActivity {
 
     // static fields
     /* --------------------------------------- */
-    final static long mb5 = (long) (5 * 10e9);
-    final static long mb1 = (long) (1 * 10e9);
+    final static long mb5 = (long) (5 * 10e6);
+    final static long mb1 = (long) (1 * 10e6);
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
     //qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
     // del personaggio di Finn nell'ultimo Star Wars episodio VII prima di diventare un dei "buoni"
