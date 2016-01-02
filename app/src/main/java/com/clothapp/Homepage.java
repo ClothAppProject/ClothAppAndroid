@@ -70,6 +70,22 @@ public class Homepage extends AppCompatActivity {
                 }
             }
         });
+        //  bottone profilo, fintanto che non viene implementato il menu
+        Button button_profile = (Button) findViewById(R.id.form_profile_button);
+        button_profile.setOnClickListener(new View.OnClickListener() {
+            //metto bottone profile in ascolto del click
+            @Override
+            public void onClick(View view_profile) {
+                // TODO Auto-generated method stub
+                switch (view_profile.getId()) {
+                    case R.id.form_profile_button:
+                        Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                        startActivity(form_intent);
+                        finish();
+                        break;
+                }
+            }
+        });
     }
 
 }

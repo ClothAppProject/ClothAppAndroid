@@ -30,6 +30,13 @@
         android:layout_width="fill_parent"
         android:layout_below="@+id/final_button"
         android:layout_marginTop="50dp" />
+    <Button
+        android:id="@+id/form_profile_button"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_button"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/final_button"
+        android:layout_marginTop="50dp" />
 
 
     <android.support.design.widget.FloatingActionButton

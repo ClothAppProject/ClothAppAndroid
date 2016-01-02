@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
+        android:name=".ParseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
@@ -35,9 +36,6 @@
             android:name="com.clothapp.MainActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Login"
-            android:label="@string/app_name" />
-        <activity
             android:name="com.clothapp.Homepage"
             android:label="@string/app_name" />
         <activity
@@ -51,7 +49,9 @@
         <activity
             android:name="com.clothapp.Register"
             android:label="@string/app_name" />
-
+        <activity
+            android:name="com.clothapp.Profile"
+            android:label="@string/app_name" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
