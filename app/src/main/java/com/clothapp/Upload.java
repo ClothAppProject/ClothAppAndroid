@@ -41,6 +41,7 @@ public class Upload extends AppCompatActivity {
     // static fields
     /* --------------------------------------- */
     final static long mb5 = (long) (5 * 10e6);
+    final static long mb3 = (long) (3 * 10e6);
     final static long mb1 = (long) (1 * 10e6);
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
     //qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
@@ -113,7 +114,7 @@ public class Upload extends AppCompatActivity {
                 //TODO qui
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                 byte[] byteImg = stream.toByteArray();
-                System.out.println("debug: dimensione del byteImg "+byteImg.length);
+                System.out.println("debug: dimensione del file è "+getAllocationByteCount(imageBitmap));
 
                 //creazione di un ParseFile
                 System.out.println("debug: creazione di un ParseFile");
@@ -178,7 +179,7 @@ public class Upload extends AppCompatActivity {
         } else { // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             System.out.println("debug: immagine non è stata scattata");
-            // redirecting the user to the homepage activity
+            // reinderizzo l'utente alla homePage activity
             Intent i = new Intent(getApplicationContext(), Homepage.class);
             startActivity(i);
             finish();
@@ -196,6 +197,23 @@ public class Upload extends AppCompatActivity {
         savedInstanceState.putString("photoFileName",photoFileName);
         System.out.println("debug: first è messo a false, l'attività upload è stata sospesa");
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    //in caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
+    @Override
+    public void onBackPressed() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+directoryName;
+        File f = new File(path,photoFileName);
+        //controllo se esiste
+        if(f.exists() && !f.isDirectory()) {
+            // se esiste lo elimino
+            f.delete();
+            System.out.println("debug: file eliminato");
+        }
+        // reinderizzo l'utente alla homePage activity
+        Intent i = new Intent(getApplicationContext(), Homepage.class);
+        startActivity(i);
+        finish();
     }
 
     // Ritorna l'Uri dell'immagine su disco
@@ -238,8 +256,9 @@ public class Upload extends AppCompatActivity {
     //  it takes the photo to compress
     private int checkToCompress(Bitmap photo){
         System.out.println("photo to compress is: "+getAllocationByteCount(photo));
-        if(getAllocationByteCount(photo) > mb5) return 40;
-        else if(getAllocationByteCount(photo) > mb1) return 60;
+        if(getAllocationByteCount(photo) > mb5) return 70;
+        else if(getAllocationByteCount(photo)> mb3) return 80;
+        else if(getAllocationByteCount(photo) > mb1) return 90;
         else return 100;
     }
 }
