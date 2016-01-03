@@ -15,8 +15,8 @@ import com.parse.SignUpCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static Resources.ExceptionCheck.*;
-import static Resources.RegisterUtil.*;
+import static com.clothapp.resources.ExceptionCheck.*;
+import static com.clothapp.resources.RegisterUtil.*;
 
 
 

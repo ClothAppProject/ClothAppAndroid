@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,10 +27,11 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import static android.support.v4.graphics.BitmapCompat.*;
-import static Resources.ExceptionCheck.*;
+import static com.clothapp.resources.ExceptionCheck.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -168,9 +171,30 @@ public class Upload extends AppCompatActivity {
             takenPhotoUri = getPhotoFileUri(photoFileName);
             // a questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+
+
+            //TODO ancora problemi con l'orientamento dell'immagine, poi lo mettiamo a posto con calma
             // inserisco l'immagine bitmap nella imageView
+            ExifInterface ei = null;
+            try {
+                ei = new ExifInterface(takenPhotoUri.getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch(orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    System.out.println("debug: ruotata di 90°");
+                    rotateImage(imageBitmap, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    System.out.println("debug: ruotata di 180°");
+                    rotateImage(imageBitmap, 180);
+                    break;
+            }
+
             imageView.setImageBitmap(imageBitmap);
-            rotate();
             //TODO ci sono problemi con l'orientamento dell'immagine nel textview
         } else { // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -237,9 +261,19 @@ public class Upload extends AppCompatActivity {
         return false;
     }
 
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Bitmap retVal;
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+
+        return retVal;
+    }
+
     //funzione per ruotare l'image view di 90 gradi
-    private void rotate() {
-        final RotateAnimation rotateAnim = new RotateAnimation(0.0f, -90,
+    private void rotate(int grade) {
+        final RotateAnimation rotateAnim = new RotateAnimation(0.0f, grade,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 
@@ -251,6 +285,7 @@ public class Upload extends AppCompatActivity {
     //  returns the parameter to pass to the compression method
     //  it takes the photo to compress
     private int checkToCompress(Bitmap photo){
+        //TODO getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
         System.out.println("photo to compress is: "+getAllocationByteCount(photo));
         if(getAllocationByteCount(photo) > mb5) return 70;
         else if(getAllocationByteCount(photo)> mb3) return 80;

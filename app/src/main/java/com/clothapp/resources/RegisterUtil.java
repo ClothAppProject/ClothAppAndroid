@@ -1,4 +1,4 @@
-package Resources;
+package com.clothapp.resources;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

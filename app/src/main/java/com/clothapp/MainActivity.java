@@ -10,15 +10,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.Date;
-import java.util.List;
-
-import static Resources.ExceptionCheck.check;
+import static com.clothapp.resources.ExceptionCheck.check;
 
 
 public class MainActivity extends AppCompatActivity {
