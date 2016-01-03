@@ -17,6 +17,7 @@ import com.parse.ParseUser;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static Resources.ExceptionCheck.check;
 
@@ -43,23 +44,23 @@ public class MainActivity extends AppCompatActivity {
                         //prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
                         final EditText edit_username = (EditText) findViewById(R.id.edit_username);
                         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
-                        if (checknull(edit_password.getText().toString(),edit_username.getText().toString())) {
+                        if (checknull(edit_password.getText().toString().trim(),edit_username.getText().toString().trim())) {
                             Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         }else{
                             try {
-                                ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
+                                ParseUser.logIn(edit_username.getText().toString().trim(),edit_password.getText().toString().trim());
                                 System.out.println("debug: Login eseguito correttamente");
 
                                 //inserisco i valori nelle sharedPref
                                 ParseUser uth = ParseUser.getCurrentUser();
                                 SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                                 userInformation.edit().putBoolean("isLogged",true).commit();
-                                userInformation.edit().putString("username",uth.get("username").toString()).commit();
-                                userInformation.edit().putString("name",uth.get("name").toString()).commit();
-                                userInformation.edit().putString("lastname",uth.get("lastname").toString()).commit();
-                                userInformation.edit().putString("date",uth.get("date").toString()).commit();
-                                userInformation.edit().putString("email",uth.get("email").toString()).commit();
+                                userInformation.edit().putString("username",uth.get("username").toString().trim()).commit();
+                                userInformation.edit().putString("name",uth.get("name").toString().trim()).commit();
+                                userInformation.edit().putString("lastname",uth.get("lastname").toString().trim()).commit();
+                                userInformation.edit().putString("date",uth.get("date").toString().trim()).commit();
+                                userInformation.edit().putString("email",uth.get("email").toString().trim()).commit();
 
                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                 startActivity(form_intent);
