@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.clothapp.R;
+import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import static com.clothapp.ExceptionCheck.check;
+import java.util.Date;
+import java.util.List;
+
+import static Resources.ExceptionCheck.check;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,14 +27,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*FloatingActionButton centro = (FloatingActionButton) findViewById(R.id.centro);
-        centro.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "allahk bar", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        
+        //nascondo la tastiera all'avvio di quest'activity
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         Button login = (Button) findViewById(R.id.login_button);
         Button register = (Button) findViewById(R.id.register_button);
         login.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
@@ -49,29 +49,17 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             try {
                                 ParseUser.logIn(edit_username.getText().toString(),edit_password.getText().toString());
-                                //TODO inserire queste altre informazioni nelle sharedPref
-                                /*
-                                ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
-                                query.whereEqualTo("username", edit_username.getText().toString());
-                                query.findInBackground(new FindCallback<ParseUser>() {
-                                    public void done(List<ParseUser> uth, ParseException ex) {
-                                        if (ex == null) {
-                                            ParseUser utente = uth.get(0);
-                                            userInformation.edit().putString("name",utente.get("name").toString()).commit();
-                                            userInformation.edit().putString("lastname",utente.get("lastname").toString()).commit();
-                                            userInformation.edit().putString("date",utente.getDate("date").toString()).commit();
-                                            userInformation.edit().putString("email",utente.getEmail().toString()).commit();
-                                        } else {
-                                            check(ex.getCode(),vi,ex.getMessage());
-                                        }
-                                    }
-                                });*/
-
                                 System.out.println("debug: Login eseguito correttamente");
-                                //  setting isLogged to true
+
+                                //inserisco i valori nelle sharedPref
+                                ParseUser uth = ParseUser.getCurrentUser();
                                 SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                                 userInformation.edit().putBoolean("isLogged",true).commit();
-                                userInformation.edit().putString("username",edit_username.getText().toString()).commit();
+                                userInformation.edit().putString("username",uth.get("username").toString()).commit();
+                                userInformation.edit().putString("name",uth.get("name").toString()).commit();
+                                userInformation.edit().putString("lastname",uth.get("lastname").toString()).commit();
+                                userInformation.edit().putString("date",uth.get("date").toString()).commit();
+                                userInformation.edit().putString("email",uth.get("email").toString()).commit();
 
                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                 startActivity(form_intent);

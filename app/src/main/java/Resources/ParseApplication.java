@@ -1,4 +1,4 @@
-package com.clothapp;
+package Resources;
 
 import android.app.Application;
 

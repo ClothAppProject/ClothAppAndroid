@@ -7,7 +7,7 @@
 
     <string name="form_register">Inserisci i tuoi dati:</string>
     <string name="username">Username</string>
-    <string name="mail">Email</string>
+    <string name="email">Email</string>
     <string name="name">Nome</string>
     <string name="lastname">Cognome</string>
     <string name="birthday">Data di Nascita</string>

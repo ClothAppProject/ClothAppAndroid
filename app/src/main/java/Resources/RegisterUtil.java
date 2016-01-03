@@ -1,25 +1,7 @@
-package com.clothapp;
+package Resources;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import static com.clothapp.ExceptionCheck.check;
 
 /**
  * Created by Roberto on 29/12/15.
@@ -28,7 +10,7 @@ public class RegisterUtil {
 
 
     //funzione per controllare le 2 password siano uguali e non nulle
-    static boolean checkPassWordAndConfirmPassword(String password, String confirmPassword) {
+    public static boolean checkPassWordAndConfirmPassword(String password, String confirmPassword) {
         boolean pstatus = true;
         if (confirmPassword != null && password != null) {
             if (password.equals(confirmPassword)) {
@@ -38,7 +20,7 @@ public class RegisterUtil {
         return pstatus;
     }
     //funzione per controllare che sia indirizzo mail valido
-    static boolean isValidEmailAddress(String email) {
+    public static boolean isValidEmailAddress(String email) {
         if (email == "") return false;
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -47,7 +29,7 @@ public class RegisterUtil {
     }
 
     //  it returns true if it is a valid birthday, else false
-    static boolean isValidBirthday (int day, int month, int year) {
+    public static boolean isValidBirthday (int day, int month, int year) {
 
         boolean flag = false;
         if(year < 1900 || year > 2015) return flag;
@@ -74,13 +56,13 @@ public class RegisterUtil {
 
     //   checking if the n parameter representing the year is bisestle
     //   it returns true if it is
-    static boolean isBisestle(int n) {
+    public static boolean isBisestle(int n) {
         if((n % 4 == 0 && n % 100 != 0) || n % 400 == 0) return true;
         return false;
     }
 
     //  checking pswd lenght is greater than 6
-    static boolean checkPswdLength(String a){
+    public static boolean checkPswdLength(String a){
         return a.length() >= 6 && a.length() <= 12;
     }
 
@@ -98,7 +80,7 @@ public class RegisterUtil {
  *  -4 if there space characters (tab new line ecc)
  *  -5 if there are other special characters (like comma, question mark ecc)
  */
-    static int passWordChecker (String input) {
+    public static int passWordChecker (String input) {
         Pattern[] passwordRegexes = new Pattern[3];
         passwordRegexes[0] = Pattern.compile(".*[A-Z].*"); //   capital letters
         passwordRegexes[1] = Pattern.compile(".*[a-z].*"); //   non capital letters
@@ -118,7 +100,7 @@ public class RegisterUtil {
         return 0;
     }
 
-    static String cryptoPswd(String a){
+    public static String cryptoPswd(String a){
         String finale = "";
         int length = a.length();
         for (int i = 0; i<length; i++){
@@ -128,7 +110,7 @@ public class RegisterUtil {
     }
 
     //TODO funzione che decripta la pswd
-    private static String deCryptoPswd(String a){
+    public static String deCryptoPswd(String a){
         String finale = "";
         int length = a.length();
         return finale;

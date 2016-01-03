@@ -1,16 +1,14 @@
-package com.clothapp;
+package Resources;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
-import java.text.ParseException;
 
 /**
  * Created by giacomoceribelli on 27/12/15.
  */
 public class ExceptionCheck {
 
-    static void check(int code,View vi,String message) {
+    public static void check(int code,View vi,String message) {
 
         System.out.println("debug: errore = " + message);
         String output = "";

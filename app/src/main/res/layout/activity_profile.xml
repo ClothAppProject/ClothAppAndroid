@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="1">
-        <TableRow android:layout_gravity="center_vertical">
+        <TableRow android:layout_gravity="center_vertical"
+            android:layout_marginTop="30dp">
                 <TextView
                     android:text="@string/username"
                     android:layout_width="fill_parent"
@@ -23,6 +24,62 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp" />
+        </TableRow>
+        <TableRow android:layout_gravity="center_vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:text="@string/name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp" />
+
+            <TextView
+                android:id="@+id/name_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
+        </TableRow>
+        <TableRow android:layout_gravity="center_vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:text="@string/lastname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp" />
+
+            <TextView
+                android:id="@+id/lastname_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
+        </TableRow>
+        <TableRow android:layout_gravity="center_vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:text="@string/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp" />
+
+            <TextView
+                android:id="@+id/email_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
+        </TableRow>
+        <TableRow android:layout_gravity="center_vertical"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:text="@string/birthday"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp" />
+
+            <TextView
+                android:id="@+id/date_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
         </TableRow>
     </TableLayout>
 </ScrollView>

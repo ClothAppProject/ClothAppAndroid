@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.RotateAnimation;
@@ -26,7 +25,7 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import static android.support.v4.graphics.BitmapCompat.*;
-import static com.clothapp.ExceptionCheck.*;
+import static Resources.ExceptionCheck.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,7 +64,6 @@ public class Upload extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
         imageView = (ImageView) findViewById(R.id.view_immagine);
 
-        //TODO bisognerebbe creare un pulsante annulla sulla toolbar che torna all'activity homepage ed elimina la foto appena creata
         //controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
         //dell'apertura della fotocamera
         if (savedInstanceState != null) {
@@ -105,13 +103,11 @@ public class Upload extends AppCompatActivity {
 
                 System.out.println("debug: compressione immagine");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                //TODO uniche modifiche fatte sono dalla riga seguente fino a
                 // e la funzione a fine file checkToCompress()
 
                 int toCompress = checkToCompress(imageBitmap);
                 System.out.println("debug: toCompress = " + toCompress);
 
-                //TODO qui
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                 byte[] byteImg = stream.toByteArray();
                 System.out.println("debug: dimensione del file è "+getAllocationByteCount(imageBitmap));
