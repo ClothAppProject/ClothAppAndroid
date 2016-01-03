@@ -1,4 +1,4 @@
-<img src="https%3A//drive.google.com/a098fca7-ecbc-4256-8f0d-9aa9bf491668" >
+<img src="https://github.com/ceribbo/ClothApp/blob/master/app/src/main/res/mipmap-hdpi/logo.png" >
 # ClothApp
 
 Quick way to help people to find out their friends opinion about any clothes they want to buy!
