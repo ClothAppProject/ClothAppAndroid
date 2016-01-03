@@ -11,8 +11,6 @@ import com.parse.ParseUser;
 
 public class Homepage extends AppCompatActivity {
 
-    // Prova Android Studio su Debian - Simone
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
