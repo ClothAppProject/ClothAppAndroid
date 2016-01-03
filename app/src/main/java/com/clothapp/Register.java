@@ -46,25 +46,25 @@ public class Register extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.form_register_button:
                         //  checking if username is nulll
-                        if (edit_username.getText().toString()=="") {
+                        if (edit_username.getText().toString().trim()=="") {
                             //nel caso in cui l'username è lasciato in bianco
                             Snackbar.make(v, "L'username non può essere vuoto", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: il campo username è vuoto");
                         //  checking if password and confirm password match
-                        }else if (checkPassWordAndConfirmPassword(edit_password.getText().toString(), edit_password_confirm.getText().toString())) {
+                        }else if (checkPassWordAndConfirmPassword(edit_password.getText().toString().trim(), edit_password_confirm.getText().toString())) {
                             //nel caso in cui le password non coincidano
                             Snackbar.make(v, "Le password devono coincidere", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: le password non coincidono");
                         //  checking if the email address is valid
-                        }else if(!isValidEmailAddress(edit_email.getText().toString())) {
+                        }else if(!isValidEmailAddress(edit_email.getText().toString().trim())) {
                             //nel caso in cui la mail non sia valida
                             Snackbar.make(v, "La mail inserita non è valida", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: la mail inserita è sbagliata");
                         //  checking if first and last name are not null
-                        }else if(edit_lastname.getText().toString()==""||edit_name.getText().toString()=="")  {
+                        }else if(edit_lastname.getText().toString().trim()==""||edit_name.getText().toString().trim()=="")  {
                             //nel caso in cui nome e cognome siano vuoti
                             Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
@@ -76,13 +76,13 @@ public class Register extends AppCompatActivity {
                                     .setAction("Action",null).show();
                             System.out.println("debug: la data inserita non e' valida");
                         //  checking if pswd length is right
-                        }else if(!checkPswdLength(edit_password.getText().toString())) {
+                        }else if(!checkPswdLength(edit_password.getText().toString().trim())) {
                             Snackbar.make(v, "La password deve essere lunga almeno 6 caratteri e non più di 12", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             System.out.println("debug: lunghezza pswd sbagliata");
                         //  checking if pswd is acceptable. See Register.Util.passWordChecker for the parameters accepted
-                        }else if(passWordChecker(edit_password.getText().toString()) != 0){
-                            String pswd = edit_password.getText().toString();
+                        }else if(passWordChecker(edit_password.getText().toString().trim()) != 0){
+                            String pswd = edit_password.getText().toString().trim();
                             int result = passWordChecker(pswd);
                             switch (result){
                                 case -1:
@@ -123,11 +123,11 @@ public class Register extends AppCompatActivity {
                             }
 
                             ParseUser user = new ParseUser();
-                            user.setUsername(edit_username.getText().toString());
-                            user.setPassword(edit_password.getText().toString());
-                            user.setEmail(edit_email.getText().toString());
-                            user.put("name",edit_name.getText().toString());
-                            user.put("lastname",edit_lastname.getText().toString());
+                            user.setUsername(edit_username.getText().toString().trim());
+                            user.setPassword(edit_password.getText().toString().trim());
+                            user.setEmail(edit_email.getText().toString().trim());
+                            user.put("name",edit_name.getText().toString().trim());
+                            user.put("lastname",edit_lastname.getText().toString().trim());
                             user.put("date",date);
 
                             System.out.println("debug: userID = "+user.getObjectId());
@@ -141,11 +141,11 @@ public class Register extends AppCompatActivity {
                                         //caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                         System.out.println("debug: registrazione eseguita corretttamente");
                                         SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                        userInformation.edit().putString("username",edit_username.getText().toString()).commit();
-                                        userInformation.edit().putString("name",edit_name.getText().toString()).commit();
-                                        userInformation.edit().putString("lastname",edit_lastname.getText().toString()).commit();
-                                        userInformation.edit().putString("password",cryptoPswd(edit_password.getText().toString())).commit();
-                                        userInformation.edit().putString("email",edit_email.getText().toString()).commit();
+                                        userInformation.edit().putString("username",edit_username.getText().toString().trim()).commit();
+                                        userInformation.edit().putString("name",edit_name.getText().toString().trim()).commit();
+                                        userInformation.edit().putString("lastname",edit_lastname.getText().toString().trim()).commit();
+                                        userInformation.edit().putString("password",cryptoPswd(edit_password.getText().toString().trim())).commit();
+                                        userInformation.edit().putString("email",edit_email.getText().toString().trim()).commit();
                                         userInformation.edit().putString("date",edit_date.toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
                                         Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
