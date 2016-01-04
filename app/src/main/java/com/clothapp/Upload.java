@@ -74,8 +74,6 @@ public class Upload extends AppCompatActivity {
             photoFileName = savedInstanceState.getString("photoFileName");
             System.out.println("debug: first è false quindi non avvia la fotocamera");
             //inizializzo parse perchè l'activity è stata chiusa
-            Parse.enableLocalDatastore(this);
-            Parse.initialize(this);
         }
         if (first)   {
             //non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
@@ -172,30 +170,13 @@ public class Upload extends AppCompatActivity {
             // a questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
 
-
-            //TODO ancora problemi con l'orientamento dell'immagine, poi lo mettiamo a posto con calma
-            // inserisco l'immagine bitmap nella imageView
-            ExifInterface ei = null;
+            //inserisco l'immagine nel bitmap
+            //prima però controllo in che modo è stata scattata (rotazione)
             try {
-                ei = new ExifInterface(takenPhotoUri.getPath());
+                imageView.setImageBitmap(rotateImageIfRequired(imageBitmap,takenPhotoUri));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-            switch(orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    System.out.println("debug: ruotata di 90°");
-                    rotateImage(imageBitmap, 90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    System.out.println("debug: ruotata di 180°");
-                    rotateImage(imageBitmap, 180);
-                    break;
-            }
-
-            imageView.setImageBitmap(imageBitmap);
-            //TODO ci sono problemi con l'orientamento dell'immagine nel textview
         } else { // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             System.out.println("debug: immagine non è stata scattata");
@@ -261,29 +242,8 @@ public class Upload extends AppCompatActivity {
         return false;
     }
 
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Bitmap retVal;
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        retVal = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-
-        return retVal;
-    }
-
-    //funzione per ruotare l'image view di 90 gradi
-    private void rotate(int grade) {
-        final RotateAnimation rotateAnim = new RotateAnimation(0.0f, grade,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-
-        rotateAnim.setDuration(0);
-        rotateAnim.setFillAfter(true);
-        imageView.startAnimation(rotateAnim);
-    }
-
-    //  returns the parameter to pass to the compression method
-    //  it takes the photo to compress
+    //  ritorna il parametro da passare il metodo compression
+    //  prende la foto da comprimere
     private int checkToCompress(Bitmap photo){
         //TODO getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
         System.out.println("photo to compress is: "+getAllocationByteCount(photo));
@@ -291,5 +251,32 @@ public class Upload extends AppCompatActivity {
         else if(getAllocationByteCount(photo)> mb3) return 80;
         else if(getAllocationByteCount(photo) > mb1) return 90;
         else return 100;
+    }
+
+    //funzione che controlla se ruotare l'immagine o no
+    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+        //prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    //funzione che ruota l'immagine
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
     }
 }
