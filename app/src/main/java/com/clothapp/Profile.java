@@ -2,9 +2,11 @@ package com.clothapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -12,13 +14,13 @@ import java.io.File;
 /**
  * Created by giacomoceribelli on 02/01/16.
  */
-public class Profile extends AppCompatActivity{
+public class Profile extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        setUpMenu();
         TextView username = (TextView) findViewById(R.id.username_field);
         TextView name = (TextView) findViewById(R.id.name_field);
         TextView lastname = (TextView) findViewById(R.id.lastname_field);
@@ -45,5 +47,15 @@ public class Profile extends AppCompatActivity{
             return original;
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1);
+    }
+    private void setUpMenu(){
+        String[] navMenuTitles;
+        TypedArray navMenuIcons;
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+
+        set(navMenuTitles,navMenuIcons);
     }
 }

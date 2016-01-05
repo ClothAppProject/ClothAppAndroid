@@ -2,14 +2,18 @@ package com.clothapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.clothapp.resources.Logout;
 import com.parse.ParseUser;
 
-public class Homepage extends AppCompatActivity {
+public class Homepage extends BaseActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
+        setUpMenu();
+
         //button upload a new photo
         FloatingActionButton upload = (FloatingActionButton) findViewById(R.id.upload_button);
         upload.setOnClickListener(new View.OnClickListener(){
@@ -53,16 +59,16 @@ public class Homepage extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 switch (view_logout.getId()) {
                     case R.id.form_logout_button:
-                            //chiudo sessione e metto valore sharedPref a false
-                            ParseUser.logOut();
-                            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                            userInformation.edit().putString("username", "").commit();
-                            userInformation.edit().putString("name", "").commit();
-                            userInformation.edit().putString("lastname", "").commit();
-                            userInformation.edit().putString("email", "").commit();
-                            userInformation.edit().putString("date", "").commit();
-                            userInformation.edit().putBoolean("isLogged", false).commit();
-                            System.out.println("debug: logout eseguito");
+                            new Logout();
+                        ParseUser.logOut();
+                        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                        userInformation.edit().putString("username", "").commit();
+                        userInformation.edit().putString("name", "").commit();
+                        userInformation.edit().putString("lastname", "").commit();
+                        userInformation.edit().putString("email", "").commit();
+                        userInformation.edit().putString("date", "").commit();
+                        userInformation.edit().putBoolean("isLogged", false).commit();
+                        System.out.println("debug: logout eseguito");
                             Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(form_intent);
                             finish();
@@ -86,6 +92,17 @@ public class Homepage extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setUpMenu(){
+        String[] navMenuTitles;
+        TypedArray navMenuIcons;
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+
+        set(navMenuTitles,navMenuIcons);
     }
 
 }

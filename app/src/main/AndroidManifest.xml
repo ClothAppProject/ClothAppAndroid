@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clothapp">
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".resources.ParseApplication"
         android:allowBackup="true"
@@ -13,6 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- meta-data per parse -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
@@ -20,10 +23,10 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk" />
-        <!---->
+        <!--  -->
 
         <activity
-            android:name="com.clothapp.Launcher_Activity"
+            android:name=".Launcher_Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -33,30 +36,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.clothapp.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Homepage"
+            android:name=".Homepage"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Upload"
+            android:name=".Upload"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.clothapp.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".Register"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Register"
+            android:name=".Profile"
             android:label="@string/app_name" />
-        <activity
-            android:name="com.clothapp.Profile"
-            android:label="@string/app_name" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".Try"></activity>
     </application>
 
 </manifest>

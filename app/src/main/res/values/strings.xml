@@ -29,4 +29,22 @@
     <string name="separator">-</string>
     <string name="info">Log-Info</string>
 
+    <string-array name="nav_drawer_items">
+        <item>Profilo</item>
+        <item>Homepage</item>
+        <item>Third</item>
+        <item>Fourth</item>
+        <item>Logout</item>
+        <item>Sucaaaa</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+    </array>
+
 </resources>
