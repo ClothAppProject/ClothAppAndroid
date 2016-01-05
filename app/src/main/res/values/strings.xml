@@ -16,7 +16,7 @@
 
     <string name="login_button">Login</string>
     <string name="register_button">Registrati</string>
-    <string name="homepage_button">Homepage</string>
+    <string name="homepage_button">HomePage</string>
     <string name="logout_button">Logout</string>
     <string name="profile_button">Profilo</string>
     <string name="barra_separatrice">____________________________________________</string>
@@ -26,6 +26,7 @@
     <string name="label_form_lastname">Cognome Inserito:</string>
     <string name="finale">You Won!</string>
     <string name="loading">Caricamento...</string>
+
     <string-array name="string_menu">
         <item>Profilo</item>
         <item>Home</item>
@@ -38,18 +39,12 @@
     <string name="close_navigation">Chiudi il menu</string>
 
     <string-array name="nav_drawer_items">
+        <item>HomePage</item>
         <item>Profilo</item>
-        <item>Homepage</item>
-        <item>Third</item>
-        <item>Fourth</item>
         <item>Logout</item>
-        <item>Sucaaaa</item>
     </string-array>
 
     <array name="nav_drawer_icons">
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_launcher</item>
         <item>@mipmap/ic_launcher</item>
         <item>@mipmap/ic_launcher</item>
         <item>@mipmap/ic_launcher</item>

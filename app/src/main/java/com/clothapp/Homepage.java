@@ -23,8 +23,6 @@ public class Homepage extends BaseActivity {
         Button button_final = (Button) findViewById(R.id.final_button);
 
         button_final.setOnClickListener(new View.OnClickListener(){
-
-
             @Override
             public void onClick(View v) {
                 switch(v.getId()) {

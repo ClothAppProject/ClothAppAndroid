@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
-import com.clothapp.resources.Logout;
+import com.clothapp.resources.NavDrawerItem;
+import com.clothapp.resources.NavDrawerListAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -152,23 +152,25 @@ public class BaseActivity extends AppCompatActivity {
         Intent i = null;
         switch (position) {
             case 0:
-                i = new Intent(this, Profile.class);
-                break;
-            case 1:
+                //homepage
                 i = new Intent(this, Homepage.class);
                 break;
+            case 1:
+                //profilo
+                i = new Intent(this, Profile.class);
+                break;
             case 2:
-                i = new Intent(this, Try.class);
-                break;
-            case 3:
-                i = new Intent(this, Try.class);
-                break;
-            case 4:
-                new Logout();
+                //logout
+                ParseUser.logOut();
+                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                userInformation.edit().putString("username", "").commit();
+                userInformation.edit().putString("name", "").commit();
+                userInformation.edit().putString("lastname", "").commit();
+                userInformation.edit().putString("email", "").commit();
+                userInformation.edit().putString("date", "").commit();
+                userInformation.edit().putBoolean("isLogged", false).commit();
+                System.out.println("debug: logout eseguito");
                 i = new Intent(this, MainActivity.class);
-                break;
-            case 5:
-                i = new Intent(this, Try.class);
                 break;
             default:
                 break;

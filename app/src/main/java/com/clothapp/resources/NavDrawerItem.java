@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.resources;
 
 /**
  * Created by Roberto on 05/01/16.

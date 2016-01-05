@@ -1,10 +1,8 @@
-package com.clothapp; /**
+package com.clothapp.resources; /**
  * Created by Roberto on 05/01/16.
  */
 
 import java.util.ArrayList;
-import com.clothapp.NavDrawerItem;
-import com.clothapp.R;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.clothapp.R;
 
 public class NavDrawerListAdapter extends BaseAdapter {
 
