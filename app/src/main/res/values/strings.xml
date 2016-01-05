@@ -37,4 +37,22 @@
     <string name="open_navigation">Apri il menu</string>
     <string name="close_navigation">Chiudi il menu</string>
 
+    <string-array name="nav_drawer_items">
+        <item>Profilo</item>
+        <item>Homepage</item>
+        <item>Third</item>
+        <item>Fourth</item>
+        <item>Logout</item>
+        <item>Sucaaaa</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+    </array>
+
 </resources>
