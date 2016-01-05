@@ -8,7 +8,15 @@ import android.os.AsyncTask;
 import android.content.Intent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.net.URL;
+import java.util.List;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -82,6 +90,27 @@ public class SplashScreen extends AppCompatActivity {
         //TODO  FETCHING AN ARRAY OF PICS FROM DB
         @Override
         protected Void doInBackground(Void... arg0) {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+            query.whereEqualTo("user",userInformation.getString("username", "clothapp") );
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> listaFoto, ParseException e) {
+                    if (e == null) {
+                        URL url = null;
+                        try {
+                            url = new URL(listaFoto.get(1).getParseFile("photo").getUrl());
+                            System.out.println("preso url "+url);
+                            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                            ImageView image = (ImageView) findViewById(R.id.imageView); // ho provato ad inserire imageView nella home, ma putroppo non funziona, pochè non essendo stata ancora creata ritorna null
+                            image.setImageBitmap(bmp);
+                        } catch (Exception e1) {
+                            System.out.println("errore "+e1.getMessage());
+                        }
+                    } else {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                }
+            });
             /*
              * Will make http call here This call will download required data
              * before launching the app
