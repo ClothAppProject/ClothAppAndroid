@@ -12,14 +12,12 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -173,7 +171,8 @@ public class Upload extends AppCompatActivity {
             //inserisco l'immagine nel bitmap
             //prima però controllo in che modo è stata scattata (rotazione)
             try {
-                imageView.setImageBitmap(rotateImageIfRequired(imageBitmap,takenPhotoUri));
+                imageBitmap = rotateImageIfRequired(imageBitmap,takenPhotoUri);
+                imageView.setImageBitmap(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }

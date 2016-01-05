@@ -16,6 +16,7 @@
 
     <string name="login_button">Login</string>
     <string name="register_button">Registrati</string>
+    <string name="homepage_button">Homepage</string>
     <string name="logout_button">Logout</string>
     <string name="profile_button">Profilo</string>
     <string name="barra_separatrice">____________________________________________</string>
@@ -25,8 +26,15 @@
     <string name="label_form_lastname">Cognome Inserito:</string>
     <string name="finale">You Won!</string>
     <string name="loading">Caricamento...</string>
+    <string-array name="string_menu">
+        <item>Profilo</item>
+        <item>Home</item>
+        <item>Logout</item>
+    </string-array>
 
     <string name="separator">-</string>
     <string name="info">Log-Info</string>
+    <string name="open_navigation">Apri il menu</string>
+    <string name="close_navigation">Chiudi il menu</string>
 
 </resources>

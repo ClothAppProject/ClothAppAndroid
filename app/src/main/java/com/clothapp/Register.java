@@ -26,6 +26,7 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        getSupportActionBar().setTitle(R.string.register_button);
 
         //prendo tutti valori
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);

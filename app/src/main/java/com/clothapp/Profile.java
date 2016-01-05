@@ -18,6 +18,7 @@ public class Profile extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        getSupportActionBar().setTitle(R.string.profile_button);
 
         TextView username = (TextView) findViewById(R.id.username_field);
         TextView name = (TextView) findViewById(R.id.name_field);
