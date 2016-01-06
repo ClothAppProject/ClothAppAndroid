@@ -6,16 +6,24 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
 import static com.clothapp.resources.ExceptionCheck.*;
+import static com.clothapp.resources.FacebookUtil.getUserDetailLoginFB;
+import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 import static com.clothapp.resources.RegisterUtil.*;
 
 
@@ -27,23 +35,25 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getSupportActionBar().setTitle(R.string.register_button);
-
-        //prendo tutti valori
-        final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
-        final EditText edit_password = (EditText) findViewById(R.id.edit_password);
-        final EditText edit_username = (EditText) findViewById(R.id.edit_username);
-        final EditText edit_email = (EditText) findViewById(R.id.edit_email);
-        final EditText edit_name = (EditText) findViewById(R.id.edit_name);
-        final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
-        final EditText edit_day = (EditText) findViewById(R.id.edit_day);
-        final EditText edit_month = (EditText) findViewById(R.id.edit_month);
-        final EditText edit_year = (EditText) findViewById(R.id.edit_year);
+        //nascondo la tastiera all'avvio di quest'activity
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         Button button = (Button) findViewById(R.id.form_register_button); //inizializzo bottone registrati
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //listener sul bottone
+                //prendo tutti valori
+                final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
+                final EditText edit_password = (EditText) findViewById(R.id.edit_password);
+                final EditText edit_username = (EditText) findViewById(R.id.edit_username);
+                final EditText edit_email = (EditText) findViewById(R.id.edit_email);
+                final EditText edit_name = (EditText) findViewById(R.id.edit_name);
+                final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
+                final EditText edit_day = (EditText) findViewById(R.id.edit_day);
+                final EditText edit_month = (EditText) findViewById(R.id.edit_month);
+                final EditText edit_year = (EditText) findViewById(R.id.edit_year);
                 final View vi = v;
+
                 switch (v.getId()) {
                     case R.id.form_register_button:
                         //  checking if username is nulll
@@ -126,7 +136,7 @@ public class Register extends AppCompatActivity {
                             ParseUser user = new ParseUser();
                             user.setUsername(edit_username.getText().toString().trim());
                             user.setPassword(edit_password.getText().toString().trim());
-                            user.setEmail(edit_email.getText().toString().trim());
+                            user.setEmail(edit_email.getText().toString());
                             user.put("name",edit_name.getText().toString().trim());
                             user.put("lastname",edit_lastname.getText().toString().trim());
                             user.put("date",date);
@@ -146,7 +156,7 @@ public class Register extends AppCompatActivity {
                                         userInformation.edit().putString("name",edit_name.getText().toString().trim()).commit();
                                         userInformation.edit().putString("lastname",edit_lastname.getText().toString().trim()).commit();
                                         userInformation.edit().putString("password",cryptoPswd(edit_password.getText().toString().trim())).commit();
-                                        userInformation.edit().putString("email",edit_email.getText().toString().trim()).commit();
+                                        userInformation.edit().putString("email",edit_email.getText().toString()).commit();
                                         userInformation.edit().putString("date",edit_date.toString()).commit();
                                         userInformation.edit().putBoolean("isLogged",true).commit();
                                         Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
@@ -163,5 +173,56 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
+
+        //listener sul pulsante login with facebook
+        Button facebook_login = (Button) findViewById(R.id.register_button_facebook);
+        facebook_login.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
+            @Override
+            public void onClick(View v) {
+                final View vi = v;
+                final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                //specifico i campi ai quali sono interessato quando richiedo permesso ad utente
+                List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
+                //eseguo la chiamata per il login via facebook con parse
+                ParseFacebookUtils.logInWithReadPermissionsInBackground(Register.this, permissions, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException err) {
+                        if (err != null) {
+                            //controllo che non ci siano eccezioni parse
+                            check(err.getCode(), vi, err.getMessage());
+                        } else if (user == null) {
+                            //login via facebook cancellato dall'utente
+                            System.out.println("debug: Login attraverso facebook cancellato");
+                        } else if (user.isNew()) {
+                            //L'utente non è registrato con facebook, eseguo registrazione con facebook
+                            System.out.println("debug: Registrazione e Login eseguiti attraverso facebook");
+                            try {
+                                //chiamo per inserire le informazioni di facebook nel database parse (l'utente è già stato creato)
+                                getUserDetailsRegisterFB(user, vi,userInformation);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                            startActivity(form_intent);
+                            finish();
+                        } else {
+                            //login eseguito correttamente attraverso facebook
+                            System.out.println("debug: Login eseguito attraverso Facebook");
+                            getUserDetailLoginFB(user,vi,userInformation);
+                            Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                            startActivity(form_intent);
+                            finish();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //dopo login su facebook ritorna qui
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 }

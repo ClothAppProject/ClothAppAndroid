@@ -7,19 +7,27 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
-        android:name=".resources.ParseApplication"
+        android:name=".resources.ApplicationSupport"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- meta-data per parse -->
+        <!-- meta-data per parse & facebook-->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8" />
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!---->
 
         <activity
@@ -56,8 +64,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-
     </application>
 
 </manifest>

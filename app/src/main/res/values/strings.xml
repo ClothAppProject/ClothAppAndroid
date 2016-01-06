@@ -1,7 +1,10 @@
 <resources>
+    <string name="facebook_app_id">1088170274561501</string>
+    <string name="connect_facebook">Connetti con Facebook</string>
+    <string name="disconnect_facebook">Disconnetti da Facebook</string>
+
     <string name="app_name">ClothApp</string>
     <string name="action_settings">Settings</string>
-
 
     <string name="form_intro">Esegui il Login o Registrati</string>
 
