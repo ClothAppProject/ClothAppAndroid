@@ -127,72 +127,66 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                switch (v.getId()) {
+                final View vi = v;
 
-                    case R.id.login_button:
+                // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
+                final EditText edit_username = (EditText) findViewById(R.id.edit_username);
+                final EditText edit_password = (EditText) findViewById(R.id.edit_password);
 
-                        final View vi = v;
+                if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
+                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    // Inizializzo barra di caricamento
+                    dialog = ProgressDialog.show(MainActivity.this, "",
+                            "Logging in. Please wait...", true);
 
-                        // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
-                        final EditText edit_username = (EditText) findViewById(R.id.edit_username);
-                        final EditText edit_password = (EditText) findViewById(R.id.edit_password);
+                    // Create a thread to manage the login in background
+                    Thread login = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
+                                System.out.println("debug: Login eseguito correttamente");
 
-                        if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
-                            Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                        } else {
-                            // Inizializzo barra di caricamento
-                            dialog = ProgressDialog.show(MainActivity.this, "",
-                                    "Logging in. Please wait...", true);
+                                // Inserisco i valori nelle sharedPref
+                                ParseUser uth = ParseUser.getCurrentUser();
+                                userInformation.edit().putBoolean("isLogged", true).commit();
+                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
+                                //userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
+                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
+                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
+                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
+                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
 
-                            // Create a thread to manage the login in background
-                            Thread login = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
-                                        System.out.println("debug: Login eseguito correttamente");
+                                // Chiudo la progressdialogbar
+                                dialog.dismiss();
 
-                                        // Inserisco i valori nelle sharedPref
-                                        ParseUser uth = ParseUser.getCurrentUser();
-                                        userInformation.edit().putBoolean("isLogged", true).commit();
-                                        userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
-                                        //userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
-                                        userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
-                                        userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
-                                        userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
-                                        userInformation.edit().putString("email", uth.get("email").toString()).commit();
+                                // Redirect user to Splash Screen Activity
+                                Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                startActivity(form_intent);
 
-                                        // Chiudo la progressdialogbar
-                                        dialog.dismiss();
+                                finish();
 
-                                        // Redirect user to Splash Screen Activity
-                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
-                                        startActivity(form_intent);
+                            } catch (ParseException e) {
+                                // Chiudo la progressdialogbar
+                                dialog.dismiss();
 
-                                        finish();
+                                if (e.getCode() == 101) {
+                                    // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
+                                    Log.d("MainActivity", "Errore: " + e.getMessage());
 
-                                    } catch (ParseException e) {
-                                        // Chiudo la progressdialogbar
-                                        dialog.dismiss();
-
-                                        if (e.getCode() == 101) {
-                                            // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
-                                            Log.d("MainActivity", "Errore: " + e.getMessage());
-
-                                            Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                        } else {
-                                            check(e.getCode(), vi, e.getMessage());
-                                        }
-                                    }
+                                    Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                } else {
+                                    check(e.getCode(), vi, e.getMessage());
                                 }
-                            });
-
-                            // Start normal login thread
-                            login.start();
+                            }
                         }
-                        break;
+                    });
+
+                    // Start normal login thread
+                    login.start();
                 }
             }
         });
@@ -204,14 +198,13 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.register_button:
-                        Bundle bundle = new Bundle();
-                        Intent form_intent = new Intent(getApplicationContext(), Register.class);
-                        form_intent.putExtras(bundle);
-                        startActivity(form_intent);
-                        break;
-                }
+
+                Bundle bundle = new Bundle();
+
+                // Redirect user to signup Activity.
+                Intent form_intent = new Intent(getApplicationContext(), Register.class);
+                form_intent.putExtras(bundle);
+                startActivity(form_intent);
             }
         });
     }
