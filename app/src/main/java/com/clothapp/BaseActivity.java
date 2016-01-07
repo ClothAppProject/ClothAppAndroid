@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class BaseActivity extends AppCompatActivity {
             }
         } else {
             for (int i = 0; i < navMenuTitles.length; i++) {
-                System.out.println("debug: i = " + i);
+                //System.out.println("debug: i = " + i);
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
             }
         }

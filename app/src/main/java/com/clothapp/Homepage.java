@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
 public class Homepage extends BaseActivity {
@@ -18,20 +20,6 @@ public class Homepage extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         getSupportActionBar().setTitle(R.string.homepage_button);
-
-        //  just a sample button it does nothing when clicked
-        Button button_final = (Button) findViewById(R.id.final_button);
-
-        button_final.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                switch(v.getId()) {
-                    case R.id.final_button:
-                        System.out.println("debug: premuto you won");
-                        break;
-                }
-            }
-        });
 
         setUpMenu();
 
