@@ -45,8 +45,10 @@ public class Profile extends BaseActivity {
         username.setText(user.getUsername().toString());
         name.setText(capitalize(user.get("name").toString()));
         lastname.setText(capitalize(user.get("lastname").toString()));
-        email.setText(user.get("email").toString());
-        date.setText(user.get("date").toString());
+        email.setText(user.getEmail().toString());
+        //  trimmed the data String in order to delete white spaces
+        String timeStamp = formatDate(user.get("date").toString());
+        date.setText(timeStamp);
 
         final Button connect = (Button) findViewById(R.id.facebook_connect_button);
         final Button disconnect = (Button) findViewById(R.id.facebook_disconnect_button);
@@ -134,5 +136,44 @@ public class Profile extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
 
         set(navMenuTitles, navMenuIcons);
+    }
+
+    private String formatDate(String s){
+        String [] dataArray = s.split(" ");
+        for (int i = 0; i<dataArray.length; i++){
+            System.out.println("debug: "+ i + dataArray[i]);
+        }
+        s = dataArray [2] + "/" +  formatMonth(dataArray[1]) + "/" + dataArray[5];
+        return s;
+    }
+
+    private String formatMonth (String s){
+        switch (s) {
+            case "Jan":
+                return "01";
+            case "Feb":
+                return "02";
+            case "Mar":
+                return "03";
+            case "Apr":
+                return "04";
+            case "May":
+                return "05";
+            case "Jun":
+                return "06";
+            case "Jul":
+                return "07";
+            case "Aug":
+                return "08";
+            case "Sep":
+                return "09";
+            case "Oct":
+                return "10";
+            case "Nov":
+                return "11";
+            case "Dec":
+                return "12";
+        }
+        return "";
     }
 }
