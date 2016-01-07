@@ -21,6 +21,7 @@ public class LauncherActivity extends AppCompatActivity {
         // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_launcher);
 
         // Current user initialization. Parse handles all the data on its own.
