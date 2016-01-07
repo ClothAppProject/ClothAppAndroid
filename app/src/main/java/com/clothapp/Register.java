@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import static com.clothapp.resources.RegisterUtil.*;
 
 
 public class Register extends AppCompatActivity {
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,49 +125,59 @@ public class Register extends AppCompatActivity {
                                     break;
                             }
                         }else{
+                            //inizializzo la barra di caricamento
+                            final ProgressDialog dialog = ProgressDialog.show(Register.this, "",
+                                    "Logging out. Please wait...", true);
                             //formatto data
                             final String edit_date = edit_year.getText().toString()+"-"+edit_month.getText().toString()+"-"+edit_day.getText().toString();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = null;
                             try {
                                 date = sdf.parse(edit_date);
                             } catch (java.text.ParseException e) {
                                 e.printStackTrace();
                             }
+                            Thread register = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ParseUser user = new ParseUser();
+                                    user.setUsername(edit_username.getText().toString().trim());
+                                    user.setPassword(edit_password.getText().toString().trim());
+                                    user.setEmail(edit_email.getText().toString());
+                                    user.put("name",edit_name.getText().toString().trim());
+                                    user.put("lastname",edit_lastname.getText().toString().trim());
+                                    user.put("date",date);
 
-                            ParseUser user = new ParseUser();
-                            user.setUsername(edit_username.getText().toString().trim());
-                            user.setPassword(edit_password.getText().toString().trim());
-                            user.setEmail(edit_email.getText().toString());
-                            user.put("name",edit_name.getText().toString().trim());
-                            user.put("lastname",edit_lastname.getText().toString().trim());
-                            user.put("date",date);
+                                    System.out.println("debug: userID = "+user.getObjectId());
 
-                            System.out.println("debug: userID = "+user.getObjectId());
+                                    System.out.println("debug: pswd is: "+edit_password.getText().toString());
 
-                            System.out.println("debug: pswd is: "+edit_password.getText().toString());
+                                    user.signUpInBackground(new SignUpCallback() {
+                                        public void done(ParseException e) {
+                                            if (e==null)    {
 
-                            user.signUpInBackground(new SignUpCallback() {
-                                public void done(ParseException e) {
-                                    if (e==null)    {
-
-                                        //caso in cui registrazione è andata a buon fine e non ci sono eccezioni
-                                        System.out.println("debug: registrazione eseguita corretttamente");
-                                        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                        userInformation.edit().putString("username",edit_username.getText().toString().trim()).commit();
-                                        userInformation.edit().putString("name",edit_name.getText().toString().trim()).commit();
-                                        userInformation.edit().putString("lastname",edit_lastname.getText().toString().trim()).commit();
-                                        userInformation.edit().putString("password",cryptoPswd(edit_password.getText().toString().trim())).commit();
-                                        userInformation.edit().putString("email",edit_email.getText().toString()).commit();
-                                        userInformation.edit().putString("date",edit_date.toString()).commit();
-                                        userInformation.edit().putBoolean("isLogged",true).commit();
-                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
-                                        startActivity(form_intent);
-                                        finish();
-                                    }else {
-                                        //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                        check(e.getCode(),vi,e.getMessage());
-                                    }
+                                                //caso in cui registrazione è andata a buon fine e non ci sono eccezioni
+                                                System.out.println("debug: registrazione eseguita corretttamente");
+                                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                                userInformation.edit().putString("username",edit_username.getText().toString().trim()).commit();
+                                                userInformation.edit().putString("name",edit_name.getText().toString().trim()).commit();
+                                                userInformation.edit().putString("lastname",edit_lastname.getText().toString().trim()).commit();
+                                                userInformation.edit().putString("password",cryptoPswd(edit_password.getText().toString().trim())).commit();
+                                                userInformation.edit().putString("email",edit_email.getText().toString()).commit();
+                                                userInformation.edit().putString("date",edit_date.toString()).commit();
+                                                userInformation.edit().putBoolean("isLogged",true).commit();
+                                                Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                                startActivity(form_intent);
+                                                //chiudo la dialogBar
+                                                dialog.dismiss();
+                                                finish();
+                                            }else {
+                                                //chiudo la dialogBar
+                                                dialog.dismiss();
+                                                //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                check(e.getCode(),vi,e.getMessage());
+                                            }
+                                        }
+                                    });
                                 }
                             });
                         }

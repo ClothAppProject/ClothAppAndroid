@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -41,22 +42,32 @@ public class Homepage extends BaseActivity {
             //metto bottone logout in ascolto del click
             @Override
             public void onClick(View view_logout) {
-                // TODO Auto-generated method stub
+                //inizializzo la progressDialogBar
+                final ProgressDialog dialog = ProgressDialog.show(Homepage.this, "",
+                        "Logging out. Please wait...", true);
+
                 switch (view_logout.getId()) {
                     case R.id.form_logout_button:
                             //chiudo sessione e metto valore sharedPref a false
-                            ParseUser.logOut();
-                            SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                            userInformation.edit().putString("username", "").commit();
-                            userInformation.edit().putString("name", "").commit();
-                            userInformation.edit().putString("lastname", "").commit();
-                            userInformation.edit().putString("email", "").commit();
-                            userInformation.edit().putString("date", "").commit();
-                            userInformation.edit().putBoolean("isLogged", false).commit();
-                            System.out.println("debug: logout eseguito");
-                            Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(form_intent);
-                            finish();
+                        Thread t = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ParseUser.logOut();
+                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                                userInformation.edit().putString("username", "").commit();
+                                userInformation.edit().putString("name", "").commit();
+                                userInformation.edit().putString("lastname", "").commit();
+                                userInformation.edit().putString("email", "").commit();
+                                userInformation.edit().putString("date", "").commit();
+                                userInformation.edit().putBoolean("isLogged", false).commit();
+                                System.out.println("debug: logout eseguito");
+                                Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(form_intent);
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+                        t.start();
                         break;
                 }
             }

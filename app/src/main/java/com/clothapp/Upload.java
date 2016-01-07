@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
@@ -133,9 +134,8 @@ public class Upload extends AppCompatActivity {
                 });
 
                 //Creazione di un ParseObject da inviare
-                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                 ParseObject picture = new ParseObject("Photo");
-                picture.put("user", userInformation.getString("username", "clothapp").toString());
+                picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
                 //invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {

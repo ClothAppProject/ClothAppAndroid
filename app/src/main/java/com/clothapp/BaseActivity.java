@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -90,13 +91,14 @@ public class BaseActivity extends AppCompatActivity {
                 // accessibility
         ) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
+                //TODO qua e sotto titolo del menu che cambia all'apertura del menu ma poi torna quello dell'activity precedente
+                //getSupportActionBar().setTitle(mTitle);
                 // calling onPrepareOptionsMenu() to show action bar icons
                 supportInvalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                //getSupportActionBar().setTitle(mDrawerTitle);
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 supportInvalidateOptionsMenu();
             }
@@ -162,16 +164,25 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 2:
                 //logout
-                ParseUser.logOut();
-                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                userInformation.edit().putString("username", "").commit();
-                userInformation.edit().putString("name", "").commit();
-                userInformation.edit().putString("lastname", "").commit();
-                userInformation.edit().putString("email", "").commit();
-                userInformation.edit().putString("date", "").commit();
-                userInformation.edit().putBoolean("isLogged", false).commit();
-                System.out.println("debug: logout eseguito");
+                final ProgressDialog dialog = ProgressDialog.show(BaseActivity.this, "",
+                        "Logging out. Please wait...", true);
+                Thread logout = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ParseUser.logOut();
+                        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+                        userInformation.edit().putString("username", "").commit();
+                        userInformation.edit().putString("name", "").commit();
+                        userInformation.edit().putString("lastname", "").commit();
+                        userInformation.edit().putString("email", "").commit();
+                        userInformation.edit().putString("date", "").commit();
+                        userInformation.edit().putBoolean("isLogged", false).commit();
+                        System.out.println("debug: logout eseguito");
+                    }
+                });
+                logout.start();
                 i = new Intent(this, MainActivity.class);
+                dialog.dismiss();
                 break;
             default:
                 break;

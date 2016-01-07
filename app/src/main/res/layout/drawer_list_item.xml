@@ -27,7 +27,8 @@
         android:textSize="15dp"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
-        android:paddingRight="40dp"/>
+        android:paddingRight="40dp"
+        />
 
 
 </RelativeLayout>
