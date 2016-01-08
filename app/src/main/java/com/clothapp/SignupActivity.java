@@ -38,7 +38,12 @@ public class SignupActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_signup);
 
-        getSupportActionBar().setTitle(R.string.register_button);
+        try {
+            getSupportActionBar().setTitle(R.string.register_button);
+        } catch (NullPointerException e) {
+            Log.d("SignupActivity", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         // Nascondo la tastiera all'avvio di quest'activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
