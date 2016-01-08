@@ -1,14 +1,10 @@
 package com.clothapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -32,7 +28,7 @@ public class LauncherActivity extends AppCompatActivity {
             Log.d("LauncherActivity", "Already logged in as " + currentUser.getUsername());
 
             // Skip log in page. Go directly to Splash Screen Activity.
-            Intent intent = new Intent(this, SplashScreen.class);
+            Intent intent = new Intent(this, SplashScreenActivity.class);
             startActivity(intent);
 
             // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
@@ -52,7 +48,7 @@ public class LauncherActivity extends AppCompatActivity {
 //        if (checkIfLogged()) {
 //            System.out.println("debug: logged");
 //            //  redirecting user to splash screen to fetch the images and then go to the homepage
-//            Intent i = new Intent(getApplicationContext(), SplashScreen.class);
+//            Intent i = new Intent(getApplicationContext(), SplashScreenActivity.class);
 //            startActivity(i);
 //            finish();
 //        } else {

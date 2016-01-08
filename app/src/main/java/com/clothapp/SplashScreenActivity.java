@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     //  ms to wait for the splash screen
     private final int TIME_TO_WAIT = 1000;
@@ -36,7 +36,7 @@ public class SplashScreen extends AppCompatActivity {
 //        //  calling the class to fetch the images
 //        new PrefetchData().execute();
 
-        Log.d("SplashScreen", "Finito il prefetch dei dati.");
+        Log.d("SplashScreenActivity", "Finito il prefetch dei dati.");
 
         // Create a thread which switches activity after TIME_TO_WAIT.
         Runnable r = new Runnable(){

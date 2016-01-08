@@ -194,7 +194,7 @@ public class SignupActivity extends AppCompatActivity {
 //                                                userInformation.edit().putBoolean("isLogged", true).commit();
 
                                                 // Redirect user to Splash Screen Activity.
-                                                Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                                Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
                                                 startActivity(form_intent);
 
                                                 // Chiudo la dialogBar
@@ -254,7 +254,7 @@ public class SignupActivity extends AppCompatActivity {
                             }
 
                             // Redirect user to Splash Screen Activity.
-                            Intent form_intent = new Intent(SignupActivity.this, SplashScreen.class);
+                            Intent form_intent = new Intent(SignupActivity.this, SplashScreenActivity.class);
                             startActivity(form_intent);
 
                             finish();
@@ -265,7 +265,7 @@ public class SignupActivity extends AppCompatActivity {
                             getUserDetailLoginFB(user, vi, userInformation);
 
                             // Redirect user to Splash Screen Activity
-                            Intent form_intent = new Intent(SignupActivity.this, SplashScreen.class);
+                            Intent form_intent = new Intent(SignupActivity.this, SplashScreenActivity.class);
                             startActivity(form_intent);
 
                             finish();

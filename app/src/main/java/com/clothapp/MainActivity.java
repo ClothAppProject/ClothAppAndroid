@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     // Redirect user to Splash Screen Activity
-                                    Intent form_intent = new Intent(MainActivity.this, SplashScreen.class);
+                                    Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
                                     startActivity(form_intent);
 
                                     // Chiudo barra di caricamento
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                                     getUserDetailLoginFB(user, vi, userInformation);
 
                                     // Redirect user to Splash Screen Activity
-                                    Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                    Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
                                     startActivity(form_intent);
 
                                     // Chiudo barra di caricamento
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 //                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
 
                                 // Redirect user to Splash Screen Activity
-                                Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
+                                Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
                                 startActivity(form_intent);
 
                                 // Chiudo la progressdialogbar
