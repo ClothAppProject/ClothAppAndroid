@@ -61,7 +61,9 @@ public class HomepageActivity extends BaseActivity {
 
                 switch (view_logout.getId()) {
                     case R.id.form_logout_button:
+
                         // Chiudo sessione e metto valore sharedPref a false
+
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -69,13 +71,13 @@ public class HomepageActivity extends BaseActivity {
                                 // Actual logout function.
                                 ParseUser.logOut();
 
-                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                userInformation.edit().putString("username", "").commit();
-                                userInformation.edit().putString("name", "").commit();
-                                userInformation.edit().putString("lastname", "").commit();
-                                userInformation.edit().putString("email", "").commit();
-                                userInformation.edit().putString("date", "").commit();
-                                userInformation.edit().putBoolean("isLogged", false).commit();
+//                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+//                                userInformation.edit().putString("username", "").commit();
+//                                userInformation.edit().putString("name", "").commit();
+//                                userInformation.edit().putString("lastname", "").commit();
+//                                userInformation.edit().putString("email", "").commit();
+//                                userInformation.edit().putString("date", "").commit();
+//                                userInformation.edit().putBoolean("isLogged", false).commit();
 
                                 Log.d("HomepageActivity", "Logout eseguito con successo");
 
