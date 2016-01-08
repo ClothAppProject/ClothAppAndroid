@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // Nascondo la tastiera all'avvio di quest'activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+        // final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 
         // Facebook button initialization
         Button facebook_login = (Button) findViewById(R.id.login_button_facebook);
@@ -68,11 +68,13 @@ public class MainActivity extends AppCompatActivity {
                                 if (err != null) {
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
+
                                     // Controllo che non ci siano eccezioni parse
                                     check(err.getCode(), vi, err.getMessage());
                                 } else if (user == null) {
                                     // Login via facebook cancellato dall'utente
                                     Log.d("MainActivity", "Login attraverso Facebook cancellato dall'utente.");
+
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
                                 } else if (user.isNew()) {
@@ -86,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
 
-                                    // Chiudo barra di caricamento
-                                    dialog.dismiss();
-
                                     // Redirect user to Splash Screen Activity
                                     Intent form_intent = new Intent(MainActivity.this, SplashScreen.class);
                                     startActivity(form_intent);
+
+                                    // Chiudo barra di caricamento
+                                    dialog.dismiss();
 
                                     finish();
                                 } else {
@@ -100,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
 
                                     getUserDetailLoginFB(user, vi, userInformation);
 
-                                    // Chiudo barra di caricamento
-                                    dialog.dismiss();
-
                                     // Redirect user to Splash Screen Activity
                                     Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                     startActivity(form_intent);
+
+                                    // Chiudo barra di caricamento
+                                    dialog.dismiss();
 
                                     finish();
                                 }
@@ -149,22 +151,22 @@ public class MainActivity extends AppCompatActivity {
                                 ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
                                 System.out.println("debug: Login eseguito correttamente");
 
-                                // Inserisco i valori nelle sharedPref
-                                ParseUser uth = ParseUser.getCurrentUser();
-                                userInformation.edit().putBoolean("isLogged", true).commit();
-                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
-                                //userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
-                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
-                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
-                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
-                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
-
-                                // Chiudo la progressdialogbar
-                                dialog.dismiss();
+//                                // Inserisco i valori nelle sharedPref
+//                                ParseUser uth = ParseUser.getCurrentUser();
+//                                userInformation.edit().putBoolean("isLogged", true).commit();
+//                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
+//                                // userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
+//                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
+//                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
+//                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
+//                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
 
                                 // Redirect user to Splash Screen Activity
                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
                                 startActivity(form_intent);
+
+                                // Chiudo la progressdialogbar
+                                dialog.dismiss();
 
                                 finish();
 
