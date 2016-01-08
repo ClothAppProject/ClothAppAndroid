@@ -48,9 +48,9 @@
     </string-array>
 
     <array name="nav_drawer_icons">
-        <item>@mipmap/home</item>
-        <item>@mipmap/user</item>
-        <item>@mipmap/exit</item>
+        <item>@mipmap/home_icon</item>
+        <item>@mipmap/user_icon</item>
+        <item>@mipmap/exit_icon</item>
     </array>
 
 </resources>
