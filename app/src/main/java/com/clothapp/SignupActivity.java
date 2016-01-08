@@ -212,6 +212,9 @@ public class SignupActivity extends AppCompatActivity {
                                     });
                                 }
                             });
+
+                            // Start the signup thread
+                            signup.start();
                         }
                         break;
                 }
