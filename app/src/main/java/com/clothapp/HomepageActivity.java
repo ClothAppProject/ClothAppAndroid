@@ -59,17 +59,14 @@ public class HomepageActivity extends BaseActivity {
                 final ProgressDialog dialog = ProgressDialog.show(HomepageActivity.this, "",
                         "Logging out. Please wait...", true);
 
-                switch (view_logout.getId()) {
-                    case R.id.form_logout_button:
+                // Chiudo sessione e metto valore sharedPref a false
 
-                        // Chiudo sessione e metto valore sharedPref a false
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                        Thread t = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                // Actual logout function.
-                                ParseUser.logOut();
+                        // Actual logout function.
+                        ParseUser.logOut();
 
 //                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 //                                userInformation.edit().putString("username", "").commit();
@@ -79,24 +76,21 @@ public class HomepageActivity extends BaseActivity {
 //                                userInformation.edit().putString("date", "").commit();
 //                                userInformation.edit().putBoolean("isLogged", false).commit();
 
-                                Log.d("HomepageActivity", "Logout eseguito con successo");
+                        Log.d("HomepageActivity", "Logout eseguito con successo");
 
-                                // Redirect the user to the Main Activity.
-                                Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(form_intent);
+                        // Redirect the user to the Main Activity.
+                        Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(form_intent);
 
-                                // Close the loading dialog.
-                                dialog.dismiss();
+                        // Close the loading dialog.
+                        dialog.dismiss();
 
-                                finish();
-                            }
-                        });
+                        finish();
+                    }
+                });
 
-                        // Start logout thread
-                        t.start();
-
-                        break;
-                }
+                // Start logout thread
+                t.start();
             }
         });
 
@@ -108,16 +102,12 @@ public class HomepageActivity extends BaseActivity {
             //metto bottone profile in ascolto del click
             @Override
             public void onClick(View view_profile) {
-                switch (view_profile.getId()) {
-                    case R.id.form_profile_button:
 
-                        // Redirect the user to the Profile Activity.
-                        Intent form_intent = new Intent(getApplicationContext(), Profile.class);
-                        startActivity(form_intent);
+                // Redirect the user to the Profile Activity.
+                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                startActivity(form_intent);
 
-                        finish();
-                        break;
-                }
+                finish();
             }
         });
     }
