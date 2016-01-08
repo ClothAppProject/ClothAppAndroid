@@ -98,6 +98,13 @@ public class SignupActivity extends AppCompatActivity {
                                     .setAction("Action", null).show();
 
                             Log.d("SignupActivity", "Nome o cognome non possono essere vuoti");
+                            //  checking if the birthday is empty
+                        } else if (edit_day.getText().toString().equalsIgnoreCase("")||edit_month.getText().toString().equalsIgnoreCase("")||edit_year.getText().toString().equalsIgnoreCase(""))   {
+                            // Nel caso in cui la data di nasciata sia vuota
+                            Snackbar.make(v, "La data di nascita non può essere vuota", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+
+                            Log.d("SignupActivity", "La data di nascita non può esser vuota");
                             //  checking if the birthday is acceptable
                         } else if (!isValidBirthday(Integer.parseInt(edit_day.getText().toString()), Integer.parseInt(edit_month.getText().toString()),
                                 Integer.parseInt(edit_year.getText().toString()))) {

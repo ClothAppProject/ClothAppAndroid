@@ -164,9 +164,6 @@ public class ProfileActivity extends BaseActivity {
 
     private String formatDate(String s) {
         String[] dataArray = s.split(" ");
-        for (int i = 0; i < dataArray.length; i++) {
-            System.out.println("debug: " + i + dataArray[i]);
-        }
         s = dataArray[2] + "/" + formatMonth(dataArray[1]) + "/" + dataArray[5];
         return s;
     }
