@@ -49,10 +49,10 @@ public class Profile extends BaseActivity {
         // Get current Parse user
         final ParseUser user = ParseUser.getCurrentUser();
 
-        username.setText(user.getUsername().toString());
+        username.setText(user.getUsername());
         name.setText(capitalize(user.get("name").toString()));
         lastname.setText(capitalize(user.get("lastname").toString()));
-        email.setText(user.getEmail().toString());
+        email.setText(user.getEmail());
         // Trimmed the data String in order to delete white spaces
         String timeStamp = formatDate(user.get("date").toString());
         date.setText(timeStamp);
