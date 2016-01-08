@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.clothapp.resources.FacebookUtil.*;
 import static com.clothapp.resources.ExceptionCheck.check;
-import static com.clothapp.resources.RegisterUtil.cryptoPswd;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -204,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
 
                 // Redirect user to signup Activity.
-                Intent form_intent = new Intent(getApplicationContext(), Register.class);
+                Intent form_intent = new Intent(getApplicationContext(), SignupActivity.class);
                 form_intent.putExtras(bundle);
                 startActivity(form_intent);
             }
