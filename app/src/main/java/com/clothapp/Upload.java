@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,13 +45,16 @@ public class Upload extends AppCompatActivity {
     final static long mb3 = (long) (3 * 10e6);
     final static long mb1 = (long) (1 * 10e6);
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
-    //qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
+
+    // ATTENZIONE Roberto! Possibili spoiler su Star Wars VII
+
+    // Qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
     // del personaggio di Finn nell'ultimo Star Wars episodio VII prima di diventare un dei "buoni"
-    //inoltre 2187 corrisponde anche al numero di cella dove è stata rinchiusa la pricipessa Leia dopo essere stata catturata
-    //da Dart Vather in una delle prima scene di Star Wars episodio IV
+    // inoltre 2187 corrisponde anche al numero di cella dove è stata rinchiusa la pricipessa Leia dopo essere stata catturata
+    // da Dart Vather in una delle prima scene di Star Wars episodio IV
 
     /* --------------------------------------- */
-    boolean first=true;
+    boolean first = true;
     final String directoryName = "ClothApp";
     String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'").format(new Date());
     Uri takenPhotoUri;
@@ -60,43 +64,57 @@ public class Upload extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("debug: inizizializzazione activity upload");
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_upload);
+
+        Log.d("Upload", "Inizializzazione Upload activity");
+
         imageView = (ImageView) findViewById(R.id.view_immagine);
 
-        //controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
-        //dell'apertura della fotocamera
+        // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
+        // dell'apertura della fotocamera
         if (savedInstanceState != null) {
             first = savedInstanceState.getBoolean("first");
             photoFileName = savedInstanceState.getString("photoFileName");
-            System.out.println("debug: first è false quindi non avvia la fotocamera");
-            //inizializzo parse perchè l'activity è stata chiusa
+
+            Log.d("Upload", "First è false, quindi non avvia la fotocamera");
+            // Inizializzo parse perchè l'activity è stata chiusa
         }
-        if (first)   {
-            //non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
-            //questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-            System.out.println("debug: è il first");
-            // creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
+        if (first) {
+            // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
+            // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
+            Log.d("Upload", "E' il first");
+
+            // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            //TODO check if getPhotoFileUri returns null
+
+            // TODO: Check if getPhotoFileUri returns null
+
+            // Set the image file name
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
 
             // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
-            //quindi devo chiamare la fotocamera
+            // quindi devo chiamare la fotocamera
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 // Starto l'attivity di cattura della foto passandogli l'intent
                 startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
             }
         }
+
         final TextView percentuale = (TextView) findViewById(R.id.percentuale);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.barraProgresso);
-        final Button button = (Button) findViewById(R.id.send);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button btnSend = (Button) findViewById(R.id.send);
+
+        // Add an OnClick listener to the send button
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { //listener sul bottone
+            public void onClick(View v) {
+
                 final View vi = v;
-                button.setVisibility(View.INVISIBLE);
+
+                btnSend.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 percentuale.setVisibility(View.VISIBLE);
 
@@ -105,50 +123,56 @@ public class Upload extends AppCompatActivity {
                 // e la funzione a fine file checkToCompress()
 
                 int toCompress = checkToCompress(imageBitmap);
-                System.out.println("debug: toCompress = " + toCompress);
+                Log.d("Upload", "toCompress = " + toCompress);
 
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                 byte[] byteImg = stream.toByteArray();
-                System.out.println("debug: dimensione del file è "+getAllocationByteCount(imageBitmap));
+                Log.d("Upload", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
 
-                //creazione di un ParseFile
-                System.out.println("debug: creazione di un ParseFile");
+                // Creazione di un ParseFile
+                Log.d("Upload", "Creazione di un ParseFile");
                 ParseFile file = new ParseFile(photoFileName, byteImg);
+
+                // Save the file to Parse
                 file.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            System.out.println("debug: file inviato correttamente");
+                            Log.d("Upload", "File inviato correttamente");
                         } else {
-                            //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                            // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                             check(e.getCode(), vi, e.getMessage());
-                            System.out.println("debug: errore nell'invio del file");
+                            Log.d("Upload", "Errore durante l'invio del file");
                         }
                     }
                 }, new ProgressCallback() {
-                        public void done (Integer percentDone){
-                            // Update your progress spinner here. percentDone will be between 0 and 100.
-                            percentuale.setText("Caricamento: "+percentDone+"%");
-                            progressBar.setProgress(percentDone);
-                        }
+                    public void done(Integer percentDone) {
+                        // Update your progress spinner here. percentDone will be between 0 and 100.
+                        percentuale.setText("Caricamento: " + percentDone + "%");
+                        progressBar.setProgress(percentDone);
+                    }
                 });
 
-                //Creazione di un ParseObject da inviare
+                // Creazione di un ParseObject da inviare
                 ParseObject picture = new ParseObject("Photo");
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
-                //invio ParseObject (immagine) al server
+
+                // Invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            System.out.println("debug: Oggetto immagine inviata correttamente");
-                            // redirecting the user to the homepage activity
+                            Log.d("Upload", "Oggetto immagine inviato correttamente");
+
+                            // Redirecting the user to the homepage activity
                             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
                             startActivity(i);
+
                             finish();
                         } else {
-                            //chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                             check(e.getCode(), vi, e.getMessage());
-                            System.out.println("debug: errore nell'invio dell'oggetto immagine");
+
+                            Log.d("Upload", "Errore durante l'invio dell'oggetto immagine");
                         }
                     }
                 });
@@ -157,61 +181,73 @@ public class Upload extends AppCompatActivity {
         });
     }
 
-    //questa funzione serve a prendere la foto dopo che è stata scattata dalla fotocamera, e mette l'immagine nella ImageView
+    // Questa funzione serve a prendere la foto dopo che è stata scattata dalla fotocamera, e mette l'immagine nella ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("debug: siamo arrivati alla onActivityResult");
-        //controllo che l'immagine sia stata catturata correttamente
+        Log.d("Upload", "Siamo arrivati alla onActivityResult");
+
+        // Controllo che l'immagine sia stata catturata correttamente
         if (requestCode == CAPTURE_IMAGE_ACTIVITY && resultCode == RESULT_OK) {
             takenPhotoUri = getPhotoFileUri(photoFileName);
-            // a questo punto l'immagine è stata salvata sullo storage
+
+            // A questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
 
-            //inserisco l'immagine nel bitmap
-            //prima però controllo in che modo è stata scattata (rotazione)
+            // Inserisco l'immagine nel bitmap
+            // Prima però controllo in che modo è stata scattata (rotazione)
             try {
-                imageBitmap = rotateImageIfRequired(imageBitmap,takenPhotoUri);
+                imageBitmap = rotateImageIfRequired(imageBitmap, takenPhotoUri);
                 imageView.setImageBitmap(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else { // Errore della fotocamera
+        } else {
+            // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            System.out.println("debug: immagine non è stata scattata");
-            // reinderizzo l'utente alla homePage activity
+
+            Log.d("Uplaod", "L'Immagine non è stata scattata");
+
+            // Reinderizzo l'utente alla homePage activity
             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
             startActivity(i);
+
             finish();
         }
     }
 
-    //questa funzione serve nel caso in cui dopo aver chiamato la fotocamera, l'attività upload si chiude
-    //quindi ci dobbiamo salvare la variabile first, altrimenti quando l'attività Upload viene riaperta
-    //rilancia di nuovo l'attività fotocamera e quindi è un ciclo continuo
+    // Questa funzione serve nel caso in cui dopo aver chiamato la fotocamera, l'attività upload si chiude
+    // quindi ci dobbiamo salvare la variabile first, altrimenti quando l'attività Upload viene riaperta
+    // rilancia di nuovo l'attività fotocamera e quindi è un ciclo continuo
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // salva la variabile first=false nell'istanza, che non viene eliminata quando l'attività upload viene chiusa
-        savedInstanceState.putBoolean("first",false);
-        // inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
-        savedInstanceState.putString("photoFileName",photoFileName);
-        System.out.println("debug: first è messo a false, l'attività upload è stata sospesa");
+        // Salva la variabile first=false nell'istanza, che non viene eliminata quando l'attività upload viene chiusa
+        savedInstanceState.putBoolean("first", false);
+
+        // Inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
+        savedInstanceState.putString("photoFileName", photoFileName);
+
+        Log.d("Upload", "First è stato messo a false");
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    //in caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
+    // In caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
     @Override
     public void onBackPressed() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+directoryName;
-        File f = new File(path,photoFileName);
-        //controllo se esiste
-        if(f.exists() && !f.isDirectory()) {
-            // se esiste lo elimino
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + directoryName;
+        File f = new File(path, photoFileName);
+
+        // Controllo se esiste
+        if (f.exists() && !f.isDirectory()) {
+            // Se esiste lo elimino
             f.delete();
-            System.out.println("debug: file eliminato");
+
+            Log.d("Upload", "File eliminato");
         }
-        // reinderizzo l'utente alla homePage activity
+        // Reinderizzo l'utente alla homePage activity
         Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
         startActivity(i);
+
         finish();
     }
 
@@ -219,41 +255,43 @@ public class Upload extends AppCompatActivity {
     public Uri getPhotoFileUri(String fileName) {
         // Continua solamente se la memoria SD è montata
         if (isExternalStorageAvailable()) {
+
             // Get safe storage directory for photos
             File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
+
             // Creo la directory di storage se non esiste
-            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-                System.out.println("debug: impossibile creare cartella");
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+                Log.d("Upload", "Impossibile creare cartella");
             }
+
             // Ritorna l'uri alla foto in base al fileName
             return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
         }
         return null;
     }
 
-    //funzione per controllare che lo storage esterno sia disponibile
+    // Funzione per controllare che lo storage esterno sia disponibile
     private boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        }
-        return false;
+
+        return state.equals(Environment.MEDIA_MOUNTED);
     }
 
-    //  ritorna il parametro da passare il metodo compression
+    //  Ritorna il parametro da passare il metodo compression
     //  prende la foto da comprimere
-    private int checkToCompress(Bitmap photo){
-        //TODO getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
-        System.out.println("photo to compress is: "+getAllocationByteCount(photo));
-        if(getAllocationByteCount(photo) > mb5) return 70;
-        else if(getAllocationByteCount(photo)> mb3) return 80;
-        else if(getAllocationByteCount(photo) > mb1) return 90;
+    private int checkToCompress(Bitmap photo) {
+        // TODO: getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
+        Log.d("Upload", "photo to compress is: " + getAllocationByteCount(photo));
+
+        if (getAllocationByteCount(photo) > mb5) return 70;
+        else if (getAllocationByteCount(photo) > mb3) return 80;
+        else if (getAllocationByteCount(photo) > mb1) return 90;
         else return 100;
     }
 
-    //funzione che controlla se ruotare l'immagine o no
+    // Funzione che controlla se ruotare l'immagine o no
     private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
-        //prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
+        // Prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
         ExifInterface ei = new ExifInterface(selectedImage.getPath());
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
@@ -269,12 +307,14 @@ public class Upload extends AppCompatActivity {
         }
     }
 
-    //funzione che ruota l'immagine
+    // Funzione che ruota l'immagine
     private static Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
+
         Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
         img.recycle();
+
         return rotatedImg;
     }
 }
