@@ -29,7 +29,7 @@ public class HomepageActivity extends BaseActivity {
         // Create a side menu
         setUpMenu();
 
-        // Upload a new photo button initialization
+        // UploadActivity a new photo button initialization
         FloatingActionButton upload = (FloatingActionButton) findViewById(R.id.upload_button);
 
         // Add an OnClick listener to the upload button
@@ -38,7 +38,7 @@ public class HomepageActivity extends BaseActivity {
             public void onClick(View view_upload) {
 
                 // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), Upload.class);
+                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
 
                 finish();

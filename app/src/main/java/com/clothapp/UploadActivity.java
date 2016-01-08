@@ -37,7 +37,7 @@ import java.util.Date;
 /**
  * Created by giacomoceribelli on 29/12/15.
  */
-public class Upload extends AppCompatActivity {
+public class UploadActivity extends AppCompatActivity {
 
     // static fields
     /* --------------------------------------- */
@@ -69,7 +69,7 @@ public class Upload extends AppCompatActivity {
 
         setContentView(R.layout.activity_upload);
 
-        Log.d("Upload", "Inizializzazione Upload activity");
+        Log.d("UploadActivity", "Inizializzazione UploadActivity activity");
 
         imageView = (ImageView) findViewById(R.id.view_immagine);
 
@@ -79,13 +79,13 @@ public class Upload extends AppCompatActivity {
             first = savedInstanceState.getBoolean("first");
             photoFileName = savedInstanceState.getString("photoFileName");
 
-            Log.d("Upload", "First è false, quindi non avvia la fotocamera");
+            Log.d("UploadActivity", "First è false, quindi non avvia la fotocamera");
             // Inizializzo parse perchè l'activity è stata chiusa
         }
         if (first) {
             // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
             // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-            Log.d("Upload", "E' il first");
+            Log.d("UploadActivity", "E' il first");
 
             // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -123,25 +123,25 @@ public class Upload extends AppCompatActivity {
                 // e la funzione a fine file checkToCompress()
 
                 int toCompress = checkToCompress(imageBitmap);
-                Log.d("Upload", "toCompress = " + toCompress);
+                Log.d("UploadActivity", "toCompress = " + toCompress);
 
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                 byte[] byteImg = stream.toByteArray();
-                Log.d("Upload", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
+                Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
 
                 // Creazione di un ParseFile
-                Log.d("Upload", "Creazione di un ParseFile");
+                Log.d("UploadActivity", "Creazione di un ParseFile");
                 ParseFile file = new ParseFile(photoFileName, byteImg);
 
                 // Save the file to Parse
                 file.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            Log.d("Upload", "File inviato correttamente");
+                            Log.d("UploadActivity", "File inviato correttamente");
                         } else {
                             // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                             check(e.getCode(), vi, e.getMessage());
-                            Log.d("Upload", "Errore durante l'invio del file");
+                            Log.d("UploadActivity", "Errore durante l'invio del file");
                         }
                     }
                 }, new ProgressCallback() {
@@ -161,7 +161,7 @@ public class Upload extends AppCompatActivity {
                 picture.saveInBackground(new SaveCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            Log.d("Upload", "Oggetto immagine inviato correttamente");
+                            Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
 
                             // Redirecting the user to the homepage activity
                             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
@@ -172,7 +172,7 @@ public class Upload extends AppCompatActivity {
                             // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                             check(e.getCode(), vi, e.getMessage());
 
-                            Log.d("Upload", "Errore durante l'invio dell'oggetto immagine");
+                            Log.d("UploadActivity", "Errore durante l'invio dell'oggetto immagine");
                         }
                     }
                 });
@@ -184,7 +184,7 @@ public class Upload extends AppCompatActivity {
     // Questa funzione serve a prendere la foto dopo che è stata scattata dalla fotocamera, e mette l'immagine nella ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Upload", "Siamo arrivati alla onActivityResult");
+        Log.d("UploadActivity", "Siamo arrivati alla onActivityResult");
 
         // Controllo che l'immagine sia stata catturata correttamente
         if (requestCode == CAPTURE_IMAGE_ACTIVITY && resultCode == RESULT_OK) {
@@ -216,7 +216,7 @@ public class Upload extends AppCompatActivity {
     }
 
     // Questa funzione serve nel caso in cui dopo aver chiamato la fotocamera, l'attività upload si chiude
-    // quindi ci dobbiamo salvare la variabile first, altrimenti quando l'attività Upload viene riaperta
+    // quindi ci dobbiamo salvare la variabile first, altrimenti quando l'attività UploadActivity viene riaperta
     // rilancia di nuovo l'attività fotocamera e quindi è un ciclo continuo
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -226,7 +226,7 @@ public class Upload extends AppCompatActivity {
         // Inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
         savedInstanceState.putString("photoFileName", photoFileName);
 
-        Log.d("Upload", "First è stato messo a false");
+        Log.d("UploadActivity", "First è stato messo a false");
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -242,7 +242,7 @@ public class Upload extends AppCompatActivity {
             // Se esiste lo elimino
             f.delete();
 
-            Log.d("Upload", "File eliminato");
+            Log.d("UploadActivity", "File eliminato");
         }
         // Reinderizzo l'utente alla homePage activity
         Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
@@ -261,7 +261,7 @@ public class Upload extends AppCompatActivity {
 
             // Creo la directory di storage se non esiste
             if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-                Log.d("Upload", "Impossibile creare cartella");
+                Log.d("UploadActivity", "Impossibile creare cartella");
             }
 
             // Ritorna l'uri alla foto in base al fileName
@@ -281,7 +281,7 @@ public class Upload extends AppCompatActivity {
     //  prende la foto da comprimere
     private int checkToCompress(Bitmap photo) {
         // TODO: getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
-        Log.d("Upload", "photo to compress is: " + getAllocationByteCount(photo));
+        Log.d("UploadActivity", "photo to compress is: " + getAllocationByteCount(photo));
 
         if (getAllocationByteCount(photo) > mb5) return 70;
         else if (getAllocationByteCount(photo) > mb3) return 80;
