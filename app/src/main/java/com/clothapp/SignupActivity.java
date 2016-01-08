@@ -184,14 +184,14 @@ public class SignupActivity extends AppCompatActivity {
                                                 // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                                 Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
 
-                                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-                                                userInformation.edit().putString("username", edit_username.getText().toString().trim()).commit();
-                                                userInformation.edit().putString("name", edit_name.getText().toString().trim()).commit();
-                                                userInformation.edit().putString("lastname", edit_lastname.getText().toString().trim()).commit();
-                                                userInformation.edit().putString("password", cryptoPswd(edit_password.getText().toString().trim())).commit();
-                                                userInformation.edit().putString("email", edit_email.getText().toString()).commit();
-                                                userInformation.edit().putString("date", edit_date.toString()).commit();
-                                                userInformation.edit().putBoolean("isLogged", true).commit();
+//                                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
+//                                                userInformation.edit().putString("username", edit_username.getText().toString().trim()).commit();
+//                                                userInformation.edit().putString("name", edit_name.getText().toString().trim()).commit();
+//                                                userInformation.edit().putString("lastname", edit_lastname.getText().toString().trim()).commit();
+//                                                userInformation.edit().putString("password", cryptoPswd(edit_password.getText().toString().trim())).commit();
+//                                                userInformation.edit().putString("email", edit_email.getText().toString()).commit();
+//                                                userInformation.edit().putString("date", edit_date.toString()).commit();
+//                                                userInformation.edit().putBoolean("isLogged", true).commit();
 
                                                 // Redirect user to Splash Screen Activity.
                                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreen.class);
