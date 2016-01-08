@@ -21,7 +21,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 02/01/16.
  */
-public class Profile extends BaseActivity {
+public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class Profile extends BaseActivity {
             getSupportActionBar().setTitle(R.string.profile_button);
 
         } catch (NullPointerException e) {
-            Log.d("Profile", "Error: " + e.getMessage());
+            Log.d("ProfileActivity", "Error: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -77,10 +77,10 @@ public class Profile extends BaseActivity {
                         @Override
                         public void done(ParseException ex) {
                             if (ex == null) {
-                                Log.d("Profile", "Disconesso da Facebook");
+                                Log.d("ProfileActivity", "Disconesso da Facebook");
 
-                                // Redirect the user to the Profile Activity
-                                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                                // Redirect the user to the ProfileActivity Activity
+                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                 startActivity(form_intent);
 
                                 finish();
@@ -103,7 +103,7 @@ public class Profile extends BaseActivity {
                     final View vi = v;
                     // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
                     List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
-                    ParseFacebookUtils.linkWithReadPermissionsInBackground(user, Profile.this, permissions, new SaveCallback() {
+                    ParseFacebookUtils.linkWithReadPermissionsInBackground(user, ProfileActivity.this, permissions, new SaveCallback() {
                         @Override
                         public void done(ParseException ex) {
                             if (ex != null) {
@@ -111,10 +111,10 @@ public class Profile extends BaseActivity {
                                 check(ex.getCode(), vi, ex.getMessage());
                             }
                             if (ParseFacebookUtils.isLinked(user)) {
-                                Log.d("Profile", "Connesso a Facebook");
+                                Log.d("ProfileActivity", "Connesso a Facebook");
 
-                                // Redirect the user to the Profile Activity
-                                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                                // Redirect the user to the ProfileActivity Activity
+                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                 startActivity(form_intent);
 
                                 finish();

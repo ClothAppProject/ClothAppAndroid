@@ -2,7 +2,6 @@ package com.clothapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -94,7 +93,7 @@ public class HomepageActivity extends BaseActivity {
             }
         });
 
-        // Profile button initialization
+        // ProfileActivity button initialization
         Button button_profile = (Button) findViewById(R.id.form_profile_button);
 
         // Add an OnClick listener to the profile button
@@ -103,8 +102,8 @@ public class HomepageActivity extends BaseActivity {
             @Override
             public void onClick(View view_profile) {
 
-                // Redirect the user to the Profile Activity.
-                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                // Redirect the user to the ProfileActivity Activity.
+                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(form_intent);
 
                 finish();

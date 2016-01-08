@@ -58,7 +58,7 @@
             android:name=".SignupActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Profile"
+            android:name=".ProfileActivity"
             android:label="@string/app_name" />
         <activity android:name=".BaseActivity" />
         <meta-data

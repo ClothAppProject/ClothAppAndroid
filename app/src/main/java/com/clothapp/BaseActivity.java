@@ -159,7 +159,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 1:
                 //profilo
-                i = new Intent(this, Profile.class);
+                i = new Intent(this, ProfileActivity.class);
                 break;
             case 2:
                 //logout
