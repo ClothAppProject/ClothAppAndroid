@@ -29,7 +29,13 @@ public class Profile extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        getSupportActionBar().setTitle(R.string.profile_button);
+        try {
+            getSupportActionBar().setTitle(R.string.profile_button);
+
+        } catch (NullPointerException e) {
+            Log.d("Profile", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         // Create side menu
         setUpMenu();
@@ -47,7 +53,7 @@ public class Profile extends BaseActivity {
         name.setText(capitalize(user.get("name").toString()));
         lastname.setText(capitalize(user.get("lastname").toString()));
         email.setText(user.getEmail().toString());
-        //  trimmed the data String in order to delete white spaces
+        // Trimmed the data String in order to delete white spaces
         String timeStamp = formatDate(user.get("date").toString());
         date.setText(timeStamp);
 
