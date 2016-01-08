@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,44 +16,61 @@ import com.parse.ParseUser;
 
 public class Homepage extends BaseActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
-        getSupportActionBar().setTitle(R.string.homepage_button);
 
+        setContentView(R.layout.activity_homepage);
+
+        try {
+            getSupportActionBar().setTitle(R.string.homepage_button);
+        } catch (NullPointerException e) {
+            Log.d("Homepage", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Create a side menu
         setUpMenu();
 
-        //button upload a new photo
+        // Upload a new photo button initialization
         FloatingActionButton upload = (FloatingActionButton) findViewById(R.id.upload_button);
-        upload.setOnClickListener(new View.OnClickListener(){
+
+        // Add an OnClick listener to the upload button
+        upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view_upload) {
-                // redirecting the user to the upload activity and upload a photo
+
+                // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), Upload.class);
                 startActivity(i);
+
                 finish();
             }
         });
 
-        //  logout button
+        // Logout button initialization
         Button button_logout = (Button) findViewById(R.id.form_logout_button);
+
+        // Add an OnClick listener to the logout button
         button_logout.setOnClickListener(new View.OnClickListener() {
             //metto bottone logout in ascolto del click
             @Override
             public void onClick(View view_logout) {
-                //inizializzo la progressDialogBar
+
+                // Inizializzo la progressDialogBar
                 final ProgressDialog dialog = ProgressDialog.show(Homepage.this, "",
                         "Logging out. Please wait...", true);
 
                 switch (view_logout.getId()) {
                     case R.id.form_logout_button:
-                            //chiudo sessione e metto valore sharedPref a false
+                        // Chiudo sessione e metto valore sharedPref a false
                         Thread t = new Thread(new Runnable() {
                             @Override
                             public void run() {
+
+                                // Actual logout function.
                                 ParseUser.logOut();
+
                                 SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                                 userInformation.edit().putString("username", "").commit();
                                 userInformation.edit().putString("name", "").commit();
@@ -60,29 +78,43 @@ public class Homepage extends BaseActivity {
                                 userInformation.edit().putString("email", "").commit();
                                 userInformation.edit().putString("date", "").commit();
                                 userInformation.edit().putBoolean("isLogged", false).commit();
-                                System.out.println("debug: logout eseguito");
+
+                                Log.d("Homepage", "Logout eseguito con successo");
+
+                                // Redirect the user to the Main Activity.
                                 Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(form_intent);
+
+                                // Close the loading dialog.
                                 dialog.dismiss();
+
                                 finish();
                             }
                         });
+
+                        // Start logout thread
                         t.start();
+
                         break;
                 }
             }
         });
-        //  bottone profilo, fintanto che non viene implementato il menu
+
+        // Profile button initialization
         Button button_profile = (Button) findViewById(R.id.form_profile_button);
+
+        // Add an OnClick listener to the profile button
         button_profile.setOnClickListener(new View.OnClickListener() {
             //metto bottone profile in ascolto del click
             @Override
             public void onClick(View view_profile) {
-                // TODO Auto-generated method stub
                 switch (view_profile.getId()) {
                     case R.id.form_profile_button:
+
+                        // Redirect the user to the Profile Activity.
                         Intent form_intent = new Intent(getApplicationContext(), Profile.class);
                         startActivity(form_intent);
+
                         finish();
                         break;
                 }
@@ -90,15 +122,21 @@ public class Homepage extends BaseActivity {
         });
     }
 
-    private void setUpMenu(){
+    // This function creates a side menu and populates it with the given elements.
+    private void setUpMenu() {
+
         String[] navMenuTitles;
         TypedArray navMenuIcons;
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
 
+        // Load titles from string.xml
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+
+
+        // Load icons from strings.xml
         navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+                .obtainTypedArray(R.array.nav_drawer_icons);
 
-        set(navMenuTitles,navMenuIcons);
+        set(navMenuTitles, navMenuIcons);
     }
 
 }
