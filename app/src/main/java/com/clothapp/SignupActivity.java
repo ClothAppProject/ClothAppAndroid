@@ -29,7 +29,6 @@ import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 import static com.clothapp.resources.RegisterUtil.*;
 
 
-
 public class SignupActivity extends AppCompatActivity {
     private Date date;
 
@@ -67,7 +66,7 @@ public class SignupActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.form_register_button:
                         // Checking if username is nulll
-                        if (edit_username.getText().toString().trim() == "") {
+                        if (edit_username.getText().toString().trim().equalsIgnoreCase("")) {
                             // Nel caso in cui l'username è lasciato in bianco
                             Snackbar.make(v, "L'username non può essere vuoto", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
@@ -88,7 +87,7 @@ public class SignupActivity extends AppCompatActivity {
 
                             Log.d("SignupActivity", "La mail inserito non è corretta");
                             // Checking if first and last name are not null
-                        } else if (edit_lastname.getText().toString().trim() == "" || edit_name.getText().toString().trim() == "") {
+                        } else if (edit_lastname.getText().toString().trim().equalsIgnoreCase("") || edit_name.getText().toString().trim().equalsIgnoreCase("")) {
                             // Nel caso in cui nome e cognome siano vuoti
                             Snackbar.make(v, "Nome e Cognome non possono essere vuoti", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
