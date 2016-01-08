@@ -1,15 +1,11 @@
 package com.clothapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -17,7 +13,6 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,36 +21,54 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 02/01/16.
  */
-public class Profile extends BaseActivity {
+public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        getSupportActionBar().setTitle(R.string.profile_button);
 
+        try {
+            getSupportActionBar().setTitle(R.string.profile_button);
+
+        } catch (NullPointerException e) {
+            Log.d("ProfileActivity", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Create side menu
         setUpMenu();
+
         TextView username = (TextView) findViewById(R.id.username_field);
         TextView name = (TextView) findViewById(R.id.name_field);
         TextView lastname = (TextView) findViewById(R.id.lastname_field);
         TextView email = (TextView) findViewById(R.id.email_field);
         TextView date = (TextView) findViewById(R.id.date_field);
 
+        // Get current Parse user
         final ParseUser user = ParseUser.getCurrentUser();
-        username.setText(user.getUsername().toString());
+
+        username.setText(user.getUsername());
         name.setText(capitalize(user.get("name").toString()));
         lastname.setText(capitalize(user.get("lastname").toString()));
-        email.setText(user.getEmail().toString());
-        //  trimmed the data String in order to delete white spaces
+        email.setText(user.getEmail());
+        // Trimmed the data String in order to delete white spaces
         String timeStamp = formatDate(user.get("date").toString());
         date.setText(timeStamp);
 
+        // Create connect to Facebook button
         final Button connect = (Button) findViewById(R.id.facebook_connect_button);
+
+        // Create disconnect from Facebook button
         final Button disconnect = (Button) findViewById(R.id.facebook_disconnect_button);
-        //controlliamo se è connesso
+
+        // Controlliamo se è connesso
         if (ParseFacebookUtils.isLinked(user)) {
-            //l'utente è già connesso gli do solo l'opzione per disconnettersi da facebook
+            // L'utente è già connesso: gli do solo l'opzione per disconnettersi da facebook
             connect.setVisibility(View.INVISIBLE);
+
+            // Add an OnClick listener to the disconnect button
             disconnect.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
                 @Override
                 public void onClick(View v) {
@@ -64,38 +77,46 @@ public class Profile extends BaseActivity {
                         @Override
                         public void done(ParseException ex) {
                             if (ex == null) {
-                                System.out.println("debug: disconnesso a facebook");
-                                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                                Log.d("ProfileActivity", "Disconesso da Facebook");
+
+                                // Redirect the user to the ProfileActivity Activity
+                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                 startActivity(form_intent);
+
                                 finish();
-                            }else{
-                                //controllo che non ci siano eccezioni parse
+                            } else {
+                                // Controllo che non ci siano eccezioni Parse
                                 check(ex.getCode(), vi, ex.getMessage());
                             }
                         }
                     });
                 }
             });
-        }else{
-            //l'utente non è connesso a facebook, gli do l'opzione per connettersi
+        } else {
+            // L'utente non è connesso a facebook: gli do solo l'opzione per connettersi
             disconnect.setVisibility(View.INVISIBLE);
+
+            // Add an OnClick listener to the connect button
             connect.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
                 @Override
                 public void onClick(View v) {
                     final View vi = v;
-                    //specifico i campi ai quali sono interessato quando richiedo permesso ad utente
+                    // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
                     List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
-                    ParseFacebookUtils.linkWithReadPermissionsInBackground(user, Profile.this, permissions, new SaveCallback() {
+                    ParseFacebookUtils.linkWithReadPermissionsInBackground(user, ProfileActivity.this, permissions, new SaveCallback() {
                         @Override
                         public void done(ParseException ex) {
                             if (ex != null) {
-                                //controllo che non ci siano eccezioni parse
+                                // Controllo che non ci siano eccezioni parse
                                 check(ex.getCode(), vi, ex.getMessage());
                             }
                             if (ParseFacebookUtils.isLinked(user)) {
-                                System.out.println("debug: connesso a facebook");
-                                Intent form_intent = new Intent(getApplicationContext(), Profile.class);
+                                Log.d("ProfileActivity", "Connesso a Facebook");
+
+                                // Redirect the user to the ProfileActivity Activity
+                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
                                 startActivity(form_intent);
+
                                 finish();
                             }
                         }
@@ -105,12 +126,13 @@ public class Profile extends BaseActivity {
         }
     }
 
-    //in caso sia premuto il pulsante indietro torniamo alla home activity
+    // In caso sia premuto il pulsante indietro torniamo alla home activity
     @Override
     public void onBackPressed() {
-        // reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), Homepage.class);
+        // Redirect the user to the Homepage Activity
+        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
         startActivity(i);
+
         finish();
     }
 
@@ -120,6 +142,7 @@ public class Profile extends BaseActivity {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
+    // Capitalize the first character of a string.
     public String capitalize(String original) {
         if (original == null || original.length() == 0) {
             return original;
@@ -127,6 +150,7 @@ public class Profile extends BaseActivity {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
+    // Create a side menu
     private void setUpMenu() {
         String[] navMenuTitles;
         TypedArray navMenuIcons;
@@ -138,16 +162,16 @@ public class Profile extends BaseActivity {
         set(navMenuTitles, navMenuIcons);
     }
 
-    private String formatDate(String s){
-        String [] dataArray = s.split(" ");
-        for (int i = 0; i<dataArray.length; i++){
-            System.out.println("debug: "+ i + dataArray[i]);
+    private String formatDate(String s) {
+        String[] dataArray = s.split(" ");
+        for (int i = 0; i < dataArray.length; i++) {
+            System.out.println("debug: " + i + dataArray[i]);
         }
-        s = dataArray [2] + "/" +  formatMonth(dataArray[1]) + "/" + dataArray[5];
+        s = dataArray[2] + "/" + formatMonth(dataArray[1]) + "/" + dataArray[5];
         return s;
     }
 
-    private String formatMonth (String s){
+    private String formatMonth(String s) {
         switch (s) {
             case "Jan":
                 return "01";

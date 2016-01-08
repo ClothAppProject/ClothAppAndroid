@@ -31,7 +31,7 @@
         <!---->
 
         <activity
-            android:name="com.clothapp.Launcher_Activity"
+            android:name=".LauncherActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -44,21 +44,21 @@
             android:name="com.clothapp.MainActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Homepage"
+            android:name=".HomepageActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Upload"
+            android:name=".UploadActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"/>
         <activity
-            android:name="com.clothapp.SplashScreen"
+            android:name=".SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Register"
+            android:name=".SignupActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Profile"
+            android:name=".ProfileActivity"
             android:label="@string/app_name" />
         <activity android:name=".BaseActivity" />
         <meta-data
