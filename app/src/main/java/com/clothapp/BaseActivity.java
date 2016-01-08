@@ -17,7 +17,6 @@ import android.widget.ListView;
 
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -156,7 +155,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 //homepage
-                i = new Intent(this, Homepage.class);
+                i = new Intent(this, HomepageActivity.class);
                 break;
             case 1:
                 //profilo

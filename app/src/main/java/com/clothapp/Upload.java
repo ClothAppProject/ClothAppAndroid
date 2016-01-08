@@ -1,7 +1,6 @@
 package com.clothapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -143,7 +142,7 @@ public class Upload extends AppCompatActivity {
                         if (e == null) {
                             System.out.println("debug: Oggetto immagine inviata correttamente");
                             // redirecting the user to the homepage activity
-                            Intent i = new Intent(getApplicationContext(), Homepage.class);
+                            Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
                             startActivity(i);
                             finish();
                         } else {
@@ -180,7 +179,7 @@ public class Upload extends AppCompatActivity {
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             System.out.println("debug: immagine non è stata scattata");
             // reinderizzo l'utente alla homePage activity
-            Intent i = new Intent(getApplicationContext(), Homepage.class);
+            Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
             startActivity(i);
             finish();
         }
@@ -211,7 +210,7 @@ public class Upload extends AppCompatActivity {
             System.out.println("debug: file eliminato");
         }
         // reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), Homepage.class);
+        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
         startActivity(i);
         finish();
     }

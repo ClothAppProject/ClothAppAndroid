@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
-public class Homepage extends BaseActivity {
+public class HomepageActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +23,7 @@ public class Homepage extends BaseActivity {
         try {
             getSupportActionBar().setTitle(R.string.homepage_button);
         } catch (NullPointerException e) {
-            Log.d("Homepage", "Error: " + e.getMessage());
+            Log.d("HomepageActivity", "Error: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -58,7 +56,7 @@ public class Homepage extends BaseActivity {
             public void onClick(View view_logout) {
 
                 // Inizializzo la progressDialogBar
-                final ProgressDialog dialog = ProgressDialog.show(Homepage.this, "",
+                final ProgressDialog dialog = ProgressDialog.show(HomepageActivity.this, "",
                         "Logging out. Please wait...", true);
 
                 switch (view_logout.getId()) {
@@ -79,7 +77,7 @@ public class Homepage extends BaseActivity {
                                 userInformation.edit().putString("date", "").commit();
                                 userInformation.edit().putBoolean("isLogged", false).commit();
 
-                                Log.d("Homepage", "Logout eseguito con successo");
+                                Log.d("HomepageActivity", "Logout eseguito con successo");
 
                                 // Redirect the user to the Main Activity.
                                 Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);

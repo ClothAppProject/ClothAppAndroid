@@ -44,7 +44,7 @@
             android:name="com.clothapp.MainActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.clothapp.Homepage"
+            android:name=".HomepageActivity"
             android:label="@string/app_name" />
         <activity
             android:name="com.clothapp.Upload"

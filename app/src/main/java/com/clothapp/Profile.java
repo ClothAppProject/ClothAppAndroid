@@ -1,15 +1,10 @@
 package com.clothapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -17,7 +12,6 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -109,7 +103,7 @@ public class Profile extends BaseActivity {
     @Override
     public void onBackPressed() {
         // reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), Homepage.class);
+        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
         startActivity(i);
         finish();
     }

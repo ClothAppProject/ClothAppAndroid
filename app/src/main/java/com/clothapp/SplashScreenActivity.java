@@ -1,10 +1,7 @@
 package com.clothapp;
 
-import android.content.SharedPreferences;
-import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.AsyncTask;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Window;
@@ -43,7 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run(){
                 try{
                     Thread.sleep(TIME_TO_WAIT);
-                    Intent i = new Intent(getApplicationContext(), Homepage.class);
+                    Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
 //                    SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
                     startActivity(i);
 
@@ -64,7 +61,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 //        // After completing http call
 //        // will close this activity and lauch homepage activity
-//        Intent i = new Intent(getApplicationContext(), Homepage.class);
+//        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
 //        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 //        startActivity(i);
 //
