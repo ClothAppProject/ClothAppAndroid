@@ -173,27 +173,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Bundle bundle = new Bundle();
-
                 // Redirect user to signup Activity.
-                Intent form_intent = new Intent(getApplicationContext(), SignupActivity.class);
-                form_intent.putExtras(bundle);
-                startActivity(form_intent);
+                Intent signupIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(signupIntent);
             }
         });
     }
 
-    // Dopo login su facebook ritorna qui
+    // Get the result of the Facebook login activity when coming back to this activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-    }
-
-    // Funzione per controllare che ne username ne password siano vuote
-    public boolean checknull(String p, String u) {
-        return (p.equals("") || u.equals(""));
     }
 
 }
