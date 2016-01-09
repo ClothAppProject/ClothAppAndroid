@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".MainActivity"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:background="#b71515"
-    android:orientation="vertical">
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -21,34 +20,43 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="15dp"
+        android:layout_gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingBottom="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:paddingTop="20dp">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/mainUsername"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:hint="@string/main_username"
             android:inputType="textEmailAddress|text"
-            android:hint="@string/main_username" />
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_text"
+            android:textColorHint="@color/input_text_hint"/>
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/mainPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
             android:hint="@string/main_password"
-            android:inputType="textPassword" />
-    </LinearLayout>
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_text"
+            android:textColorHint="@color/input_text_hint"/>
+
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mainLogin"
         android:layout_gravity="center_horizontal"
@@ -56,30 +64,30 @@
         android:backgroundTint="#ffffff" />
 
     <Button
-        android:layout_width="match_parent"
+        android:id="@+id/mainLoginFacebook"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/main_login_facebook"
-        android:id="@+id/mainLoginFacebook"
         android:layout_gravity="center_horizontal"
         android:backgroundTint="#3b5998"
         android:textColor="#ffffff"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="30dp" />
 
     <Button
-        android:layout_width="match_parent"
+        android:id="@+id/mainLoginTwitter"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/main_login_twitter"
-        android:id="@+id/mainLoginTwitter"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
-        android:backgroundTint="#4099ff" />
+        android:backgroundTint="#4099ff"
+        android:layout_marginTop="20dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_marginTop="30dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -103,4 +111,5 @@
             android:layout_alignParentEnd="true"
             android:textColor="#ffffff" />
     </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

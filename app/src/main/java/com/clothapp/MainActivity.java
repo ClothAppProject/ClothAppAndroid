@@ -20,8 +20,6 @@ import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.clothapp.resources.FacebookUtil.*;
 import static com.clothapp.resources.ExceptionCheck.check;
 
 
@@ -54,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Get trimmed strings from the username and password fields
-                String username = editUsername.getText().toString().trim();
-                String password = editPassword.getText().toString().trim();
+                final String username = editUsername.getText().toString().trim();
+                final String password = editPassword.getText().toString().trim();
+                final View vi = v;
 
                 // Check if either the username or the password are not blank
                 if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
@@ -67,34 +66,40 @@ public class MainActivity extends AppCompatActivity {
                 // Show a loading dialog. Needed to show something to the user if the Internet connection is slow.
                 dialog = ProgressDialog.show(MainActivity.this, "", "Logging in. Please wait...", true);
 
-                try {
-                    ParseUser.logIn(username, password);
+                Thread login = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ParseUser.logIn(username, password);
 
-                    Log.d("MainActivity", "Login eseguito correttamente");
+                            Log.d("MainActivity", "Login eseguito correttamente");
 
-                    // Redirect user to Splash Screen Activity
-                    Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                    startActivity(form_intent);
+                            // Redirect user to Splash Screen Activity
+                            Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                            startActivity(form_intent);
 
-                    // Close the loading dialog.
-                    dialog.dismiss();
+                            // Close the loading dialog.
+                            dialog.dismiss();
 
-                    finish();
+                            finish();
 
-                } catch (ParseException e) {
+                        } catch (ParseException e) {
 
-                    // Close the loading dialog.
-                    dialog.dismiss();
+                            // Close the loading dialog.
+                            dialog.dismiss();
 
-                    if (e.getCode() == 101) {
-                        // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
-                        Log.d("MainActivity", "Errore: " + e.getMessage());
+                            if (e.getCode() == 101) {
+                                // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
+                                Log.d("MainActivity", "Errore: " + e.getMessage());
 
-                        Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    } else {
-                        check(e.getCode(), v, e.getMessage());
+                                Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                            } else {
+                                check(e.getCode(), vi, e.getMessage());
+                            }
+                        }
                     }
-                }
+                });
+                login.start();
             }
         });
 
@@ -175,6 +180,17 @@ public class MainActivity extends AppCompatActivity {
 
                 // Redirect user to signup Activity.
                 Intent signupIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(signupIntent);
+            }
+        });
+
+        // Add an OnClick listener to the forgot password button
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Redirect user to forgot password Activity.
+                Intent signupIntent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
                 startActivity(signupIntent);
             }
         });
