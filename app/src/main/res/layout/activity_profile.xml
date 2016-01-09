@@ -135,8 +135,8 @@
         android:layout_gravity="start"
         android:background="#ffffff"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
+        android:divider="#000000"
+        android:dividerHeight="0.5dp"
         android:listSelector="#C0C0C0" />
 
 

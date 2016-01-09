@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -128,6 +129,15 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
+
+        setUpImg();
+
+    }
+
+    public void setUpImg(){
+
+       // ImageView imageView = (ImageView) findViewById(R.id.menu_image);
+       // imageView.setImageResource(R.mipmap.prova);
 
     }
 
