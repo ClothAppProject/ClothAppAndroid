@@ -60,39 +60,40 @@ public class MainActivity extends AppCompatActivity {
                 if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
                     Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                } else {
 
-                    // Inizializzo barra di caricamento
-                    dialog = ProgressDialog.show(MainActivity.this, "",
-                            "Logging in. Please wait...", true);
+                    return;
+                }
 
-                    try {
-                        ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
+                // Inizializzo barra di caricamento
+                dialog = ProgressDialog.show(MainActivity.this, "",
+                        "Logging in. Please wait...", true);
 
-                        Log.d("MainActivity", "Login eseguito correttamente");
+                try {
+                    ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
 
-                        // Redirect user to Splash Screen Activity
-                        Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                        startActivity(form_intent);
+                    Log.d("MainActivity", "Login eseguito correttamente");
 
-                        // Chiudo la progressdialogbar
-                        dialog.dismiss();
+                    // Redirect user to Splash Screen Activity
+                    Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                    startActivity(form_intent);
 
-                        finish();
+                    // Chiudo la progressdialogbar
+                    dialog.dismiss();
 
-                    } catch (ParseException e) {
-                        // Chiudo la progressdialogbar
-                        dialog.dismiss();
+                    finish();
 
-                        if (e.getCode() == 101) {
-                            // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
-                            Log.d("MainActivity", "Errore: " + e.getMessage());
+                } catch (ParseException e) {
+                    // Chiudo la progressdialogbar
+                    dialog.dismiss();
 
-                            Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                        } else {
-                            check(e.getCode(), v, e.getMessage());
-                        }
+                    if (e.getCode() == 101) {
+                        // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
+                        Log.d("MainActivity", "Errore: " + e.getMessage());
+
+                        Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        check(e.getCode(), v, e.getMessage());
                     }
                 }
             }
