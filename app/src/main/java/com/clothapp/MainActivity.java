@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final View vi = v;
-
                 // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
                 final EditText edit_username = (EditText) findViewById(R.id.mainUsername);
                 final EditText edit_password = (EditText) findViewById(R.id.mainPassword);
@@ -90,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
                             // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
                             Log.d("MainActivity", "Errore: " + e.getMessage());
 
-                            Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG)
+                            Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                         } else {
-                            check(e.getCode(), vi, e.getMessage());
+                            check(e.getCode(), v, e.getMessage());
                         }
                     }
                 }
