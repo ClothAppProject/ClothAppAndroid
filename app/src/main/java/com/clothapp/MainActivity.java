@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         // final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 
         // Facebook button initialization
-        Button facebook_login = (Button) findViewById(R.id.login_button_facebook);
+        Button facebook_login = (Button) findViewById(R.id.mainLoginFacebook);
 
         // Add a listener to the Facebook button
         facebook_login.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Normal login button initialization
-        Button login = (Button) findViewById(R.id.login_button);
+        Button login = (Button) findViewById(R.id.mainLogin);
 
         // Add a listener to the normal login button
         login.setOnClickListener(new View.OnClickListener() {
@@ -131,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 final View vi = v;
 
                 // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
-                final EditText edit_username = (EditText) findViewById(R.id.edit_username);
-                final EditText edit_password = (EditText) findViewById(R.id.edit_password);
+                final EditText edit_username = (EditText) findViewById(R.id.mainUsername);
+                final EditText edit_password = (EditText) findViewById(R.id.mainPassword);
 
                 if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
                     Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
@@ -193,10 +195,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Signup button initialization
-        Button register = (Button) findViewById(R.id.register_button);
+        // Button register = (Button) findViewById(R.id.mainSignup);
+        TextView btnSignup = (TextView) findViewById(R.id.mainSignup);
 
         // Add an OnClick listener to the signup button
-        register.setOnClickListener(new View.OnClickListener() {
+        btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

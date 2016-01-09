@@ -13,6 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- meta-data per parse & facebook-->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
@@ -42,7 +43,8 @@
         </activity>
         <activity
             android:name="com.clothapp.MainActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".HomepageActivity"
             android:label="@string/app_name" />
