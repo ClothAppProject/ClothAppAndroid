@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
-                                System.out.println("debug: Login eseguito correttamente");
+
+                                Log.d("MainActivity", "Login eseguito correttamente");
 
                                 // Redirect user to Splash Screen Activity
                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
