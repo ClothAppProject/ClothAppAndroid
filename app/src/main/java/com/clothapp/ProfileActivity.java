@@ -159,7 +159,7 @@ public class ProfileActivity extends BaseActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
 
-        set(navMenuTitles, navMenuIcons);
+        set(navMenuTitles, navMenuIcons,1);
     }
 
     private String formatDate(String s) {
