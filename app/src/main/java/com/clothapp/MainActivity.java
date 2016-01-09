@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add a listener to the normal login button
         btnLogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
@@ -107,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Add a listener to the Facebook button
-        btnFacebookLogin.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
+        btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Create a thread to manage Facebook Login in background.
                 Thread facebook = new Thread(new Runnable() {
+
                     @Override
                     public void run() {
 
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Eseguo la chiamata per il login via facebook con parse
                         ParseFacebookUtils.logInWithReadPermissionsInBackground(MainActivity.this, permissions, new LogInCallback() {
+
                             @Override
                             public void done(ParseUser user, ParseException err) {
                                 if (err != null) {
@@ -135,12 +139,14 @@ public class MainActivity extends AppCompatActivity {
 
                                     // Controllo che non ci siano eccezioni parse
                                     check(err.getCode(), vi, err.getMessage());
+
                                 } else if (user == null) {
                                     // Login via facebook cancellato dall'utente
                                     Log.d("MainActivity", "Login attraverso Facebook cancellato dall'utente.");
 
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
+
                                 } else if (user.isNew()) {
                                     // L'utente non è registrato con facebook, eseguo registrazione con facebook
                                     Log.d("MainActivity", "L'utente non registrato con Facebook, eseguo registrazione con Facebook");
@@ -153,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                     dialog.dismiss();
 
                                     finish();
+
                                 } else {
                                     // Login eseguito correttamente attraverso facebook
                                     Log.d("MainActivity", "Login eseguito correttamente attraverso Facebook");
@@ -178,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add an OnClick listener to the signup button
         txtSignup.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
@@ -189,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add an OnClick listener to the forgot password button
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
