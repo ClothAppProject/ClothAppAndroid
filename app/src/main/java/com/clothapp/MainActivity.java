@@ -17,6 +17,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,16 +35,92 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        EditText editUsername = (EditText) findViewById(R.id.mainUsername);
+        EditText editPassword = (EditText) findViewById(R.id.mainPassword);
+
+        Button btnLogin = (Button) findViewById(R.id.mainLogin);
+        Button btnFacebookLogin = (Button) findViewById(R.id.mainLoginFacebook);
+        Button btnTwitterLogin = (Button) findViewById(R.id.mainLoginTwitter);
+
+        TextView txtForgotPassword = (TextView) findViewById(R.id.mainForgotPassword);
+        TextView txtSignup = (TextView) findViewById(R.id.mainSignup);
+
         // Nascondo la tastiera all'avvio di quest'activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 
-        // Facebook button initialization
-        Button facebook_login = (Button) findViewById(R.id.mainLoginFacebook);
+        // Add a listener to the normal login button
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final View vi = v;
+
+                // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
+                final EditText edit_username = (EditText) findViewById(R.id.mainUsername);
+                final EditText edit_password = (EditText) findViewById(R.id.mainPassword);
+
+                if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
+                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    // Inizializzo barra di caricamento
+                    dialog = ProgressDialog.show(MainActivity.this, "",
+                            "Logging in. Please wait...", true);
+
+                    // Create a thread to manage the login in background
+                    Thread login = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
+                                System.out.println("debug: Login eseguito correttamente");
+
+//                                // Inserisco i valori nelle sharedPref
+//                                ParseUser uth = ParseUser.getCurrentUser();
+//                                userInformation.edit().putBoolean("isLogged", true).commit();
+//                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
+//                                // userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
+//                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
+//                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
+//                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
+//                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
+
+                                // Redirect user to Splash Screen Activity
+                                Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                startActivity(form_intent);
+
+                                // Chiudo la progressdialogbar
+                                dialog.dismiss();
+
+                                finish();
+
+                            } catch (ParseException e) {
+                                // Chiudo la progressdialogbar
+                                dialog.dismiss();
+
+                                if (e.getCode() == 101) {
+                                    // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
+                                    Log.d("MainActivity", "Errore: " + e.getMessage());
+
+                                    Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                } else {
+                                    check(e.getCode(), vi, e.getMessage());
+                                }
+                            }
+                        }
+                    });
+
+                    // Start normal login thread
+                    login.start();
+                }
+            }
+        });
 
         // Add a listener to the Facebook button
-        facebook_login.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
+        btnFacebookLogin.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
             @Override
             public void onClick(View v) {
 
@@ -122,84 +199,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Normal login button initialization
-        Button login = (Button) findViewById(R.id.mainLogin);
-
-        // Add a listener to the normal login button
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final View vi = v;
-
-                // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
-                final EditText edit_username = (EditText) findViewById(R.id.mainUsername);
-                final EditText edit_password = (EditText) findViewById(R.id.mainPassword);
-
-                if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
-                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    // Inizializzo barra di caricamento
-                    dialog = ProgressDialog.show(MainActivity.this, "",
-                            "Logging in. Please wait...", true);
-
-                    // Create a thread to manage the login in background
-                    Thread login = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
-                                System.out.println("debug: Login eseguito correttamente");
-
-//                                // Inserisco i valori nelle sharedPref
-//                                ParseUser uth = ParseUser.getCurrentUser();
-//                                userInformation.edit().putBoolean("isLogged", true).commit();
-//                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
-//                                // userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
-//                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
-//                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
-//                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
-//                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
-
-                                // Redirect user to Splash Screen Activity
-                                Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                startActivity(form_intent);
-
-                                // Chiudo la progressdialogbar
-                                dialog.dismiss();
-
-                                finish();
-
-                            } catch (ParseException e) {
-                                // Chiudo la progressdialogbar
-                                dialog.dismiss();
-
-                                if (e.getCode() == 101) {
-                                    // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
-                                    Log.d("MainActivity", "Errore: " + e.getMessage());
-
-                                    Snackbar.make(vi, "Username o Password errati...", Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                } else {
-                                    check(e.getCode(), vi, e.getMessage());
-                                }
-                            }
-                        }
-                    });
-
-                    // Start normal login thread
-                    login.start();
-                }
-            }
-        });
-
-        // Signup button initialization
-        // Button register = (Button) findViewById(R.id.mainSignup);
-        TextView btnSignup = (TextView) findViewById(R.id.mainSignup);
-
         // Add an OnClick listener to the signup button
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        txtSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
