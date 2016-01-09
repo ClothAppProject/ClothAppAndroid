@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final View vi = v;
-                final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
 
                 // Inizializzo barra di caricamento
                 dialog = ProgressDialog.show(MainActivity.this, "",
@@ -138,13 +137,6 @@ public class MainActivity extends AppCompatActivity {
                                     // L'utente non è registrato con facebook, eseguo registrazione con facebook
                                     Log.d("MainActivity", "L'utente non registrato con Facebook, eseguo registrazione con Facebook");
 
-                                    try {
-                                        //chiamo per inserire le informazioni di facebook nel database parse (l'utente è già stato creato)
-                                        getUserDetailsRegisterFB(user, vi, userInformation);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-
                                     // Redirect user to Splash Screen Activity
                                     Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
                                     startActivity(form_intent);
@@ -156,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     // Login eseguito correttamente attraverso facebook
                                     Log.d("MainActivity", "Login eseguito correttamente attraverso Facebook");
-
-                                    getUserDetailLoginFB(user, vi, userInformation);
 
                                     // Redirect user to Splash Screen Activity
                                     Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
