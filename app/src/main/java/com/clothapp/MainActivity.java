@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        EditText editUsername = (EditText) findViewById(R.id.mainUsername);
-        EditText editPassword = (EditText) findViewById(R.id.mainPassword);
+        final EditText editUsername = (EditText) findViewById(R.id.mainUsername);
+        final EditText editPassword = (EditText) findViewById(R.id.mainPassword);
 
         Button btnLogin = (Button) findViewById(R.id.mainLogin);
         Button btnFacebookLogin = (Button) findViewById(R.id.mainLoginFacebook);
@@ -53,23 +53,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Prendo tutti valori, li metto nel bundle e li attacco al form intent per mandarla alla prossima activity
-                final EditText edit_username = (EditText) findViewById(R.id.mainUsername);
-                final EditText edit_password = (EditText) findViewById(R.id.mainPassword);
+                // Get trimmed strings from the username and password fields
+                String username = editUsername.getText().toString().trim();
+                String password = editPassword.getText().toString().trim();
 
-                if (checknull(edit_password.getText().toString().trim(), edit_username.getText().toString().trim())) {
-                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                // Check if either the username or the password are not blank
+                if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
+                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                     return;
                 }
 
-                // Inizializzo barra di caricamento
-                dialog = ProgressDialog.show(MainActivity.this, "",
-                        "Logging in. Please wait...", true);
+                // Show a loading dialog. Needed to show something to the user if the Internet connection is slow.
+                dialog = ProgressDialog.show(MainActivity.this, "", "Logging in. Please wait...", true);
 
                 try {
-                    ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
+                    ParseUser.logIn(username, password);
 
                     Log.d("MainActivity", "Login eseguito correttamente");
 
@@ -77,21 +76,21 @@ public class MainActivity extends AppCompatActivity {
                     Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
                     startActivity(form_intent);
 
-                    // Chiudo la progressdialogbar
+                    // Close the loading dialog.
                     dialog.dismiss();
 
                     finish();
 
                 } catch (ParseException e) {
-                    // Chiudo la progressdialogbar
+
+                    // Close the loading dialog.
                     dialog.dismiss();
 
                     if (e.getCode() == 101) {
                         // Siccome il codice 101 è per 2 tipi di errori faccio prima il controllo qua e in caso chiamo gli altri
                         Log.d("MainActivity", "Errore: " + e.getMessage());
 
-                        Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        Snackbar.make(v, "Username o Password errati...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     } else {
                         check(e.getCode(), v, e.getMessage());
                     }
