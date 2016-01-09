@@ -73,12 +73,12 @@
         android:layout_gravity="start"
         android:background="#1a1c25"
         android:choiceMode="singleChoice"
-        android:divider="#696969"
-        android:dividerHeight="2dp"
-        android:drawSelectorOnTop="true"
-        android:listSelector="#AAAAAA" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="false"
+        android:listSelector="#dedede" />
     <!--android:listSelector="@android:drawable/list_selector_background"
-    android:divider="@android:color/transparent"-->
+-->
 
 
 </android.support.v4.widget.DrawerLayout>

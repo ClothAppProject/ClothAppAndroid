@@ -59,8 +59,9 @@ public class BaseActivity extends AppCompatActivity {
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items
-        System.out.println("debug: navMenuTitles length = "+ navMenuTitles.length);
+
         boolean flag;
+
         if (navMenuIcons == null) {
             for (int i = 0; i < navMenuTitles.length; i++) {
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
@@ -153,7 +154,7 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * Diplaying fragment view for selected nav drawer list item
      * */
-    private void displayView(int position) {
+    public void displayView(int position) {
         // update the main content by replacing fragments
         Intent i = null;
         switch (position) {
