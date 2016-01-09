@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
         // Nascondo la tastiera all'avvio di quest'activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        // final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-
         // Add a listener to the normal login button
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,16 +74,6 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 ParseUser.logIn(edit_username.getText().toString().trim(), edit_password.getText().toString().trim());
                                 System.out.println("debug: Login eseguito correttamente");
-
-//                                // Inserisco i valori nelle sharedPref
-//                                ParseUser uth = ParseUser.getCurrentUser();
-//                                userInformation.edit().putBoolean("isLogged", true).commit();
-//                                userInformation.edit().putString("username", uth.get("username").toString().trim()).commit();
-//                                // userInformation.edit().putString("password", cryptoPswd(uth.get("password").toString())).commit();
-//                                userInformation.edit().putString("name", uth.get("name").toString().trim()).commit();
-//                                userInformation.edit().putString("lastname", uth.get("lastname").toString().trim()).commit();
-//                                userInformation.edit().putString("date", uth.get("date").toString().trim()).commit();
-//                                userInformation.edit().putString("email", uth.get("email").toString()).commit();
 
                                 // Redirect user to Splash Screen Activity
                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
