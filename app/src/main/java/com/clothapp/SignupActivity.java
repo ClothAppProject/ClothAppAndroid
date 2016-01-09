@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.*;
-import static com.clothapp.resources.FacebookUtil.getUserDetailLoginFB;
 import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 import static com.clothapp.resources.RegisterUtil.*;
 
@@ -271,8 +270,6 @@ public class SignupActivity extends AppCompatActivity {
                         } else {
                             // Login eseguito correttamente attraverso facebook
                             Log.d("SignupActivity", "Login eseguito attraverso Facebook");
-
-                            getUserDetailLoginFB(user, vi, userInformation);
 
                             // Redirect user to Splash Screen Activity
                             Intent form_intent = new Intent(SignupActivity.this, SplashScreenActivity.class);

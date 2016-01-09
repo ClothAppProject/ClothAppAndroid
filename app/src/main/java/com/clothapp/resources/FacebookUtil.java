@@ -75,13 +75,7 @@ public class FacebookUtil {
                             if (e == null) {
                                 // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                 Log.d("FacebookUtils", "Informazioni inserite su Parse");
-//                                userInformation.edit().putBoolean("isLogged", true).commit();
-//                                userInformation.edit().putString("username", user.getUsername().toString().trim()).commit();
-//                                userInformation.edit().putString("password", "password").commit();
-//                                userInformation.edit().putString("name", name.toString().trim()).commit();
-//                                userInformation.edit().putString("lastname", lastname.toString().trim()).commit();
-//                                userInformation.edit().putString("email", email.toString()).commit();
-//                                userInformation.edit().putString("date", birthday.toString()).commit();
+
                             } else {
                                 // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                                 check(e.getCode(), vi, e.getMessage());
@@ -90,22 +84,13 @@ public class FacebookUtil {
                     });
                 } catch (JSONException e) {
                     System.out.println("debug: eccezione nell'ottenere info da facebook");
+
                 } catch (java.text.ParseException e) {
                     System.out.println("debug: eccezione nel formattare la data");
+
                 }
             }
         }
         ).executeAsync();
-    }
-
-    // Funzione per salvare nelle sharedPref i dati in caso di Login eseguito via Facebook
-    public static void getUserDetailLoginFB(ParseUser user, View v, SharedPreferences userInformation) {
-//        userInformation.edit().putBoolean("isLogged", true).commit();
-//        userInformation.edit().putString("username", user.get("username").toString().trim()).commit();
-//        userInformation.edit().putString("password", "password").commit();
-//        userInformation.edit().putString("name", user.get("name").toString().trim()).commit();
-//        userInformation.edit().putString("lastname", user.get("lastname").toString().trim()).commit();
-//        userInformation.edit().putString("date", user.get("date").toString().trim()).commit();
-//        userInformation.edit().putString("email", user.get("email").toString()).commit();
     }
 }
