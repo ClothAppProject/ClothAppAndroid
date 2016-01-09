@@ -71,12 +71,12 @@
         android:layout_width="260dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#1a1c25"
+        android:background="#ffffff"
         android:choiceMode="singleChoice"
-        android:divider="#696969"
-        android:dividerHeight="2dp"
-        android:drawSelectorOnTop="true"
-        android:listSelector="#AAAAAA" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:drawSelectorOnTop="false"
+        android:listSelector="#C0C0C0" />
     <!--android:listSelector="@android:drawable/list_selector_background"
     android:divider="@android:color/transparent"-->
 
