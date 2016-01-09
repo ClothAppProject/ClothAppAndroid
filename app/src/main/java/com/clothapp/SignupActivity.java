@@ -30,6 +30,7 @@ import static com.clothapp.resources.RegisterUtil.*;
 
 
 public class SignupActivity extends AppCompatActivity {
+
     private Date date;
 
     @Override

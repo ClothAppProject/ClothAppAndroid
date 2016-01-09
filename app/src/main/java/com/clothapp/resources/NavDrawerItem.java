@@ -8,13 +8,15 @@ public class NavDrawerItem {
 
     private String title;
     private int icon;
+    private boolean selected;
 
     public NavDrawerItem() {
     }
 
-    public NavDrawerItem(String title, int icon) {
+    public NavDrawerItem(String title, int icon, boolean selected) {
         this.title = title;
         this.icon = icon;
+        this.selected=selected;
     }
     public NavDrawerItem(String title) {
         this.title = title;
@@ -36,4 +38,7 @@ public class NavDrawerItem {
         this.icon = icon;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
 }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
@@ -48,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
         // }
     }
 
-    public void set(String[] navMenuTitles, TypedArray navMenuIcons) {
+    public void set(String[] navMenuTitles, TypedArray navMenuIcons, int selected) {
         mTitle = mDrawerTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -59,6 +60,7 @@ public class BaseActivity extends AppCompatActivity {
 
         // adding nav drawer items
         System.out.println("debug: navMenuTitles length = "+ navMenuTitles.length);
+        boolean flag;
         if (navMenuIcons == null) {
             for (int i = 0; i < navMenuTitles.length; i++) {
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
@@ -66,7 +68,9 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             for (int i = 0; i < navMenuTitles.length; i++) {
                 //System.out.println("debug: i = " + i);
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
+                if(i==selected) flag=true;
+                else flag=false;
+                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1),flag));
             }
         }
 

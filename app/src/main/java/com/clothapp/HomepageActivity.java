@@ -3,11 +3,14 @@ package com.clothapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.ParseUser;
 
@@ -120,12 +123,12 @@ public class HomepageActivity extends BaseActivity {
         // Load titles from string.xml
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
-
         // Load icons from strings.xml
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        set(navMenuTitles, navMenuIcons);
+        set(navMenuTitles, navMenuIcons,0);
+
     }
 
 }
