@@ -57,8 +57,6 @@ public class NavDrawerListAdapter extends BaseAdapter {
         txtTitle.setText(navDrawerItems.get(position).getTitle());
         if(this.navDrawerItems.get(position).isSelected()) sfondo.setBackgroundColor(Color.parseColor("#C0C0C0"));
 
-
-
         return convertView;
     }
 

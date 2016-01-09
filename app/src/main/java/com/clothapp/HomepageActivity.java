@@ -123,12 +123,11 @@ public class HomepageActivity extends BaseActivity {
         // Load titles from string.xml
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
-
         // Load icons from strings.xml
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
-        set(navMenuTitles, navMenuIcons,0);
+        set(navMenuTitles, navMenuIcons, 0);
 
     }
 
