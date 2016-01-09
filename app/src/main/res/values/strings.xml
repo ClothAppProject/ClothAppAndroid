@@ -41,6 +41,15 @@
     <string name="open_navigation">Apri il menu</string>
     <string name="close_navigation">Chiudi il menu</string>
 
+    <string name="logo_description">Application logo</string>
+    <string name="main_username">Username or email</string>
+    <string name="main_password">Password</string>
+    <string name="main_login">Login</string>
+    <string name="main_login_facebook">Login with Facebook</string>
+    <string name="main_login_twitter">Login with Twitter</string>
+    <string name="main_forgot_password"><u>Forgot password?</u></string>
+    <string name="main_signup"><u>New here? Sign up!</u></string>
+
     <string-array name="nav_drawer_items">
         <item>HomePage</item>
         <item>Profilo</item>
