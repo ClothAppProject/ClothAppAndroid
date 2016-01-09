@@ -25,7 +25,7 @@
         android:layout_gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="0dp"
         android:paddingTop="20dp">
 
         <EditText
@@ -39,20 +39,24 @@
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_text"
-            android:textColorHint="@color/input_text_hint"/>
+            android:textColorHint="@color/input_text_hint"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp" />
 
         <EditText
             android:id="@+id/mainPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/white"
             android:hint="@string/main_password"
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_text"
-            android:textColorHint="@color/input_text_hint"/>
+            android:textColorHint="@color/input_text_hint"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp" />
 
 
     <Button
@@ -81,13 +85,13 @@
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:backgroundTint="#4099ff"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="5dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
