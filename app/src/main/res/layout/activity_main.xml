@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#3b5998"
+            android:backgroundTint="@color/facebook"
             android:text="@string/main_login_facebook"
             android:textColor="#ffffff" />
 
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:backgroundTint="#4099ff"
+            android:backgroundTint="@color/twitter"
             android:text="@string/main_login_twitter"
             android:textColor="#ffffff" />
 

@@ -10,6 +10,7 @@
     <color name="input_text">#222222</color>
     <color name="input_text_hint">#999999</color>
     <color name="white">#ffffff</color>
-
+    <color name="facebook">#3b5998</color>
+    <color name="twitter">#4099ff</color>
 
 </resources>
