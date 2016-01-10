@@ -2,7 +2,6 @@ package com.clothapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,19 +11,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.*;
-import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 import static com.clothapp.resources.RegisterUtil.*;
 
 
@@ -99,7 +93,7 @@ public class SignupActivity extends AppCompatActivity {
 
                             Log.d("SignupActivity", "Nome o cognome non possono essere vuoti");
                             //  checking if the birthday is empty
-                        } else if (edit_day.getText().toString().equalsIgnoreCase("")||edit_month.getText().toString().equalsIgnoreCase("")||edit_year.getText().toString().equalsIgnoreCase(""))   {
+                        } else if (edit_day.getText().toString().equalsIgnoreCase("") || edit_month.getText().toString().equalsIgnoreCase("") || edit_year.getText().toString().equalsIgnoreCase("")) {
                             // Nel caso in cui la data di nasciata sia vuota
                             Snackbar.make(v, "La data di nascita non può essere vuota", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
@@ -227,68 +221,5 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // Facebook button initialization
-        Button facebook_login = (Button) findViewById(R.id.register_button_facebook);
-
-        // Add OnClick listener to the Facebook button
-        facebook_login.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
-            @Override
-            public void onClick(View v) {
-
-                final View vi = v;
-                final SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-
-                // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
-                List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
-
-                // Eseguo la chiamata per il login via facebook con parse
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(SignupActivity.this, permissions, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, ParseException err) {
-                        if (err != null) {
-                            // Controllo che non ci siano eccezioni parse
-                            check(err.getCode(), vi, err.getMessage());
-                        } else if (user == null) {
-                            // Login via facebook cancellato dall'utente
-                            Log.d("SignupActivity", "Login attraverso Facebook cancellato dall'utente");
-                        } else if (user.isNew()) {
-                            // L'utente non è registrato con facebook, eseguo registrazione con facebook
-                            Log.d("SignupActivity", "L'utente non è registrato con Facebook, eseguo registrazione con Facebook");
-
-                            try {
-                                // Chiamo per inserire le informazioni di facebook nel database parse (l'utente è già stato creato)
-                                getUserDetailsRegisterFB(user, vi, userInformation);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            // Redirect user to Splash Screen Activity.
-                            Intent form_intent = new Intent(SignupActivity.this, SplashScreenActivity.class);
-                            startActivity(form_intent);
-
-                            finish();
-                        } else {
-                            // Login eseguito correttamente attraverso facebook
-                            Log.d("SignupActivity", "Login eseguito attraverso Facebook");
-
-                            // Redirect user to Splash Screen Activity
-                            Intent form_intent = new Intent(SignupActivity.this, SplashScreenActivity.class);
-                            startActivity(form_intent);
-
-                            finish();
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    // Dopo login su facebook ritorna qui
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 }
