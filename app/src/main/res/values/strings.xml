@@ -44,7 +44,7 @@
     <string name="close_navigation">Chiudi il menu</string>
 
     <string name="logo_description">Application logo</string>
-    <string name="main_username">Username or email</string>
+    <string name="main_username">Username or Email</string>
     <string name="main_password">Password</string>
     <string name="main_login">Login</string>
     <string name="main_login_facebook">Login with Facebook</string>

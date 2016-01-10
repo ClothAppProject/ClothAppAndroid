@@ -9,8 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -66,7 +68,8 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        //inizializzo layout e tasto indietro
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_upload);
 
         Log.d("UploadActivity", "Inizializzazione UploadActivity activity");
@@ -234,6 +237,33 @@ public class UploadActivity extends AppCompatActivity {
     // In caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
     @Override
     public void onBackPressed() {
+        deleteImage();
+        // Reinderizzo l'utente alla homePage activity
+        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+        startActivity(i);
+
+        finish();
+    }
+
+    //funzione di supporto per il tasto indietro
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                deleteImage();
+                // Reinderizzo l'utente alla homePage activity
+                Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+                startActivity(i);
+
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //funzione che cancella l'imamgine scattata
+    public void deleteImage()   {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + directoryName;
         File f = new File(path, photoFileName);
 
@@ -244,13 +274,7 @@ public class UploadActivity extends AppCompatActivity {
 
             Log.d("UploadActivity", "File eliminato");
         }
-        // Reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
-        startActivity(i);
-
-        finish();
     }
-
     // Ritorna l'Uri dell'immagine su disco
     public Uri getPhotoFileUri(String fileName) {
         // Continua solamente se la memoria SD è montata
