@@ -113,7 +113,8 @@
                     android:textColor="@color/white"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="15dip"
-                    android:text="@string/birthday" />
+                    android:text="@string/birthday"
+                    android:layout_marginBottom="5dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -132,7 +133,9 @@
                         android:hint="dd"
                         android:inputType="numberSigned"
                         android:background="@color/white"
-                        android:fontFamily="sans-serif"/>
+                        android:fontFamily="sans-serif"
+                        android:padding="10dp"
+                        android:singleLine="true"/>
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -154,7 +157,9 @@
                         android:hint="mm"
                         android:inputType="numberSigned"
                         android:background="@color/white"
-                        android:fontFamily="sans-serif"/>
+                        android:fontFamily="sans-serif"
+                        android:padding="10dp"
+                        android:singleLine="true"/>
 
                     <TextView
                         android:layout_width="fill_parent"
@@ -176,7 +181,9 @@
                         android:hint="yyyy"
                         android:inputType="numberSigned"
                         android:background="@color/white"
-                        android:fontFamily="sans-serif"/>
+                        android:fontFamily="sans-serif"
+                        android:padding="10dp"
+                        android:singleLine="true"/>
 
                 </LinearLayout>
 
