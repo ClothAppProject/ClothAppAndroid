@@ -130,15 +130,5 @@ public class HomepageActivity extends BaseActivity {
 
         set(navMenuTitles, navMenuIcons, 0);
 
-        setUpImg();
-
     }
-
-    public void setUpImg(){
-
-       // ImageView imageView = (ImageView) findViewById(R.id.menu_image);
-       // imageView.setImageResource(R.mipmap.prova);
-
-    }
-
 }

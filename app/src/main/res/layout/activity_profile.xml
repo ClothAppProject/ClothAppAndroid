@@ -128,6 +128,19 @@
 
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/drawerll"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="240dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/logo"
+        android:background="@color/background" />
+
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
@@ -139,5 +152,6 @@
         android:dividerHeight="0.5dp"
         android:listSelector="#C0C0C0" />
 
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

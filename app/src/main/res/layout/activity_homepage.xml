@@ -65,19 +65,32 @@
     </FrameLayout>
 
     <!-- The navigation drawer -->
+    <LinearLayout
+        android:id="@+id/drawerll"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical" >
 
-        <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="#ffffff"
-            android:paddingTop="150dp"
-            android:choiceMode="singleChoice"
-            android:divider="#000000"
-            android:dividerHeight="0.5dp"
-            android:drawSelectorOnTop="false"
-            android:listSelector="#C0C0C0" />
+            <ImageView
+                android:layout_width="240dp"
+                android:layout_height="120dp"
+                android:src="@mipmap/logo"
+                android:background="@color/background"/>
+            <ListView
+                android:id="@+id/left_drawer"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="#ffffff"
+                android:choiceMode="singleChoice"
+                android:divider="#000000"
+                android:dividerHeight="0.5dp"
+                android:drawSelectorOnTop="false"
+                android:listSelector="#C0C0C0" />
+
+    </LinearLayout>
+
 
     <!--android:listSelector="@android:drawable/list_selector_background"
     android:divider="@android:color/transparent"

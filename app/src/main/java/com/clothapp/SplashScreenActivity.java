@@ -23,7 +23,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
 
         // TODO: Questa classe mi sembra da rivedere. Troppo copia&incolla? :) (Simone)
-
+        // TODO: serve a scaricare le immagini da mostrare nella galleria in modo asincrono
+        // TODO: Android mette a disposizione questa classe invece che usare i thread. Pensi non vada bene? (Roberto)
 
         /**
          * Showing splashscreen while making network calls to download necessary

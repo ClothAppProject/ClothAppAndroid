@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.clothapp.resources.NavDrawerItem;
@@ -28,7 +29,8 @@ public class BaseActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-   // protected RelativeLayout _completeLayout, _activityLayout;
+    //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
+    private LinearLayout drawerll;
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -53,9 +55,12 @@ public class BaseActivity extends AppCompatActivity {
         mTitle = mDrawerTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        // left drawer ID = 2131558510
 
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
+        drawerll = (LinearLayout) findViewById(R.id.drawerll);
+        //
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items
@@ -74,6 +79,9 @@ public class BaseActivity extends AppCompatActivity {
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1),flag));
             }
         }
+
+        // Recycle the typed array
+        navMenuIcons.recycle();
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
@@ -131,10 +139,11 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-            if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-                mDrawerLayout.closeDrawer(mDrawerList);
+        //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
+            if (mDrawerLayout.isDrawerOpen(drawerll)) {
+                mDrawerLayout.closeDrawer(drawerll);
             } else {
-                mDrawerLayout.openDrawer(mDrawerList);
+                mDrawerLayout.openDrawer(drawerll);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -196,7 +205,7 @@ public class BaseActivity extends AppCompatActivity {
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         mDrawerList.setSelection(position);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(drawerll);
     }
 
 
