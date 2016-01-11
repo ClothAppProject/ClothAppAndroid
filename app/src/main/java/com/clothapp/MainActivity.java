@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Show a loading dialog. Needed to show something to the user if the Internet connection is slow.
-                dialog = ProgressDialog.show(MainActivity.this, "", "Logging in. Please wait...", true);
+                dialog = ProgressDialog.show(MainActivity.this, "", "Logging... Please wait...", true);
 
                 // Create a thread to handle login in the background.
                 Thread login = new Thread(new Runnable() {

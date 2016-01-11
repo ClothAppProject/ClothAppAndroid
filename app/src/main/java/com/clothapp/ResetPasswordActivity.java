@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -40,18 +41,32 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     Snackbar.make(v, "Email non valida", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                 } else {
-                    ParseUser.requestPasswordResetInBackground(editEmail.getText().toString(), new RequestPasswordResetCallback() {
-                        public void done(ParseException e) {
+                    //inizializzo progressbar di caricamento
+                    final ProgressDialog dialog = ProgressDialog.show(ResetPasswordActivity.this, "",
+                            "Checking your mail...", true);
 
-                            if (e == null) {
-                                // email inviata correttamente
-                                Snackbar.make(v, "Email di reset inviata correttamente", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                            } else {
-                                // Errore nel reperire l'email
-                                check(e.getCode(), v, e.getMessage());
-                            }
+                    //thread che richiede invio mail
+                    Thread ask_pswd = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ParseUser.requestPasswordResetInBackground(editEmail.getText().toString(), new RequestPasswordResetCallback() {
+                                public void done(ParseException e) {
+
+                                    if (e == null) {
+                                        // email inviata correttamente
+                                        Snackbar.make(v, "Email di reset inviata correttamente", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                        dialog.dismiss();
+                                    } else {
+                                        // Errore nel reperire l'email
+                                        dialog.dismiss();
+                                        check(e.getCode(), v, e.getMessage());
+                                    }
+                                }
+                            });
                         }
                     });
+                    ask_pswd.start();
+
                 }
             }
         });
