@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by giacomoceribelli on 29/12/15.
@@ -200,7 +202,11 @@ public class UploadActivity extends AppCompatActivity {
             // Prima però controllo in che modo è stata scattata (rotazione)
             try {
                 imageBitmap = rotateImageIfRequired(imageBitmap, takenPhotoUri);
-                imageView.setImageBitmap(imageBitmap);
+                if (imageBitmap.getHeight() > GL10.GL_MAX_TEXTURE_SIZE || imageBitmap.getWidth()>GL10.GL_MAX_TEXTURE_SIZE) {
+
+                    imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
+                }
+                else imageView.setImageBitmap(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
