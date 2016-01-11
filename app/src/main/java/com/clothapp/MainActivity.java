@@ -20,6 +20,7 @@ import com.parse.ParseUser;
 import java.util.Arrays;
 import java.util.List;
 import static com.clothapp.resources.ExceptionCheck.check;
+import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
                 final View vi = v;
 
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void done(ParseUser user, ParseException err) {
                                 if (err != null) {
+                                    //errore nel login via facebook
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
 
@@ -148,12 +150,24 @@ public class MainActivity extends AppCompatActivity {
 
                                 } else if (user.isNew()) {
                                     // L'utente non è registrato con facebook, eseguo registrazione con facebook
-                                    Log.d("MainActivity", "L'utente non registrato con Facebook, eseguo registrazione con Facebook");
+                                    Log.d("MainActivity", "L'utente non è registrato con Facebook, eseguo registrazione e login con Facebook");
 
-                                    // Redirect user to Splash Screen Activity
-                                    Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
-                                    startActivity(form_intent);
+                                    Thread saveDataFB = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //inserisco dati facebook nel nuovo utente
+                                            try {
+                                                getUserDetailsRegisterFB(ParseUser.getCurrentUser(),v);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            // Redirect user to Splash Screen Activity
+                                            Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
+                                            startActivity(form_intent);
 
+                                        }
+                                    });
+                                    saveDataFB.start();
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
 

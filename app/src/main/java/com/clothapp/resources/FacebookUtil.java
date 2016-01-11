@@ -35,7 +35,7 @@ public class FacebookUtil {
     private static Date birthday;
 
     // Funzione per prelevare le informazioni da facebook e inserirle in Parse
-    public static void getUserDetailsRegisterFB(ParseUser uth, View v, SharedPreferences userInfo) throws InterruptedException {
+    public static void getUserDetailsRegisterFB(ParseUser uth, View v) throws InterruptedException {
 
         final View vi = v;
         final ParseUser user = uth;
