@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.List;
+import static com.clothapp.resources.RegisterUtil.setButtonTint;
 import static com.clothapp.resources.ExceptionCheck.check;
 import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         Button btnLogin = (Button) findViewById(R.id.mainLogin);
         Button btnFacebookLogin = (Button) findViewById(R.id.mainLoginFacebook);
         Button btnTwitterLogin = (Button) findViewById(R.id.mainLoginTwitter);
+        //coloro pulsanti twitter e facebook su API 21
+        setButtonTint(btnFacebookLogin,getResources().getColorStateList(R.color.facebook));
+        setButtonTint(btnTwitterLogin,getResources().getColorStateList(R.color.twitter));
 
         TextView txtForgotPassword = (TextView) findViewById(R.id.mainForgotPassword);
         TextView txtSignup = (TextView) findViewById(R.id.mainSignup);
@@ -228,5 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
+
 
 }

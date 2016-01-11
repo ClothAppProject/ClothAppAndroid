@@ -1,5 +1,11 @@
 package com.clothapp.resources;
 
+import android.content.res.ColorStateList;
+import android.os.Build;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.widget.Button;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +14,15 @@ import java.util.regex.Pattern;
  */
 public class RegisterUtil {
 
+
+    //funzione per settare background tint nel caso si usino le API 21
+    public static void setButtonTint(Button button, ColorStateList tint) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP && button instanceof AppCompatButton) {
+            ((AppCompatButton) button).setSupportBackgroundTintList(tint);
+        } else {
+            ViewCompat.setBackgroundTintList(button, tint);
+        }
+    }
 
     //funzione per controllare le 2 password siano uguali e non nulle
     public static boolean checkPassWordAndConfirmPassword(String password, String confirmPassword) {
