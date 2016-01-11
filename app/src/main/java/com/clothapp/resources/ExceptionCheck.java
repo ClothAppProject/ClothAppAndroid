@@ -1,6 +1,7 @@
 package com.clothapp.resources;
 
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -10,7 +11,7 @@ public class ExceptionCheck {
 
     public static void check(int code,View vi,String message) {
 
-        System.out.println("debug: errore = " + message);
+        Log.d("debug ParseException:"," errore = " + message);
         String output = "";
         switch (code) {
             case 1:

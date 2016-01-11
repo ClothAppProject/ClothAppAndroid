@@ -44,7 +44,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:text=""
-                    android:hint="@string/username"
+                    android:hint="@string/main_username"
                     android:background="@color/white"
                     android:fontFamily="sans-serif"
                     android:padding="10dp"
@@ -196,7 +196,7 @@
                     android:layout_marginRight="10dp"
                     android:inputType="textPassword"
                     android:text=""
-                    android:hint="@string/password"
+                    android:hint="@string/main_password"
                     android:background="@color/white"
                     android:fontFamily="sans-serif"
                     android:padding="10dp"
@@ -227,7 +227,7 @@
                     android:id="@+id/form_register_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/register_button" />
+                    android:text="@string/send" />
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

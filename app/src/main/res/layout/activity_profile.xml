@@ -30,7 +30,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="35dp"
-                        android:text="@string/username" />
+                        android:text="@string/main_username" />
 
                     <TextView
                         android:id="@+id/username_field"

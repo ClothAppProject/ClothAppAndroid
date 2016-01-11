@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         try {
-            getSupportActionBar().setTitle(R.string.register_button);
+            getSupportActionBar().setTitle(R.string.signup);
         } catch (NullPointerException e) {
             Log.d("SignupActivity", "Error: " + e.getMessage());
             e.printStackTrace();

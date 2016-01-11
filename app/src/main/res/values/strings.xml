@@ -9,23 +9,27 @@
     <string name="form_intro">Esegui il Login o Registrati</string>
 
     <string name="form_register">Inserisci i tuoi dati:</string>
-    <string name="username">Username</string>
+    <string name="logo_description">Application logo</string>
+    <string name="main_username">Username</string>
+    <string name="main_password">Password</string>
+    <string name="main_login">Login</string>
+    <string name="signup">Registrati</string>
+    <string name="main_login_facebook">Login with Facebook</string>
+    <string name="main_login_twitter">Login with Twitter</string>
+    <string name="main_forgot_password"><u>Forgot password?</u></string>
+    <string name="main_signup"><u>New here? Sign up!</u></string>
     <string name="email">Email</string>
     <string name="name">Nome</string>
     <string name="lastname">Cognome</string>
     <string name="birthday">Data di Nascita</string>
-    <string name="password">Password</string>
     <string name="password_confirm">Conferma Password</string>
     <string name="reset_password">Inserisci la email del tuo account per richiedere una nuova password</string>
-    <string name="reset_password_button">Invia</string>
+    <string name="send">Invia</string>
 
-    <string name="login_button">Login</string>
-    <string name="register_button">Registrati</string>
     <string name="homepage_button">HomePage</string>
     <string name="logout_button">Logout</string>
     <string name="profile_button">Profilo</string>
     <string name="barra_separatrice">____________________________________________</string>
-    <string name="form_button_label">Invia</string>
     <string name="back_button_label">Indietro</string>
     <string name="label_form_name">Nome Inserito:</string>
     <string name="label_form_lastname">Cognome Inserito:</string>
@@ -43,14 +47,6 @@
     <string name="open_navigation">Apri il menu</string>
     <string name="close_navigation">Chiudi il menu</string>
 
-    <string name="logo_description">Application logo</string>
-    <string name="main_username">Username or Email</string>
-    <string name="main_password">Password</string>
-    <string name="main_login">Login</string>
-    <string name="main_login_facebook">Login with Facebook</string>
-    <string name="main_login_twitter">Login with Twitter</string>
-    <string name="main_forgot_password"><u>Forgot password?</u></string>
-    <string name="main_signup"><u>New here? Sign up!</u></string>
 
     <string-array name="nav_drawer_items">
         <item>HomePage</item>
