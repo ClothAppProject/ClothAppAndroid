@@ -1,4 +1,4 @@
-<img src="https://github.com/ceribbo/ClothApp/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%">
+<img src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%">
 # ClothApp
 
 Quick way to help people to find out their friends opinion about any clothes they want to buy!
@@ -15,6 +15,10 @@ Let everybody know about your fashion skills!
 -Build server-side infrastructure
 
 -Basic client-server interaction
+
+<a href="https://docs.google.com/document/d/1xguBJDqAv-cE_bg4CyerdYcvj0UBzced0T2Gtj93XfY/edit?usp=sharing">Documentation</a>
+
+<a href="https://docs.google.com/presentation/d/1E-Qs7uOaI9LWKQU4rwZBQnf1kYY-OAy7An0fMl75DX4/edit?usp=sharing">Milestone 1 Presentation</a>
 
 
 
