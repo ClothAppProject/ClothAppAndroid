@@ -16,6 +16,10 @@ Let everybody know about your fashion skills!
 
 -Basic client-server interaction
 
+<a href="https://docs.google.com/document/d/1xguBJDqAv-cE_bg4CyerdYcvj0UBzced0T2Gtj93XfY/edit?usp=sharing">Documentation</a>
+
+<a href="https://docs.google.com/presentation/d/1E-Qs7uOaI9LWKQU4rwZBQnf1kYY-OAy7An0fMl75DX4/edit?usp=sharing">Milestone 1 Presentation</a>
+
 
 
 ##Milestone 2 - Release Candidate
