@@ -33,10 +33,10 @@ public class FacebookUtil {
     private static String email;
     private static String lastname;
     private static Date birthday;
+    private static ParseException ret = null;
 
     // Funzione per prelevare le informazioni da facebook e inserirle in Parse
-    public static void getUserDetailsRegisterFB(ParseUser uth, View v) throws InterruptedException {
-
+    public static ParseException getUserDetailsRegisterFB(ParseUser uth, View v) throws InterruptedException {
         final View vi = v;
         final ParseUser user = uth;
         // final SharedPreferences userInformation = userInfo;
@@ -64,24 +64,19 @@ public class FacebookUtil {
                     Log.d("FacebookUtil", "Informazioni prelevate da Facebook");
 
                     // Inserisco le info nel ParseUser
-                    user.setPassword("password");
                     user.setEmail(email);
                     user.put("name", name.trim());
                     user.put("lastname", lastname.trim());
                     user.put("date", birthday);
 
-                    user.saveInBackground(new SaveCallback() {
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
-                                Log.d("FacebookUtils", "Informazioni inserite su Parse");
+                    try {
+                        //uso save e non savebackground perchè non deve essere asincrona
+                        user.save();
+                    } catch (ParseException e) {
+                        ret = e;
+                        System.out.println("debug: ret = "+ret.getMessage().toString());
 
-                            } else {
-                                // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                check(e.getCode(), vi, e.getMessage());
-                            }
-                        }
-                    });
+                    }
                 } catch (JSONException e) {
                     System.out.println("debug: eccezione nell'ottenere info da facebook");
 
@@ -91,6 +86,7 @@ public class FacebookUtil {
                 }
             }
         }
-        ).executeAsync();
+        ).executeAndWait();
+        return ret;
     }
 }

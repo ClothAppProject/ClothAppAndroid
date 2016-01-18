@@ -25,7 +25,7 @@ import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    private ParseException ret = null;
     private ProgressDialog dialog;
 
     @Override
@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(final View v) {
 
                 final View vi = v;
-
                 // Inizializzo barra di caricamento
                 dialog = ProgressDialog.show(MainActivity.this, "",
                         "Logging with Facebook. Please wait...", true);
@@ -137,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void done(ParseUser user, ParseException err) {
+
                                 if (err != null) {
                                     //errore nel login via facebook
                                     // Chiudo barra di caricamento
@@ -156,27 +156,50 @@ public class MainActivity extends AppCompatActivity {
                                     // L'utente non è registrato con facebook, eseguo registrazione con facebook
                                     Log.d("MainActivity", "L'utente non è registrato con Facebook, eseguo registrazione e login con Facebook");
 
+                                    //inizializzo una parse exception che ritorna l'errore se mail è già stata usata
                                     Thread saveDataFB = new Thread(new Runnable() {
                                         @Override
                                         public void run() {
                                             //inserisco dati facebook nel nuovo utente
                                             try {
-                                                getUserDetailsRegisterFB(ParseUser.getCurrentUser(),v);
+                                                //assegno alla variabile ParseException ret il ritorno della funzione
+                                                ret=getUserDetailsRegisterFB(ParseUser.getCurrentUser(),v);
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
-                                            // Redirect user to Splash Screen Activity
-                                            Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
-                                            startActivity(form_intent);
 
                                         }
                                     });
                                     saveDataFB.start();
+                                    try {
+                                        //aspetto che il thread del salvataggio dei dati termini
+                                        saveDataFB.join();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //controllo sui vari casi del ritorno del salvataggio di dati di facebook
+                                    if (ret == null) {
+                                        // Redirect user to Splash Screen Activity
+                                        Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
+                                        startActivity(form_intent);
+                                        dialog.dismiss();
+                                        finish();
+                                    }else if (ret.getCode()==203){
+                                        //caso in cui l'utente che si registra con facebook ha email già associata ad altro account
+                                        try {
+                                            ParseUser.getCurrentUser().delete();
+                                        } catch (ParseException e) {
+                                            //in caso l'eliminazione dell'utente dia problemi
+                                            check(e.getCode(), vi, e.getMessage());
+                                        }
+                                        Snackbar.make(vi, "Errore: Email associata all'account facebook già utilizzata", Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+                                    }else{
+                                        //altro caso di errore di salvataggio dei dati di facebook
+                                        check(ret.getCode(), vi, ret.getMessage());
+                                    }
                                     // Chiudo barra di caricamento
                                     dialog.dismiss();
-
-                                    finish();
-
                                 } else {
                                     // Login eseguito correttamente attraverso facebook
                                     Log.d("MainActivity", "Login eseguito correttamente attraverso Facebook");
