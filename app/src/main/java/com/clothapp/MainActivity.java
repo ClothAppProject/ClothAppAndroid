@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                     //controllo sui vari casi del ritorno del salvataggio di dati di facebook
                                     if (ret == null) {
                                         // Redirect user to Splash Screen Activity
-                                        Intent form_intent = new Intent(MainActivity.this, SplashScreenActivity.class);
+                                        Intent form_intent = new Intent(MainActivity.this, FacebookUsername.class);
                                         startActivity(form_intent);
                                         dialog.dismiss();
                                         finish();

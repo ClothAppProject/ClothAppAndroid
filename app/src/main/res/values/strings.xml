@@ -8,6 +8,7 @@
 
     <string name="form_intro">Esegui il Login o Registrati</string>
 
+    <string name="form_register_username">Inserisci un Username:</string>
     <string name="form_register">Inserisci i tuoi dati:</string>
     <string name="logo_description">Application logo</string>
     <string name="main_username">Username</string>

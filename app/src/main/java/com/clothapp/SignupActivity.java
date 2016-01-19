@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -29,11 +31,12 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_signup);
 
         try {
             getSupportActionBar().setTitle(R.string.signup);
+            //inizializzo layout e tasto indietro
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             Log.d("SignupActivity", "Error: " + e.getMessage());
             e.printStackTrace();
@@ -151,7 +154,7 @@ public class SignupActivity extends AppCompatActivity {
                         } else {
                             // Inizializzo la barra di caricamento
                             final ProgressDialog dialog = ProgressDialog.show(SignupActivity.this, "",
-                                    "Logging out. Please wait...", true);
+                                    "Loading. Please wait...", true);
 
                             // Formatto data
                             final String edit_date = edit_year.getText().toString() + "-" + edit_month.getText().toString() + "-" + edit_day.getText().toString();
@@ -175,24 +178,12 @@ public class SignupActivity extends AppCompatActivity {
                                     user.put("lastname", edit_lastname.getText().toString().trim());
                                     user.put("date", date);
 
-                                    Log.d("SignupActivity", "Signup background thread: userID = " + user.getObjectId());
-                                    Log.d("SignupActivity", "Signup background thread: password = " + edit_password.getText().toString());
-
                                     user.signUpInBackground(new SignUpCallback() {
                                         public void done(ParseException e) {
                                             if (e == null) {
 
                                                 // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                                 Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
-
-//                                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-//                                                userInformation.edit().putString("username", edit_username.getText().toString().trim()).commit();
-//                                                userInformation.edit().putString("name", edit_name.getText().toString().trim()).commit();
-//                                                userInformation.edit().putString("lastname", edit_lastname.getText().toString().trim()).commit();
-//                                                userInformation.edit().putString("password", cryptoPswd(edit_password.getText().toString().trim())).commit();
-//                                                userInformation.edit().putString("email", edit_email.getText().toString()).commit();
-//                                                userInformation.edit().putString("date", edit_date.toString()).commit();
-//                                                userInformation.edit().putBoolean("isLogged", true).commit();
 
                                                 // Redirect user to Splash Screen Activity.
                                                 Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
@@ -221,5 +212,17 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //funzione di supporto per il tasto indietro
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,6 +1,7 @@
 package com.clothapp.http;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -36,9 +37,9 @@ class Get extends AsyncTask<String, String, String> {
             }
             return responseString.toString();
         } catch (ClientProtocolException e) {
-            //TODO Handle problems..
+            Log.d("Get","ClientProtocolException= "+e.getMessage());
         } catch (IOException e) {
-            //TODO Handle problems..
+            Log.d("Get","Eccezione IO= "+e.getMessage());
         }
         return responseString.toString();
     }
