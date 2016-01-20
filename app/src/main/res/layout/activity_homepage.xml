@@ -38,8 +38,6 @@
                 android:layout_marginTop="5dp" />
 
 
-
-
         </LinearLayout>
         </ScrollView>
         <android.support.design.widget.FloatingActionButton android:id="@+id/upload_button"
