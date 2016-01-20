@@ -1,6 +1,7 @@
 package com.clothapp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -9,11 +10,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
+
+import static com.clothapp.resources.ExceptionCheck.check;
 
 public class HomepageActivity extends BaseActivity {
 
@@ -44,73 +56,34 @@ public class HomepageActivity extends BaseActivity {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
-
                 finish();
             }
         });
 
-        // Logout button initialization
-        Button button_logout = (Button) findViewById(R.id.form_logout_button);
+        loadGridview();
 
-        // Add an OnClick listener to the logout button
-        button_logout.setOnClickListener(new View.OnClickListener() {
-            //metto bottone logout in ascolto del click
-            @Override
-            public void onClick(View view_logout) {
+    }
 
-                // Inizializzo la progressDialogBar
-                final ProgressDialog dialog = ProgressDialog.show(HomepageActivity.this, "",
-                        "Logging out. Please wait...", true);
+    //funzione di appoggio che viene chiamata per caricare le immagini nel gridview
+    public void loadGridview()  {
+        final Context contesto = this;
+        final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
+        final View vi = new View(this);
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.setLimit(10);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> fotos, ParseException e) {
+                if (e == null) {
+                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
 
-                // Chiudo sessione e metto valore sharedPref a false
+                    Galleria myImageAdapter = new Galleria(contesto,fotos,vi);
+                    gridview.setAdapter(myImageAdapter);
 
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // Actual logout function.
-                        ParseUser.logOut();
-
-//                                SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-//                                userInformation.edit().putString("username", "").commit();
-//                                userInformation.edit().putString("name", "").commit();
-//                                userInformation.edit().putString("lastname", "").commit();
-//                                userInformation.edit().putString("email", "").commit();
-//                                userInformation.edit().putString("date", "").commit();
-//                                userInformation.edit().putBoolean("isLogged", false).commit();
-
-                        Log.d("HomepageActivity", "Logout eseguito con successo");
-
-                        // Redirect the user to the Main Activity.
-                        Intent form_intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(form_intent);
-
-                        // Close the loading dialog.
-                        dialog.dismiss();
-
-                        finish();
-                    }
-                });
-
-                // Start logout thread
-                t.start();
-            }
-        });
-
-        // ProfileActivity button initialization
-        Button button_profile = (Button) findViewById(R.id.form_profile_button);
-
-        // Add an OnClick listener to the profile button
-        button_profile.setOnClickListener(new View.OnClickListener() {
-            //metto bottone profile in ascolto del click
-            @Override
-            public void onClick(View view_profile) {
-
-                // Redirect the user to the ProfileActivity Activity.
-                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(form_intent);
-
-                finish();
+                } else {
+                    //errore nel reperire gli oggetti Photo dal database
+                    check(e.getCode(), vi, e.getMessage());
+                }
             }
         });
     }
