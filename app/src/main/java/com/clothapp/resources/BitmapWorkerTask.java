@@ -1,23 +1,16 @@
 package com.clothapp.resources;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.clothapp.R;
-import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
-import java.util.List;
+import java.lang.ref.WeakReference;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
@@ -25,51 +18,44 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by Roberto on 20/01/16.
  */
 
-public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
+    private final WeakReference<ImageView> imageViewReference;
 
-    private View view;
+    ParseObject pic;
 
-    List<ParseObject> pics;
 
-    public ImageAdapter(Context c, List<ParseObject> list, View v) {
-        mContext = c;
-        view = v;
-        pics = list;
+    public BitmapWorkerTask(ImageView imageView) {
+        // Use a WeakReference to ensure the ImageView can be garbage collected
+        imageViewReference = new WeakReference<ImageView>(imageView);
     }
 
-    public int getCount() {
-        return pics.size();
+    // Decode image in background.
+    @Override
+    protected Bitmap doInBackground(ParseObject... params) {
+        //TODO check parameters of the following method
+        return decodeSampledBitmap(params[0], 600, 600);
+
     }
 
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(600, 600));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
+    // Once complete, see if ImageView is still around and set bitmap.
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+        if (isCancelled()) {
+            bitmap = null;
         }
 
-        //Bitmap bm = decodeSampledBitmap(pics.get(position), 600, 600);
+        if (imageViewReference != null && bitmap != null) {
+            final ImageView imageView = imageViewReference.get();
+            final BitmapWorkerTask bitmapWorkerTask =
+                    GalleryUtil.getBitmapWorkerTask(imageView);
+            if (this == bitmapWorkerTask && imageView != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
 
-        //imageView.setImageBitmap(bm);
-        GalleryUtil.loadBitmap(pics.get(position),imageView, mContext.getResources());
-
-        return imageView;
     }
+
+
 
 
     //private static byte[] bit;
@@ -82,7 +68,9 @@ public class ImageAdapter extends BaseAdapter {
 
         } catch (ParseException e) {
             //errore nel reperire gli oggetti Photo dal database
-            check(e.getCode(), view, e.getMessage());
+           // check(e.getCode(), view, e.getMessage());
+            // TODO CHECK ON ERRORS
+            // TODO va passata la view per controllare gli errori di parse
         }
 
         Bitmap bm = null;
