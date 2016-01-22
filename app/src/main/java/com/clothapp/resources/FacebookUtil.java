@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.clothapp.SplashScreenActivity;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -66,12 +68,17 @@ public class FacebookUtil {
                     // Inserisco le info nel ParseUser
                     user.setEmail(email);
                     user.put("name", name.trim());
-                    user.put("lastname", lastname.trim());
-                    user.put("date", birthday);
-
+                    user.put("flagISA","Persona");
                     try {
                         //uso save e non savebackground perchè non deve essere asincrona
                         user.save();
+
+                        ParseObject persona = new ParseObject("Persona");
+                        persona.put("username",user.getUsername());
+                        persona.put("lastname", lastname.trim());
+                        persona.put("date",birthday);
+                        //persona.put("city",citta.trim());
+                        persona.save();
                     } catch (ParseException e) {
                         ret = e;
                         System.out.println("debug: ret = "+ret.getMessage().toString());

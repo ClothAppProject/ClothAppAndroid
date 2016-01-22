@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.text.SimpleDateFormat;
@@ -170,14 +172,12 @@ public class SignupActivity extends AppCompatActivity {
                             Thread signup = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ParseUser user = new ParseUser();
+                                    final ParseUser user = new ParseUser();
                                     user.setUsername(edit_username.getText().toString().trim());
                                     user.setPassword(edit_password.getText().toString().trim());
                                     user.setEmail(edit_email.getText().toString());
                                     user.put("name", edit_name.getText().toString().trim());
-                                    user.put("lastname", edit_lastname.getText().toString().trim());
-                                    user.put("date", date);
-
+                                    user.put("flagISA","Persona");
                                     user.signUpInBackground(new SignUpCallback() {
                                         public void done(ParseException e) {
                                             if (e == null) {
@@ -185,14 +185,34 @@ public class SignupActivity extends AppCompatActivity {
                                                 // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
                                                 Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
 
-                                                // Redirect user to Splash Screen Activity.
-                                                Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                                startActivity(form_intent);
 
-                                                // Chiudo la dialogBar
-                                                dialog.dismiss();
+                                                ParseObject persona = new ParseObject("Persona");
+                                                persona.put("username",user.getUsername());
+                                                persona.put("lastname", edit_lastname.getText().toString().trim());
+                                                persona.put("date",date);
+                                                //persona.put("city",edit_citta.getText().toString.trim());
+                                                persona.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (e == null) {
+                                                            // Redirect user to Splash Screen Activity.
+                                                            Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                                            startActivity(form_intent);
 
-                                                finish();
+                                                            // Chiudo la dialogBar
+                                                            dialog.dismiss();
+
+                                                            finish();
+                                                        }else {
+                                                            // Chiudo la dialogBar
+                                                            dialog.dismiss();
+
+                                                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                            check(e.getCode(), vi, e.getMessage());
+                                                        }
+                                                    }
+                                                });
+
                                             } else {
                                                 // Chiudo la dialogBar
                                                 dialog.dismiss();

@@ -13,8 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
@@ -71,25 +75,39 @@ public class FacebookUsername extends AppCompatActivity {
                     Thread signup = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ParseUser user = ParseUser.getCurrentUser();
+                            final ParseUser user = ParseUser.getCurrentUser();
+                            final String nomevecchio = ParseUser.getCurrentUser().getUsername();
                             user.setUsername(edit_username.getText().toString().trim());
 
 
                             user.saveInBackground(new SaveCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {
+                                        //prendo l'oggetto Persona riferito a
+                                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
+                                        query.whereEqualTo("username", nomevecchio);
+                                        try {
+                                            List<ParseObject> utente = query.find();
+                                            ParseObject persona = utente.get(0);
+                                            persona.put("username",user.getUsername());
+                                            persona.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    if (e==null) {
+                                                        // Redirect user to Splash Screen Activity.
+                                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                                        startActivity(form_intent);
 
-                                        // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
-                                        Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
+                                                        // Chiudo la dialogBar
+                                                        dialog.dismiss();
 
-                                        // Redirect user to Splash Screen Activity.
-                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                        startActivity(form_intent);
-
-                                        // Chiudo la dialogBar
-                                        dialog.dismiss();
-
-                                        finish();
+                                                        finish();
+                                                    }
+                                                }
+                                            });
+                                        } catch (ParseException e1) {
+                                            check(e.getCode(), vi, e.getMessage());
+                                        }
                                     } else {
                                         // Chiudo la dialogBar
                                         dialog.dismiss();
@@ -112,6 +130,12 @@ public class FacebookUsername extends AppCompatActivity {
     //funzione per eliminare utente appena creato con facebook
     private void deleteUser(ParseUser user)   {
         try {
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
+            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            List<ParseObject> utente = query.find();
+            ParseObject persona = utente.get(0);
+            persona.delete();
+
             user.delete();
         } catch (ParseException e) {
             check(e.getCode(), vi, e.getMessage());

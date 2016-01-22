@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -31,7 +33,6 @@ public class ProfileActivity extends BaseActivity {
 
         try {
             getSupportActionBar().setTitle(R.string.profile_button);
-
         } catch (NullPointerException e) {
             Log.d("ProfileActivity", "Error: " + e.getMessage());
             e.printStackTrace();
@@ -40,22 +41,32 @@ public class ProfileActivity extends BaseActivity {
         // Create side menu
         setUpMenu();
 
-        TextView username = (TextView) findViewById(R.id.username_field);
-        TextView name = (TextView) findViewById(R.id.name_field);
-        TextView lastname = (TextView) findViewById(R.id.lastname_field);
-        TextView email = (TextView) findViewById(R.id.email_field);
-        TextView date = (TextView) findViewById(R.id.date_field);
+        final TextView username = (TextView) findViewById(R.id.username_field);
+        final TextView name = (TextView) findViewById(R.id.name_field);
+        final TextView lastname = (TextView) findViewById(R.id.lastname_field);
+        final TextView email = (TextView) findViewById(R.id.email_field);
+        final TextView date = (TextView) findViewById(R.id.date_field);
 
         // Get current Parse user
         final ParseUser user = ParseUser.getCurrentUser();
 
         username.setText(user.getUsername());
         name.setText(capitalize(user.get("name").toString()));
-        lastname.setText(capitalize(user.get("lastname").toString()));
         email.setText(user.getEmail());
-        // Trimmed the data String in order to delete white spaces
-        String timeStamp = formatDate(user.get("date").toString());
-        date.setText(timeStamp);
+
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
+        query.whereEqualTo("username", user.getUsername());
+        try {
+            List<ParseObject> utente = query.find();
+            ParseObject persona = utente.get(0);
+
+            lastname.setText(persona.get("lastname").toString());
+            String timeStamp = formatDate(persona.get("date").toString());
+            date.setText(timeStamp);
+        } catch (ParseException e) {
+            check(e.getCode(), new View(this.getApplicationContext()), e.getMessage());
+        }
+
 
         // Create connect to Facebook button
         final Button connect = (Button) findViewById(R.id.facebook_connect_button);
