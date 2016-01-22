@@ -1,13 +1,19 @@
 package com.clothapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -24,10 +30,9 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 02/01/16.
  */
 public class ProfileActivity extends BaseActivity {
-
+    private List<ParseObject> fotos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -38,34 +43,74 @@ public class ProfileActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+        //imposto immagine profilo a metà schermo
+        ImageView profilepicture = (ImageView) findViewById(R.id.profilepicture);
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x/2;
+        profilepicture.getLayoutParams().height = width;
+        profilepicture.getLayoutParams().width =width;
+
         // Create side menu
         setUpMenu();
+        final View vi = new View(this.getApplicationContext());
+        final TextView nfoto = (TextView) findViewById(R.id.nfoto);
+        final TextView nfollowing = (TextView) findViewById(R.id.nfollowing);
+        final TextView nfollowers = (TextView) findViewById(R.id.nfollowers);
 
         final TextView username = (TextView) findViewById(R.id.username_field);
         final TextView name = (TextView) findViewById(R.id.name_field);
         final TextView lastname = (TextView) findViewById(R.id.lastname_field);
-        final TextView email = (TextView) findViewById(R.id.email_field);
         final TextView date = (TextView) findViewById(R.id.date_field);
 
         // Get current Parse user
         final ParseUser user = ParseUser.getCurrentUser();
-
         username.setText(user.getUsername());
         name.setText(capitalize(user.get("name").toString()));
-        email.setText(user.getEmail());
 
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
-        query.whereEqualTo("username", user.getUsername());
-        try {
-            List<ParseObject> utente = query.find();
-            ParseObject persona = utente.get(0);
-
-            lastname.setText(persona.get("lastname").toString());
-            String timeStamp = formatDate(persona.get("date").toString());
-            date.setText(timeStamp);
-        } catch (ParseException e) {
-            check(e.getCode(), new View(this.getApplicationContext()), e.getMessage());
+        //imposto n° followers, n° following, n° foto
+        if (user.getList("followers")!=null) {
+            nfollowers.setText(user.getList("followers").size());
         }
+        if (user.getList("following")!=null) {
+            nfollowing.setText(user.getList("following").size());
+        }
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+        queryFoto.whereEqualTo("user", user.getUsername());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null)    {
+                    fotos = objects;
+                    for (int i=0;i<fotos.size();i++)    {
+                        System.out.println("debug: imamgine"+fotos.get(i).getObjectId());
+                    }
+                    if (fotos!=null) {
+                        nfoto.setText(""+objects.size());
+                    }
+                }else{
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+        ParseQuery<ParseObject> queryInfo = new ParseQuery<ParseObject>("Persona");
+        queryInfo.whereEqualTo("username", user.getUsername());
+        queryInfo.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null) {
+                    lastname.setText(objects.get(0).get("lastname").toString());
+                    String timeStamp = formatDate(objects.get(0).get("date").toString());
+                    date.setText(timeStamp);
+                }else{
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
 
 
         // Create connect to Facebook button
