@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.parse.ParseUser;
+
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     //  ms to wait for the splash screen
-    private final int TIME_TO_WAIT = 1000;
+    private final int TIME_TO_WAIT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

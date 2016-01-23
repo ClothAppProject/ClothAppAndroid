@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+import com.clothapp.HomepageActivity;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -17,11 +18,11 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by Roberto on 20/01/16.
  */
-
-class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
+/*
+public class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
 
-    ParseObject pic;
+    public ParseObject pic;
 
 
     public BitmapWorkerTask(ImageView imageView) {
@@ -33,9 +34,11 @@ class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(ParseObject... params) {
         //TODO check parameters of the following method
-        return decodeSampledBitmap(params[0], 600, 600);
-
+        final Bitmap bitmap = decodeSampledBitmap(params[0], 600, 600);
+        addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+        return bitmap;
     }
+
 
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
@@ -47,7 +50,7 @@ class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
         if (imageViewReference != null && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
             final BitmapWorkerTask bitmapWorkerTask =
-                    GalleryUtil.getBitmapWorkerTask(imageView);
+                    getBitmapWorkerTask(imageView);
             if (this == bitmapWorkerTask && imageView != null) {
                 imageView.setImageBitmap(bitmap);
             }
@@ -68,7 +71,7 @@ class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
 
         } catch (ParseException e) {
             //errore nel reperire gli oggetti Photo dal database
-           // check(e.getCode(), view, e.getMessage());
+            // check(e.getCode(), view, e.getMessage());
             // TODO CHECK ON ERRORS
             // TODO va passata la view per controllare gli errori di parse
         }
@@ -110,5 +113,6 @@ class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
 
         return inSampleSize;
     }
-
 }
+*/
+

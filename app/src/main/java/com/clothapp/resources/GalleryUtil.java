@@ -5,11 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 
+import com.clothapp.HomepageActivity;
 import com.clothapp.R;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
-
 import java.lang.ref.WeakReference;
 
 /**
@@ -17,21 +21,32 @@ import java.lang.ref.WeakReference;
  */
 public class GalleryUtil {
 
-    public static void loadBitmap(ParseObject p, ImageView imageView, Resources r) {
 
+/*
+    public void loadBitmap(ParseObject p, ImageView imageView, Resources r) {
 
         //Bitmap icon = BitmapFactory.decodeResource(r,
-          //      R.drawable.logo);
+        //      R.drawable.logo);
 
-        if (cancelPotentialWork(p, imageView)) {
-            final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-            final AsyncDrawable asyncDrawable =
-                    new AsyncDrawable(r, null, task);
-            imageView.setImageDrawable(asyncDrawable);
-            task.execute(p);
+        final String imageKey = String.valueOf(p);
+        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        }else {
+
+            if (cancelPotentialWork(p, imageView)) {
+                //imageView.setImageResource(R.drawable.image_placeholder);
+
+                final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
+                final AsyncDrawable asyncDrawable =
+                        new AsyncDrawable(r, null, task);
+                imageView.setImageDrawable(asyncDrawable);
+                task.execute(p);
+            }
         }
-
     }
+
 
     static class AsyncDrawable extends BitmapDrawable {
 
@@ -78,4 +93,5 @@ public class GalleryUtil {
         return null;
     }
 
+*/
 }
