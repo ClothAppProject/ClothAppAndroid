@@ -56,11 +56,11 @@ public class ImageAdapter extends BaseAdapter {
             DisplayMetrics metrics =mContext.getResources().getDisplayMetrics();
 
             int w=metrics.widthPixels;
-            int s=(w/2)-1;
-            System.out.println(s);
+            int s=((w)/2)-25;
+            //System.out.println(s);
             imageView.setLayoutParams(new GridView.LayoutParams(s, s));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(0,0,0,0);
+            imageView.setPadding(0,5,0,0);
         } else {
             imageView = (ImageView) convertView;
         }
