@@ -35,7 +35,8 @@
                 android:horizontalSpacing="5dp"
                 android:stretchMode="columnWidth"
                 android:gravity="center"
-                android:layout_marginTop="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"/>
 
 
         </LinearLayout>
