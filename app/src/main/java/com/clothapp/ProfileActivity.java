@@ -1,27 +1,36 @@
 package com.clothapp;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Point;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
+import android.util.LruCache;
+import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +40,11 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 02/01/16.
  */
 public class ProfileActivity extends BaseActivity {
-    private List<ParseObject> fotos;
+
+    private static LruCache<String, Bitmap> mMemoryCache;
+    LinearLayout myGallery;
+    Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +76,22 @@ public class ProfileActivity extends BaseActivity {
         final TextView lastname = (TextView) findViewById(R.id.lastname_field);
         final TextView date = (TextView) findViewById(R.id.date_field);
 
+        //inizializzo memoria cache e galleria
+        mContext = this;
+        myGallery = (LinearLayout)findViewById(R.id.personal_gallery);
+        // Get memory class of this device, exceeding this amount will throw an
+        // OutOfMemory exception.
+        final int memClass = ((ActivityManager)getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in bytes rather than number of items.
+                return bitmap.getByteCount();
+            }
+        };
+
         // Get current Parse user
         final ParseUser user = ParseUser.getCurrentUser();
         username.setText(user.getUsername());
@@ -77,15 +106,15 @@ public class ProfileActivity extends BaseActivity {
         }
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereEqualTo("user", user.getUsername());
+        queryFoto.orderByDescending("createdAt");
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e==null)    {
-                    fotos = objects;
-                    for (int i=0;i<fotos.size();i++)    {
-                        System.out.println("debug: imamgine"+fotos.get(i).getObjectId());
+                    for (int i=0;i<objects.size();i++)  {
+                        myGallery.addView(insertPhoto(objects.get(i)));
                     }
-                    if (fotos!=null) {
+                    if (objects!=null) {
                         nfoto.setText(""+objects.size());
                     }
                 }else{
@@ -108,8 +137,6 @@ public class ProfileActivity extends BaseActivity {
                 }
             }
         });
-
-
 
         // Create connect to Facebook button
         final Button connect = (Button) findViewById(R.id.facebook_connect_button);
@@ -250,5 +277,186 @@ public class ProfileActivity extends BaseActivity {
                 return "12";
         }
         return "";
+    }
+
+    // ROBA DELLA CACHE
+    public static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public static Bitmap getBitmapFromMemCache(String key) {
+        return (Bitmap) mMemoryCache.get(key);
+    }
+
+    //ROBA DELLA GALLERIA
+    private View insertPhoto(ParseObject p) {
+
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
+        layout.setGravity(Gravity.CENTER);
+
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        final String imageKey = String.valueOf(p);
+        final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        }else {
+            if (cancelPotentialWork(p, imageView)) {
+                //imageView.setImageResource(R.drawable.image_placeholder);
+
+                final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
+                final AsyncDrawable asyncDrawable = new AsyncDrawable(mContext.getResources(), null, task);
+                imageView.setImageDrawable(asyncDrawable);
+                task.execute(p);
+            }
+        }
+
+        //setto listener su ogni imageview
+        final ParseObject idToPass = p;
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
+                toPass.putExtra("objectID",idToPass.getObjectId().toString());
+                startActivity(toPass);
+            }
+        });
+        layout.addView(imageView);
+        return layout;
+    }
+
+    static class AsyncDrawable extends BitmapDrawable {
+
+        private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
+
+        public AsyncDrawable(Resources res, Bitmap bitmap,
+                             BitmapWorkerTask bitmapWorkerTask) {
+            super(res, bitmap);
+            bitmapWorkerTaskReference =
+                    new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
+        }
+
+        public BitmapWorkerTask getBitmapWorkerTask() {
+            return bitmapWorkerTaskReference.get();
+        }
+    }
+
+    public static boolean cancelPotentialWork(ParseObject toLoad, ImageView imageView) {
+        final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
+
+        if (bitmapWorkerTask != null) {
+            final ParseObject bitmapData = bitmapWorkerTask.pic;
+            // If bitmapData is not yet set or it differs from the new data
+            if (bitmapData == null || bitmapData != toLoad) {
+                // Cancel previous task
+                bitmapWorkerTask.cancel(true);
+            } else {
+                // The same work is already in progress
+                return false;
+            }
+        }
+        // No task associated with the ImageView, or an existing task was cancelled
+        return true;
+    }
+
+    static BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof AsyncDrawable) {
+                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+                return asyncDrawable.getBitmapWorkerTask();
+            }
+        }
+        return null;
+    }
+
+    //ROBA DEL BITMAPWORKERTASK
+    public static class BitmapWorkerTask extends AsyncTask<ParseObject, Void, Bitmap> {
+
+        private final WeakReference<ImageView> imageViewReference;
+        public ParseObject pic;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(ParseObject... params) {
+            //TODO check parameters of the following method
+            final Bitmap bitmap = decodeSampledBitmap(params[0], 400, 400);
+            addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (isCancelled()) {
+                bitmap = null;
+            }
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = (ImageView) imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+
+        //private static byte[] bit;
+        public Bitmap decodeSampledBitmap(ParseObject photo, int reqWidth, int reqHeight) {
+
+            byte[] bit = null;
+            ParseFile imageFile = (ParseFile) photo.get("photo");
+            try {
+                bit = imageFile.getData();
+
+            } catch (ParseException e) {
+                //errore nel reperire gli oggetti Photo dal database
+                // check(e.getCode(), view, e.getMessage());
+                // TODO CHECK ON ERRORS
+                // TODO va passata la view per controllare gli errori di parse
+            }
+
+            Bitmap bm = null;
+            // First decode with inJustDecodeBounds=true to check dimensions
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            //BitmapFactory.decodeFile(path, options);
+            BitmapFactory.decodeByteArray(bit, 0, bit.length, options);
+
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+
+            //bm = BitmapFactory.decodeFile(path, options);
+            bm = BitmapFactory.decodeByteArray(bit, 0, bit.length, options);
+
+            return bm;
+        }
+
+        public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+                if (width > height) {
+                    inSampleSize = Math.round((float) height / (float) reqHeight);
+                } else {
+                    inSampleSize = Math.round((float) width / (float) reqWidth);
+                }
+            }
+
+            return inSampleSize;
+        }
     }
 }
