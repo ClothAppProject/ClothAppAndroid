@@ -26,7 +26,7 @@ public class BitmapUtil {
             int wout=maxsize-1;
             int hout= (int) (wout/aspect_ratio);
             System.out.println("aspect_ratio"+aspect_ratio+" wout"+wout+" hout"+hout);
-            scaledBitmap = Bitmap.createBitmap(imageBitmap, 0, 0,(int)wout, (int)hout);
+            scaledBitmap = Bitmap.createScaledBitmap(imageBitmap,(int)wout-1, (int)hout-1,false);
 
         }
 
@@ -37,7 +37,7 @@ public class BitmapUtil {
             int hout=maxsize-1;
             int wout= (int) (aspect_ratio*hout);
             System.out.println("aspect_ratio"+aspect_ratio+" wout"+wout+" hout"+hout);
-            scaledBitmap = Bitmap.createBitmap(imageBitmap, 0, 0,(int)wout-1, (int)hout-1);
+            scaledBitmap = Bitmap.createScaledBitmap(imageBitmap,(int)wout-1, (int)hout-1,false);
             return scaledBitmap;
         }
 
