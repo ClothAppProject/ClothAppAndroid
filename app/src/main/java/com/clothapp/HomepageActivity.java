@@ -16,11 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 import com.clothapp.resources.ImageAdapter;
-//import com.nostra13.universalimageloader.core.ImageLoader;
-//import com.nostra13.universalimageloader.core.assist.ViewScaleType;
-//import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,6 +29,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 
 public class HomepageActivity extends BaseActivity {
 
+    private static List<ParseObject> photos;
     private static LruCache<String, Bitmap> mMemoryCache;
 
     //  it is the percentage of VM memory we are reserving for our cache
@@ -46,7 +43,6 @@ public class HomepageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_homepage);
-
         final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
 
         // Get max available VM memory, exceeding this amount will throw an
@@ -94,41 +90,11 @@ public class HomepageActivity extends BaseActivity {
 
     }
 
-
-    /*
-
-        //funzione di appoggio che viene chiamata per caricare le immagini nel gridview
-        public void loadGridview()  {
-            final Context contesto = this;
-            final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
-            final View vi = new View(this);
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-            query.setLimit(10);
-            query.orderByDescending("createdAt");
-            query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> fotos, ParseException e) {
-                    if (e == null) {
-                        Log.d("Query", "Retrieved " + fotos.size() + " photos");
-
-                        Galleria myImageAdapter = new Galleria(contesto,fotos,vi);
-
-                        GridView grid = (GridView) findViewById(R.id.galleria_homepage);
-                        gridview.setAdapter(myImageAdapter);
-
-                    } else {
-                        //errore nel reperire gli oggetti Photo dal database
-                        check(e.getCode(), vi, e.getMessage());
-                    }
-                }
-            });
-        }
-
-    */
     public void loadGridview(GridView gridView) {
-
         final GridView grid = gridView;
-        final View vi = new View(this);
+        final View vi = new View(this.getApplicationContext());
 
+        //ottengo immagini da inserire nella gridview
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.setLimit(10);
         query.orderByDescending("createdAt");
@@ -136,7 +102,7 @@ public class HomepageActivity extends BaseActivity {
             public void done(List<ParseObject> fotos, ParseException e) {
                 if (e == null) {
                     Log.d("Query", "Retrieved " + fotos.size() + " photos");
-
+                    photos = fotos;
                     grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
                 } else {
                     //errore nel reperire gli oggetti Photo dal database
@@ -145,17 +111,18 @@ public class HomepageActivity extends BaseActivity {
             }
         });
 
+        //listener su ogni elemento della gridview
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(HomepageActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                //TODO open single photo fragment, just showing the pic number for now
+                Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
+                toPass.putExtra("objectID",photos.get(position).getObjectId().toString());
+
+                startActivity(toPass);
             }
         });
-
     }
+
 
     // This function creates a side menu and populates it with the given elements.
     private void setUpMenu() {
@@ -284,7 +251,7 @@ public class HomepageActivity extends BaseActivity {
         @Override
         protected Bitmap doInBackground(ParseObject... params) {
             //TODO check parameters of the following method
-            final Bitmap bitmap = decodeSampledBitmap(params[0], 600, 600);
+            final Bitmap bitmap = decodeSampledBitmap(params[0], 300, 300);
             addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
             return bitmap;
         }

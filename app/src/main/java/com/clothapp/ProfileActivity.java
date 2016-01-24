@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -45,11 +46,8 @@ public class ProfileActivity extends BaseActivity {
 
         //imposto immagine profilo a metà schermo
         ImageView profilepicture = (ImageView) findViewById(R.id.profilepicture);
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x/2;
+        DisplayMetrics metrics =this.getResources().getDisplayMetrics();
+        int width=(metrics.widthPixels)/2;
         profilepicture.getLayoutParams().height = width;
         profilepicture.getLayoutParams().width =width;
 

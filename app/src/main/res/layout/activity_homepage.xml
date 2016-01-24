@@ -45,11 +45,10 @@
             android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="180dp"
             android:src="@mipmap/camera_icon"
             android:padding="5dip"
-            android:layout_margin="5dip"
-            android:layout_gravity="right|bottom" />
+            android:layout_margin="15dip"
+            android:layout_gravity="right|bottom"/>
     </FrameLayout>
 
     <!-- The navigation drawer -->
@@ -78,17 +77,5 @@
                 android:listSelector="#C0C0C0" />
 
     </LinearLayout>
-
-
-    <!--android:listSelector="@android:drawable/list_selector_background"
-    android:divider="@android:color/transparent"
-            android:paddingTop="150dp"
-
-    <ImageView
-
-        android:id="@+id/menu_image"
-        android:layout_width="240dp"
-        android:layout_height="120dp" /> -->
-
 
 </android.support.v4.widget.DrawerLayout>

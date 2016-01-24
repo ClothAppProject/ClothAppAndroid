@@ -49,6 +49,9 @@
             android:name=".HomepageActivity"
             android:label="@string/app_name"/>
         <activity
+            android:name=".ImageFragment"
+            android:label="@string/app_name"/>
+        <activity
             android:name=".UploadActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
