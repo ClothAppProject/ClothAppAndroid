@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -49,7 +50,7 @@ public class ImageFragment extends FragmentActivity {
                         @Override
                         public void done(byte[] data, ParseException e) {
                             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            imageview.setImageBitmap(bitmap);
+                            imageview.setImageBitmap(BitmapUtil.scala(bitmap));
                         }
                     },
                     new ProgressCallback() {
