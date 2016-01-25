@@ -5,18 +5,23 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.clothapp.resources.ImageAdapter;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -71,23 +76,39 @@ public class HomepageActivity extends BaseActivity {
         // Create a side menu
         setUpMenu();
 
-        // UploadActivity a new photo button initialization
-        FloatingActionButton upload = (FloatingActionButton) findViewById(R.id.upload_button);
+        // UploadActivity a new photo button menu initialization
+        FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
 
-        // Add an OnClick listener to the upload button
-        upload.setOnClickListener(new View.OnClickListener() {
+        com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        camera.setTitle("Camera");
+        camera.setIcon(R.mipmap.camera_icon);
+        camera.setColorNormal(Color.RED);
+        camera.setColorPressed(Color.RED);
+        camera.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view_upload) {
-
+            public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
                 finish();
             }
         });
+        com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        gallery.setTitle("Gallery");
+        gallery.setIcon(R.mipmap.gallery_icon);
+        gallery.setColorNormal(Color.RED);
+        gallery.setColorPressed(Color.RED);
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //attività che apre la galleria ecc...
+            }
+        });
+
+        menuMultipleActions.addButton(camera);
+        menuMultipleActions.addButton(gallery);
 
         loadGridview(gridview);
-
     }
 
     public void loadGridview(GridView gridView) {
