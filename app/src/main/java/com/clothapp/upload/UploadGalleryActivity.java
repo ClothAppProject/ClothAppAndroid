@@ -150,7 +150,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
 
                 imageView = (ImageView) findViewById(R.id.view_immagine);
                 imageBitmap = BitmapFactory.decodeFile(picturePath);
-                imageView.setImageBitmap(imageBitmap);
+                imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
 
             } else {
                 // L'utente non ha scelto nessuna immagine lo rimando indietro
