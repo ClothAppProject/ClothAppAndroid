@@ -176,6 +176,10 @@ public class BaseActivity extends AppCompatActivity {
                 i = new Intent(this, ProfileActivity.class);
                 break;
             case 2:
+                //settings
+                i = new Intent(this, SettingsActivity.class);
+                break;
+            case 3:
                 //logout
                 final ProgressDialog dialog = ProgressDialog.show(BaseActivity.this, "",
                         "Logging out. Please wait...", true);

@@ -273,7 +273,6 @@ public class HomepageActivity extends BaseActivity {
         // Decode image in background.
         @Override
         protected Bitmap doInBackground(ParseObject... params) {
-            //TODO check parameters of the following method
             final Bitmap bitmap = decodeSampledBitmap(params[0], 300, 300);
             addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
             return bitmap;
@@ -348,10 +347,7 @@ public class HomepageActivity extends BaseActivity {
                     inSampleSize = Math.round((float)width / (float)reqWidth);
                 }
             }
-
             return inSampleSize;
         }
-
     }
-
 }

@@ -52,13 +52,26 @@
     <string-array name="nav_drawer_items">
         <item>HomePage</item>
         <item>Profilo</item>
+        <item>Settings</item>
         <item>Logout</item>
     </string-array>
 
     <array name="nav_drawer_icons">
         <item>@mipmap/home_icon</item>
         <item>@mipmap/user_icon</item>
+        <item>@mipmap/settings_icon</item>
         <item>@mipmap/exit_icon</item>
     </array>
+
+    <string name="account_settings">Account</string>
+    <string name="profile_settings">Profile</string>
+    <string name="password_settings">Password</string>
+    <string name="app_settings">App</string>
+    <string name="account_collegati">Account Collegati</string>
+    <string name="salva_foto">Salva Foto Telefono</string>
+    <string name="assitance_settings">Assistenza</string>
+    <string name="segnala_foto">Segnala</string>
+    <string name="info_settings">Info su di noi</string>
+
 
 </resources>

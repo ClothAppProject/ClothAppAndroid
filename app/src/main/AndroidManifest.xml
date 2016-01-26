@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clothapp">
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".resources.ApplicationSupport"
         android:allowBackup="true"
@@ -14,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- meta-data per parse & facebook-->
+        <!-- meta-data per parse & facebook -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8" />
@@ -24,12 +26,13 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!---->
+        <!--  -->
 
         <activity
             android:name=".LauncherActivity"
@@ -42,19 +45,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.clothapp.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Login"/>
+            android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".HomepageActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".ImageFragment"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".upload.UploadCameraActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
             android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -62,8 +65,8 @@
         </activity>
         <activity
             android:name=".upload.UploadGalleryActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
             android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -71,16 +74,16 @@
         </activity>
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SignupActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".FacebookUsername"
             android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/app_name"
@@ -91,11 +94,18 @@
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
+
         <activity android:name=".BaseActivity" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".HomepageActivity"/>
+
     </application>
 
 </manifest>

@@ -1,12 +1,9 @@
 package com.clothapp.resources;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
