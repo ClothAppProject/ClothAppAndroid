@@ -18,17 +18,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:divider="@color/black"
+            android:dividerHeight="3dp">
 
             <!--APP -->
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+ >
+
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dip"
                     android:text="@string/account_settings"
                     android:textColor="@color/black"
