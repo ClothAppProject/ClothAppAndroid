@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +29,7 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -139,6 +142,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
             // When an Image is picked
             if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
                 takenPhotoUri = data.getData();
+
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
                 Cursor cursor = getContentResolver().query(takenPhotoUri, filePathColumn, null, null, null);
@@ -150,6 +154,8 @@ public class UploadGalleryActivity extends AppCompatActivity {
 
                 imageView = (ImageView) findViewById(R.id.view_immagine);
                 imageBitmap = BitmapFactory.decodeFile(picturePath);
+
+                imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
                 imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
 
             } else {

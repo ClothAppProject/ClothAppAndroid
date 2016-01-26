@@ -197,7 +197,7 @@ public class UploadCameraActivity extends AppCompatActivity {
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
             try {
-                imageBitmap = rotateImageIfRequired(imageBitmap, takenPhotoUri);
+                imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
                 if (imageBitmap.getHeight() > GL10.GL_MAX_TEXTURE_SIZE || imageBitmap.getWidth()>GL10.GL_MAX_TEXTURE_SIZE) {
 
                     imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
@@ -300,32 +300,5 @@ public class UploadCameraActivity extends AppCompatActivity {
         return state.equals(Environment.MEDIA_MOUNTED);
     }
 
-    // Funzione che controlla se ruotare l'immagine o no
-    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
-        // Prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    // Funzione che ruota l'immagine
-    private static Bitmap rotateImage(Bitmap img, int degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-
-        return rotatedImg;
-    }
 }

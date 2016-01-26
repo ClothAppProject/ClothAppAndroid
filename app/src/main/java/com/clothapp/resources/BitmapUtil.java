@@ -2,7 +2,12 @@ package com.clothapp.resources;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.util.Log;
+
+import java.io.IOException;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -62,6 +67,56 @@ public class BitmapUtil {
         else if (getAllocationByteCount(photo) > mb3) return 80;
         else if (getAllocationByteCount(photo) > mb1) return 90;
         else return 100;
+    }
+    // Funzione che controlla se ruotare l'immagine o no
+    public static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+        // Prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    // Funzione che ruota l'immagine
+    public static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+
+        return rotatedImg;
+    }
+    public static Bitmap rotateGalleryImage(String picturePath,Bitmap imageBitmap)   {
+        try {
+            ExifInterface exif = new ExifInterface(picturePath);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            Log.d("EXIF", "Exif: " + orientation);
+            Matrix matrix = new Matrix();
+            if (orientation == 6) {
+                matrix.postRotate(90);
+            }
+            else if (orientation == 3) {
+                matrix.postRotate(180);
+            }
+            else if (orientation == 8) {
+                matrix.postRotate(270);
+            }
+            imageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true); // rotating bitmap
+        }
+        catch (Exception e) {
+
+        }
+        return imageBitmap;
     }
 
 }
