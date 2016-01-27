@@ -49,7 +49,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="20dp"
                                 android:textStyle="bold"
                                 android:text="username"
                                 android:textSize="30dp"/>
@@ -59,14 +59,15 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:textAlignment="center"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="20dp"
                                 android:text="nome"
-                                android:textSize="20dp"/>
+                                android:textSize="20dp" />
 
                             <Button
                                 android:id="@+id/follow_edit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="30dp" />
 
                         </LinearLayout>
                     </TableRow>

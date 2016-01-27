@@ -57,8 +57,10 @@ public class ProfileActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        String nome = getIntent().getExtras().getString("user");
         try {
-            getSupportActionBar().setTitle(R.string.profile_button);
+            getSupportActionBar().setTitle(nome);
         } catch (NullPointerException e) {
             Log.d("ProfileActivity", "Error: " + e.getMessage());
             e.printStackTrace();
@@ -66,7 +68,6 @@ public class ProfileActivity extends BaseActivity {
         final View vi = new View(this.getApplicationContext());
 
         //ottengo user
-        String nome = getIntent().getExtras().getString("user");
         ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
         queryUser.whereEqualTo("username", nome);
         try {
