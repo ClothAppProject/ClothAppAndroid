@@ -26,6 +26,8 @@
             tools:context=".HomepageActivity"
             android:orientation="vertical">
 
+
+
             <GridView
                 android:id="@+id/galleria_homepage"
                 android:layout_width="fill_parent"

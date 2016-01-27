@@ -16,8 +16,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.clothapp.resources.ImageAdapter;
+import com.clothapp.resources.ImageGridViewAdapter;
+import com.clothapp.resources.ImageGridViewAdapter;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -26,6 +29,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.squareup.picasso.Picasso;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -40,7 +45,7 @@ public class HomepageActivity extends BaseActivity {
     //  4 stands for 25% of VM memory
     //  maxMemory/MYCACHE is the formula
     //  needs to be changed according to the device the app is running on
-    private static int MYCACHE = 4;
+    private static int MYCACHE = 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +58,10 @@ public class HomepageActivity extends BaseActivity {
         // OutOfMemory exception. Stored in kilobytes as LruCache takes an
         // int in its constructor.
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
+        System.out.println("maxMemory:"+maxMemory);
         final int cacheSize = maxMemory / MYCACHE;
 
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
-                return bitmap.getByteCount() / 1024;
-            }
-        };
+
 
         try {
             getSupportActionBar().setTitle(R.string.homepage_button);
@@ -110,13 +108,14 @@ public class HomepageActivity extends BaseActivity {
         menuMultipleActions.addButton(camera);
         menuMultipleActions.addButton(gallery);
 
-        loadGridview(gridview);
+
+        loadUrlsImage(gridview);
+
     }
 
-    public void loadGridview(GridView gridView) {
-        final GridView grid = gridView;
+    private void loadUrlsImage(final GridView gridview) {
         final View vi = new View(this.getApplicationContext());
-
+         final String [] urls=new String[10];
         //ottengo immagini da inserire nella gridview
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.setLimit(10);
@@ -126,7 +125,25 @@ public class HomepageActivity extends BaseActivity {
                 if (e == null) {
                     Log.d("Query", "Retrieved " + fotos.size() + " photos");
                     photos = fotos;
-                    grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
+                    int i;
+                    for (i = 0; i < 10; i++) {
+                        ParseObject obj = photos.get(i);
+                        ParseFile file = obj.getParseFile("photo");
+                        urls[i] = file.getUrl();
+                        System.out.println(urls[i]);
+
+                    }
+                    gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, urls));
+                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                            Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
+                            toPass.putExtra("url", photos.get(position).getParseFile("photo").getUrl());
+
+                            startActivity(toPass);
+                        }
+                    });
+                    //grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
                 } else {
                     //errore nel reperire gli oggetti Photo dal database
                     check(e.getCode(), vi, e.getMessage());
@@ -134,16 +151,44 @@ public class HomepageActivity extends BaseActivity {
             }
         });
 
+    }
+
+    public String[] loadGridview(GridView gridView) {
+        final GridView grid = gridView;
+        final View vi = new View(this.getApplicationContext());
+        String [] urls=new String[10];
+        //ottengo immagini da inserire nella gridview
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.setLimit(10);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> fotos, ParseException e) {
+                if (e == null) {
+                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
+                    photos = fotos;
+
+                    //grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
+                } else {
+                    //errore nel reperire gli oggetti Photo dal database
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+        int i;
+        for(i=0;i<10;i++){
+            urls[i]=photos.get(i).getParseFile("photo").getUrl();
+        }
         //listener su ogni elemento della gridview
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectID",photos.get(position).getObjectId().toString());
+                toPass.putExtra("url",photos.get(position).getParseFile("photo").getUrl());
 
                 startActivity(toPass);
             }
         });
+        return urls;
     }
 
 
