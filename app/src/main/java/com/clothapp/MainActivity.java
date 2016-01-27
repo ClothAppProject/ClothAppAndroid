@@ -15,10 +15,7 @@ import android.widget.TextView;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -183,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                     //controllo sui vari casi del ritorno del salvataggio di dati di facebook
                                     if (ret == null) {
                                         // Redirect user to Splash Screen Activity
-                                        Intent form_intent = new Intent(MainActivity.this, FacebookUsername.class);
+                                        Intent form_intent = new Intent(MainActivity.this, FacebookUsernameActivity.class);
                                         startActivity(form_intent);
                                         dialog.dismiss();
                                         finish();

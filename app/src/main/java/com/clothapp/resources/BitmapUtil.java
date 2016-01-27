@@ -96,6 +96,8 @@ public class BitmapUtil {
 
         return rotatedImg;
     }
+
+    //funzione che ruota l'immagine presa dalla gallery
     public static Bitmap rotateGalleryImage(String picturePath,Bitmap imageBitmap)   {
         try {
             ExifInterface exif = new ExifInterface(picturePath);
@@ -114,7 +116,7 @@ public class BitmapUtil {
             imageBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true); // rotating bitmap
         }
         catch (Exception e) {
-
+            //errore nel ruotare l'immagine
         }
         return imageBitmap;
     }

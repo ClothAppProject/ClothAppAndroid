@@ -63,6 +63,14 @@
         <item>@mipmap/exit_icon</item>
     </array>
 
+    <string name="setting_pp">Imposto Immagine del profilo...</string>
+    <string name="choose_profile_picture">Cambia immagina del profilo:</string>
+    <array name="profile_picture_options">
+        <item>Fotocamera</item>
+        <item>Galleria</item>
+        <item>Rimuovi immagine del profilo</item>
+    </array>
+
     <string name="account_settings">Account</string>
     <string name="profile_settings">Profile</string>
     <string name="password_settings">Password</string>

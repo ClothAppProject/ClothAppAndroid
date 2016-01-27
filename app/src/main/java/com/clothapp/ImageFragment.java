@@ -1,5 +1,6 @@
 package com.clothapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 
 import java.util.List;
@@ -43,7 +45,19 @@ public class ImageFragment extends FragmentActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
-                    username.setText(objects.get(0).get("user").toString());
+                    final String nome = objects.get(0).getString("user");
+                    username.setText(nome);
+                    //listener sul nome dell'utente
+                    username.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            i.putExtra("user", nome);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+
                     //inserisco immagine e info
                     ParseFile f = objects.get(0).getParseFile("photo");
                     f.getDataInBackground(new GetDataCallback() {

@@ -1,7 +1,9 @@
 package com.clothapp;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -21,7 +23,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.clothapp.profilepicture.*;
+import com.clothapp.resources.BitmapUtil;
+import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
@@ -31,6 +37,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,44 +51,62 @@ public class ProfileActivity extends BaseActivity {
     private static LruCache<String, Bitmap> mMemoryCache;
     LinearLayout myGallery;
     Context mContext;
+    ParseUser user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         try {
             getSupportActionBar().setTitle(R.string.profile_button);
         } catch (NullPointerException e) {
             Log.d("ProfileActivity", "Error: " + e.getMessage());
             e.printStackTrace();
         }
+        final View vi = new View(this.getApplicationContext());
+
+        //ottengo user
+        String nome = getIntent().getExtras().getString("user");
+        ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+        queryUser.whereEqualTo("username", nome);
+        try {
+            user = queryUser.find().get(0);
+        } catch (ParseException e) {
+            ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+        }
+
 
         //imposto immagine profilo a metà schermo
-        ImageView profilepicture = (ImageView) findViewById(R.id.profilepicture);
-        DisplayMetrics metrics =this.getResources().getDisplayMetrics();
-        int width=(metrics.widthPixels)/2;
+        final ImageView profilepicture = (ImageView) findViewById(R.id.profilepicture);
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        int width = (metrics.widthPixels) / 2;
         profilepicture.getLayoutParams().height = width;
-        profilepicture.getLayoutParams().width =width;
+        profilepicture.getLayoutParams().width = width;
 
         // Create side menu
         setUpMenu();
-        final View vi = new View(this.getApplicationContext());
+
         final TextView nfoto = (TextView) findViewById(R.id.nfoto);
         final TextView nfollowing = (TextView) findViewById(R.id.nfollowing);
         final TextView nfollowers = (TextView) findViewById(R.id.nfollowers);
 
         final TextView username = (TextView) findViewById(R.id.username_field);
         final TextView name = (TextView) findViewById(R.id.name_field);
-        final TextView lastname = (TextView) findViewById(R.id.lastname_field);
-        final TextView date = (TextView) findViewById(R.id.date_field);
+        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
+
+        //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
+        if (user.getUsername().toString()==ParseUser.getCurrentUser().getUsername().toString()) {
+            follow_edit.setText("Modifica Profilo");
+        }else{
+            follow_edit.setText("Segui");
+        }
 
         //inizializzo memoria cache e galleria
         mContext = this;
-        myGallery = (LinearLayout)findViewById(R.id.personal_gallery);
+        myGallery = (LinearLayout) findViewById(R.id.personal_gallery);
         // Get memory class of this device, exceeding this amount will throw an
         // OutOfMemory exception.
-        final int memClass = ((ActivityManager)getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        final int memClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
         // Use 1/8th of the available memory for this memory cache.
         final int cacheSize = 1024 * 1024 * memClass / 8;
 
@@ -92,17 +117,17 @@ public class ProfileActivity extends BaseActivity {
             }
         };
 
-        // Get current Parse user
-        final ParseUser user = ParseUser.getCurrentUser();
+        // Get Parse user
         username.setText(user.getUsername());
         name.setText(capitalize(user.get("name").toString()));
 
         //imposto n° followers, n° following, n° foto
-        if (user.getList("followers")!=null) {
-            nfollowers.setText(user.getList("followers").size());
+        if (user.getList("followers") != null) {
+            //TODO risolvere problema della lista di followers e following
+            //nfollowers.setText((user.getList("followers").size()));
         }
-        if (user.getList("following")!=null) {
-            nfollowing.setText(user.getList("following").size());
+        if (user.getList("following") != null) {
+            //nfollowing.setText((user.getList("following").size()));
         }
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereEqualTo("user", user.getUsername());
@@ -110,98 +135,95 @@ public class ProfileActivity extends BaseActivity {
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if (e==null)    {
-                    for (int i=0;i<objects.size();i++)  {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
                         myGallery.addView(insertPhoto(objects.get(i)));
                     }
-                    if (objects!=null) {
-                        nfoto.setText(""+objects.size());
+                    if (objects != null) {
+                        nfoto.setText("" + objects.size());
                     }
-                }else{
+                } else {
                     check(e.getCode(), vi, e.getMessage());
                 }
             }
         });
 
-        ParseQuery<ParseObject> queryInfo = new ParseQuery<ParseObject>("Persona");
-        queryInfo.whereEqualTo("username", user.getUsername());
-        queryInfo.findInBackground(new FindCallback<ParseObject>() {
+
+        //Get Parse user profile picture
+        ParseQuery<ParseObject> queryProfilePicture = new ParseQuery<ParseObject>("UserPhoto");
+        queryProfilePicture.whereEqualTo("username", user.getUsername());
+        queryProfilePicture.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if (e==null) {
-                    lastname.setText(objects.get(0).get("lastname").toString());
-                    String timeStamp = formatDate(objects.get(0).get("date").toString());
-                    date.setText(timeStamp);
-                }else{
+                if (e == null) {
+                    if (objects.size() == 0) {
+                        profilepicture.setImageResource(R.mipmap.profile);
+                    } else {
+                        ParseFile picture = objects.get(0).getParseFile("profilePhoto");
+                        picture.getDataInBackground(new GetDataCallback() {
+                            @Override
+                            public void done(byte[] data, ParseException e) {
+                                if (e == null) {
+                                    Bitmap imageBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                    profilepicture.setImageBitmap(BitmapUtil.scala(imageBitmap));
+                                    profilepicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                } else {
+                                    check(e.getCode(), vi, e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                } else {
                     check(e.getCode(), vi, e.getMessage());
                 }
             }
         });
 
-        // Create connect to Facebook button
-        final Button connect = (Button) findViewById(R.id.facebook_connect_button);
-
-        // Create disconnect from Facebook button
-        final Button disconnect = (Button) findViewById(R.id.facebook_disconnect_button);
-
-        // Controlliamo se è connesso
-        if (ParseFacebookUtils.isLinked(user)) {
-            // L'utente è già connesso: gli do solo l'opzione per disconnettersi da facebook
-            connect.setVisibility(View.INVISIBLE);
-
-            // Add an OnClick listener to the disconnect button
-            disconnect.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
+        //listener sull'imageview dell'immagine del profilo
+        if (user.getUsername().toString() == ParseUser.getCurrentUser().getUsername().toString()) {
+            profilepicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final View vi = v;
-                    ParseFacebookUtils.unlinkInBackground(user, new SaveCallback() {
-                        @Override
-                        public void done(ParseException ex) {
-                            if (ex == null) {
-                                Log.d("ProfileActivity", "Disconesso da Facebook");
-
-                                // Redirect the user to the ProfileActivity Activity
-                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                                startActivity(form_intent);
-
-                                finish();
-                            } else {
-                                // Controllo che non ci siano eccezioni Parse
-                                check(ex.getCode(), vi, ex.getMessage());
-                            }
-                        }
-                    });
-                }
-            });
-        } else {
-            // L'utente non è connesso a facebook: gli do solo l'opzione per connettersi
-            disconnect.setVisibility(View.INVISIBLE);
-
-            // Add an OnClick listener to the connect button
-            connect.setOnClickListener(new View.OnClickListener() { //metto bottone login in ascolto del click
-                @Override
-                public void onClick(View v) {
-                    final View vi = v;
-                    // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
-                    List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
-                    ParseFacebookUtils.linkWithReadPermissionsInBackground(user, ProfileActivity.this, permissions, new SaveCallback() {
-                        @Override
-                        public void done(ParseException ex) {
-                            if (ex != null) {
-                                // Controllo che non ci siano eccezioni parse
-                                check(ex.getCode(), vi, ex.getMessage());
-                            }
-                            if (ParseFacebookUtils.isLinked(user)) {
-                                Log.d("ProfileActivity", "Connesso a Facebook");
-
-                                // Redirect the user to the ProfileActivity Activity
-                                Intent form_intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                                startActivity(form_intent);
-
-                                finish();
-                            }
-                        }
-                    });
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(R.string.choose_profile_picture)
+                            //.set
+                            .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            // Redirect the user to the ProfileCameraActivity Activity
+                                            Intent intentCamera = new Intent(getApplicationContext(), ProfileCameraActivity.class);
+                                            startActivity(intentCamera);
+                                            break;
+                                        case 1:
+                                            // Redirect the user to the ProfileGalleryActivity Activity
+                                            Intent intentGallery = new Intent(getApplicationContext(), ProfileGalleryActivity.class);
+                                            startActivity(intentGallery);
+                                            break;
+                                        case 2:
+                                            //delete profile picture
+                                            ParseQuery<ParseObject> queryFotoProfilo = new ParseQuery<ParseObject>("UserPhoto");
+                                            queryFotoProfilo.whereEqualTo("username", user.getUsername());
+                                            queryFotoProfilo.findInBackground(new FindCallback<ParseObject>() {
+                                                @Override
+                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                    if (e == null) {
+                                                        if (objects.size() > 0) {
+                                                            objects.get(0).deleteInBackground();
+                                                            finish();
+                                                            startActivity(getIntent());
+                                                        }
+                                                    } else {
+                                                        check(e.getCode(), vi, e.getMessage());
+                                                    }
+                                                }
+                                            });
+                                            break;
+                                    }
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
         }
@@ -240,7 +262,7 @@ public class ProfileActivity extends BaseActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
 
-        set(navMenuTitles, navMenuIcons,1);
+        set(navMenuTitles, navMenuIcons, 1);
     }
 
     private String formatDate(String s) {
@@ -279,6 +301,7 @@ public class ProfileActivity extends BaseActivity {
         return "";
     }
 
+
     // ROBA DELLA CACHE
     public static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (getBitmapFromMemCache(key) == null) {
@@ -306,7 +329,7 @@ public class ProfileActivity extends BaseActivity {
 
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        }else {
+        } else {
             if (cancelPotentialWork(p, imageView)) {
                 //imageView.setImageResource(R.drawable.image_placeholder);
 
@@ -323,7 +346,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectID",idToPass.getObjectId().toString());
+                toPass.putExtra("objectID", idToPass.getObjectId().toString());
                 startActivity(toPass);
             }
         });

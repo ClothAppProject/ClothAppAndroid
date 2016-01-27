@@ -55,6 +55,12 @@
             android:name=".ImageFragment"
             android:label="@string/app_name" />
         <activity
+            android:name=".profilepicture.ProfileCameraActivity"
+            android:label="@string/app_name"/>
+        <activity
+            android:name=".profilepicture.ProfileGalleryActivity"
+            android:label="@string/app_name"/>
+        <activity
             android:name=".upload.UploadCameraActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
@@ -81,7 +87,7 @@
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".FacebookUsername"
+            android:name=".FacebookUsernameActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" />
         <activity

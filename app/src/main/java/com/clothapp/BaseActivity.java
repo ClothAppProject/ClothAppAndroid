@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
+import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -174,6 +175,7 @@ public class BaseActivity extends AppCompatActivity {
             case 1:
                 //profilo
                 i = new Intent(this, ProfileActivity.class);
+                i.putExtra("user", ParseUser.getCurrentUser().getUsername().toString());
                 break;
             case 2:
                 //settings

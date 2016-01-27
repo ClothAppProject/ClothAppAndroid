@@ -25,7 +25,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 19/01/16.
  */
-public class FacebookUsername extends AppCompatActivity {
+public class FacebookUsernameActivity extends AppCompatActivity {
     private static View vi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class FacebookUsername extends AppCompatActivity {
         try {
             getSupportActionBar().setTitle(R.string.signup);
         } catch (NullPointerException e) {
-            Log.d("FacebookUsername", "Error: " + e.getMessage());
+            Log.d("FacebookUsernameActivity", "Error: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -68,7 +68,7 @@ public class FacebookUsername extends AppCompatActivity {
                     // Checking if password and confirm password match
                 }else{
                     // Inizializzo la barra di caricamento
-                    final ProgressDialog dialog = ProgressDialog.show(FacebookUsername.this, "",
+                    final ProgressDialog dialog = ProgressDialog.show(FacebookUsernameActivity.this, "",
                             "Loading. Please wait...", true);
 
                     // Create a new thread to handle signup in background

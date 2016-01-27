@@ -183,7 +183,5 @@ public class UploadGalleryActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    //  Ritorna il parametro da passare il metodo compression
-    //  prende la foto da comprimere
 
 }

@@ -302,7 +302,7 @@ public class HomepageActivity extends BaseActivity {
         public Bitmap decodeSampledBitmap(ParseObject photo, int reqWidth, int reqHeight) {
 
             byte[] bit = null;
-            ParseFile imageFile = (ParseFile) photo.get("photo");
+            ParseFile imageFile = photo.getParseFile("photo");
             try {
                 bit = imageFile.getData();
 
