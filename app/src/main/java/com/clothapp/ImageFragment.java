@@ -12,13 +12,14 @@ import android.widget.TextView;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 
+import java.io.File;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -28,6 +29,8 @@ import static com.clothapp.resources.ExceptionCheck.check;
  */
 public class ImageFragment extends FragmentActivity {
 
+    ImageView imageView;
+    Bitmap imageBitmap;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_image);
@@ -35,7 +38,7 @@ public class ImageFragment extends FragmentActivity {
 
         //prendo id della foto
         String objectID = getIntent().getExtras().getString("objectID");
-        final ImageView imageview = (ImageView) findViewById(R.id.image_view_fragment);
+        imageView = (ImageView) findViewById(R.id.image_view_fragment);
         final TextView username = (TextView) findViewById(R.id.username_photo);
 
         //eseguo query e inserisco tutto nei relativi campi
@@ -54,17 +57,19 @@ public class ImageFragment extends FragmentActivity {
                             Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                             i.putExtra("user", nome);
                             startActivity(i);
+                            imageBitmap=null;
                             finish();
                         }
                     });
 
                     //inserisco immagine e info
                     ParseFile f = objects.get(0).getParseFile("photo");
-                    f.getDataInBackground(new GetDataCallback() {
+                    f.getFileInBackground(new GetFileCallback() {
                         @Override
-                        public void done(byte[] data, ParseException e) {
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            imageview.setImageBitmap(BitmapUtil.scala(bitmap));
+                        public void done(File data, ParseException e) {
+                            //imageBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            imageBitmap = BitmapFactory.decodeFile(data.getAbsolutePath());
+                            imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
                         }
                     },
                     new ProgressCallback() {
@@ -79,6 +84,5 @@ public class ImageFragment extends FragmentActivity {
                 }
             }
         });
-
     }
 }

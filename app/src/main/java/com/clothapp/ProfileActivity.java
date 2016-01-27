@@ -82,7 +82,7 @@ public class ProfileActivity extends BaseActivity {
         DisplayMetrics metrics = this.getResources().getDisplayMetrics();
         int width = (metrics.widthPixels) / 2;
         profilepicture.getLayoutParams().height = width;
-        profilepicture.getLayoutParams().width = width;
+        profilepicture.getLayoutParams().width  = width;
 
         // Create side menu
         setUpMenu();
