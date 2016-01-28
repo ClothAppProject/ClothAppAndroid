@@ -1,7 +1,6 @@
 package com.clothapp.resources;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,23 +8,28 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+
 import com.clothapp.R;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static android.widget.ImageView.ScaleType.CENTER_CROP;
 
 public class ImageGridViewAdapter extends BaseAdapter {
     private final Context context;
-    private List<String> urls = new ArrayList<String>();
+   // private List<String> urls = new ArrayList<String>();
+    private List<File>files=new ArrayList<File>();
 
-    public ImageGridViewAdapter(Context context,String[] urls) {
+    public ImageGridViewAdapter(Context context,File[] files) {
         this.context = context;
-        ArrayList<String>a=new ArrayList<String>();
-        for(int i=0;i<urls.length;i++) a.add(i,urls[i]);
-        this.urls=(List)a;
+        ArrayList<File> a=new ArrayList<>();
+        for(int i=0;i<files.length;i++) a.add(i,files[i]);
+        this.files=(List)a;
 
     }
 
@@ -47,13 +51,16 @@ public class ImageGridViewAdapter extends BaseAdapter {
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         view.setPadding(0,0,0,0);
         // Get the image URL for the current position.
-        String url = getItem(position);
+        File file = null;
+
+        file = getItem(position);
+
 
         // Trigger the download of the URL asynchronously into the image view.
         Picasso.with(context) //
-                .load(url) //
-                .fit() //
-                .tag(context) //
+                .load(file) //
+               .fit() //
+                //.tag(context) //
                 .centerCrop()
                 .placeholder(R.mipmap.gallery_icon)
                 .into(view);
@@ -62,11 +69,11 @@ public class ImageGridViewAdapter extends BaseAdapter {
     }
 
     @Override public int getCount() {
-        return urls.size();
+        return files.size();
     }
 
-    @Override public String getItem(int position) {
-        return urls.get(position);
+    @Override public File getItem(int position) {
+        return (files.get(position));
     }
 
     @Override public long getItemId(int position) {

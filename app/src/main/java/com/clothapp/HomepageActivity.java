@@ -31,6 +31,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -108,87 +109,61 @@ public class HomepageActivity extends BaseActivity {
         menuMultipleActions.addButton(camera);
         menuMultipleActions.addButton(gallery);
 
-
-        loadUrlsImage(gridview);
-
-    }
-
-    private void loadUrlsImage(final GridView gridview) {
-        final View vi = new View(this.getApplicationContext());
-         final String [] urls=new String[10];
-        //ottengo immagini da inserire nella gridview
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(10);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> fotos, ParseException e) {
-                if (e == null) {
-                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
-                    photos = fotos;
-                    int i;
-                    for (i = 0; i < 10; i++) {
-                        ParseObject obj = photos.get(i);
-                        ParseFile file = obj.getParseFile("photo");
-                        urls[i] = file.getUrl();
-                        System.out.println(urls[i]);
-
-                    }
-                    gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, urls));
-                    gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                            Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                            toPass.putExtra("url", photos.get(position).getParseFile("photo").getUrl());
-
-                            startActivity(toPass);
-                        }
-                    });
-                    //grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
-                } else {
-                    //errore nel reperire gli oggetti Photo dal database
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
+        //questa va chiamata solo la prima volta
+        loadSplashImage(gridview);
+        //per tutte le altre volte loadImage che è da fare
 
     }
 
-    public String[] loadGridview(GridView gridView) {
-        final GridView grid = gridView;
-        final View vi = new View(this.getApplicationContext());
-        String [] urls=new String[10];
-        //ottengo immagini da inserire nella gridview
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(10);
-        query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> fotos, ParseException e) {
-                if (e == null) {
-                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
-                    photos = fotos;
-
-                    //grid.setAdapter(new ImageAdapter(getApplicationContext(), fotos, vi));
-                } else {
-                    //errore nel reperire gli oggetti Photo dal database
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-        int i;
-        for(i=0;i<10;i++){
-            urls[i]=photos.get(i).getParseFile("photo").getUrl();
-        }
-        //listener su ogni elemento della gridview
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void loadSplashImage(final GridView gridview) {
+        File[] file = (File[]) getIntent().getExtras().get("photo");
+        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, file));
+        //TODO:bisogna inizializzare photo per applicare i clickListener
+      /*  gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
                 Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("url",photos.get(position).getParseFile("photo").getUrl());
-
+                toPass.putExtra("url", photos.get(position).getParseFile("photo").getUrl());
                 startActivity(toPass);
             }
+
+
+        });  */
+    }
+
+    //da modificare usando file al posto di url
+    private void loadImage(final GridView gridview) {
+        final View vi = new View(this.getApplicationContext());
+        final File[]photo=new File[10];
+        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.setLimit(10);
+        query.orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> fotos, ParseException e) {
+                if (e == null) {
+                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
+
+                    int i;
+                    for (i = 0; i < 10; i++) {
+                        ParseObject obj = fotos.get(i);
+                        ParseFile file = obj.getParseFile("photo");
+                        try {
+                            photo[i] = file.getFile();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                        System.out.println(photo[i]);
+
+                    }
+                    Intent intent = new Intent(getBaseContext(), HomepageActivity.class);
+                    intent.putExtra("photo", photo);
+                    startActivity(intent);
+                } else {
+                    //errore nel reperire gli oggetti Photo dal database
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
         });
-        return urls;
+
     }
 
 

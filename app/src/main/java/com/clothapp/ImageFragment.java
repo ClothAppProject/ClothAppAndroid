@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.SquaredImageView;
 import com.parse.FindCallback;
@@ -42,12 +43,12 @@ public class ImageFragment extends FragmentActivity {
         String url = getIntent().getExtras().getString("url");
         System.out.println(url);
         imageView = (ImageView) findViewById(R.id.image_view_fragment);
-
         System.out.println(url);
         Picasso
                 .with(this)
                 .load(url)
-                .resize(500,500)
+               .fit()
+          //      .resize(700,700)
                 .centerCrop()
                 .placeholder(R.mipmap.gallery_icon)
                 .into(imageView);
