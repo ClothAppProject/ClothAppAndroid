@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ImageAdapter;
 import com.clothapp.resources.ImageGridViewAdapter;
 import com.clothapp.resources.ImageGridViewAdapter;
@@ -53,6 +54,7 @@ public class HomepageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_homepage);
+
         final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
 
         // Get max available VM memory, exceeding this amount will throw an
@@ -181,6 +183,11 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
+        ImageView imageView = (ImageView) findViewById(R.id.cerchio);
+        Picasso.with(this)
+                .load("http://th.cineblog.it/x__GR2Et_Bnq8lTBH-8E4IrZN5U=/fit-in/655xorig/http://media.cineblog.it/c/caa/suicide-squad-nuove-foto-dal-set-e-altri-regali-al-cast-dal-joker-di-jared-leto.jpg")
+                .transform(new CircleTransform())
+                .into(imageView);
 
     }
 

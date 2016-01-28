@@ -74,6 +74,8 @@
                 android:layout_width="240dp"
                 android:layout_height="120dp"
                 android:src="@mipmap/logo"
+                android:id="@+id/cerchio"
+                android:layout_marginRight="10dp"
                 android:background="@color/background"/>
             <ListView
                 android:id="@+id/left_drawer"

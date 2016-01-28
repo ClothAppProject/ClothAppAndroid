@@ -25,12 +25,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
-        //sdk parse
+    //sdk parse
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.android.support:support-v4:19.1.0'
 }

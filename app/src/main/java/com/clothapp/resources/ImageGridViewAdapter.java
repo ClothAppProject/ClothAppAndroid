@@ -9,6 +9,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.clothapp.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -59,8 +61,9 @@ public class ImageGridViewAdapter extends BaseAdapter {
         // Trigger the download of the URL asynchronously into the image view.
         Picasso.with(context) //
                 .load(file) //
-               .fit() //
+              .fit() //
                 //.tag(context) //
+          //      .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.gallery_icon)
                 .into(view);

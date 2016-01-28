@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.clothapp.resources.BitmapUtil;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.SquaredImageView;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -47,11 +48,14 @@ public class ImageFragment extends FragmentActivity {
         Picasso
                 .with(this)
                 .load(url)
-               .fit()
+                .fit()
           //      .resize(700,700)
                 .centerCrop()
                 .placeholder(R.mipmap.gallery_icon)
+           //     .transform(new CircleTransform())
                 .into(imageView);
+
+
 
     }
 }
