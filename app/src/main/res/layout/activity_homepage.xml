@@ -12,7 +12,6 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-
         <ScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
@@ -28,6 +27,9 @@
 
 
 
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <GridView
                 android:id="@+id/galleria_homepage"
                 android:layout_width="fill_parent"
@@ -41,10 +43,10 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"/>
 
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
         </ScrollView>
-
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/upload_action"
             android:layout_width="wrap_content"

@@ -1,8 +1,7 @@
 package com.clothapp;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -10,18 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.clothapp.resources.BitmapUtil;
-import com.clothapp.resources.CircleTransform;
-import com.clothapp.resources.SquaredImageView;
+import com.bumptech.glide.Glide;
+import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
-import com.parse.GetDataCallback;
-import com.parse.GetFileCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ProgressCallback;
-import com.squareup.picasso.Picasso;
+import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.List;
@@ -34,28 +28,54 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class ImageFragment extends FragmentActivity {
 
     ImageView imageView;
-    Bitmap imageBitmap;
+    TextView username;
+    Context mContext;
+    View vi;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_image);
-
-
+        mContext=this;
+        vi = new View(this);
         //prendo id della foto
-        String url = getIntent().getExtras().getString("url");
-        System.out.println(url);
+        String objectId = getIntent().getExtras().getString("objectId");
         imageView = (ImageView) findViewById(R.id.image_view_fragment);
-        System.out.println(url);
-        Picasso
-                .with(this)
-                .load(url)
-                .fit()
-          //      .resize(700,700)
-                .centerCrop()
-                .placeholder(R.mipmap.gallery_icon)
-           //     .transform(new CircleTransform())
-                .into(imageView);
+        username = (TextView) findViewById(R.id.username_photo);
 
+        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.whereEqualTo("objectId",objectId);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> foto, ParseException e) {
+                if (e == null) {
+                    ParseObject obj = foto.get(0);
+                    final String user = obj.getString("user");
+                    username.setText(user);
+                    username.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            i.putExtra("user", user);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+                    File file = null;
+                    try {
+                        file = obj.getParseFile("photo").getFile();
+                    } catch (ParseException e1) {
+                        ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+                    }
+                    Glide.with(mContext)
+                            .load(file)
+                            //.fit()
+                            //      .resize(700,700)
+                            //.centerCrop()
+                            .placeholder(R.mipmap.gallery_icon)
+                            //     .transform(new CircleTransform())
+                            .into(imageView);
+                }
+            }
+        });
 
     }
 }
