@@ -56,10 +56,10 @@
             android:label="@string/app_name" />
         <activity
             android:name=".profilepicture.ProfileCameraActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".profilepicture.ProfileGalleryActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".upload.UploadCameraActivity"
             android:configChanges="orientation|screenSize"
@@ -110,10 +110,10 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/app_name" />
-
         <activity
-            android:name="BeforeSignup"
+            android:name=".BeforeSignup"
             android:label="@string/app_name" />
+        <activity android:name=".ShopSignupActivity"></activity>
     </application>
 
 </manifest>

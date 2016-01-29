@@ -39,7 +39,7 @@ public class FacebookUsernameActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setTitle(R.string.signup);
         } catch (NullPointerException e) {
-            Log.d("FacebookUsernameActivity", "Error: " + e.getMessage());
+            Log.d("FacebookUsernameActivi", "Error: " + e.getMessage());
             e.printStackTrace();
         }
 

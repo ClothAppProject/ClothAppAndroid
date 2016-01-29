@@ -10,6 +10,7 @@
 
     <string name="form_register_username">Inserisci un Username:</string>
     <string name="form_register">Inserisci i tuoi dati:</string>
+    <string name="form_register_password">Inserisci e conferma una password:</string>
     <string name="logo_description">Application logo</string>
     <string name="main_username">Username</string>
     <string name="main_password">Password</string>
@@ -26,6 +27,12 @@
     <string name="password_confirm">Conferma Password</string>
     <string name="reset_password">Inserisci la email del tuo account per richiedere una nuova password</string>
     <string name="send">Invia</string>
+    <string name="indirizzo">Indirizzo</string>
+    <string name="info_negozio">Inserisci informazioni sul negozio</string>
+    <string name="info_negozio_onLine">Sito Web</string>
+    <string name="info_webSite">Sito Web</string>
+
+
 
     <string name="homepage_button">HomePage</string>
     <string name="logout_button">Logout</string>
@@ -93,6 +100,5 @@
     <string name="shops">Negozio</string>
     <string name="user">ClothApper</string>
     <string name="cloth">Vestito</string>>
-
 
 </resources>

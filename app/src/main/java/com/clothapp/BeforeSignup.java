@@ -24,7 +24,6 @@ public class BeforeSignup extends AppCompatActivity {
         button_person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("debuggggggg");
                 Intent i = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(i);
                 finish();
@@ -34,14 +33,10 @@ public class BeforeSignup extends AppCompatActivity {
         button_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("nogozio");
-                //Intent i = new Intent (this, SignupShopsActivity.class);
-                //startActivity(i);
-                //finish();
+                Intent i = new Intent (getApplicationContext(), ShopSignupActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }
-
-
-
 }
