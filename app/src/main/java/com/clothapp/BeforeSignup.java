@@ -17,22 +17,24 @@ public class BeforeSignup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.before_signup);
 
-        Button button_person = (Button) findViewById(R.id.button_person);;
+        Button button_person = (Button) findViewById(R.id.button_person);
         Button button_shop = (Button) findViewById(R.id.button_shops);
+
 
         button_person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("DEBUG: SIIII");
+                System.out.println("debuggggggg");
                 Intent i = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(i);
                 finish();
             }
         });
 
-        button_person.setOnClickListener(new View.OnClickListener() {
+        button_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("nogozio");
                 //Intent i = new Intent (this, SignupShopsActivity.class);
                 //startActivity(i);
                 //finish();
