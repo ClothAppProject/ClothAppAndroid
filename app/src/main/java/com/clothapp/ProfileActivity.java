@@ -30,6 +30,7 @@ import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.GetFileCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
@@ -38,10 +39,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -55,6 +59,8 @@ public class ProfileActivity extends BaseActivity {
     Context mContext;
     ParseUser user;
     View vi;
+    List<String> followers;
+    List<String> following;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -76,6 +82,8 @@ public class ProfileActivity extends BaseActivity {
         queryUser.whereEqualTo("username", nome);
         try {
             user = queryUser.find().get(0);
+            followers = user.getList("followers");
+            following = user.getList("following");
         } catch (ParseException e) {
             ExceptionCheck.check(e.getCode(), vi, e.getMessage());
         }
@@ -99,11 +107,54 @@ public class ProfileActivity extends BaseActivity {
         final TextView name = (TextView) findViewById(R.id.name_field);
         final Button follow_edit = (Button) findViewById(R.id.follow_edit);
 
+
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (user.getUsername().toString()==ParseUser.getCurrentUser().getUsername().toString()) {
             follow_edit.setText("Modifica Profilo");
         }else{
-            follow_edit.setText("Segui");
+            if (ParseUser.getCurrentUser().getList("following").contains(user.getUsername().toString()))   {
+                //nel caso in cui si può smettere di seguire l'utente
+                follow_edit.setText("Non Seguire");
+                follow_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO problemi di permessi di scrittura sui follower di altri utenti
+                        /*List<String> yout = (user.getList("followers"));
+                        yout.remove(ParseUser.getCurrentUser().getUsername());
+                        List<String> pout = ParseUser.getCurrentUser().getList("following");
+                        pout.remove(user.getUsername());
+                        user.put("followers",yout);
+                        ParseUser.getCurrentUser().put("following",pout);
+                        try {
+                            user.save();
+                            ParseUser.getCurrentUser().save();
+                        } catch (ParseException e) {
+                            ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+                        }*/
+                    }
+                });
+            }else{
+                //nel caso si può segurie l'utente
+                follow_edit.setText("Segui");
+                follow_edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO problemi di permessi di scrittura sui follower di altri utenti
+                        /*
+                        user.add("followers",ParseUser.getCurrentUser().getUsername());
+                        ParseUser.getCurrentUser().add("following",user.getUsername());
+                        try {
+                            user.save();
+                            ParseUser.getCurrentUser().save();
+                        }catch (ParseException e)   {
+                            ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+                        }
+                        finish();
+                        startActivity(getIntent());
+                        */
+                    }
+                });
+            }
         }
 
         // Get Parse user
@@ -112,11 +163,10 @@ public class ProfileActivity extends BaseActivity {
 
         //imposto n° followers, n° following, n° foto
         if (user.getList("followers") != null) {
-            //TODO risolvere problema della lista di followers e following
-            //nfollowers.setText((user.getList("followers").size()));
+            nfollowers.setText(Integer.toString(user.getList("followers").size()));
         }
         if (user.getList("following") != null) {
-            //nfollowing.setText((user.getList("following").size()));
+            nfollowing.setText(Integer.toString(user.getList("following").size()));
         }
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereEqualTo("user", user.getUsername());
