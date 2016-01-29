@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -41,6 +43,9 @@ public class HomepageActivity extends BaseActivity {
     String username = ParseUser.getCurrentUser().getUsername();
     FloatingActionsMenu menuMultipleActions;
     SwipeRefreshLayout swipeRefreshLayout;
+    ImageGridViewAdapter imageGridViewAdapter;
+    View vi;
+    Boolean canLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class HomepageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        final View vi = new View(this);
+         vi = new View(this);
         final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
 
         try {
@@ -85,7 +90,7 @@ public class HomepageActivity extends BaseActivity {
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        photos.addFirst(new Image(f.getFile(), objects.get(i).getObjectId()));
+                                        photos.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId()));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -142,22 +147,65 @@ public class HomepageActivity extends BaseActivity {
 
         //questa va chiamata solo la prima volta
         loadSplashImage(gridview);
-        //per tutte le altre volte loadImage che è da fare
 
+        //listener sullo scrollview della gridview
+        gridview.setOnScrollListener(new AbsListView.OnScrollListener(){
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(firstVisibleItem + visibleItemCount >= totalItemCount) {
+                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                    if (canLoad)  {
+                        canLoad = false;
+                        int toDownload = 10;
+                        if (photos.getPhotos().size() % 2 == 0) toDownload = 11;
+                        ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+                        updatePhotos.whereLessThan("createdAt", photos.getLastDate());
+                        updatePhotos.orderByDescending("createdAt");
+                        updatePhotos.setLimit(toDownload);
+                        updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> objects, ParseException e) {
+                                if (e == null) {
+                                    if (objects.size() > 0) {
+                                        int i;
+                                        for (i = 0; i < objects.size(); i++) {
+                                            ParseFile f = objects.get(i).getParseFile("thumbnail");
+                                            try {
+                                                //ottengo la foto e la aggiungo per ultima
+                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId());
+                                                if (!photos.check(toAdd)) {
+                                                    System.out.println("debug chiamata n°" + i + " per l'oggetto " + objects.get(i).getObjectId());
+                                                    photos.addLastPhoto(toAdd);
+                                                    //notifico l'image adapter di aggiornarsi
+                                                    imageGridViewAdapter.notifyDataSetChanged();
+                                                }
+                                            } catch (ParseException e1) {
+                                                check(e1.getCode(), vi, e1.getMessage());
+                                            }
+                                        }
+                                        canLoad = true;
+                                        //modifico la data dell'utlima foto
+                                        photos.setLastDate(objects.get(i - 1).getCreatedAt());
+                                    }
+                                } else {
+                                    check(e.getCode(), vi, e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState){}
+        });
     }
 
     private void loadSplashImage(final GridView gridview) {
-        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos.getPhotos()));
+        imageGridViewAdapter = new ImageGridViewAdapter(HomepageActivity.this, photos.getPhotos());
+        gridview.setAdapter(imageGridViewAdapter);
 
         //listener su ogni foto della gridview
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
-                startActivity(toPass);
-            }
-        });
-
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
@@ -170,7 +218,6 @@ public class HomepageActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     // This function creates a side menu and populates it with the given elements.

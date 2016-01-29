@@ -27,7 +27,8 @@ public class ApplicationSupport extends Application {
     //getter e setter variabili globali
     public List<Image>getPhotos()   {return photos;}
     public void setPhotos(List<Image> foto)  {photos=foto;}
-    public void addFirst(Image foto)    {photos.add(0,foto);}
+    public void addFirstPhoto(Image foto)    {photos.add(0,foto);}
+    public void addLastPhoto(Image foto) {photos.add(foto);}
     public void setFirstDate(Date data) {firstDate= data;}
     public void setLastDate(Date data)  {lastDate= data;}
     public Date getFirstDate()  {return firstDate;}

@@ -23,8 +23,8 @@ public class ImageGridViewAdapter extends BaseAdapter {
     public ImageGridViewAdapter(Context context, List<Image> photos) {
         this.context = context;
         files = photos;
-
     }
+    public void addToGridView(Image foto)   {files.add(foto);}
 
     @Override public View getView(int position, View convertView, ViewGroup parent) {
         SquaredImageView view = (SquaredImageView) convertView;

@@ -50,7 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         final List<Image> photo = new ArrayList<>();
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(10);
+        query.setLimit(12);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> fotos, ParseException e) {
@@ -60,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     ApplicationSupport photos = ((ApplicationSupport) getApplicationContext());
                     photos.setFirstDate(fotos.get(0).getCreatedAt());
                     int i;
-                    for (i = 0; i < 10; i++) {
+                    for (i = 0; i < fotos.size(); i++) {
                         ParseObject obj = fotos.get(i);
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
