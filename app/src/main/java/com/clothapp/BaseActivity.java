@@ -2,7 +2,6 @@ package com.clothapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.support.v4.widget.DrawerLayout;
@@ -13,13 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
-import com.parse.Parse;
+import com.clothapp.settings.SettingsActivity;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;

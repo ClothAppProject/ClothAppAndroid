@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.ImageGridViewAdapter;
+import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -36,6 +37,10 @@ public class HomepageActivity extends BaseActivity {
 
     String name = ParseUser.getCurrentUser().getString("name");
     String username = ParseUser.getCurrentUser().getUsername();
+
+    // UploadCameraActivity a new photo button menu initialization
+    FloatingActionsMenu menuMultipleActions;
+
 
     SwipeRefreshLayout swipeRefreshLayout;
     @Override
@@ -72,9 +77,7 @@ public class HomepageActivity extends BaseActivity {
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
-        // UploadCameraActivity a new photo button menu initialization
-        FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
-
+        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
         com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         camera.setTitle("Camera");
         camera.setIcon(R.mipmap.camera_icon);
@@ -119,13 +122,20 @@ public class HomepageActivity extends BaseActivity {
         gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos));
 
         //listener su ogni foto della gridview
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectId", photos.get(position).getObjectId());
-                startActivity(toPass);
-            }
-        });
+
+         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                    if(menuMultipleActions.isExpanded()) {
+                        menuMultipleActions.collapse();
+                    }else {
+                        Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
+                        toPass.putExtra("objectId", photos.get(position).getObjectId());
+                        startActivity(toPass);
+                    }
+                }
+            });
+
     }
 
     // This function creates a side menu and populates it with the given elements.

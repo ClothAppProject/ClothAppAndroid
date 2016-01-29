@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.settings;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.clothapp.HomepageActivity;
+import com.clothapp.R;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.SaveCallback;
