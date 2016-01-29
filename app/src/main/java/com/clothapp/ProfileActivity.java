@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.profilepicture.*;
 import com.clothapp.resources.BitmapUtil;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -207,7 +208,7 @@ public class ProfileActivity extends BaseActivity {
                                             .load(data)
                                             .centerCrop()
                                             .placeholder(R.mipmap.profile)
-                                            //     .transform(new CircleTransform())
+                                            .transform(new CircleTransform(mContext))
                                             .into(profilepicture);
                                 } else {
                                     check(e.getCode(), vi, e.getMessage());

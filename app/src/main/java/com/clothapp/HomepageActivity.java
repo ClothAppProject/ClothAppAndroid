@@ -4,46 +4,28 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.ImageGridViewAdapter;
-import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import java.io.File;
 import java.util.List;
-import static com.clothapp.resources.ExceptionCheck.check;
-
+import java.util.logging.Handler;
 
 public class HomepageActivity extends BaseActivity {
 
-    ApplicationSupport photos;
-    String name = ParseUser.getCurrentUser().getString("name");
-    String username = ParseUser.getCurrentUser().getUsername();
-    FloatingActionsMenu menuMultipleActions;
     SwipeRefreshLayout swipeRefreshLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        photos = (ApplicationSupport) getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
@@ -60,8 +42,6 @@ public class HomepageActivity extends BaseActivity {
         // Create a side menu
         setUpMenu();
 
-
-
         //istanzio lo swipe to refresh
         // find the layout
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -69,43 +49,15 @@ public class HomepageActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //query che prende tutte le foto più nuove rispetto a quelle già in memoria
-                ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                updatePhotos.whereGreaterThan("createdAt", photos.getFirstDate());
-                updatePhotos.orderByDescending("createdAt");
-                updatePhotos.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        if (e==null) {
-                            if (objects.size()>0) {
-                                //modifico la data della prima foto
-                                photos.setFirstDate(objects.get(0).getCreatedAt());
-                                for (int i = objects.size() - 1; i >= 0; i--) {
-                                    ParseFile f = objects.get(i).getParseFile("thumbnail");
-                                    try {
-                                        //ottengo la foto e la aggiungo per prima
-                                        photos.addFirst(new Image(f.getFile(), objects.get(i).getObjectId()));
-                                    } catch (ParseException e1) {
-                                        check(e1.getCode(), vi, e1.getMessage());
-                                    }
-                                    //aggiorno la galleria
-                                    loadSplashImage(gridview);
-                                }
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                        }else{
-                            swipeRefreshLayout.setRefreshing(false);
-                            check(e.getCode(), vi, e.getMessage());
-                        }
-                    }
-                });
+                //codice da eseguire quando si aggiorna la galleria
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
         // UploadCameraActivity a new photo button menu initialization
-        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
+        FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
 
         com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         camera.setTitle("Camera");
@@ -146,30 +98,18 @@ public class HomepageActivity extends BaseActivity {
     }
 
     private void loadSplashImage(final GridView gridview) {
-        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos.getPhotos()));
+        //prendo la lista delle immagini da caricare dalla variabile globale
+        final List <Image> photos = ((ApplicationSupport) getApplicationContext()).getPhotos();
+        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos));
 
         //listener su ogni foto della gridview
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
+                toPass.putExtra("objectId", photos.get(position).getObjectId());
                 startActivity(toPass);
             }
         });
-
-         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                    if(menuMultipleActions.isExpanded()) {
-                        menuMultipleActions.collapse();
-                    }else {
-                        Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                        toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
-                        startActivity(toPass);
-                    }
-                }
-            });
-
     }
 
     // This function creates a side menu and populates it with the given elements.
@@ -186,65 +126,12 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
-        final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
+        //ImageView imageView = (ImageView) findViewById(R.id.cerchio);
+        /*Picasso.with(this)
+                .load("http://th.cineblog.it/x__GR2Et_Bnq8lTBH-8E4IrZN5U=/fit-in/655xorig/http://media.cineblog.it/c/caa/suicide-squad-nuove-foto-dal-set-e-altri-regali-al-cast-dal-joker-di-jared-leto.jpg")
+                .transform(new CircleTransform())
+                .into(imageView);*/
 
-        TextView textView = (TextView) findViewById(R.id.nameMenu);
-        textView.setText(name);
-
-        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
-        textView2.setText(username);
-
-
-        final View vi = new View(this.getApplicationContext());
-
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-
-                        try {
-                            File file = f.getFile();
-                            Glide.with(getApplicationContext())
-                                    .load(file)
-                                    .centerCrop()
-                                    .into(imageView);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
-                startActivity(i);
-                finish();
-            }
-        });
-
-        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
-        l.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //va all'activity settings solo per prova, dovremo decidere poi cosa fare
-                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
     }
 
 }
