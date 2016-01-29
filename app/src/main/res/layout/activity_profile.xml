@@ -37,7 +37,8 @@
                         <ImageView
                             android:id="@+id/profilepicture"
                             android:layout_width="200dp"
-                            android:layout_height="200dp" />
+                            android:layout_height="200dp"
+                            android:layout_gravity="left" />
 
                         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                             android:layout_width="fill_parent"
@@ -147,11 +148,6 @@
                         android:orientation="horizontal"
                         />
                 </HorizontalScrollView>
-                <!--
-                <Gallery
-                    android:id="@+id/personal_gallery"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />-->
 
                 <TextView
                     android:id="@+id/negozi_seguiti"

@@ -4,7 +4,9 @@ import android.app.Application;
 
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 import java.util.List;
 /**
@@ -32,6 +34,11 @@ public class ApplicationSupport extends Application {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
+        try {
+            ParseUser.getCurrentUser().fetch();
+        } catch (ParseException e) {
+            //errore nell'aggiornare il profilo locale
+        }
 
     }
 }
