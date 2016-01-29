@@ -16,6 +16,7 @@ class Get extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... uri) {
+        String result = "ERRORE 90";
         StringBuffer responseString = null;
         InputStream is = null;
         try {
@@ -35,13 +36,17 @@ class Get extends AsyncTask<String, String, String> {
             if (is != null) {
                 is.close();
             }
-            return responseString.toString();
+            if(responseString.toString()!=null) {
+                result = "OK 69";
+                return result;
+            }
+            return result;
         } catch (ClientProtocolException e) {
             Log.d("Get","ClientProtocolException= "+e.getMessage());
         } catch (IOException e) {
             Log.d("Get","Eccezione IO= "+e.getMessage());
         }
-        return responseString.toString();
+        return result;
     }
 
     @Override

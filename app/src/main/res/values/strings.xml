@@ -71,6 +71,7 @@
         <item>Rimuovi immagine del profilo</item>
     </array>
 
+    <!-- SETTINGS STRING -->
     <string name="account_settings">Account</string>
 
     <string name="profile_settings">Profilo</string>
@@ -87,6 +88,11 @@
     <string name="segnala_foto">Segnala</string>
     <string name="info_set">Credits</string>
     <string name="info_settings">Info su di noi</string>
+    <!-- SETTINGS STRING -->
+
+    <string name="shops">Negozio</string>
+    <string name="user">ClothApper</string>
+
 
 
 </resources>
