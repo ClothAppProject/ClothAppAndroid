@@ -12,7 +12,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-class Get extends AsyncTask<String, String, String> {
+public class Get extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... uri) {
