@@ -159,15 +159,20 @@ public class HomepageActivity extends BaseActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
-                    ParseFile f = objects.get(0).getParseFile("profilePhoto");
-                    try {
-                        File file = f.getFile();
-                        Glide.with(getApplicationContext())
-                                .load(file)
-                                .centerCrop()
-                                .into(imageView);
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
+                    //  if the user has a profile pic it will be shown in the side menu
+                    //  else the app logo will be shown
+                    if (objects.size() != 0) {
+                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+
+                        try {
+                            File file = f.getFile();
+                            Glide.with(getApplicationContext())
+                                    .load(file)
+                                    .centerCrop()
+                                    .into(imageView);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 } else {
                     check(e.getCode(), vi, e.getMessage());
