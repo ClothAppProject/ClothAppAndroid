@@ -12,11 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.clothapp.resources.ExceptionCheck;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ProgressCallback;
 
 import java.io.File;
 import java.util.List;
@@ -27,7 +30,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 23/01/16.
  */
 public class ImageFragment extends FragmentActivity {
-
+    DonutProgress donutProgress;
     ImageView imageView;
     TextView username;
     Context mContext;
@@ -40,6 +43,7 @@ public class ImageFragment extends FragmentActivity {
         //prendo id della foto
         String objectId = getIntent().getExtras().getString("objectId");
         imageView = (ImageView) findViewById(R.id.image_view_fragment);
+        donutProgress = (DonutProgress) findViewById(R.id.donut_progress);
         username = (TextView) findViewById(R.id.username_photo);
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -60,21 +64,31 @@ public class ImageFragment extends FragmentActivity {
                             finish();
                         }
                     });
-                    File file = null;
-                    try {
-                        file = obj.getParseFile("photo").getFile();
-                    } catch (ParseException e1) {
-                        ExceptionCheck.check(e.getCode(), vi, e.getMessage());
-                    }
-                    Glide.with(mContext)
-                            .load(file)
-                                    //.fit()
-                                    //      .resize(700,700)
-                                    //.centerCrop()
-                                    //    .placeholder(R.mipmap.gallery_icon)
-                                    //     .transform(new CircleTransform())
-                        //    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageView);
+                    obj.getParseFile("photo").getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(File file, ParseException e) {
+                            if (e==null)    {
+                                donutProgress.setVisibility(View.INVISIBLE);
+                                imageView.setVisibility(View.VISIBLE);
+                                Glide.with(mContext)
+                                        .load(file)
+                                        //.fit()
+                                        //      .resize(700,700)
+                                        //.centerCrop()
+                                        //    .placeholder(R.mipmap.gallery_icon)
+                                        //     .transform(new CircleTransform())
+                                        //    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(imageView);
+                            }else{
+                                ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+                            }
+                        }
+                    }, new ProgressCallback() {
+                        @Override
+                        public void done(Integer percentDone) {
+                            donutProgress.setProgress(percentDone);
+                        }
+                    });
                 }
             }
         });

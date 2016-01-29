@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.resources.ApplicationSupport;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.ImageGridViewAdapter;
 import com.clothapp.settings.SettingsActivity;
@@ -213,6 +214,7 @@ public class HomepageActivity extends BaseActivity {
                             Glide.with(getApplicationContext())
                                     .load(file)
                                     .centerCrop()
+                                    .transform(new CircleTransform(getApplicationContext()))
                                     .into(imageView);
                         } catch (ParseException e1) {
                             e1.printStackTrace();

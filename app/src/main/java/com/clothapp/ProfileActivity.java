@@ -208,7 +208,6 @@ public class ProfileActivity extends BaseActivity {
                                             .load(data)
                                             .centerCrop()
                                             .placeholder(R.mipmap.profile)
-                                            .transform(new CircleTransform(mContext))
                                             .into(profilepicture);
                                 } else {
                                     check(e.getCode(), vi, e.getMessage());
