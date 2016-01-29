@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,15 +19,17 @@ import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class HomepageActivity extends BaseActivity {
 
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_homepage);
 
+        final View vi = new View(this);
         final GridView gridview = (GridView) findViewById(R.id.galleria_homepage);
 
         try {
@@ -37,6 +41,20 @@ public class HomepageActivity extends BaseActivity {
 
         // Create a side menu
         setUpMenu();
+
+        //istanzio lo swipe to refresh
+        // find the layout
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        // the refresh listner. this would be called when the layout is pulled down
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //codice da eseguire quando si aggiorna la galleria
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
         // UploadCameraActivity a new photo button menu initialization
         FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
@@ -115,4 +133,5 @@ public class HomepageActivity extends BaseActivity {
                 .into(imageView);*/
 
     }
+
 }
