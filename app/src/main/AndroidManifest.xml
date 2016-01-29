@@ -101,7 +101,6 @@
         <activity
             android:name=".ProfileActivity"
             android:label="@string/app_name" />
-
         <activity android:name=".BaseActivity" />
 
         <meta-data
@@ -110,8 +109,7 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".HomepageActivity"/>
-
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

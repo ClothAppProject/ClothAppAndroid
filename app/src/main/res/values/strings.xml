@@ -72,13 +72,20 @@
     </array>
 
     <string name="account_settings">Account</string>
-    <string name="profile_settings">Profile</string>
+
+    <string name="profile_settings">Profilo</string>
+    <string name="profile_summary">Impostazioni e modifiche del profilo utente</string>
+
     <string name="password_settings">Password</string>
+
     <string name="app_settings">App</string>
+
     <string name="account_collegati">Account Collegati</string>
-    <string name="salva_foto">Salva Foto Telefono</string>
+    <string name="salva_foto">Salva Foto Sul Telefono</string>
+
     <string name="assitance_settings">Assistenza</string>
     <string name="segnala_foto">Segnala</string>
+    <string name="info_set">Credits</string>
     <string name="info_settings">Info su di noi</string>
 
 

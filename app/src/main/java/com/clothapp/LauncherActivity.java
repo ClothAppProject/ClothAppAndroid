@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -22,6 +23,11 @@ public class LauncherActivity extends AppCompatActivity {
         // nascondo la status bar
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //Straight from android documentation:
+        //Then, from the onCreate() method in your application's main activity—and in any other activity
+        // through which the user may enter your application for the first time—call setDefaultValues():
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         super.onCreate(savedInstanceState);
 

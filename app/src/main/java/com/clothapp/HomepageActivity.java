@@ -4,24 +4,38 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.ImageGridViewAdapter;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import java.io.File;
 import java.util.List;
-import java.util.logging.Handler;
+import static com.clothapp.resources.ExceptionCheck.check;
+
 
 public class HomepageActivity extends BaseActivity {
+
+    String name = ParseUser.getCurrentUser().getString("name");
+    String username = ParseUser.getCurrentUser().getUsername();
 
     SwipeRefreshLayout swipeRefreshLayout;
     @Override
@@ -41,6 +55,8 @@ public class HomepageActivity extends BaseActivity {
 
         // Create a side menu
         setUpMenu();
+
+
 
         //istanzio lo swipe to refresh
         // find the layout
@@ -126,12 +142,60 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
-        ImageView imageView = (ImageView) findViewById(R.id.cerchio);
-        /*Picasso.with(this)
-                .load("http://th.cineblog.it/x__GR2Et_Bnq8lTBH-8E4IrZN5U=/fit-in/655xorig/http://media.cineblog.it/c/caa/suicide-squad-nuove-foto-dal-set-e-altri-regali-al-cast-dal-joker-di-jared-leto.jpg")
-                .transform(new CircleTransform())
-                .into(imageView);*/
+        final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
 
+        TextView textView = (TextView) findViewById(R.id.nameMenu);
+        textView.setText(name);
+
+        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
+        textView2.setText(username);
+
+
+        final View vi = new View(this.getApplicationContext());
+
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    ParseFile f = objects.get(0).getParseFile("profilePhoto");
+                    try {
+                        File file = f.getFile();
+                        Glide.with(getApplicationContext())
+                                .load(file)
+                                .centerCrop()
+                                .into(imageView);
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
+                startActivity(i);
+                finish();
+            }
+        });
+
+        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //va all'activity settings solo per prova, dovremo decidere poi cosa fare
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
 }
