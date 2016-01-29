@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Account settings -->
+    <PreferenceCategory
+        android:title="@string/account_settings">
+        <PreferenceScreen
+            android:title="@string/profile_settings"
+            android:summary="@string/profile_summary">
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:title="@string/password_settings">
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <!-- APP settings -->
+    <PreferenceCategory
+        android:title="@string/app_settings">
+        <PreferenceScreen
+            android:title="@string/account_collegati">
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <CheckBoxPreference
+        android:title="@string/salva_foto"
+        android:defaultValue="true"
+        android:key="savingPhoto">
+    </CheckBoxPreference>
+
+    <!-- Assistenza settings -->
+    <PreferenceCategory
+        android:title="@string/assitance_settings">
+        <PreferenceScreen
+            android:title="@string/segnala_foto">
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <!-- INFO settings -->
+    <PreferenceCategory
+        android:title="@string/info_set">
+        <Preference
+            android:title="@string/info_settings">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.clothapp.it" />
+        </Preference>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
