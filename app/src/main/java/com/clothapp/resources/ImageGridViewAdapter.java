@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.clothapp.R;
 
 import java.io.File;
@@ -40,8 +41,8 @@ public class ImageGridViewAdapter extends BaseAdapter {
         int s=((w)/2)-25;
         //System.out.println(s);
         view.setLayoutParams(new GridView.LayoutParams(s, s));
-        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        view.setPadding(0,0,0,0);
+        //view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //view.setPadding(0,0,0,0);
         // Get the image URL for the current position.
         File file = getItem(position);
 
@@ -51,7 +52,7 @@ public class ImageGridViewAdapter extends BaseAdapter {
                 .load(file)
                 //.fit()
                 //.tag(context)
-                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
                 .placeholder(R.mipmap.gallery_icon)
                 .into(view);

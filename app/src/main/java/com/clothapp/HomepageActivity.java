@@ -126,7 +126,7 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
-        ImageView imageView = (ImageView) findViewById(R.id.cerchio);
+        //ImageView imageView = (ImageView) findViewById(R.id.cerchio);
         /*Picasso.with(this)
                 .load("http://th.cineblog.it/x__GR2Et_Bnq8lTBH-8E4IrZN5U=/fit-in/655xorig/http://media.cineblog.it/c/caa/suicide-squad-nuove-foto-dal-set-e-altri-regali-al-cast-dal-joker-di-jared-leto.jpg")
                 .transform(new CircleTransform())

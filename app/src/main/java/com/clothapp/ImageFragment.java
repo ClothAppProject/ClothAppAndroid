@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,7 +43,7 @@ public class ImageFragment extends FragmentActivity {
         username = (TextView) findViewById(R.id.username_photo);
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.whereEqualTo("objectId",objectId);
+        query.whereEqualTo("objectId", objectId);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> foto, ParseException e) {
                 if (e == null) {
@@ -67,11 +68,12 @@ public class ImageFragment extends FragmentActivity {
                     }
                     Glide.with(mContext)
                             .load(file)
-                            //.fit()
-                            //      .resize(700,700)
-                            //.centerCrop()
-                            .placeholder(R.mipmap.gallery_icon)
-                            //     .transform(new CircleTransform())
+                                    //.fit()
+                                    //      .resize(700,700)
+                                    //.centerCrop()
+                                    //    .placeholder(R.mipmap.gallery_icon)
+                                    //     .transform(new CircleTransform())
+                        //    .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
                 }
             }
