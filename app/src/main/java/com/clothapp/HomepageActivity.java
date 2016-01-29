@@ -173,12 +173,9 @@ public class HomepageActivity extends BaseActivity {
                                             try {
                                                 //ottengo la foto e la aggiungo per ultima
                                                 Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId());
-                                                if (!photos.check(toAdd)) {
-                                                    System.out.println("debug chiamata n°" + i + " per l'oggetto " + objects.get(i).getObjectId());
-                                                    photos.addLastPhoto(toAdd);
-                                                    //notifico l'image adapter di aggiornarsi
-                                                    imageGridViewAdapter.notifyDataSetChanged();
-                                                }
+                                                photos.addLastPhoto(toAdd);
+                                                //notifico l'image adapter di aggiornarsi
+                                                imageGridViewAdapter.notifyDataSetChanged();
                                             } catch (ParseException e1) {
                                                 check(e1.getCode(), vi, e1.getMessage());
                                             }
