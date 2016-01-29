@@ -179,7 +179,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 2:
                 //settings
-                i = new Intent(this, SettingsActivity.class);
+              //  i = new Intent(this, SettingsActivity.class);
                 break;
             case 3:
                 //logout

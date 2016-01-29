@@ -80,6 +80,6 @@
     <string name="assitance_settings">Assistenza</string>
     <string name="segnala_foto">Segnala</string>
     <string name="info_settings">Info su di noi</string>
-
+    <string name="title_activity_settings">Settings</string>
 
 </resources>

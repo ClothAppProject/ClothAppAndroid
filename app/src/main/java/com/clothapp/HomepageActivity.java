@@ -126,12 +126,58 @@ public class HomepageActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
-        ImageView imageView = (ImageView) findViewById(R.id.cerchio);
-        /*Picasso.with(this)
-                .load("http://th.cineblog.it/x__GR2Et_Bnq8lTBH-8E4IrZN5U=/fit-in/655xorig/http://media.cineblog.it/c/caa/suicide-squad-nuove-foto-dal-set-e-altri-regali-al-cast-dal-joker-di-jared-leto.jpg")
-                .transform(new CircleTransform())
-                .into(imageView);*/
+        final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
 
+        TextView textView = (TextView) findViewById(R.id.nameMenu);
+        textView.setText(name);
+
+        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
+        textView2.setText(username);
+
+
+        final View vi = new View(this.getApplicationContext());
+
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    ParseFile f = objects.get(0).getParseFile("profilePhoto");
+                    try {
+                        File file = f.getFile();
+                        Glide.with(getApplicationContext())
+                                .load(file)
+                                .centerCrop()
+                                .into(imageView);
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
+                startActivity(i);
+            }
+        });
+
+        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //va all'activity settings solo per prova, dovremo decidere poi cosa fare
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 }

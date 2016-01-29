@@ -66,6 +66,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
+                        System.out.println(photo.get(i));
 
                     }
                     Intent intent = new Intent(getBaseContext(), HomepageActivity.class);
