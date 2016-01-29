@@ -308,23 +308,26 @@ public class ProfileActivity extends BaseActivity {
         layout.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
         layout.setGravity(Gravity.CENTER);
 
-        ImageView imageView = new ImageView(getApplicationContext());
+        final ImageView imageView = new ImageView(getApplicationContext());
         imageView.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         //inserisco foto nell'imageview
-        ParseFile f = p.getParseFile("photo");
-        try {
-            File file = f.getFile();
-            Glide.with(mContext)
-                    .load(file)
-                    .centerCrop()
-                    .placeholder(R.mipmap.gallery_icon)
-                    .into(imageView);
-        } catch (ParseException e) {
-            ExceptionCheck.check(e.getCode(), vi, e.getMessage());
-        }
-
+        ParseFile f = p.getParseFile("thumbnail");
+        f.getFileInBackground(new GetFileCallback() {
+            @Override
+            public void done(File file, ParseException e) {
+                if (e == null) {
+                    Glide.with(mContext)
+                            .load(file)
+                            .centerCrop()
+                            .placeholder(R.mipmap.gallery_icon)
+                            .into(imageView);
+                } else {
+                    ExceptionCheck.check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
         //setto listener su ogni imageview
         final ParseObject idToPass = p;
         imageView.setOnClickListener(new View.OnClickListener() {

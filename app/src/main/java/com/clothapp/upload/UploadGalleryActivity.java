@@ -116,10 +116,11 @@ public class UploadGalleryActivity extends AppCompatActivity {
                         if (e == null) {
                             Log.d("UploadGalleryActivity", "Oggetto immagine inviato correttamente");
 
-                            String url = "http://clothapp.parseapp.com/createthumbnail/id?id="+picture.getObjectId();
-
+                            //chiamata get per salvare il thumbnail
+                            String url = "http://clothapp.parseapp.com/createthumbnail/"+picture.getObjectId();
                             Get g = new Get();
                             g.execute(url);
+
                             // Redirecting the user to the homepage activity
                             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
                             startActivity(i);

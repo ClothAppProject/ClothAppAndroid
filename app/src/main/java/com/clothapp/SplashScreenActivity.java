@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -54,24 +55,24 @@ public class SplashScreenActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> fotos, ParseException e) {
                 if (e == null) {
-                    Log.d("Query", "Retrieved " + fotos.size() + " photos");
-
+                    Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
+                    //aggiunto la data della prima foto
+                    ApplicationSupport photos = ((ApplicationSupport) getApplicationContext());
+                    photos.setFirstDate(fotos.get(0).getCreatedAt());
                     int i;
                     for (i = 0; i < 10; i++) {
                         ParseObject obj = fotos.get(i);
-                        ParseFile file = obj.getParseFile("photo");
+                        ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
                             photo.add(new Image(file.getFile(), obj.getObjectId()));
                         } catch (ParseException e1) {
-                            e1.printStackTrace();
+                            check(e.getCode(), vi, e.getMessage());
                         }
-                        System.out.println(photo.get(i));
-
                     }
+                    photos.setLastDate(fotos.get(i-1).getCreatedAt());
                     Intent intent = new Intent(getBaseContext(), HomepageActivity.class);
                     //prendo la variabile globale photos e ci metto dentro le immagini
-                    ApplicationSupport photos = ((ApplicationSupport) getApplicationContext());
                     photos.setPhotos(photo);
                     startActivity(intent);
                     finish();

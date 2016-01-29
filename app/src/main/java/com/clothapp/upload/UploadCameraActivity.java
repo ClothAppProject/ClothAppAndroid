@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.clothapp.HomepageActivity;
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -154,7 +155,7 @@ public class UploadCameraActivity extends AppCompatActivity {
                 });
 
                 // Creazione di un ParseObject da inviare
-                ParseObject picture = new ParseObject("Photo");
+                final ParseObject picture = new ParseObject("Photo");
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
 
@@ -163,6 +164,11 @@ public class UploadCameraActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.d("UploadCameraActivity", "Oggetto immagine inviato correttamente");
+
+                            //chiamata get per salvare il thumbnail
+                            String url = "http://clothapp.parseapp.com/createthumbnail/"+picture.getObjectId();
+                            Get g = new Get();
+                            g.execute(url);
 
                             // Redirecting the user to the homepage activity
                             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);

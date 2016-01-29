@@ -35,16 +35,15 @@ import static com.clothapp.resources.ExceptionCheck.check;
 
 public class HomepageActivity extends BaseActivity {
 
+    ApplicationSupport photos;
     String name = ParseUser.getCurrentUser().getString("name");
     String username = ParseUser.getCurrentUser().getUsername();
-
-    // UploadCameraActivity a new photo button menu initialization
     FloatingActionsMenu menuMultipleActions;
-
-
     SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        photos = (ApplicationSupport) getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
@@ -70,14 +69,44 @@ public class HomepageActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //codice da eseguire quando si aggiorna la galleria
-                swipeRefreshLayout.setRefreshing(false);
+                //query che prende tutte le foto più nuove rispetto a quelle già in memoria
+                ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+                updatePhotos.whereGreaterThan("createdAt", photos.getFirstDate());
+                updatePhotos.orderByDescending("createdAt");
+                updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e==null) {
+                            if (objects.size()>0) {
+                                //modifico la data della prima foto
+                                photos.setFirstDate(objects.get(0).getCreatedAt());
+                                for (int i = objects.size() - 1; i >= 0; i--) {
+                                    ParseFile f = objects.get(i).getParseFile("thumbnail");
+                                    try {
+                                        //ottengo la foto e la aggiungo per prima
+                                        photos.addFirst(new Image(f.getFile(), objects.get(i).getObjectId()));
+                                    } catch (ParseException e1) {
+                                        check(e1.getCode(), vi, e1.getMessage());
+                                    }
+                                    //aggiorno la galleria
+                                    loadSplashImage(gridview);
+                                }
+                            }
+                            swipeRefreshLayout.setRefreshing(false);
+                        }else{
+                            swipeRefreshLayout.setRefreshing(false);
+                            check(e.getCode(), vi, e.getMessage());
+                        }
+                    }
+                });
             }
         });
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
+        // UploadCameraActivity a new photo button menu initialization
         menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
+
         com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         camera.setTitle("Camera");
         camera.setIcon(R.mipmap.camera_icon);
@@ -117,11 +146,16 @@ public class HomepageActivity extends BaseActivity {
     }
 
     private void loadSplashImage(final GridView gridview) {
-        //prendo la lista delle immagini da caricare dalla variabile globale
-        final List <Image> photos = ((ApplicationSupport) getApplicationContext()).getPhotos();
-        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos));
+        gridview.setAdapter(new ImageGridViewAdapter(HomepageActivity.this, photos.getPhotos()));
 
         //listener su ogni foto della gridview
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
+                toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
+                startActivity(toPass);
+            }
+        });
 
          gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -130,7 +164,7 @@ public class HomepageActivity extends BaseActivity {
                         menuMultipleActions.collapse();
                     }else {
                         Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                        toPass.putExtra("objectId", photos.get(position).getObjectId());
+                        toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
                         startActivity(toPass);
                     }
                 }
