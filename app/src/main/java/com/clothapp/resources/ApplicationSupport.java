@@ -1,6 +1,7 @@
 package com.clothapp.resources;
 
 import android.app.Application;
+import android.view.View;
 
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
@@ -8,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
+import java.util.Date;
 import java.util.List;
 /**
  * Created by giacomoceribelli on 02/01/16.
@@ -19,12 +21,17 @@ public class ApplicationSupport extends Application {
 
     //inizializzo la variabile globale photos
     private List<Image> photos;
-    public List<Image>getPhotos(){
-        return photos;
-    }
-    public void setPhotos(List<Image> foto)  {
-        photos=foto;
-    }
+    private Date firstDate;
+    private Date lastDate;
+
+    //getter e setter variabili globali
+    public List<Image>getPhotos()   {return photos;}
+    public void setPhotos(List<Image> foto)  {photos=foto;}
+    public void addFirst(Image foto)    {photos.add(0,foto);}
+    public void setFirstDate(Date data) {firstDate= data;}
+    public void setLastDate(Date data)  {lastDate= data;}
+    public Date getFirstDate()  {return firstDate;}
+    public Date getLastDate()  {return lastDate;}
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,8 +42,11 @@ public class ApplicationSupport extends Application {
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
         try {
-            ParseUser.getCurrentUser().fetch();
+            if (ParseUser.getCurrentUser()!=null) {
+                ParseUser.getCurrentUser().fetch();
+            }
         } catch (ParseException e) {
+            ExceptionCheck.check(e.getCode(),new View(this), e.getMessage());
             //errore nell'aggiornare il profilo locale
         }
 

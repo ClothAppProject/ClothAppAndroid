@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +18,7 @@ import android.widget.TextView;
 
 import com.clothapp.HomepageActivity;
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,7 +28,6 @@ import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -108,7 +106,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 });
 
                 // Creazione di un ParseObject da inviare
-                ParseObject picture = new ParseObject("Photo");
+                final ParseObject picture = new ParseObject("Photo");
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
 
@@ -118,6 +116,8 @@ public class UploadGalleryActivity extends AppCompatActivity {
                         if (e == null) {
                             Log.d("UploadGalleryActivity", "Oggetto immagine inviato correttamente");
 
+                            String url = "http://clothapp.parseapp.com/createthumbnail/id?id="+picture.getObjectId();
+                            Get g = new Get.execute(url);
                             // Redirecting the user to the homepage activity
                             Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
                             startActivity(i);
