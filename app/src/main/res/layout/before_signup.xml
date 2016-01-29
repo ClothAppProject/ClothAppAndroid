@@ -2,11 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BeforeSignupFragment"
+    tools:context=".BeforeSignup"
     android:background="@color/background"
     android:clickable="true"
     android:focusable="false">
-
 
 
     <Button
@@ -14,15 +13,18 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="@string/user"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="192dp"
+        android:clickable="true"/>
 
     <Button
         android:id="@+id/button_shops"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="@string/shops"
-        android:layout_below="@id/button_person"
-        android:layout_centerInParent="true"/>
+        android:layout_below="@+id/button_person"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

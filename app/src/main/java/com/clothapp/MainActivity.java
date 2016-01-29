@@ -1,5 +1,7 @@
 package com.clothapp;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -230,8 +232,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Redirect user to signup Activity.
-                Intent signupIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent signupIntent = new Intent(getApplicationContext(), BeforeSignup.class);
                 startActivity(signupIntent);
+
             }
         });
 

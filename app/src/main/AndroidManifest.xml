@@ -110,6 +110,10 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/app_name" />
+
+        <activity
+            android:name="BeforeSignup"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
