@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -59,6 +63,20 @@ public class UploadGalleryActivity extends AppCompatActivity {
         final TextView percentuale = (TextView) findViewById(R.id.percentuale);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.barraProgresso);
         final Button btnSend = (Button) findViewById(R.id.send);
+        ImageView add=(ImageView)findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.lista);
+                EditText vestito=new EditText(UploadGalleryActivity.this);
+                vestito.setHint(R.string.cloth);
+                EditText tipo = (EditText) findViewById(R.id.tipo);
+                vestito.setWidth(tipo.getWidth());
+                vestito.setGravity(Gravity.CENTER_HORIZONTAL);
+                linearLayout.addView(vestito);
+            }
+        });
 
         // Add an OnClick listener to the send button
         btnSend.setOnClickListener(new View.OnClickListener() {

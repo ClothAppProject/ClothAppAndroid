@@ -214,7 +214,7 @@ public class HomepageActivity extends BaseActivity {
                             Glide.with(getApplicationContext())
                                     .load(file)
                                     .centerCrop()
-                                    .transform(new CircleTransform(getApplicationContext()))
+                                    .transform(new CircleTransform(HomepageActivity.this))
                                     .into(imageView);
                         } catch (ParseException e1) {
                             e1.printStackTrace();

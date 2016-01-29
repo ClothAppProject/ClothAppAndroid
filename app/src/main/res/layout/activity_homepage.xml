@@ -37,10 +37,10 @@
                 android:layout_height="fill_parent"
                 android:columnWidth="150dp"
                 android:numColumns="auto_fit"
-                android:verticalSpacing="5dp"
-                android:horizontalSpacing="5dp"
                 android:stretchMode="columnWidth"
                 android:gravity="center"
+                android:verticalSpacing="5dp"
+                android:horizontalSpacing="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"/>
 

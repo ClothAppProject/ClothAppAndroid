@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,14 +12,19 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.HomepageActivity;
 import com.clothapp.R;
 import com.clothapp.http.Get;
@@ -74,7 +80,20 @@ public class UploadCameraActivity extends AppCompatActivity {
         Log.d("UploadCameraActivity", "Inizializzazione UploadCameraActivity");
 
         imageView = (ImageView) findViewById(R.id.view_immagine);
+        ImageView add=(ImageView)findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.lista);
+                EditText vestito=new EditText(UploadCameraActivity.this);
+                vestito.setHint(R.string.cloth);
+                EditText tipo = (EditText) findViewById(R.id.tipo);
+                vestito.setWidth(tipo.getWidth());
+                vestito.setGravity(Gravity.CENTER_HORIZONTAL);
+                linearLayout.addView(vestito);
+            }
+        });
         // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
         // dell'apertura della fotocamera
         if (savedInstanceState != null) {
@@ -202,16 +221,8 @@ public class UploadCameraActivity extends AppCompatActivity {
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
-            try {
-                imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
-                if (imageBitmap.getHeight() > GL10.GL_MAX_TEXTURE_SIZE || imageBitmap.getWidth()>GL10.GL_MAX_TEXTURE_SIZE) {
+            imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
 
-                    imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
-                }
-                else imageView.setImageBitmap(imageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
             // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
