@@ -210,7 +210,7 @@ public class HomepageActivity extends BaseActivity {
                     menuMultipleActions.collapse();
                 }else {
                     Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                    toPass.putExtra("objectId", photos.getPhotos().get(position).getObjectId());
+                    toPass.putExtra("position", position);
                     startActivity(toPass);
                 }
             }

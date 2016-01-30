@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
@@ -23,6 +24,12 @@ public class ApplicationSupport extends Application {
     private List<Image> photos;
     private Date firstDate;
     private Date lastDate;
+    private List<ParseObject> parseObjects;
+
+
+    public void setParseObject(List<ParseObject>obj){parseObjects=obj;}
+    public ParseObject getParseObject(int i){if(i<=parseObjects.size()) return parseObjects.get(i); else return null;}
+    public List<ParseObject> getParseObject(){return parseObjects;}
 
     //getter e setter variabili globali
     public List<Image>getPhotos()   {return photos;}
