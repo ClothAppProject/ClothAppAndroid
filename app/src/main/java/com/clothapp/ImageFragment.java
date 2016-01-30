@@ -45,7 +45,7 @@ public class ImageFragment extends FragmentActivity {
         setContentView(R.layout.fragment_image);
         photos = (ApplicationSupport) getApplicationContext();
         ParseQuery<ParseObject> query= new ParseQuery<ParseObject>("Photo");
-        query.orderByAscending("createdAt");
+        query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
 
             @Override
