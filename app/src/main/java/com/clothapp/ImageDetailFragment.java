@@ -13,7 +13,14 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.resources.ApplicationSupport;
+import com.clothapp.resources.ExceptionCheck;
+import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.parse.FindCallback;
+import com.parse.GetFileCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ProgressCallback;
 
 
 /**
@@ -21,34 +28,24 @@ import com.parse.ParseObject;
  */import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 public class ImageDetailFragment extends Fragment {
 
-    private static final String URL = "EXTRA_DATA";
-    private static final String USER = "USER";
-    private String url;
     private String user;
     private ImageView v;
     private TextView t;
+    private DonutProgress donutProgress;
+    private String Id;
 
-    public static ImageDetailFragment newInstance(ParseObject objects) {
-        String imageUrl=objects.getParseFile("photo").getUrl();
-        String username= objects.getString("user");
-        final ImageDetailFragment f = new ImageDetailFragment();
-
-        final Bundle args = new Bundle();
-        args.putString(URL, imageUrl);
-        args.putString(USER,username);
-        f.setArguments(args);
-        return f;
+    public ImageDetailFragment(String id)   {
+        this.Id=id;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        url = getArguments() != null ? getArguments().getString(URL) : null;
-        user= getArguments() != null ? getArguments().getString(USER) : null;
     }
 
     @Override
@@ -56,6 +53,7 @@ public class ImageDetailFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         t=(TextView)rootView.findViewById(R.id.user);
         v=(ImageView) rootView.findViewById(R.id.details);
+        donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         return rootView;
     }
 
@@ -64,20 +62,47 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        t.setText(user);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        final Fragment fragmento = this;
 
-                Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user", user);
-                startActivity(i);
-                getActivity().finish();
-            }
-        });
-        Glide.with(this)
-                .load(url)
-                .into(v);
+        //faccio query al database per scaricare la foto
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.whereEqualTo("objectId", Id);
+        query.orderByDescending("createdAt");
+        try {
+            List<ParseObject> objects = query.find();
+            user = objects.get(0).getString("user");
+            t.setText(user);
+            t.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
+                    i.putExtra("user", user);
+                    startActivity(i);
+                    getActivity().finish();
+                }
+            });
+            objects.get(0).getParseFile("photo").getFileInBackground(new GetFileCallback() {
+                @Override
+                public void done(File file, ParseException e) {
+                    if (e==null)    {
+                        //nascondo caricamento mostro immagine
+                        donutProgress.setVisibility(View.INVISIBLE);
+                        v.setVisibility(View.VISIBLE);
+                        Glide.with(fragmento)
+                                .load(file)
+                                .into(v);
+                    }
+                }
+            }, new ProgressCallback() {
+                @Override
+                public void done(Integer percentDone) {
+                    //passo percentuale
+                    donutProgress.setProgress(percentDone);
+                }
+            });
+        } catch (ParseException e) {
+            //errore chiamata
+        }
     }
 
 }

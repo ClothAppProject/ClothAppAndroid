@@ -28,6 +28,7 @@ import com.clothapp.profilepicture.*;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.GetFileCallback;
@@ -38,6 +39,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import org.json.JSONArray;
@@ -196,14 +198,19 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
+                    final DonutProgress donutProgress = (DonutProgress) findViewById(R.id.donut_progress_profile);
                     if (objects.size() == 0) {
+                        donutProgress.setVisibility(View.INVISIBLE);
                         profilepicture.setImageResource(R.mipmap.profile);
                     } else {
+                        profilepicture.setVisibility(View.INVISIBLE);
                         ParseFile picture = objects.get(0).getParseFile("profilePhoto");
                         picture.getFileInBackground(new GetFileCallback() {
                             @Override
                             public void done(File data, ParseException e) {
                                 if (e == null) {
+                                    donutProgress.setVisibility(View.INVISIBLE);
+                                    profilepicture.setVisibility(View.VISIBLE);
                                     Glide.with(mContext)
                                             .load(data)
                                             .centerCrop()
@@ -213,8 +220,13 @@ public class ProfileActivity extends BaseActivity {
                                     check(e.getCode(), vi, e.getMessage());
                                 }
                             }
-                        });
-                    }
+                        }, new ProgressCallback() {
+                                @Override
+                                public void done (Integer percentDone){
+                                    donutProgress.setProgress(percentDone);
+                                }
+                            });
+                        }
                 } else {
                     check(e.getCode(), vi, e.getMessage());
                 }

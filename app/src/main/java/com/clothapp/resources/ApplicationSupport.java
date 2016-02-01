@@ -24,13 +24,8 @@ public class ApplicationSupport extends Application {
     private List<Image> photos;
     private Date firstDate;
     private Date lastDate;
-    private List<ParseObject> parseObjects;
 
-
-    public void setParseObject(List<ParseObject>obj){parseObjects=obj;}
-    public ParseObject getParseObject(int i){if(i<=parseObjects.size()) return parseObjects.get(i); else return null;}
-    public List<ParseObject> getParseObject(){return parseObjects;}
-
+    public String getId(int i)  {return photos.get(i).getObjectId();}
     //getter e setter variabili globali
     public List<Image>getPhotos()   {return photos;}
     public void setPhotos(List<Image> foto)  {photos=foto;}
