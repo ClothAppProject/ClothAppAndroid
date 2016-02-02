@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.login_signup.MainActivity;
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
 import com.clothapp.settings.SettingsActivity;
@@ -168,7 +170,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 //homepage
-                i = new Intent(this, HomepageActivity.class);
+                i = new Intent(this, HomeActivity.class);
                 break;
             case 1:
                 //profilo

@@ -1,4 +1,4 @@
-package com.clothapp.resources;
+package com.clothapp.home_gallery;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -9,6 +9,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.resources.Image;
+import com.clothapp.resources.SquaredImageView;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,8 +1,9 @@
-package com.clothapp;
+package com.clothapp.login_signup;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -14,9 +15,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.clothapp.R;
+import com.clothapp.SplashScreenActivity;
+import com.clothapp.profilepicture.ProfileCameraActivity;
+import com.clothapp.profilepicture.ProfileGalleryActivity;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
@@ -33,9 +41,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-
+        final Context mContext = this;
         final EditText editUsername = (EditText) findViewById(R.id.mainUsername);
         final EditText editPassword = (EditText) findViewById(R.id.mainPassword);
 
@@ -227,14 +234,28 @@ public class MainActivity extends AppCompatActivity {
 
         // Add an OnClick listener to the signup button
         txtSignup.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                // Redirect user to signup Activity.
-                Intent signupIntent = new Intent(getApplicationContext(), BeforeSignup.class);
-                startActivity(signupIntent);
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle(R.string.choose_user)
+                        .setItems(R.array.signup, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        // Redirect the user to the ProfileCameraActivity Activity
+                                        Intent profilo = new Intent(getApplicationContext(), SignupActivity.class);
+                                        startActivity(profilo);
+                                        break;
+                                    case 1:
+                                        // Redirect the user to the ProfileGalleryActivity Activity
+                                        Intent negozio = new Intent(getApplicationContext(), ShopSignupActivity.class);
+                                        startActivity(negozio);
+                                        break;
+                                }
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.clothapp.HomepageActivity;
 import com.clothapp.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.resources.BitmapUtil;

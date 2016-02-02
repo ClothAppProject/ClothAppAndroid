@@ -22,6 +22,7 @@
     <string name="main_signup"><u>New here? Sign up!</u></string>
     <string name="email">Email</string>
     <string name="name">Nome</string>
+    <string name="name_shop">Nome del Negozio</string>
     <string name="lastname">Cognome</string>
     <string name="birthday">Data di Nascita</string>
     <string name="password_confirm">Conferma Password</string>
@@ -97,8 +98,16 @@
     <string name="info_settings">Info su di noi</string>
     <!-- SETTINGS STRING -->
 
-    <string name="shops">Negozio</string>
-    <string name="user">ClothApper</string>
+    <array name="home_titles">
+        <item>Most Recent</item>
+        <item>Top Rated</item>
+        <item>Popular Shops</item>
+    </array>
+    <string name="choose_user">Che tipo di utente sei?</string>
+    <array name="signup">
+        <item>ClothApper</item>
+        <item>Negozio</item>
+    </array>
     <string name="cloth">Vestito</string>
     <string name="title_template_step">ciao</string>>
 

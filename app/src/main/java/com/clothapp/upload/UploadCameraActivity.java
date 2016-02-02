@@ -3,9 +3,6 @@ package com.clothapp.upload;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.PixelFormat;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,13 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.clothapp.HomepageActivity;
 import com.clothapp.R;
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;
@@ -41,11 +36,8 @@ import static com.clothapp.resources.ExceptionCheck.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Created by giacomoceribelli on 29/12/15.
@@ -190,7 +182,7 @@ public class UploadCameraActivity extends AppCompatActivity {
                             g.execute(url);
 
                             // Redirecting the user to the homepage activity
-                            Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+                            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(i);
 
                             finish();
@@ -230,7 +222,7 @@ public class UploadCameraActivity extends AppCompatActivity {
             Log.d("UploadCameraActivity", "L'Immagine non è stata scattata");
 
             // Reinderizzo l'utente alla homePage activity
-            Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(i);
 
             finish();
@@ -258,7 +250,7 @@ public class UploadCameraActivity extends AppCompatActivity {
     public void onBackPressed() {
         deleteImage();
         // Reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
 
         finish();
@@ -268,7 +260,7 @@ public class UploadCameraActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
+            // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
                 deleteImage();
                 // Reinderizzo l'utente alla homePage activity

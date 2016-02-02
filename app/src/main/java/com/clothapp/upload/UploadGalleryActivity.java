@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,8 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.clothapp.HomepageActivity;
 import com.clothapp.R;
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;
@@ -140,7 +139,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
                             g.execute(url);
 
                             // Redirecting the user to the homepage activity
-                            Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+                            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(i);
 
                             finish();
@@ -188,7 +187,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
         finish();
     }
@@ -196,7 +195,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
+            // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
                 // Reinderizzo l'utente alla homePage activity
                 onBackPressed();

@@ -11,7 +11,7 @@
         android:background="@color/background"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".MainActivity">
+        tools:context=".login_signup.MainActivity">
 
         <ImageView
             android:id="@+id/mainLogo"

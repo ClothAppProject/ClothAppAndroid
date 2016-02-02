@@ -1,21 +1,13 @@
 package com.clothapp;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -24,31 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profilepicture.*;
-import com.clothapp.resources.BitmapUtil;
-import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
-import com.parse.GetDataCallback;
 import com.parse.GetFileCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ProgressCallback;
-import com.parse.SaveCallback;
-
-import org.json.JSONArray;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -171,25 +152,31 @@ public class ProfileActivity extends BaseActivity {
         if (user.getList("following") != null) {
             nfollowing.setText(Integer.toString(user.getList("following").size()));
         }
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        queryFoto.whereEqualTo("user", user.getUsername());
-        queryFoto.orderByDescending("createdAt");
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+        //ho creato questo thread per diminuire il lavoro del thread principale altrimenti scattava
+        Thread putPhotos = new Thread(new Runnable() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        myGallery.addView(insertPhoto(objects.get(i)));
+            public void run() {
+                ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+                queryFoto.whereEqualTo("user", user.getUsername());
+                queryFoto.orderByDescending("createdAt");
+                queryFoto.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); i++) {
+                                myGallery.addView(insertPhoto(objects.get(i)));
+                            }
+                            if (objects != null) {
+                                nfoto.setText("" + objects.size());
+                            }
+                        } else {
+                            check(e.getCode(), vi, e.getMessage());
+                        }
                     }
-                    if (objects != null) {
-                        nfoto.setText("" + objects.size());
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
+                });
             }
         });
-
+        putPhotos.start();
 
         //Get Parse user profile picture
         ParseQuery<ParseObject> queryProfilePicture = new ParseQuery<ParseObject>("UserPhoto");
@@ -287,7 +274,7 @@ public class ProfileActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // Redirect the user to the Homepage Activity
-        Intent i = new Intent(getApplicationContext(), HomepageActivity.class);
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
 
         finish();

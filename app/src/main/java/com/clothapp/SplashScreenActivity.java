@@ -1,7 +1,5 @@
 package com.clothapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -9,21 +7,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
-import com.clothapp.resources.ImageGridViewAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -71,7 +65,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         }
                     }
                     photos.setLastDate(fotos.get(i-1).getCreatedAt());
-                    Intent intent = new Intent(getBaseContext(), HomepageActivity.class);
+                    Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                     //prendo la variabile globale photos e ci metto dentro le immagini
                     photos.setPhotos(photo);
                     startActivity(intent);

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
+import com.clothapp.login_signup.MainActivity;
 import com.parse.ParseUser;
 
 import java.security.MessageDigest;
@@ -30,8 +31,6 @@ public class LauncherActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_launcher);
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
