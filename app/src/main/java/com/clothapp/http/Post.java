@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-class Post extends AsyncTask<String, String, String>{
+public class Post extends AsyncTask<String, String, String>{
 
     public String performPostCall(String requestURL, HashMap<String,String> data) {
 
