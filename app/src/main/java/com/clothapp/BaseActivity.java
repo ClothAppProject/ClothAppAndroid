@@ -94,6 +94,7 @@ public class BaseActivity extends AppCompatActivity {
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setElevation(0);
         // getSupportActionBar().setIcon(R.drawable.ic_drawer);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,

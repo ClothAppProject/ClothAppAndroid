@@ -13,5 +13,7 @@
     <color name="white">#ffffff</color>
     <color name="facebook">#3b5998</color>
     <color name="twitter">#4099ff</color>
+    <color name="red">#D32F2F</color>
+
 
 </resources>

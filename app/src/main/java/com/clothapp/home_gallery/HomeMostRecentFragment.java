@@ -157,6 +157,7 @@ public class HomeMostRecentFragment extends Fragment {
                     startActivity(toPass);
                 }
             }
+
         });
     }
 }

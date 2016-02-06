@@ -4,13 +4,26 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
 
 import com.bumptech.glide.Glide;
 import com.clothapp.BaseActivity;
@@ -36,45 +49,34 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 02/02/16.
  */
-public class HomeActivity extends BaseActivity implements ActionBar.TabListener{
+public class HomeActivity extends BaseActivity {
+    static final int NUM_ITEMS = 3;
+
+    MyAdapter mAdapter;
+
+    ViewPager mPager;
+
     static FloatingActionsMenu menuMultipleActions;
-    private ViewPager mViewPager;
-    private HomeAdapter mAdapter;
-    // Tab titles
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         getSupportActionBar().setTitle(R.string.homepage_button);
+
         setUpMenu();
-        getSupportActionBar().setHomeButtonEnabled(false);
 
-        // mostriamo tabs nella actionbar
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // setto l'adattatore passandogli le varie cose
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mAdapter = new HomeAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                //Quando si fa lo swipe tra le sezioni cambia la posizione
-                getSupportActionBar().setSelectedNavigationItem(position);
-            }
-        });
-
-        // Aggiungo una tab per ogni sezione
         String[] titles = getResources().getStringArray(R.array.home_titles);
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            //creo una tab con testo corrispondente ed interfaccia tablistener
-            getSupportActionBar().addTab(
-                    getSupportActionBar().newTab()
-                            .setText(titles[i])
-                            .setTabListener(this));
-        }
+
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        //set adapter to  ViewPager
+        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(),titles));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+
 
         // UploadCameraActivity a new photo button menu initialization
         menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
@@ -110,19 +112,89 @@ public class HomeActivity extends BaseActivity implements ActionBar.TabListener{
 
         menuMultipleActions.addButton(camera);
         menuMultipleActions.addButton(gallery);
+
     }
 
-    //tabs stuff
-    @Override
-    public void onTabSelected(ActionBar.Tab selectedtab, FragmentTransaction arg1) {
-        mViewPager.setCurrentItem(selectedtab.getPosition()); //update tab position on tap
-    }
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {}
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {}
+    //un adattatore per gestire le tab secondo le nostre esigenze
+    public static class MyAdapter extends FragmentPagerAdapter {
+        String[]titles;
 
-    // This function creates a side menu and populates it with the given elements.
+        public MyAdapter(FragmentManager fm,String[] titles) {
+            super(fm);
+            this.titles=titles;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ArrayListFragment.newInstance(position);
+        }
+    }
+
+    //una classe che simula un'array delle tab da inserire nella tabView
+    public static class ArrayListFragment extends ListFragment {
+        int mNum;
+
+        /**
+         * Create a new instance of CountingFragment, providing "num"
+         * as an argument.
+         */
+        static ArrayListFragment newInstance(int num) {
+            ArrayListFragment f = new ArrayListFragment();
+
+            // Supply num input as an argument.
+            Bundle args = new Bundle();
+            args.putInt("num", num);
+            f.setArguments(args);
+
+            return f;
+        }
+
+        /**
+         * When creating, retrieve this instance's number from its arguments.
+         */
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mNum = getArguments() != null ? getArguments().getInt("num") : 1;
+        }
+
+        /**
+         * The Fragment's UI is just a simple text view showing its
+         * instance number.
+         */
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.fragment_pager_list, container, false);
+           // View tv = v.findViewById(R.id.text);
+            //((TextView)tv).setText("Fragment #" + mNum);
+            return v;
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            String[] titles = {"ciao"};
+            setListAdapter(new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_list_item_1,titles ));
+        }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            Log.i("FragmentList", "Item clicked: " + id);
+        }
+    }
+
     private void setUpMenu() {
 
         String[] navMenuTitles;
