@@ -39,13 +39,18 @@ public class ImageDetailFragment extends Fragment {
     private DonutProgress donutProgress;
     private String Id;
 
-    public ImageDetailFragment(String id)   {
-        this.Id=id;
+    public static ImageDetailFragment newInstance(String id) {
+        final ImageDetailFragment f = new ImageDetailFragment();
+        final Bundle args = new Bundle();
+        args.putString("ID", id);
+        f.setArguments(args);
+        return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.Id = getArguments() != null ? getArguments().getString("ID") : null;
     }
 
     @Override

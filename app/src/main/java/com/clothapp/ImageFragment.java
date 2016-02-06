@@ -68,7 +68,7 @@ public class ImageFragment extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new ImageDetailFragment(photos.getId(position));//.newInstance(photos.getId(position));
+            return new ImageDetailFragment().newInstance(photos.getId(position));
         }
 
         @Override
