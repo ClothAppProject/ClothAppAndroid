@@ -10,6 +10,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 /**
@@ -21,14 +22,14 @@ public class ApplicationSupport extends Application {
 //di inizializzare parse un'altra volta.
 
     //inizializzo la variabile globale photos
-    private List<Image> photos;
+    private ArrayList<Image> photos;
     private Date firstDate;
     private Date lastDate;
 
     public String getId(int i)  {return photos.get(i).getObjectId();}
     //getter e setter variabili globali
-    public List<Image>getPhotos()   {return photos;}
-    public void setPhotos(List<Image> foto)  {photos=foto;}
+    public ArrayList<Image>getPhotos()   {return photos;}
+    public void setPhotos(ArrayList<Image> foto)  {photos=foto;}
     public void addFirstPhoto(Image foto)    {photos.add(0,foto);}
     public void addLastPhoto(Image foto) {photos.add(foto);}
     public void setFirstDate(Date data) {firstDate= data;}
