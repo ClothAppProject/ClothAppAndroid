@@ -21,6 +21,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -29,19 +30,19 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 01/02/16.
  */
 public class HomeMostRecentFragment extends Fragment {
-    ApplicationSupport photos;
+    ApplicationSupport global;
+    ArrayList<Image> photos;
     SwipeRefreshLayout swipeRefreshLayout;
     ImageGridViewAdapter imageGridViewAdapter;
     Boolean canLoad = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated
-        // properly.
-
         final View vi = inflater.inflate(R.layout.fragment_home_last, container, false);
 
-        photos = (ApplicationSupport) getActivity().getApplicationContext();
+
+        global = (ApplicationSupport) getActivity().getApplicationContext();
+        photos = global.getPhotos();
         final GridView gridview = (GridView) vi.findViewById(R.id.galleria_homepage);
 
         //istanzio lo swipe to refresh
@@ -53,7 +54,7 @@ public class HomeMostRecentFragment extends Fragment {
             public void onRefresh() {
                 //query che prende tutte le foto più nuove rispetto a quelle già in memoria
                 ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                updatePhotos.whereGreaterThan("createdAt", photos.getFirstDate());
+                updatePhotos.whereGreaterThan("createdAt", global.getFirstDate());
                 updatePhotos.orderByDescending("createdAt");
                 updatePhotos.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -61,12 +62,12 @@ public class HomeMostRecentFragment extends Fragment {
                         if (e == null) {
                             if (objects.size() > 0) {
                                 //modifico la data della prima foto
-                                photos.setFirstDate(objects.get(0).getCreatedAt());
+                                global.setFirstDate(objects.get(0).getCreatedAt());
                                 for (int i = objects.size() - 1; i >= 0; i--) {
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        photos.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId()));
+                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId()));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -98,9 +99,9 @@ public class HomeMostRecentFragment extends Fragment {
                     if (canLoad) {
                         canLoad = false;
                         int toDownload = 10;
-                        if (photos.getPhotos().size() % 2 == 0) toDownload = 11;
+                        if (photos.size() % 2 == 0) toDownload = 11;
                         ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                        updatePhotos.whereLessThan("createdAt", photos.getLastDate());
+                        updatePhotos.whereLessThan("createdAt", global.getLastDate());
                         updatePhotos.orderByDescending("createdAt");
                         updatePhotos.setLimit(toDownload);
                         updatePhotos.findInBackground(new FindCallback<ParseObject>() {
@@ -114,7 +115,7 @@ public class HomeMostRecentFragment extends Fragment {
                                             try {
                                                 //ottengo la foto e la aggiungo per ultima
                                                 Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId());
-                                                photos.addLastPhoto(toAdd);
+                                                global.addLastPhoto(toAdd);
                                                 //notifico l'image adapter di aggiornarsi
                                                 imageGridViewAdapter.notifyDataSetChanged();
                                             } catch (ParseException e1) {
@@ -123,7 +124,7 @@ public class HomeMostRecentFragment extends Fragment {
                                         }
                                         canLoad = true;
                                         //modifico la data dell'utlima foto
-                                        photos.setLastDate(objects.get(i - 1).getCreatedAt());
+                                        global.setLastDate(objects.get(i - 1).getCreatedAt());
                                     }
                                 } else {
                                     check(e.getCode(), vi, e.getMessage());
@@ -142,7 +143,7 @@ public class HomeMostRecentFragment extends Fragment {
     }
 
     private void loadSplashImage(final GridView gridview) {
-        imageGridViewAdapter = new ImageGridViewAdapter(getActivity().getApplicationContext(), photos.getPhotos());
+        imageGridViewAdapter = new ImageGridViewAdapter(getActivity().getApplicationContext(), photos);
         gridview.setAdapter(imageGridViewAdapter);
 
         //listener su ogni foto della gridview
@@ -154,6 +155,8 @@ public class HomeMostRecentFragment extends Fragment {
                 } else {
                     Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
                     toPass.putExtra("position", position);
+                    //passo la lista delle foto al fragment
+                    toPass.putExtra("lista",photos);
                     startActivity(toPass);
                 }
             }
