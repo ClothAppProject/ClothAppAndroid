@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import com.clothapp.ProfileActivity;
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -122,7 +123,7 @@ public class ProfileGalleryActivity extends AppCompatActivity {
         });
 
         // Creazione di un ParseObject da inviare
-        ParseObject picture = new ParseObject("UserPhoto");
+        final ParseObject picture = new ParseObject("UserPhoto");
         picture.put("username", ParseUser.getCurrentUser().getUsername());
         picture.put("profilePhoto", file);
 
@@ -131,6 +132,12 @@ public class ProfileGalleryActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     dialog.dismiss();
+
+                    //chiamata get per salvare il thumbnail
+                    String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+picture.getObjectId();
+                    Get g = new Get();
+                    g.execute(url);
+
                     Log.d("ProfileGalleryActivity", "Oggetto immagine inviato correttamente");
                     // Redirecting the user to the profile activity
                     Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
