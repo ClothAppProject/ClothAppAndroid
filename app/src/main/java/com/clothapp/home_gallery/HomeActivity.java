@@ -157,7 +157,7 @@ public class HomeActivity extends BaseActivity {
         com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         camera.setTitle("Camera");
         camera.setIcon(R.mipmap.camera_icon);
-        camera.setColorNormal(Color.rgb(199,49,50));
+        camera.setColorNormal(Color.rgb(210,36,37));
         camera.setColorPressed(Color.RED);
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +171,7 @@ public class HomeActivity extends BaseActivity {
         com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         gallery.setTitle("Gallery");
         gallery.setIcon(R.mipmap.gallery_icon);
-        gallery.setColorNormal(Color.rgb(199,49,50));
+        gallery.setColorNormal(Color.rgb(210,36,37));
         gallery.setColorPressed(Color.RED);
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override

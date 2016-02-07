@@ -13,8 +13,9 @@
     <color name="white">#ffffff</color>
     <color name="facebook">#3b5998</color>
     <color name="twitter">#4099ff</color>
-    <color name="red">#C63232</color>
-    <color name="pressedred">#CD170C</color>
+    <color name="red">#d22424</color>
+    <color name="cloth">#C63232</color>
+    <color name="pressedred">#ff1414</color>
     <color name="darkred">#ab1d15</color>
 
 </resources>
