@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profilepicture.*;
 import com.clothapp.resources.ExceptionCheck;
+import com.clothapp.resources.Image;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
 import com.parse.GetFileCallback;
@@ -30,6 +31,7 @@ import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -45,6 +47,7 @@ public class ProfileActivity extends BaseActivity {
     View vi;
     List<String> followers;
     List<String> following;
+    ArrayList<Image> lista = new ArrayList<Image>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -164,7 +167,7 @@ public class ProfileActivity extends BaseActivity {
                     public void done(List<ParseObject> objects, ParseException e) {
                         if (e == null) {
                             for (int i = 0; i < objects.size(); i++) {
-                                myGallery.addView(insertPhoto(objects.get(i)));
+                                myGallery.addView(insertPhoto(objects.get(i),i));
                             }
                             if (objects != null) {
                                 nfoto.setText("" + objects.size());
@@ -301,7 +304,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     //ROBA DELLA GALLERIA
-    private View insertPhoto(ParseObject p) {
+    private View insertPhoto(final ParseObject p,final int position) {
         //inizializzo layout
         LinearLayout layout = new LinearLayout(getApplicationContext());
         layout.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
@@ -317,6 +320,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void done(File file, ParseException e) {
                 if (e == null) {
+                    lista.add(new Image(file,p.getObjectId()));
                     Glide.with(mContext)
                             .load(file)
                             .centerCrop()
@@ -333,7 +337,8 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent toPass = new Intent(getApplicationContext(), ImageFragment.class);
-                toPass.putExtra("objectId", idToPass.getObjectId().toString());
+                toPass.putExtra("lista",lista);
+                toPass.putExtra("position", position);
                 startActivity(toPass);
             }
         });

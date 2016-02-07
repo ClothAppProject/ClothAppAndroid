@@ -41,7 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         //qui scarico le foto
         final View vi = new View(this.getApplicationContext());
-        final List<Image> photo = new ArrayList<>();
+        final ArrayList<Image> photo = new ArrayList<>();
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.setLimit(12);
