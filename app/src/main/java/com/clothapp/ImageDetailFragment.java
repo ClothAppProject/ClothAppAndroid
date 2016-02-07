@@ -7,25 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.resources.ApplicationSupport;
-import com.clothapp.resources.ExceptionCheck;
 import com.github.lzyzsd.circleprogress.DonutProgress;
-import com.parse.FindCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
-
-
-/**
- * This fragment will populate the children of the ViewPager from
- */import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
 import java.io.File;

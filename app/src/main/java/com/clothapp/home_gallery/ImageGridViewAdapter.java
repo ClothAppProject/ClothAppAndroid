@@ -71,12 +71,14 @@ public class ImageGridViewAdapter extends BaseAdapter {
                     //rimuovo il like e cambio la lista
                     image.remLike(username);
                     point.put("like",image.getLike());
+                    point.put("nLike",image.getLike().size());
                     point.saveInBackground();
                     cuore.setImageResource(R.mipmap.cuore);
                 }else{
                     //aggiungo like e aggiorno anche in parse
                     image.addLike(username);
                     point.add("like",username);
+                    point.put("nLike",image.getLike().size());
                     point.saveInBackground();
                     cuore.setImageResource(R.mipmap.cuore_pressed);
                 }
