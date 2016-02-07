@@ -8,14 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by giacomoceribelli on 01/02/16.
  */
 
-public class HomeAdapter extends FragmentPagerAdapter {
+public class HomeAdapter  {
 
-    public HomeAdapter(FragmentManager fm) {
-        super(fm);
-    }
 
-    @Override
-    public Fragment getItem(int index) {
+
+    public static Fragment getItem(int index) {
 
         switch (index) {
             case 0:
@@ -32,7 +29,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    @Override
+
     public int getCount() {
         // get item count - equal to number of tabs
         return 3;

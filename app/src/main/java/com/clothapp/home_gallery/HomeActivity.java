@@ -50,12 +50,6 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 02/02/16.
  */
 public class HomeActivity extends BaseActivity {
-    static final int NUM_ITEMS = 3;
-
-    MyAdapter mAdapter;
-
-    ViewPager mPager;
-
     static FloatingActionsMenu menuMultipleActions;
 
     @Override
@@ -77,46 +71,13 @@ public class HomeActivity extends BaseActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-
         // UploadCameraActivity a new photo button menu initialization
-        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
-
-        com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
-        camera.setTitle("Camera");
-        camera.setIcon(R.mipmap.camera_icon);
-        camera.setColorNormal(Color.RED);
-        camera.setColorPressed(Color.RED);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
-        gallery.setTitle("Gallery");
-        gallery.setIcon(R.mipmap.gallery_icon);
-        gallery.setColorNormal(Color.RED);
-        gallery.setColorPressed(Color.RED);
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        menuMultipleActions.addButton(camera);
-        menuMultipleActions.addButton(gallery);
+        setupFloatingButton();
 
     }
 
     //un adattatore per gestire le tab secondo le nostre esigenze
-    public static class MyAdapter extends FragmentPagerAdapter {
+    public class MyAdapter extends FragmentPagerAdapter {
         String[]titles;
 
         public MyAdapter(FragmentManager fm,String[] titles) {
@@ -131,69 +92,15 @@ public class HomeActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return NUM_ITEMS;
+            return new HomeAdapter().getCount();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return ArrayListFragment.newInstance(position);
+            return HomeAdapter.getItem(position);
         }
     }
 
-    //una classe che simula un'array delle tab da inserire nella tabView
-    public static class ArrayListFragment extends ListFragment {
-        int mNum;
-
-        /**
-         * Create a new instance of CountingFragment, providing "num"
-         * as an argument.
-         */
-        static ArrayListFragment newInstance(int num) {
-            ArrayListFragment f = new ArrayListFragment();
-
-            // Supply num input as an argument.
-            Bundle args = new Bundle();
-            args.putInt("num", num);
-            f.setArguments(args);
-
-            return f;
-        }
-
-        /**
-         * When creating, retrieve this instance's number from its arguments.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            mNum = getArguments() != null ? getArguments().getInt("num") : 1;
-        }
-
-        /**
-         * The Fragment's UI is just a simple text view showing its
-         * instance number.
-         */
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_pager_list, container, false);
-           // View tv = v.findViewById(R.id.text);
-            //((TextView)tv).setText("Fragment #" + mNum);
-            return v;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            String[] titles = {"ciao"};
-            setListAdapter(new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1,titles ));
-        }
-
-        @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
-            Log.i("FragmentList", "Item clicked: " + id);
-        }
-    }
 
     private void setUpMenu() {
 
@@ -268,5 +175,41 @@ public class HomeActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    private void setupFloatingButton(){
+        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
+
+        com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        camera.setTitle("Camera");
+        camera.setIcon(R.mipmap.camera_icon);
+        camera.setColorNormal(Color.rgb(199,49,50));
+        camera.setColorPressed(Color.RED);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirect the user to the upload activity and upload a photo
+                Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        gallery.setTitle("Gallery");
+        gallery.setIcon(R.mipmap.gallery_icon);
+        gallery.setColorNormal(Color.rgb(199,49,50));
+        gallery.setColorPressed(Color.RED);
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirect the user to the upload activity and upload a photo
+                Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        menuMultipleActions.addButton(camera);
+        menuMultipleActions.addButton(gallery);
     }
 }
