@@ -71,7 +71,7 @@ public class ImageFragment extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new ImageDetailFragment().newInstance(lista.get(position).getObjectId());
+            return new ImageDetailFragment().newInstance(lista.get(position).getObjectId(),getApplicationContext());
         }
 
         @Override

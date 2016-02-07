@@ -38,8 +38,10 @@ public class ImageDetailFragment extends Fragment {
     private TextView t;
     private DonutProgress donutProgress;
     private String Id;
+    private static Context context;
 
-    public static ImageDetailFragment newInstance(String id) {
+    public static ImageDetailFragment newInstance(String id, Context c) {
+        context = c;
         final ImageDetailFragment f = new ImageDetailFragment();
         final Bundle args = new Bundle();
         args.putString("ID", id);
@@ -67,7 +69,6 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final Fragment fragmento = this;
 
         //faccio query al database per scaricare la foto
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -93,7 +94,7 @@ public class ImageDetailFragment extends Fragment {
                         //nascondo caricamento mostro immagine
                         donutProgress.setVisibility(View.INVISIBLE);
                         v.setVisibility(View.VISIBLE);
-                        Glide.with(fragmento)
+                        Glide.with(context)
                                 .load(file)
                                 .into(v);
                     }
