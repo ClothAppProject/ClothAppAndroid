@@ -13,8 +13,8 @@
     <ImageView
         android:id="@+id/cuore"
         android:src="@mipmap/cuore"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:padding="2dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true" />

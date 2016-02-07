@@ -1,5 +1,6 @@
 package com.clothapp.home_gallery;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
@@ -40,7 +42,6 @@ public class HomeMostRecentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View vi = inflater.inflate(R.layout.fragment_home_last, container, false);
 
-
         global = (ApplicationSupport) getActivity().getApplicationContext();
         photos = global.getPhotos();
         final GridView gridview = (GridView) vi.findViewById(R.id.galleria_homepage);
@@ -67,7 +68,7 @@ public class HomeMostRecentFragment extends Fragment {
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId()));
+                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getList("like")));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -100,6 +101,7 @@ public class HomeMostRecentFragment extends Fragment {
                         canLoad = false;
                         int toDownload = 10;
                         if (photos.size() % 2 == 0) toDownload = 11;
+                        Toast.makeText(getActivity(),"Attendere. Caricamento foto...",Toast.LENGTH_SHORT).show();
                         ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
                         updatePhotos.whereLessThan("createdAt", global.getLastDate());
                         updatePhotos.orderByDescending("createdAt");
@@ -114,7 +116,7 @@ public class HomeMostRecentFragment extends Fragment {
                                             ParseFile f = objects.get(i).getParseFile("thumbnail");
                                             try {
                                                 //ottengo la foto e la aggiungo per ultima
-                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId());
+                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getList("like"));
                                                 global.addLastPhoto(toAdd);
                                                 //notifico l'image adapter di aggiornarsi
                                                 imageGridViewAdapter.notifyDataSetChanged();

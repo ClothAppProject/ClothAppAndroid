@@ -17,6 +17,10 @@ import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.SquaredImageView;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,19 +46,40 @@ public class ImageGridViewAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.gridview_layout, parent, false);
         }
+        final Image image = getItem(position);
         //prendo i vari oggetti del gridview_layout
         SquaredImageView view = (SquaredImageView) row.findViewById(R.id.image);
         //l'id è solo una prova per vedere se si vedeva
         TextView id = (TextView) row.findViewById(R.id.id);
-        id.setText(getItem(position).getObjectId());
-        ImageView cuore = (ImageView) row.findViewById(R.id.cuore);
+        id.setText(image.getObjectId());
 
+        final ImageView cuore = (ImageView) row.findViewById(R.id.cuore);
+        final String username = ParseUser.getCurrentUser().getUsername();
+        //controllo se ho messo like sull'attuale foto
+        if ((image.getLike().contains(username)))    {
+            cuore.setImageResource(R.mipmap.cuore_pressed);
+        }else{
+            cuore.setImageResource(R.mipmap.cuore);
+        }
         //listener sul like della foto
         cuore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //non funziona il click sul cuore...
-                System.out.printf("debug: premuto cuore");
+                ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
+                if ((image.getLike().contains(username))) {
+                    //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
+                    //rimuovo il like e cambio la lista
+                    image.remLike(username);
+                    point.put("like",image.getLike());
+                    point.saveInBackground();
+                    cuore.setImageResource(R.mipmap.cuore);
+                }else{
+                    //aggiungo like e aggiorno anche in parse
+                    image.addLike(username);
+                    point.add("like",username);
+                    point.saveInBackground();
+                    cuore.setImageResource(R.mipmap.cuore_pressed);
+                }
             }
         });
 
@@ -70,7 +95,7 @@ public class ImageGridViewAdapter extends BaseAdapter {
         view.getLayoutParams().height = s;
         view.getLayoutParams().width = s;
         // Get the image URL for the current position.
-        File file = getItem(position).getFile();
+        File file = image.getFile();
         // Trigger the download of the URL asynchronously into the image view.
         Glide.with(context)
                 .load(file)

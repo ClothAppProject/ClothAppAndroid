@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by giacomoceribelli on 28/01/16.
@@ -13,10 +16,22 @@ import java.io.File;
 public class Image implements Parcelable{
     private File file;
     private String objectId;
-    public Image(File f, String Id)   {
+    private List like;
+    public Image(File f, String Id, List likes)   {
         this.objectId = Id;
         this.file=f;
+        if (likes==null) {
+            like= new ArrayList();
+        }else {
+            this.like = likes;
+        }
     }
+
+    public List getLike() {return like;}
+    public int getNumLike() {return like.size();}
+    public void addLike(Object o) {like.add(o);}
+    public void remLike(Object o) {like.remove(o);}
+    public void setLike(List like) {this.like = like;}
 
     public File getFile(){
         return this.file;
