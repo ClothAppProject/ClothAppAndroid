@@ -4,17 +4,32 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-/**
- * Created by giacomoceribelli on 01/02/16.
- */
 
-public class HomeAdapter  {
+//UN ADATTATORE PER DOMINARLI TUTTI!
+public class HomeAdapter extends FragmentPagerAdapter {
 
+    String[]titles;
 
+    public HomeAdapter(FragmentManager fm,String[] titles) {
+        //passo il fragment manager e i titoli delle tab
+        super(fm);
+        this.titles=titles;
+    }
 
-    public static Fragment getItem(int index) {
+    //do il titolo alla tab
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles[position];
+    }
 
-        switch (index) {
+    @Override
+    public int getCount() {
+        return 3;
+    }
+
+    //ritorno il fragment della pagina che voglio mostrare
+    public Fragment getItem(int position) {
+        switch (position) {
             case 0:
                 // HomeMostRecentFragment
                 return new HomeMostRecentFragment();
@@ -29,10 +44,5 @@ public class HomeAdapter  {
         return null;
     }
 
-
-    public int getCount() {
-        // get item count - equal to number of tabs
-        return 3;
-    }
 
 }

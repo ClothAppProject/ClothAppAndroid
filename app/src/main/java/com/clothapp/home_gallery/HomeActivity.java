@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         //set adapter to  ViewPager
-        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(),titles));
+        viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(),titles));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -75,32 +75,6 @@ public class HomeActivity extends BaseActivity {
         setupFloatingButton();
 
     }
-
-    //un adattatore per gestire le tab secondo le nostre esigenze
-    public class MyAdapter extends FragmentPagerAdapter {
-        String[]titles;
-
-        public MyAdapter(FragmentManager fm,String[] titles) {
-            super(fm);
-            this.titles=titles;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
-        }
-
-        @Override
-        public int getCount() {
-            return new HomeAdapter().getCount();
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return HomeAdapter.getItem(position);
-        }
-    }
-
 
     private void setUpMenu() {
 
