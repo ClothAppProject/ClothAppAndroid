@@ -54,25 +54,28 @@ public class HomeTopRatedFragment extends Fragment {
         //setCardViews(findTopRated(),container);
         return rootView;
     }
-
+/*
     public void setCardViews(List<Image>images,ViewGroup container){
         int i;
         for(i=0;i<images.size();i++){
            // Card c=new Card();
             ImageView imageView= (ImageView) getActivity().findViewById(R.id.topfoto);
             l.addView(imageView);
+            TextView user=(TextView)rootView.findViewById(R.id.user);
+            user.setText(images.get(i).getUser());
+
             Glide.with(this)
                     .load(images.get(i).getFile())
                     .into(imageView);
         }
     }
-
+*/
     public List<Image> findTopRated(){
         //qui scarico le foto
         final View vi = new View(getActivity().getApplicationContext());
         final ArrayList<Image> photo = new ArrayList<>();
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(4);
+        query.setLimit(12);
         query.orderByDescending("nLike");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> fotos, ParseException e) {
@@ -85,7 +88,7 @@ public class HomeTopRatedFragment extends Fragment {
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista
-                            photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getList("like")));
+                            photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
                             Log.d("toprated", "finito"+i);
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());

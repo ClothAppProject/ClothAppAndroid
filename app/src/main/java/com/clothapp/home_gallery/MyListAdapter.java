@@ -64,8 +64,8 @@ public class MyListAdapter extends BaseAdapter {
         final Image image = getItem(position);
         //prendo i vari oggetti del gridview_layout
         ImageView view = (ImageView) row.findViewById(R.id.topfoto);
-        TextView textView=(TextView) row.findViewById(R.id.info_text);
-        textView.setText((CharSequence)image.getObjectId());
+        TextView user=(TextView)row.findViewById(R.id.user);
+        user.setText((CharSequence)files.get(position).getUser());
 
 
         // Get the image URL for the current position.

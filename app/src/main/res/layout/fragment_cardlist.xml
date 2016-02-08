@@ -10,24 +10,95 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_gravity="center"
-        android:elevation="5dp"
+        android:elevation="10dp"
         android:layout_width="350dp"
-        android:layout_height="170dp"
-        android:paddingTop="10dp"
-        card_view:cardCornerRadius="2dp">
+        android:layout_height="180dp"
+        android:paddingTop="20dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardUseCompatPadding="true">
 
         <ImageView
             android:layout_width="180dp"
-            android:layout_height="170dp"
+            android:layout_height="180dp"
             android:layout_gravity="left"
             android:id="@+id/topfoto" />
 
         <TextView
-            android:id="@+id/info_text"
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
+            android:id="@+id/user"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="30dp"
             android:textColor="@color/transparent_black"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:paddingTop="15dp"
+            android:paddingLeft="5dp"
+
+            android:textAllCaps="true"
+            android:textSize="20dp"
+            android:text="Jacopo" />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_more_vert_white_48dp"
+            android:tint="@color/dim_foreground_disabled_material_light"
+            android:layout_gravity="right"
+            android:id="@+id/more" />
+
+        <TextView
+            android:id="@+id/hashtag"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:paddingLeft="5dp"
+            android:textColor="@color/input_text_hint"
+            android:layout_gravity="right|center"
+            android:text="#hashtag" />
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:showDividers="middle"
+            android:divider="@drawable/empty_tall_divider"
+            android:dividerPadding="10dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="bottom|right"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/ic_share_white_48dp"
+                android:tint="@color/red"
+                android:id="@+id/share" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/ic_person_white_48dp"
+                android:tint="@color/red"
+                android:id="@+id/person" />
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/ic_info_white_48dp"
+                android:tint="@color/red"
+                android:id="@+id/info" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/ic_favorite_white_48dp"
+                android:tint="@color/red"
+                android:id="@+id/like" />
+        </LinearLayout>
+
+
     </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"></LinearLayout>
 
 </LinearLayout>

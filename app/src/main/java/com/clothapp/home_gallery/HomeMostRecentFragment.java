@@ -68,7 +68,7 @@ public class HomeMostRecentFragment extends Fragment {
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getList("like")));
+                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like")));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -116,7 +116,7 @@ public class HomeMostRecentFragment extends Fragment {
                                             ParseFile f = objects.get(i).getParseFile("thumbnail");
                                             try {
                                                 //ottengo la foto e la aggiungo per ultima
-                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getList("like"));
+                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like"));
                                                 global.addLastPhoto(toAdd);
                                                 //notifico l'image adapter di aggiornarsi
                                                 imageGridViewAdapter.notifyDataSetChanged();

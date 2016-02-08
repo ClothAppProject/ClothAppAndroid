@@ -16,8 +16,10 @@ import java.util.Objects;
 public class Image implements Parcelable{
     private File file;
     private String objectId;
+    private String user;
     private List like;
-    public Image(File f, String Id, List likes)   {
+    public Image(File f, String Id, String user,List likes)   {
+        this.user=user;
         this.objectId = Id;
         this.file=f;
         if (likes==null) {
@@ -25,6 +27,10 @@ public class Image implements Parcelable{
         }else {
             this.like = likes;
         }
+    }
+
+    public String getUser() {
+        return user;
     }
 
     public List getLike() {return like;}
