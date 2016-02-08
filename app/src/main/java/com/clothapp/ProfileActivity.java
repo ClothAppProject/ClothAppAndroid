@@ -143,129 +143,15 @@ public class ProfileActivity extends BaseActivity {
 
         loadUserPhotos(this);
 
-        //ho creato questo thread per diminuire il lavoro del thread principale altrimenti scattava
-        /*Thread putPhotos = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-                queryFoto.whereEqualTo("user", user.getUsername());
-                queryFoto.orderByDescending("createdAt");
-                queryFoto.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        if (e == null) {
-                            for (int i = 0; i < objects.size(); i++) {
-                                myGallery.addView(insertPhoto(objects.get(i),i));
-                            }
-                            if (objects != null) {
-                                nfoto.setText("" + objects.size());
-                            }
-                        } else {
-                            check(e.getCode(), vi, e.getMessage());
-                        }
-                    }
-                });
-            }
-        });*/
-
-//        putPhotos.start();
-
-        //Get Parse user profile picture
+        // Get Parse user profile picture
 
         loadUserProfilePhoto(this, profilepicture);
-
-
-        /*ParseQuery<ParseObject> queryProfilePicture = new ParseQuery<ParseObject>("UserPhoto");
-        queryProfilePicture.whereEqualTo("username", user.getUsername());
-        queryProfilePicture.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    final DonutProgress donutProgress = (DonutProgress) findViewById(R.id.donut_progress_profile);
-                    if (objects.size() == 0) {
-                        donutProgress.setVisibility(View.INVISIBLE);
-                        profilepicture.setImageResource(R.mipmap.profile);
-                    } else {
-                        profilepicture.setVisibility(View.INVISIBLE);
-                        ParseFile picture = objects.get(0).getParseFile("profilePhoto");
-                        picture.getFileInBackground(new GetFileCallback() {
-                            @Override
-                            public void done(File data, ParseException e) {
-                                if (e == null) {
-                                    donutProgress.setVisibility(View.INVISIBLE);
-                                    profilepicture.setVisibility(View.VISIBLE);
-                                    Glide.with(mContext)
-                                            .load(data)
-                                            .centerCrop()
-                                            .placeholder(R.mipmap.profile)
-                                            .into(profilepicture);
-                                } else {
-                                    check(e.getCode(), vi, e.getMessage());
-                                }
-                            }
-                        }, new ProgressCallback() {
-                                @Override
-                                public void done (Integer percentDone){
-                                    donutProgress.setProgress(percentDone);
-                                }
-                            });
-                        }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });*/
 
         //listener sull'imageview dell'immagine del profilo
         if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
 
             setProfilePhotoClickListener(this, profilepicture);
 
-            /*profilepicture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(R.string.choose_profile_picture)
-                            //.set
-                            .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which) {
-                                        case 0:
-                                            // Redirect the user to the ProfileCameraActivity Activity
-                                            Intent intentCamera = new Intent(getApplicationContext(), ProfileCameraActivity.class);
-                                            startActivity(intentCamera);
-                                            break;
-                                        case 1:
-                                            // Redirect the user to the ProfileGalleryActivity Activity
-                                            Intent intentGallery = new Intent(getApplicationContext(), ProfileGalleryActivity.class);
-                                            startActivity(intentGallery);
-                                            break;
-                                        case 2:
-                                            //delete profile picture
-                                            ParseQuery<ParseObject> queryFotoProfilo = new ParseQuery<ParseObject>("UserPhoto");
-                                            queryFotoProfilo.whereEqualTo("username", user.getUsername());
-                                            queryFotoProfilo.findInBackground(new FindCallback<ParseObject>() {
-                                                @Override
-                                                public void done(List<ParseObject> objects, ParseException e) {
-                                                    if (e == null) {
-                                                        if (objects.size() > 0) {
-                                                            objects.get(0).deleteInBackground();
-                                                            finish();
-                                                            startActivity(getIntent());
-                                                        }
-                                                    } else {
-                                                        check(e.getCode(), vi, e.getMessage());
-                                                    }
-                                                }
-                                            });
-                                            break;
-                                    }
-                                }
-                            });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });*/
         }
     }
 
