@@ -9,35 +9,132 @@
     android:weightSum="1">
 
 
-    <TextView style="@android:style/TextAppearance.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/user"
-        android:layout_weight="0.09"
-        android:textSize="25dp"
-        android:text="prova"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:textColor="#416aff" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
-        <ImageView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/details"
-            android:layout_weight="0.76"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true" />
+            android:layout_height="match_parent">
 
-        <com.github.lzyzsd.circleprogress.DonutProgress
-            android:id="@+id/donut_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/details">
+
+
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_foto"
+                android:layout_gravity="center"
+                android:elevation="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                card_view:cardCornerRadius="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:id="@+id/photo"
+                    android:layout_weight="0.76"
+                    android:visibility="invisible"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView style="@android:style/TextAppearance.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user"
+                    android:layout_weight="0.09"
+                    android:textSize="25dp"
+                    android:text="prova"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:textColor="#2196F3" />
+
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/rectangle"
+                        android:hint=" #hashtag"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:showDividers="middle"
+                        android:divider="@drawable/empty_tall_divider"
+                        android:paddingLeft="60dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@mipmap/ic_share_white_48dp"
+                            android:tint="@color/red"/>
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="35dp"/>
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@mipmap/ic_person_white_48dp"
+                            android:tint="@color/red"/>
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="35dp"/>
+
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@mipmap/ic_favorite_white_48dp"
+                            android:tint="@color/red"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:textSize="30dp"
+                            android:textColor="@color/red"
+                            android:textColorHint="@color/red"
+                            android:hint="0"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/listInfo" />
+
+            <com.github.lzyzsd.circleprogress.DonutProgress
+                android:id="@+id/donut_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </LinearLayout>
+
+        </ScrollView>
+
     </RelativeLayout>
 
 </LinearLayout>

@@ -18,6 +18,8 @@ public class Image implements Parcelable{
     private String objectId;
     private String user;
     private List like;
+
+
     public Image(File f, String Id, String user,List likes)   {
         this.user=user;
         this.objectId = Id;
