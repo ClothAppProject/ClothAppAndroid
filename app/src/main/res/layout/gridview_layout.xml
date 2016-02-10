@@ -8,8 +8,7 @@
         android:id="@+id/image"
         android:src="@mipmap/logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"/>
+        android:layout_height="wrap_content"/>
     <ImageView
         android:id="@+id/cuore"
         android:src="@mipmap/cuore"

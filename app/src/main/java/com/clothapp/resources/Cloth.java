@@ -10,13 +10,15 @@ public class Cloth implements Parcelable {
     private String cloth;
     private String address;
     private String shop;
-    private double prize;
+    private String brand;
+    private String price;
 
-    public Cloth(String cloth, String address, double prize, String shop) {
+    public Cloth(String cloth, String address, String price, String shop,String brand) {
         this.cloth = cloth;
         this.address = address;
-        this.prize = prize;
+        this.price = price;
         this.shop = shop;
+        this.brand=brand;
     }
 
     public String getCloth() {
@@ -27,12 +29,16 @@ public class Cloth implements Parcelable {
         return address;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
     public String getShop() {
         return shop;
     }
 
-    public double getPrize() {
-        return prize;
+    public String getPrice() {
+        return price;
     }
 
     public void setCloth(String cloth) {
@@ -47,15 +53,19 @@ public class Cloth implements Parcelable {
         this.shop = shop;
     }
 
-    public void setPrize(double prize) {
-        this.prize = prize;
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setPrize(String price) {
+        this.price = price;
     }
 
     protected Cloth(Parcel in) {
         cloth = in.readString();
         address = in.readString();
         shop = in.readString();
-        prize = in.readDouble();
+        price = in.readString();
     }
 
     public static final Creator<Cloth> CREATOR = new Creator<Cloth>() {
@@ -80,6 +90,6 @@ public class Cloth implements Parcelable {
         dest.writeString(cloth);
         dest.writeString(address);
         dest.writeString(shop);
-        dest.writeDouble(prize);
+        dest.writeString(price);
     }
 }

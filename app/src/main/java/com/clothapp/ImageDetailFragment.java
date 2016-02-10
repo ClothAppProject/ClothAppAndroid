@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -29,7 +31,9 @@ import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -46,8 +50,9 @@ public class ImageDetailFragment extends Fragment {
     private DonutProgress donutProgress;
     private String Id;
     private static Context context;
-    private LinearLayout l;
+    private List<Cloth> vestiti;
     private ListView listView;
+    private TextView hashtag;
 
     public static ImageDetailFragment newInstance(String id, Context c) {
         context = c;
@@ -67,16 +72,15 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
-        l=(LinearLayout)rootView.findViewById(R.id.details);
         t=(TextView)rootView.findViewById(R.id.user);
         v=(ImageView) rootView.findViewById(R.id.photo);
         listView=(ListView)rootView.findViewById(R.id.listInfo);
-
+        hashtag=(TextView)rootView.findViewById(R.id.hashtag);
 
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
 
-        donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
+        //donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         return rootView;
     }
 
@@ -84,43 +88,26 @@ public class ImageDetailFragment extends Fragment {
     public void findInfoPhoto(){
         //qui scarico le foto
         final View vi = new View(getActivity().getApplicationContext());
-        final Image photo;
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.whereEqualTo("objectId",this.Id);
-        query.getFirstInBackground(new GetCallback<ParseObject>(){
-            @Override
-            public void done(ParseObject foto, ParseException e) {
-                if (e == null) {
-
-
-                    //dovremmo fare una chiamata per trovare tutte le info dei vestiti poi passare List<Vestiti> e passare la lista all'adattatore
+        query.whereEqualTo("objectId", this.Id);
 
 
 
-                }
-            }
-
-
-        });
     }
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//TODO:solo fittizio
-        Cloth c=new Cloth("Cloth","Address",12.2,"Shop");
-        ArrayList<Cloth>arrayList=new ArrayList<Cloth>();
-        arrayList.add(c);
 
-        MyCardListAdapter adapter = new MyCardListAdapter(getActivity().getApplicationContext(),arrayList);
-        listView.setAdapter(adapter);
+
         //faccio query al database per scaricare la foto
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.whereEqualTo("objectId", Id);
         query.orderByDescending("createdAt");
         try {
             List<ParseObject> objects = query.find();
+
             user = objects.get(0).getString("user");
             t.setText(user);
             t.setOnClickListener(new View.OnClickListener() {
@@ -132,17 +119,55 @@ public class ImageDetailFragment extends Fragment {
                     getActivity().finish();
                 }
             });
+
+            //setto gli hashtag
+            ArrayList tag=(ArrayList)objects.get(0).get("hashtag");
+            String s=" ";
+            if(tag!=null) {
+                for (int i = 0; i < tag.size(); i++) {
+                    s += tag.get(i).toString() + " ";
+                }
+            }
+            hashtag.setText((CharSequence) s);
+
+            //per ogni vestito cerco le informazioni
+            ArrayList arrayList= (ArrayList) objects.get(0).get("vestiti");
+            if(arrayList==null) arrayList=new ArrayList<Cloth>();
+            vestiti=new ArrayList<Cloth>(arrayList.size());
+            for(int i=0;i<arrayList.size();i++) {
+                ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Vestito");
+                query1.whereEqualTo("codice", arrayList.get(i));
+                query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject info, ParseException e) {
+                        if (e == null) {
+                            Cloth c = new Cloth(info.getString("tipo"),
+                                    info.getString("luogoAcquisto"),
+                                    info.getString("prezzo"),
+                                    info.getString("shop"),
+                                    info.getString("brand"));
+
+                            vestiti.add(c);
+                            MyCardListAdapter adapter = new MyCardListAdapter(getActivity().getApplicationContext(), vestiti);
+                            listView.setAdapter(adapter);
+                            setListViewHeightBasedOnItems(listView);
+                        }
+
+                    }
+                });
+
+            }
+
             objects.get(0).getParseFile("photo").getFileInBackground(new GetFileCallback() {
                 @Override
                 public void done(File file, ParseException e) {
-                    if (e==null)    {
+                    if (e == null) {
                         //nascondo caricamento mostro immagine
-                        donutProgress.setVisibility(View.INVISIBLE);
-                        v.setVisibility(View.VISIBLE);
+                        //donutProgress.setVisibility(View.INVISIBLE);
+                        //v.setVisibility(View.VISIBLE);
                         Glide.with(context)
                                 .load(file)
                                 .into(v);
-
 
 
                     }
@@ -151,12 +176,49 @@ public class ImageDetailFragment extends Fragment {
                 @Override
                 public void done(Integer percentDone) {
                     //passo percentuale
-                    donutProgress.setProgress(percentDone);
+                    // donutProgress.setProgress(percentDone);
                 }
             });
+
+
+
         } catch (ParseException e) {
             //errore chiamata
         }
+    }
+
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            int itemPos;
+            for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                item.measure(0, 0);
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() *
+                    (numberOfItems - 1);
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
+            return true;
+
+        } else {
+            return false;
+        }
+
     }
 
 }

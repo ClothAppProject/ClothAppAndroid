@@ -89,10 +89,9 @@ public class ImageGridViewAdapter extends BaseAdapter {
         DisplayMetrics metrics =context.getResources().getDisplayMetrics();
 
         int w=metrics.widthPixels;
-        int s=((w)/2)-25;
-        row.setLayoutParams(new GridView.LayoutParams(s, s));
-        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        view.setPadding(0,0,0,0);
+        int s=((w-10)/2);
+        //row.setLayoutParams(new GridView.LayoutParams(s, s));
+       // view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         //devo per forza ridargli la dimesione corretta altrimenti non so perchè me le resiza...
         view.getLayoutParams().height = s;
         view.getLayoutParams().width = s;

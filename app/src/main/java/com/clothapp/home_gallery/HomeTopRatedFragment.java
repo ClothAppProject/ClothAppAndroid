@@ -89,7 +89,7 @@ public class HomeTopRatedFragment extends Fragment {
                         try {
                             //inserisco le foto in una lista
                             photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
-                            Log.d("toprated", "finito"+i);
+
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());
                         }

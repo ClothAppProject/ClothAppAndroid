@@ -39,25 +39,20 @@ public class MyCardListAdapter extends BaseAdapter {
             row = inflater.inflate(R.layout.info_cloth_card, parent, false);
         }
 
-        CardView card=(CardView)row.findViewById(R.id.infocard);
-        listCard.add(card);
-   /*     final Image image = getItem(position);
-        //prendo i vari oggetti del gridview_layout
-        ImageView view = (ImageView) row.findViewById(R.id.topfoto);
-        TextView user=(TextView)row.findViewById(R.id.user);
-        user.setText((CharSequence)files.get(position).getUser());
+
+        //prendo i vari oggetti del card_layout
+        TextView address = (TextView) row.findViewById(R.id.address);
+        TextView shop=(TextView)row.findViewById(R.id.shop);
+        TextView price=(TextView)row.findViewById(R.id.price);
+        TextView brand = (TextView) row.findViewById(R.id.brand);
+        TextView cloth=(TextView)row.findViewById(R.id.cloth);
+        address.setText((CharSequence)cloths.get(position).getAddress());
+        shop.setText((CharSequence)cloths.get(position).getShop());
+        price.setText((CharSequence) cloths.get(position).getPrice());
+        brand.setText((CharSequence)cloths.get(position).getBrand());
+        cloth.setText((CharSequence) cloths.get(position).getCloth());
 
 
-        // Get the image URL for the current position.
-        File file = image.getFile();
-        // Trigger the download of the URL asynchronously into the image view.
-
-        Glide.with(context)
-                .load(file)
-                .centerCrop()
-                .placeholder(R.mipmap.gallery_icon)
-                .into(view);
-*/
         return row;
     }
 
