@@ -86,16 +86,20 @@
             android:name=".login_signup.SignupActivity"
             android:label="@string/app_name"
             android:parentActivityName=".login_signup.MainActivity" />
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login_signup.MainActivity" />
 
-        <activity android:name=".login_signup.ShopSignupActivity"
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".login_signup.MainActivity" />
+
+        <activity
+            android:name=".login_signup.ShopSignupActivity"
             android:label="@string/app_name"
             android:parentActivityName=".login_signup.MainActivity" />
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login_signup.MainActivity" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".login_signup.MainActivity" />
+
         <activity
             android:name=".login_signup.FacebookUsernameActivity"
             android:label="@string/app_name"
@@ -123,6 +127,11 @@
         <activity
             android:name=".login_signup.BeforeSignup"
             android:label="@string/app_name" />
+        <activity
+            android:name=".profile.UserProfile"
+            android:label="@string/title_activity_new_profile"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
