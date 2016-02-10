@@ -109,7 +109,7 @@
                 android:value=".login_signup.MainActivity" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="@string/app_name" />
         <activity android:name=".BaseActivity" />
 

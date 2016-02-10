@@ -11,7 +11,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import com.clothapp.ProfileActivity;
+import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;

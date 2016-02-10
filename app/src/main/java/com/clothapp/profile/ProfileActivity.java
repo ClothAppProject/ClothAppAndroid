@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.profile;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.BaseActivity;
+import com.clothapp.ImageFragment;
+import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profilepicture.*;
 import com.clothapp.resources.ExceptionCheck;

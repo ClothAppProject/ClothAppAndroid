@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.ProfileActivity;
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
 import com.clothapp.settings.SettingsActivity;

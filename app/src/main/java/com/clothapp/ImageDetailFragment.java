@@ -3,44 +3,32 @@ package com.clothapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.home_gallery.MyListAdapter;
+import com.clothapp.profile.ProfileActivity;
 import com.clothapp.resources.Cloth;
-import com.clothapp.resources.Image;
 import com.clothapp.resources.MyCardListAdapter;
 import com.github.lzyzsd.circleprogress.DonutProgress;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ProgressCallback;
 
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ImageDetailFragment extends Fragment {
 
