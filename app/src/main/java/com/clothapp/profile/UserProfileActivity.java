@@ -1,6 +1,9 @@
 package com.clothapp.profile;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,12 +21,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clothapp.R;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
 
 public class UserProfileActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    private String username;
+
+    static ParseUser user;
+    static ParseObject person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +59,11 @@ public class UserProfileActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-    }
+        username = getIntent().getExtras().getString("user");
 
+        ProfileUtils.getParseUser(UserProfileActivity.this, username);
+        ProfileUtils.getParsePerson(UserProfileActivity.this, username);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,8 +133,11 @@ public class UserProfileActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.profile_card_username);
-            textView.setText(getArguments().getString(PARSE_USERNAME));
+
+            TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
+            txtUsername.setText(getArguments().getString(PARSE_USERNAME));
+
+            // TextView txtName
             return rootView;
         }
 
@@ -172,5 +194,76 @@ public class UserProfileActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+}
+
+class ProfileUtils {
+
+    static void getParseUser(final Context context, final String username) {
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", username);
+
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e == null) {
+                    UserProfileActivity.user = object;
+                    showDialog(context, "Success", "Successfully retrieved user info from Parse.");
+                } else {
+                    e.printStackTrace();
+                    showDialog(context, "Error", "Failed to retrieve user info. Check your Internet connection.");
+                }
+            }
+        });
+    }
+
+    static void getParsePerson(final Context context, String username) {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Persona");
+        query.whereEqualTo("username", username);
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    UserProfileActivity.person = object;
+                    showDialog(context, "Success", "Successfully retrieved person info from Parse.");
+                } else {
+                    e.printStackTrace();
+                    showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
+                }
+            }
+        });
+    }
+
+    private static void showDialog(Context context, String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        String positiveText = "OK";
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // positive button logic
+                    }
+                });
+
+        String negativeText = "CANCEL";
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // negative button logic
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 }
