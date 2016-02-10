@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.clothapp.R;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
