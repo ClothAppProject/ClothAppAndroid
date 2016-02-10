@@ -148,7 +148,7 @@ public class ImageDetailFragment extends Fragment {
                                     info.getString("brand"));
 
                             vestiti.add(c);
-                            MyCardListAdapter adapter = new MyCardListAdapter(getActivity().getApplicationContext(), vestiti);
+                            MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
                             listView.setAdapter(adapter);
                             setListViewHeightBasedOnItems(listView);
                         }

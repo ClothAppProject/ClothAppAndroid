@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
@@ -96,6 +98,20 @@ public class HomeTopRatedFragment extends Fragment {
                     }
                     MyListAdapter adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
                     l.setAdapter(adapter);
+                    l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (HomeActivity.menuMultipleActions.isExpanded()) {
+                                HomeActivity.menuMultipleActions.collapse();
+                            } else {
+                                Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                                toPass.putExtra("position", position);
+                                //passo la lista delle foto al fragment
+                                toPass.putExtra("lista", photo);
+                                startActivity(toPass);
+                            }
+                        }
+                    });
                 } else {
                     //errore nel reperire gli oggetti Photo dal database
                     check(e.getCode(), vi, e.getMessage());
