@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.ProfileActivity;
+import com.clothapp.profile.UserProfile;
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
 import com.clothapp.settings.SettingsActivity;
@@ -176,7 +177,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 1:
                 //profilo
-                i = new Intent(this, ProfileActivity.class);
+                i = new Intent(this, UserProfile.class);
                 i.putExtra("user", ParseUser.getCurrentUser().getUsername().toString());
                 break;
             case 2:
