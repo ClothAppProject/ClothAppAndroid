@@ -72,16 +72,18 @@
                             android:layout_height="40dp"
                             android:showDividers="middle"
                             android:divider="@drawable/empty_tall_divider"
-                            android:paddingLeft="60dp"
-                            android:orientation="horizontal">
+                            android:paddingLeft="40dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:src="@mipmap/ic_share_white_48dp"
                                 android:tint="@color/red"/>
+
                             <ImageView
-                                android:layout_width="60dp"
+                                android:layout_width="90dp"
                                 android:layout_height="35dp"/>
 
                             <ImageView
@@ -89,25 +91,25 @@
                                 android:layout_height="35dp"
                                 android:src="@mipmap/ic_person_white_48dp"
                                 android:tint="@color/red"/>
-                            <ImageView
-                                android:layout_width="60dp"
-                                android:layout_height="35dp"/>
 
+
+
+                            <TextView
+                                android:layout_width="90dp"
+                                android:layout_height="match_parent"
+                                android:textSize="30dp"
+                                android:gravity="right"
+                                android:textColor="@color/red"
+                                android:textColorHint="@color/red"
+                                android:hint="0"
+                                android:layout_weight="0.37" />
 
                             <ImageView
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
-                                android:src="@mipmap/ic_favorite_white_48dp"
+                                android:src="@mipmap/ic_favorite_border_white_48dp"
                                 android:tint="@color/red"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="60dp"
-                                android:textSize="30dp"
-                                android:textColor="@color/red"
-                                android:textColorHint="@color/red"
-                                android:hint="0"
-                                android:text="0" />
                         </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
