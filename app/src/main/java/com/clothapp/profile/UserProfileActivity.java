@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -151,6 +152,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
             // Test ListView
             listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
+
+            listProfileInfo.addHeaderView(inflater.inflate(R.layout.fragment_profile_info_list_header, null));
 
             ArrayList<ProfileInfoListItem> items = new ArrayList<>();
 
@@ -315,12 +318,14 @@ class ProfileUtils {
 
     private static void updateListItem(int position, String text) {
 
-        ProfileInfoListViewAdapter adapter = (ProfileInfoListViewAdapter) UserProfileActivity.listProfileInfo.getAdapter();
+        HeaderViewListAdapter wrapperAdapter = (HeaderViewListAdapter) UserProfileActivity.listProfileInfo.getAdapter();
+        ProfileInfoListViewAdapter wrappedAdapter = (ProfileInfoListViewAdapter) wrapperAdapter.getWrappedAdapter();
 
-        ProfileInfoListItem item = (ProfileInfoListItem) adapter.getItem(position);
+
+        ProfileInfoListItem item = (ProfileInfoListItem) wrappedAdapter.getItem(position);
         item.setContent(text);
 
-        adapter.notifyDataSetChanged();
+        wrappedAdapter.notifyDataSetChanged();
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
