@@ -65,6 +65,7 @@ public class ImageGridViewAdapter extends BaseAdapter {
         cuore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("cuore cliccato");
                 ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
                 if ((image.getLike().contains(username))) {
                     //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente

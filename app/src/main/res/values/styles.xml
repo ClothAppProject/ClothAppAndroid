@@ -19,7 +19,7 @@
 
     <style name="AppTheme.Login" parent="AppTheme.NoActionBar" />
 
-<!--Home-->
+    <!--Home-->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
         <item name="tabMaxWidth">@dimen/tab_max_width</item>
         <item name="tabIndicatorColor">@color/white</item>

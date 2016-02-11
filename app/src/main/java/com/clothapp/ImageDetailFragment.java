@@ -72,14 +72,9 @@ public class ImageDetailFragment extends Fragment {
         return rootView;
     }
 
-    //TODO:fare la query giusta! questa è fittizia
+    //TODO:fare la query giusta
     public void findInfoPhoto(){
         //qui scarico le foto
-        final View vi = new View(getActivity().getApplicationContext());
-        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.whereEqualTo("objectId", this.Id);
-
-
 
     }
 
