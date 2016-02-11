@@ -44,12 +44,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     static String username;
 
-    static TextView txtName;
-    static TextView txtAge;
-    static TextView txtCity;
-    static TextView txtEmail;
-    static TextView txtDescription;
-
     static ListView listProfileInfo;
 
     @Override
@@ -152,33 +146,11 @@ public class UserProfileActivity extends AppCompatActivity {
             //TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
             //txtUsername.setText(getArguments().getString(PARSE_USERNAME));
 
-            /*UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
-            UserProfileActivity.txtAge = (TextView) rootView.findViewById(R.id.profile_card_age);
-            UserProfileActivity.txtCity = (TextView) rootView.findViewById(R.id.profile_card_city);
-            UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
-            UserProfileActivity.txtDescription = (TextView) rootView.findViewById(R.id.profile_card_description);
-
-            txtName.setText("Loading...");
-            txtAge.setText("Loading...");
-            txtCity.setText("Loading...");
-            txtEmail.setText("Loading...");
-            txtDescription.setText("Loading...");*/
-
             // Get user info from Parse
             ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
             // Test ListView
             listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
-
-            /*String[] values = new String[] {"NAME",
-                    "AGE",
-                    "CITY",
-                    "EMAIL",
-                    "DESCRIPTION"
-            };
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserProfileActivity.context,
-                    R.layout.fragment_profile_info_list_item, R.id.profile_info_list_item_title, values);*/
 
             ArrayList<ProfileInfoListItem> items = new ArrayList<>();
 
@@ -304,9 +276,6 @@ class ProfileUtils {
                     user = object;
                     // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
-                    //UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
-                    //UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
-
                     updateListItem(0, user.get("name").toString());
                     updateListItem(3, user.getEmail());
 
@@ -332,9 +301,6 @@ class ProfileUtils {
                 if (e == null) {
                     person = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
-
-                    //UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
-                    //UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
 
                     updateListItem(1, person.get("date").toString());
                     updateListItem(2, person.get("city").toString());
