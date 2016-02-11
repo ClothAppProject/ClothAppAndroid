@@ -10,13 +10,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.clothapp.R;
 import com.parse.GetCallback;
@@ -24,6 +30,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -40,6 +49,8 @@ public class UserProfileActivity extends AppCompatActivity {
     static TextView txtCity;
     static TextView txtEmail;
     static TextView txtDescription;
+
+    static ListView listProfileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +149,10 @@ public class UserProfileActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
-            TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
-            txtUsername.setText(getArguments().getString(PARSE_USERNAME));
+            //TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
+            //txtUsername.setText(getArguments().getString(PARSE_USERNAME));
 
-            UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
+            /*UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
             UserProfileActivity.txtAge = (TextView) rootView.findViewById(R.id.profile_card_age);
             UserProfileActivity.txtCity = (TextView) rootView.findViewById(R.id.profile_card_city);
             UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
@@ -151,14 +162,65 @@ public class UserProfileActivity extends AppCompatActivity {
             txtAge.setText("Loading...");
             txtCity.setText("Loading...");
             txtEmail.setText("Loading...");
-            txtDescription.setText("Loading...");
+            txtDescription.setText("Loading...");*/
 
             // Get user info from Parse
             ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
+            // Test ListView
+            listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
+
+            /*String[] values = new String[] {"NAME",
+                    "AGE",
+                    "CITY",
+                    "EMAIL",
+                    "DESCRIPTION"
+            };
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserProfileActivity.context,
+                    R.layout.fragment_profile_info_list_item, R.id.profile_info_list_item_title, values);*/
+
+            ArrayList<ProfileInfoListItem> items = new ArrayList<>();
+
+            ProfileInfoListItem itemName = new ProfileInfoListItem("NAME", "Loading...");
+            ProfileInfoListItem itemAge = new ProfileInfoListItem("AGE", "Loading...");
+            ProfileInfoListItem itemCity = new ProfileInfoListItem("CITY", "Loading...");
+            ProfileInfoListItem itemEmail = new ProfileInfoListItem("EMAIL", "Loading...");
+            ProfileInfoListItem itemDescription = new ProfileInfoListItem("DESCRIPTION", "Loading...");
+
+            items.add(itemName);
+            items.add(itemAge);
+            items.add(itemCity);
+            items.add(itemEmail);
+            items.add(itemDescription);
+
+            ProfileInfoListViewAdapter adapter = new ProfileInfoListViewAdapter(items, UserProfileActivity.context);
+
+            listProfileInfo.setAdapter(adapter);
+
+            listProfileInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    // ListView Clicked item index
+                    int itemPosition = position;
+
+                    // ListView Clicked item value
+                    // String itemValue = (String) listProfileInfo.getItemAtPosition(position);
+
+                    // Show Alert
+                    Toast.makeText(UserProfileActivity.context,
+                            "Position :" + itemPosition, Toast.LENGTH_LONG)
+                            .show();
+
+                }
+
+            });
+
             return rootView;
         }
-
 
     }
 
@@ -242,8 +304,11 @@ class ProfileUtils {
                     user = object;
                     // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
-                    UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
-                    UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
+                    //UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
+                    //UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
+
+                    updateListItem(0, user.get("name").toString());
+                    updateListItem(3, user.getEmail());
 
                 } else {
                     e.printStackTrace();
@@ -268,8 +333,11 @@ class ProfileUtils {
                     person = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
-                    UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
-                    UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
+                    //UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
+                    //UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
+
+                    updateListItem(1, person.get("date").toString());
+                    updateListItem(2, person.get("city").toString());
 
                 } else {
                     e.printStackTrace();
@@ -277,6 +345,16 @@ class ProfileUtils {
                 }
             }
         });
+    }
+
+    private static void updateListItem(int position, String text) {
+
+        ProfileInfoListViewAdapter adapter = (ProfileInfoListViewAdapter) UserProfileActivity.listProfileInfo.getAdapter();
+
+        ProfileInfoListItem item = (ProfileInfoListItem) adapter.getItem(position);
+        item.setContent(text);
+
+        adapter.notifyDataSetChanged();
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
@@ -307,5 +385,80 @@ class ProfileUtils {
         AlertDialog dialog = builder.create();
         // display dialog
         dialog.show();
+    }
+}
+
+class ProfileInfoListItem {
+    private String title;
+    private String content;
+
+    public ProfileInfoListItem(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
+
+class ProfileInfoListViewAdapter extends BaseAdapter {
+
+    private List<ProfileInfoListItem> items;
+    private Context context;
+
+    public ProfileInfoListViewAdapter(List<ProfileInfoListItem> items, Context context) {
+        this.items = items;
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return items.get(position);
+    }
+
+    public void setItem(int position, ProfileInfoListItem item) {
+        items.set(position, item);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).hashCode();
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null)
+        {
+            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_profile_info_list_item, null);
+        }
+
+        ProfileInfoListItem item = (ProfileInfoListItem) getItem(position);
+
+        TextView txtTitle = (TextView) convertView.findViewById(R.id.profile_info_list_item_title);
+        txtTitle.setText(item.getTitle());
+
+        TextView txtContent = (TextView) convertView.findViewById(R.id.profile_info_list_item_content);
+        txtContent.setText(item.getContent());
+
+        return convertView;
     }
 }
