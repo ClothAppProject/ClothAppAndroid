@@ -33,7 +33,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String username;
 
+    // Object to store info about the user (not necessarily the current user).
     static ParseUser user;
+    // Object to store info about the "Persona" associated with the user above.
     static ParseObject person;
 
     @Override
@@ -54,16 +56,19 @@ public class UserProfileActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // Get username from the calling activity
         username = getIntent().getExtras().getString("user");
 
+        // Get user info from Parse
         ProfileUtils.getParseUser(UserProfileActivity.this, username);
+        // Get person info from Parse
         ProfileUtils.getParsePerson(UserProfileActivity.this, username);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_profile_user, menu);
         return true;
     }
 
@@ -83,6 +88,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
 
+    // This is a placeholder fragment for unimplemented sections.
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -108,6 +114,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
+    // This fragment contains info about the user.
     public static class ProfileInfoFragment extends Fragment {
 
         private static final String PARSE_USERNAME = "username";
@@ -139,10 +146,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    // PagerAdapter for tabs and associated fragments.
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -192,8 +196,12 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 }
 
+
+// This class helps keeping the code clean and modular.
 class ProfileUtils {
 
+    // Gets a ParseUser object for the given username.
+    // The context arguments is needed to show a dialog in case of success or failure.
     static void getParseUser(final Context context, final String username) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -214,6 +222,8 @@ class ProfileUtils {
         });
     }
 
+    // Gets a ParseObject ("Persona") object for the given username.
+    // The context arguments is needed to show a dialog in case of success or failure.
     static void getParsePerson(final Context context, String username) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Persona");
@@ -234,6 +244,8 @@ class ProfileUtils {
         });
     }
 
+    // Shows a simple dialog with a title, a message and two buttons.
+    // The context argument is needed to show the dialog inside the UserProfileActivity activity.
     private static void showDialog(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
