@@ -31,7 +31,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-    private String username;
+    static Context context;
+
+    static String username;
 
     static TextView txtName;
     static TextView txtAge;
@@ -43,6 +45,12 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_user);
+
+        // Get username from the calling activity.
+        username = getIntent().getExtras().getString("user");
+
+        // Set context to current context.
+        context = UserProfileActivity.this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,11 +65,6 @@ public class UserProfileActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Get username from the calling activity
-        username = getIntent().getExtras().getString("user");
-
-        // Get user info from Parse
-        ProfileUtils.getParseInfo(UserProfileActivity.this, username);
     }
 
     @Override
@@ -144,11 +147,14 @@ public class UserProfileActivity extends AppCompatActivity {
             UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
             UserProfileActivity.txtDescription = (TextView) rootView.findViewById(R.id.profile_card_description);
 
-//            txtName.setText("Loading...");
-//            txtAge.setText("Loading...");
-//            txtCity.setText("Loading...");
-//            txtEmail.setText("Loading...");
-//            txtDescription.setText("Loading...");
+            txtName.setText("Loading...");
+            txtAge.setText("Loading...");
+            txtCity.setText("Loading...");
+            txtEmail.setText("Loading...");
+            txtDescription.setText("Loading...");
+
+            // Get user info from Parse
+            ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
             return rootView;
         }
