@@ -33,10 +33,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String username;
 
-    // Object to store info about the user (not necessarily the current user).
-    static ParseUser user;
-    // Object to store info about the "Persona" associated with the user above.
-    static ParseObject person;
+    static TextView txtName;
+    static TextView txtAge;
+    static TextView txtCity;
+    static TextView txtEmail;
+    static TextView txtDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,7 @@ public class UserProfileActivity extends AppCompatActivity {
         username = getIntent().getExtras().getString("user");
 
         // Get user info from Parse
-        ProfileUtils.getParseUser(UserProfileActivity.this, username);
-        // Get person info from Parse
-        ProfileUtils.getParsePerson(UserProfileActivity.this, username);
+        ProfileUtils.getParseInfo(UserProfileActivity.this, username);
     }
 
     @Override
@@ -139,7 +138,18 @@ public class UserProfileActivity extends AppCompatActivity {
             TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
             txtUsername.setText(getArguments().getString(PARSE_USERNAME));
 
-            // TextView txtName
+            UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
+            UserProfileActivity.txtAge = (TextView) rootView.findViewById(R.id.profile_card_age);
+            UserProfileActivity.txtCity = (TextView) rootView.findViewById(R.id.profile_card_city);
+            UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
+            UserProfileActivity.txtDescription = (TextView) rootView.findViewById(R.id.profile_card_description);
+
+//            txtName.setText("Loading...");
+//            txtAge.setText("Loading...");
+//            txtCity.setText("Loading...");
+//            txtEmail.setText("Loading...");
+//            txtDescription.setText("Loading...");
+
             return rootView;
         }
 
@@ -156,12 +166,10 @@ public class UserProfileActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            // return PlaceholderFragment.newInstance(position + 1);
 
             switch (position) {
                 case 0:
-                    return ProfileInfoFragment.newInstance("simone");
+                    return ProfileInfoFragment.newInstance(username);
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
             }
@@ -200,9 +208,22 @@ public class UserProfileActivity extends AppCompatActivity {
 // This class helps keeping the code clean and modular.
 class ProfileUtils {
 
+    // Object to store info about the user (not necessarily the current user).
+    static ParseUser user;
+    // Object to store info about the "Persona" associated with the user above.
+    static ParseObject person;
+
+
+    // Get info about the user from Parse.
+    // Call getParseUser() and getParsePerson().
+    static void getParseInfo(final Context context, String username) {
+        getParseUser(context, username);
+        getParsePerson(context, username);
+    }
+
     // Gets a ParseUser object for the given username.
     // The context arguments is needed to show a dialog in case of success or failure.
-    static void getParseUser(final Context context, final String username) {
+    private static void getParseUser(final Context context, final String username) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", username);
@@ -212,8 +233,12 @@ class ProfileUtils {
             @Override
             public void done(ParseUser object, ParseException e) {
                 if (e == null) {
-                    UserProfileActivity.user = object;
+                    user = object;
                     showDialog(context, "Success", "Successfully retrieved user info from Parse.");
+
+                    UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
+                    UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
+
                 } else {
                     e.printStackTrace();
                     showDialog(context, "Error", "Failed to retrieve user info. Check your Internet connection.");
@@ -224,7 +249,7 @@ class ProfileUtils {
 
     // Gets a ParseObject ("Persona") object for the given username.
     // The context arguments is needed to show a dialog in case of success or failure.
-    static void getParsePerson(final Context context, String username) {
+    private static void getParsePerson(final Context context, String username) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Persona");
         query.whereEqualTo("username", username);
@@ -234,8 +259,12 @@ class ProfileUtils {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    UserProfileActivity.person = object;
+                    person = object;
                     showDialog(context, "Success", "Successfully retrieved person info from Parse.");
+
+                    UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
+                    UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
+
                 } else {
                     e.printStackTrace();
                     showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
