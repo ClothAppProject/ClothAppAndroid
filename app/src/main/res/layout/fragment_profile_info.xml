@@ -80,7 +80,7 @@
                 android:paddingLeft="35dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="20dp"
-                android:text="DESCRIPTION: description description"
+                android:text="DESCRIPTION: Loading..."
                 android:textSize="15dp" />
         </LinearLayout>
 
