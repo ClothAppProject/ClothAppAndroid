@@ -240,14 +240,14 @@ class ProfileUtils {
             public void done(ParseUser object, ParseException e) {
                 if (e == null) {
                     user = object;
-                    showDialog(context, "Success", "Successfully retrieved user info from Parse.");
+                    // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
                     UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
                     UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
 
                 } else {
                     e.printStackTrace();
-                    showDialog(context, "Error", "Failed to retrieve user info. Check your Internet connection.");
+                    // showDialog(context, "Error", "Failed to retrieve user info. Check your Internet connection.");
                 }
             }
         });
@@ -266,14 +266,14 @@ class ProfileUtils {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     person = object;
-                    showDialog(context, "Success", "Successfully retrieved person info from Parse.");
+                    // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
                     UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
                     UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
 
                 } else {
                     e.printStackTrace();
-                    showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
+                    // showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
                 }
             }
         });
