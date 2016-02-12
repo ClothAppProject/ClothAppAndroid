@@ -96,11 +96,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
-            try {
-                imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
             upload();
         } else {
             // Errore della fotocamera
