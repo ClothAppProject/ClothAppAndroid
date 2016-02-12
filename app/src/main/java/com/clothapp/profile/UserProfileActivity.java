@@ -2,8 +2,6 @@ package com.clothapp.profile;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,36 +9,33 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.HeaderViewListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.clothapp.BaseActivity;
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
-import com.clothapp.resources.CircleTransform;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.clothapp.resources.ExceptionCheck.check;
-
-
-public class UserProfileActivity extends BaseActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -50,11 +45,7 @@ public class UserProfileActivity extends BaseActivity {
 
     static String username;
 
-    static TextView txtName;
-    static TextView txtAge;
-    static TextView txtCity;
-    static TextView txtEmail;
-    static TextView txtDescription;
+    static ListView listProfileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +71,7 @@ public class UserProfileActivity extends BaseActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        setUpSideMenu();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,27 +144,58 @@ public class UserProfileActivity extends BaseActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
-            TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
-            txtUsername.setText(getArguments().getString(PARSE_USERNAME));
-
-            UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
-            UserProfileActivity.txtAge = (TextView) rootView.findViewById(R.id.profile_card_age);
-            UserProfileActivity.txtCity = (TextView) rootView.findViewById(R.id.profile_card_city);
-            UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
-            UserProfileActivity.txtDescription = (TextView) rootView.findViewById(R.id.profile_card_description);
-
-            txtName.setText("Loading...");
-            txtAge.setText("Loading...");
-            txtCity.setText("Loading...");
-            txtEmail.setText("Loading...");
-            txtDescription.setText("Loading...");
+            //TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
+            //txtUsername.setText(getArguments().getString(PARSE_USERNAME));
 
             // Get user info from Parse
             ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
+            // Test ListView
+            listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
+
+            listProfileInfo.addHeaderView(inflater.inflate(R.layout.fragment_profile_info_list_header, null));
+
+            ArrayList<ProfileInfoListItem> items = new ArrayList<>();
+
+            ProfileInfoListItem itemName = new ProfileInfoListItem("NAME", "Loading...");
+            ProfileInfoListItem itemAge = new ProfileInfoListItem("AGE", "Loading...");
+            ProfileInfoListItem itemCity = new ProfileInfoListItem("CITY", "Loading...");
+            ProfileInfoListItem itemEmail = new ProfileInfoListItem("EMAIL", "Loading...");
+            ProfileInfoListItem itemDescription = new ProfileInfoListItem("DESCRIPTION", "Loading...");
+
+            items.add(itemName);
+            items.add(itemAge);
+            items.add(itemCity);
+            items.add(itemEmail);
+            items.add(itemDescription);
+
+            ProfileInfoListViewAdapter adapter = new ProfileInfoListViewAdapter(items, UserProfileActivity.context);
+
+            listProfileInfo.setAdapter(adapter);
+
+            listProfileInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    // ListView Clicked item index
+                    int itemPosition = position;
+
+                    // ListView Clicked item value
+                    // String itemValue = (String) listProfileInfo.getItemAtPosition(position);
+
+                    // Show Alert
+                    Toast.makeText(UserProfileActivity.context,
+                            "Position :" + itemPosition, Toast.LENGTH_LONG)
+                            .show();
+
+                }
+
+            });
+
             return rootView;
         }
-
 
     }
 
@@ -226,80 +245,6 @@ public class UserProfileActivity extends BaseActivity {
             return null;
         }
     }
-
-    // Create a side menu
-    private void setUpSideMenu() {
-        String[] navMenuTitles;
-        TypedArray navMenuIcons;
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
-
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
-
-        set(navMenuTitles, navMenuIcons, 1);
-
-        final ImageView imageView = (ImageView) findViewById(R.id.ppProfile);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.profProfile);
-
-        TextView textView = (TextView) findViewById(R.id.nameMenu);
-        textView.setText(ParseUser.getCurrentUser().getString("name"));
-
-        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
-        textView2.setText(ParseUser.getCurrentUser().getUsername());
-
-
-        final View vi = new View(this.getApplicationContext());
-
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-
-                        try {
-                            File file = f.getFile();
-                            Glide.with(getApplicationContext())
-                                    .load(file)
-                                    .centerCrop()
-                                    .transform(new CircleTransform(UserProfileActivity.this))
-                                    .into(imageView);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
-                startActivity(i);
-                finish();
-            }
-        });
-
-
-        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
-        l.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-    }
-
 }
 
 
@@ -334,8 +279,8 @@ class ProfileUtils {
                     user = object;
                     // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
-                    UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
-                    UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
+                    updateListItem(0, user.get("name").toString());
+                    updateListItem(3, user.getEmail());
 
                 } else {
                     e.printStackTrace();
@@ -360,8 +305,8 @@ class ProfileUtils {
                     person = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
-                    UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
-                    UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
+                    updateListItem(1, person.get("date").toString());
+                    updateListItem(2, person.get("city").toString());
 
                 } else {
                     e.printStackTrace();
@@ -369,6 +314,18 @@ class ProfileUtils {
                 }
             }
         });
+    }
+
+    private static void updateListItem(int position, String text) {
+
+        HeaderViewListAdapter wrapperAdapter = (HeaderViewListAdapter) UserProfileActivity.listProfileInfo.getAdapter();
+        ProfileInfoListViewAdapter wrappedAdapter = (ProfileInfoListViewAdapter) wrapperAdapter.getWrappedAdapter();
+
+
+        ProfileInfoListItem item = (ProfileInfoListItem) wrappedAdapter.getItem(position);
+        item.setContent(text);
+
+        wrappedAdapter.notifyDataSetChanged();
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
@@ -400,5 +357,79 @@ class ProfileUtils {
         // display dialog
         dialog.show();
     }
+}
 
+class ProfileInfoListItem {
+    private String title;
+    private String content;
+
+    public ProfileInfoListItem(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
+
+class ProfileInfoListViewAdapter extends BaseAdapter {
+
+    private List<ProfileInfoListItem> items;
+    private Context context;
+
+    public ProfileInfoListViewAdapter(List<ProfileInfoListItem> items, Context context) {
+        this.items = items;
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return items.get(position);
+    }
+
+    public void setItem(int position, ProfileInfoListItem item) {
+        items.set(position, item);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).hashCode();
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null)
+        {
+            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_profile_info_list_item, null);
+        }
+
+        ProfileInfoListItem item = (ProfileInfoListItem) getItem(position);
+
+        TextView txtTitle = (TextView) convertView.findViewById(R.id.profile_info_list_item_title);
+        txtTitle.setText(item.getTitle());
+
+        TextView txtContent = (TextView) convertView.findViewById(R.id.profile_info_list_item_content);
+        txtContent.setText(item.getContent());
+
+        return convertView;
+    }
 }

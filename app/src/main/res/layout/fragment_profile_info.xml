@@ -20,68 +20,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/profile_card_username"
+            <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="10dp"
-                android:text="Title"
-                android:textSize="30dp" />
+                android:id="@+id/profile_info_list_view" />
 
-            <TextView
-                android:id="@+id/profile_card_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="35dp"
-                android:paddingTop="10dp"
-                android:text="NAME: first last"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/profile_card_age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="35dp"
-                android:paddingTop="10dp"
-                android:text="AGE: age"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/profile_card_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="35dp"
-                android:paddingTop="10dp"
-                android:text="CITY: city"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/profile_card_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="35dp"
-                android:paddingTop="10dp"
-                android:text="EMAIL: email@email.com"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/profile_card_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:paddingLeft="35dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
-                android:text="DESCRIPTION: Loading..."
-                android:textSize="15dp" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
