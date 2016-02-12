@@ -195,7 +195,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 1:
                 //profilo
-                i = new Intent(this, ProfileActivity.class);
+                i = new Intent(this, UserProfileActivity.class);
                 i.putExtra("user", ParseUser.getCurrentUser().getUsername().toString());
                 break;
             case 2:
