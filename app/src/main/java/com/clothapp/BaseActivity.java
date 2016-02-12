@@ -55,7 +55,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
 
-        setProfileP();
+        //setProfileP();
+
+
         // if (savedInstanceState == null) {
         // // on first time display view for first nav item
         // // displayView(0);
