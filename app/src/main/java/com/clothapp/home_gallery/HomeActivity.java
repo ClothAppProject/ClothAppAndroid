@@ -17,6 +17,7 @@ import com.clothapp.BaseActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.resources.Image;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
@@ -76,7 +77,9 @@ public class HomeActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
+
         final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.prof);
 
         TextView textView = (TextView) findViewById(R.id.nameMenu);
         textView.setText(ParseUser.getCurrentUser().getString("name"));
@@ -116,7 +119,7 @@ public class HomeActivity extends BaseActivity {
         });
 
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
@@ -126,16 +129,15 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
+
         LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
         l.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //va all'activity settings solo per prova, dovremo decidere poi cosa fare
-                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(i);
-                finish();
+
             }
         });
+
     }
 
     private void setupFloatingButton(){
@@ -169,8 +171,14 @@ public class HomeActivity extends BaseActivity {
                 finish();
             }
         });
-
         menuMultipleActions.addButton(camera);
         menuMultipleActions.addButton(gallery);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(super.isOpen()) super.closeDrawer();
+
     }
 }

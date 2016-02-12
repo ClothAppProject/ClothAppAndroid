@@ -67,21 +67,24 @@ public class ImageGridViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 System.out.println("cuore cliccato");
                 ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
-                if ((image.getLike().contains(username))) {
-                    //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
-                    //rimuovo il like e cambio la lista
-                    image.remLike(username);
-                    point.put("like",image.getLike());
-                    point.put("nLike",image.getLike().size());
-                    point.saveInBackground();
-                    cuore.setImageResource(R.mipmap.cuore);
-                }else{
-                    //aggiungo like e aggiorno anche in parse
-                    image.addLike(username);
-                    point.add("like",username);
-                    point.put("nLike",image.getLike().size());
-                    point.saveInBackground();
-                    cuore.setImageResource(R.mipmap.cuore_pressed);
+                if(HomeActivity.menuMultipleActions.isExpanded()) HomeActivity.menuMultipleActions.collapse();
+                else {
+                    if ((image.getLike().contains(username))) {
+                        //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
+                        //rimuovo il like e cambio la lista
+                        image.remLike(username);
+                        point.put("like", image.getLike());
+                        point.put("nLike", image.getLike().size());
+                        point.saveInBackground();
+                        cuore.setImageResource(R.mipmap.cuore);
+                    } else {
+                        //aggiungo like e aggiorno anche in parse
+                        image.addLike(username);
+                        point.add("like", username);
+                        point.put("nLike", image.getLike().size());
+                        point.saveInBackground();
+                        cuore.setImageResource(R.mipmap.cuore_pressed);
+                    }
                 }
             }
         });
