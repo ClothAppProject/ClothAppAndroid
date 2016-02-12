@@ -12,12 +12,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.ProfileActivity;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
 import com.clothapp.settings.SettingsActivity;
@@ -34,6 +38,9 @@ public class BaseActivity extends AppCompatActivity {
     //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
     private LinearLayout drawerll;
 
+    //image view for profile pic
+    // private ImageView imageView = (ImageView) findViewById(R.id.noProfileP);
+
     // nav drawer title
     private CharSequence mDrawerTitle;
 
@@ -47,11 +54,23 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
+
+        //setProfileP();
+
+
         // if (savedInstanceState == null) {
         // // on first time display view for first nav item
         // // displayView(0);
         // }
     }
+
+    /*private void setProfileP(){
+        Glide.with(getApplicationContext())
+                .load(R.mipmap.profile)
+                .centerCrop()
+                .transform(new CircleTransform(BaseActivity.this))
+                .into(imageView);
+    }*/
 
     public void set(String[] navMenuTitles, TypedArray navMenuIcons, int selected) {
         mTitle = mDrawerTitle = getTitle();
@@ -176,7 +195,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 1:
                 //profilo
-                i = new Intent(this, UserProfileActivity.class);
+                i = new Intent(this, ProfileActivity.class);
                 i.putExtra("user", ParseUser.getCurrentUser().getUsername().toString());
                 break;
             case 2:
@@ -233,5 +252,13 @@ public class BaseActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void closeDrawer(){
+        mDrawerLayout.closeDrawer(drawerll);
+    }
+
+    public boolean isOpen(){
+        return mDrawerLayout.isDrawerOpen(drawerll);
     }
 }

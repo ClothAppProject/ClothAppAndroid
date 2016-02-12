@@ -20,6 +20,7 @@ import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profilepicture.*;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
 import com.clothapp.resources.Image;
 import com.github.lzyzsd.circleprogress.DonutProgress;
@@ -176,6 +177,64 @@ public class ProfileActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
 
         set(navMenuTitles, navMenuIcons, 1);
+
+        final ImageView imageView = (ImageView) findViewById(R.id.ppProfile1);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.profProfile1);
+
+        TextView textView = (TextView) findViewById(R.id.nameMenu);
+        textView.setText(ParseUser.getCurrentUser().getString("name"));
+
+        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
+        textView2.setText(ParseUser.getCurrentUser().getUsername());
+
+
+        final View vi = new View(this.getApplicationContext());
+
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    //  if the user has a profile pic it will be shown in the side menu
+                    //  else the app logo will be shown
+                    if (objects.size() != 0) {
+                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+
+                        try {
+                            File file = f.getFile();
+                            Glide.with(getApplicationContext())
+                                    .load(file)
+                                    .centerCrop()
+                                    .transform(new CircleTransform(ProfileActivity.this))
+                                    .into(imageView);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+
+        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     // ROBA DELLA GALLERIA

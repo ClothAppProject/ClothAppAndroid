@@ -72,9 +72,14 @@ public class BitmapUtil {
         else return 100;
     }
     // Funzione che controlla se ruotare l'immagine o no
-    public static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+    public static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage)  {
         // Prendo i dati exif della foto (comprendono data, orientamento, geolocalizzazione della foto ecc...)
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(selectedImage.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
         switch (orientation) {

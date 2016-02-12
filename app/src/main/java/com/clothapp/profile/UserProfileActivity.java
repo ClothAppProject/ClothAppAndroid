@@ -2,6 +2,8 @@ package com.clothapp.profile;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,20 +24,33 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.clothapp.BaseActivity;
 import com.clothapp.R;
+import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.resources.CircleTransform;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.util.List;
 
-public class UserProfileActivity extends AppCompatActivity {
+import static com.clothapp.resources.ExceptionCheck.check;
+
+
+public class UserProfileActivity extends BaseActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -71,7 +86,10 @@ public class UserProfileActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        setUpSideMenu();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -245,6 +263,80 @@ public class UserProfileActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    // Create a side menu
+    private void setUpSideMenu() {
+        String[] navMenuTitles;
+        TypedArray navMenuIcons;
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+
+        set(navMenuTitles, navMenuIcons, 1);
+
+        final ImageView imageView = (ImageView) findViewById(R.id.ppProfile);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.profProfile);
+
+        TextView textView = (TextView) findViewById(R.id.nameMenu);
+        textView.setText(ParseUser.getCurrentUser().getString("name"));
+
+        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
+        textView2.setText(ParseUser.getCurrentUser().getUsername());
+
+
+        final View vi = new View(this.getApplicationContext());
+
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    //  if the user has a profile pic it will be shown in the side menu
+                    //  else the app logo will be shown
+                    if (objects.size() != 0) {
+                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+
+                        try {
+                            File file = f.getFile();
+                            Glide.with(getApplicationContext())
+                                    .load(file)
+                                    .centerCrop()
+                                    .transform(new CircleTransform(UserProfileActivity.this))
+                                    .into(imageView);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
+                startActivity(i);
+                finish();
+            }
+        });
+
+
+        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+    }
+
 }
 
 
@@ -357,6 +449,7 @@ class ProfileUtils {
         // display dialog
         dialog.show();
     }
+
 }
 
 class ProfileInfoListItem {
