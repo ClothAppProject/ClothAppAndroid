@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -142,16 +143,15 @@ public class UserProfileActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
-            //TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
-            //txtUsername.setText(getArguments().getString(PARSE_USERNAME));
-
-            // Get user info from Parse
-            ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
-
             // Test ListView
             listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
 
-            listProfileInfo.addHeaderView(inflater.inflate(R.layout.fragment_profile_info_list_header, null));
+            View header =  inflater.inflate(R.layout.fragment_profile_info_list_header, null);
+            TextView txtHeaderTitle = (TextView) header.findViewById(R.id.profile_info_list_header_title);
+            String strHeaderTitle = UserProfileActivity.username.substring(0, 1).toUpperCase() + UserProfileActivity.username.substring(1);
+            txtHeaderTitle.setText(strHeaderTitle);
+
+            listProfileInfo.addHeaderView(header);
 
             ArrayList<ProfileInfoListItem> items = new ArrayList<>();
 
@@ -185,12 +185,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     // Show Alert
                     Toast.makeText(UserProfileActivity.context,
-                            "Position :" + itemPosition, Toast.LENGTH_LONG)
+                            "Clicked on item " + itemPosition, Toast.LENGTH_LONG)
                             .show();
 
                 }
 
             });
+
+            // Get user info from Parse
+            ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
             return rootView;
         }
