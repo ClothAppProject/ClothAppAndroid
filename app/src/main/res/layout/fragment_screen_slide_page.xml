@@ -95,6 +95,7 @@
                                 android:layout_height="match_parent"
                                 android:textSize="30dp"
                                 android:gravity="right"
+                                android:id="@+id/like"
                                 android:layout_marginRight="35dp"
                                 android:textColor="@color/red"
                                 android:textColorHint="@color/red"

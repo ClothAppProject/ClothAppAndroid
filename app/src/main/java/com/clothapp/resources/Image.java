@@ -3,6 +3,9 @@ package com.clothapp.resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ public class Image implements Parcelable{
     private String objectId;
     private String user;
     private List like;
+    private int nLike;
 
 
     public Image(File f, String Id, String user,List likes)   {
@@ -29,6 +33,18 @@ public class Image implements Parcelable{
         }else {
             this.like = likes;
         }
+    }
+
+    public Image(ParseObject o)  {
+        try {
+            this.file=o.getParseFile("photo").getFile();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.objectId=o.getObjectId();
+        this.user=o.getString("user");
+        this.nLike=(int)o.get("nLike");
+        this.like=(ArrayList)o.get("like");
     }
 
     public String getUser() {

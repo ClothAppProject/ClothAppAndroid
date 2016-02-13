@@ -36,6 +36,12 @@ public class HomeMostRecentFragment extends Fragment {
     ArrayList<Image> photos;
     SwipeRefreshLayout swipeRefreshLayout;
     ImageGridViewAdapter imageGridViewAdapter;
+    GridView gridview;
+
+    public ImageGridViewAdapter getImageGridViewAdapter() {
+        return imageGridViewAdapter;
+    }
+
     Boolean canLoad = true;
 
     @Override
@@ -44,7 +50,7 @@ public class HomeMostRecentFragment extends Fragment {
 
         global = (ApplicationSupport) getActivity().getApplicationContext();
         photos = global.getPhotos();
-        final GridView gridview = (GridView) vi.findViewById(R.id.galleria_homepage);
+        gridview = (GridView) vi.findViewById(R.id.galleria_homepage);
 
         //istanzio lo swipe to refresh
         // find the layout
@@ -72,9 +78,9 @@ public class HomeMostRecentFragment extends Fragment {
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
-                                    //aggiorno la galleria
-                                    imageGridViewAdapter.notifyDataSetChanged();
-                                }
+
+                                }//aggiorno la galleria
+                                imageGridViewAdapter.notifyDataSetChanged();
                             }
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
@@ -159,11 +165,15 @@ public class HomeMostRecentFragment extends Fragment {
                     Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
                     toPass.putExtra("position", position);
                     //passo la lista delle foto al fragment
-                    toPass.putExtra("lista",photos);
+                    toPass.putExtra("lista", photos);
                     startActivity(toPass);
                 }
             }
 
         });
     }
+
+
+
+
 }

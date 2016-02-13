@@ -1,11 +1,14 @@
 package com.clothapp.home_gallery;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,6 +48,14 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().setTitle(R.string.homepage_button);
+
+/*
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        ImageView imageView=new ImageView(getBaseContext());
+        imageView.setImageResource(R.mipmap.camera_icon);
+        //System.out.println(actionBar+"   "+imageView);
+        actionBar.setCustomView(imageView);
+*/
 
         setUpMenu();
 

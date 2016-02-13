@@ -1,6 +1,7 @@
 package com.clothapp;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.resources.Cloth;
+import com.clothapp.resources.Image;
 import com.clothapp.resources.MyCardListAdapter;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.GetCallback;
@@ -20,6 +23,7 @@ import com.parse.GetFileCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 
 import android.widget.ListAdapter;
@@ -43,6 +47,8 @@ public class ImageDetailFragment extends Fragment {
     private TextView hashtag;
     private ImageView person;
     private ImageView share;
+    private ImageView cuore;
+    private TextView like;
 
     public static ImageDetailFragment newInstance(String id, Context c) {
         context = c;
@@ -68,6 +74,8 @@ public class ImageDetailFragment extends Fragment {
         hashtag=(TextView)rootView.findViewById(R.id.hashtag);
         person=(ImageView)rootView.findViewById(R.id.person);
         share=(ImageView)rootView.findViewById(R.id.share);
+        cuore=(ImageView)rootView.findViewById(R.id.heart);
+        like=(TextView)rootView.findViewById(R.id.like);
 
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
@@ -105,7 +113,9 @@ public class ImageDetailFragment extends Fragment {
         query.whereEqualTo("objectId", Id);
         query.orderByDescending("createdAt");
         try {
-            List<ParseObject> objects = query.find();
+            final List<ParseObject> objects = query.find();
+
+            final Image image=new Image(objects.get(0));
 
             user = objects.get(0).getString("user");
             t.setText(user);
@@ -186,17 +196,68 @@ public class ImageDetailFragment extends Fragment {
 
                             }
                         });
-*/
 
-                    }
-                }
-            }, new ProgressCallback() {
+                        */
+                            }
+                        }
+
+                    }, new ProgressCallback() {
+                        @Override
+                        public void done(Integer percentDone) {
+                            //passo percentuale
+                            // donutProgress.setProgress(percentDone);
+                        }
+                    });
+
+            //mostro il numero di like
+            like.setText(objects.get(0).get("nLike").toString());
+
+            //controllo se ho messo like sull'attuale foto
+            final String username = ParseUser.getCurrentUser().getUsername();
+            if ((image.getLike().contains(username)))    {
+                cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+            }else{
+                cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+            }
+
+            //metto i listener sul cuore
+            cuore.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void done(Integer percentDone) {
-                    //passo percentuale
-                    // donutProgress.setProgress(percentDone);
+                public void onClick(View v) {
+                    System.out.println("cuore cliccato");
+                    ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
+                    //if(HomeActivity.menuMultipleActions.isExpanded()) HomeActivity.menuMultipleActions.collapse();
+                    //else {
+                        if ((image.getLike().contains(username))) {
+                            //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
+                            //rimuovo il like e cambio la lista
+                            image.remLike(username);
+                            point.put("like", image.getLike());
+                            point.put("nLike", image.getLike().size());
+                            point.saveInBackground();
+                            cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+                            //aggiorno il numero di like
+                            like.setText(objects.get(0).get("nLike").toString());
+                            //aggiorno la galleria
+
+
+                        } else {
+                            //aggiungo like e aggiorno anche in parse
+                            image.addLike(username);
+                            point.add("like", username);
+                            point.put("nLike", image.getLike().size());
+                            point.saveInBackground();
+                            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                            //aggiorno il numero di like
+                            like.setText(objects.get(0).get("nLike").toString());
+
+                        }
+                    //}
                 }
             });
+
+
+
 
 
 
