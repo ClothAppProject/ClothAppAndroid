@@ -49,9 +49,6 @@ public class ImageGridViewAdapter extends BaseAdapter {
         final Image image = getItem(position);
         //prendo i vari oggetti del gridview_layout
         SquaredImageView view = (SquaredImageView) row.findViewById(R.id.image);
-        //l'id è solo una prova per vedere se si vedeva
-        TextView id = (TextView) row.findViewById(R.id.id);
-        id.setText(image.getObjectId());
 
         final ImageView cuore = (ImageView) row.findViewById(R.id.cuore);
         final String username = ParseUser.getCurrentUser().getUsername();

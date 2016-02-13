@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -40,18 +42,33 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class HomeTopRatedFragment extends Fragment {
     private List<CardView>cardViews;
     private View rootView;
+    SwipeRefreshLayout swipeRefreshLayout;
+    MyListAdapter adapter;
     private View view;
     private ListView l;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
+    private ArrayList<Image> photo = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_home_top_rated, container, false);
-        l=(ListView)rootView.findViewById(R.id.toplist);
-        findTopRated();
+        l=(ListView) rootView.findViewById(R.id.toplist);
+        findRated(12);
+
+        //istanzio lo swipe to refresh
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        // the refresh listner. this would be called when the layout is pulled down
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                findRated(photo.size());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        // sets the colors used in the refresh animation
+        swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
         //setCardViews(findTopRated(),container);
         return rootView;
@@ -72,54 +89,49 @@ public class HomeTopRatedFragment extends Fragment {
         }
     }
 */
-    public List<Image> findTopRated(){
-        //qui scarico le foto
-        final View vi = new View(getActivity().getApplicationContext());
-        final ArrayList<Image> photo = new ArrayList<>();
-        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(12);
-        query.orderByDescending("nLike");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> fotos, ParseException e) {
-                if (e == null) {
-                    Log.d("toprated", "Retrieved " + fotos.size() + " photos");
+ public void findRated(int n)    {
+     photo = new ArrayList<>();
+     //qui scarico le foto
+     final View vi = new View(getActivity().getApplicationContext());
+     final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+     query.setLimit(n);
+     query.orderByDescending("nLike");
+     query.findInBackground(new FindCallback<ParseObject>() {
+         public void done(List<ParseObject> fotos, ParseException e) {
+             if (e == null) {
+                 for (int i = 0; i < fotos.size(); i++) {
+                     ParseObject obj = fotos.get(i);
+                     ParseFile file = obj.getParseFile("thumbnail");
+                     try {
+                         //inserisco le foto in una lista
+                         photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
 
-                    int i;
-                    for (i = 0; i < fotos.size(); i++) {
-                        ParseObject obj = fotos.get(i);
-                        ParseFile file = obj.getParseFile("thumbnail");
-                        try {
-                            //inserisco le foto in una lista
-                            photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
-
-                        } catch (ParseException e1) {
-                            check(e.getCode(), vi, e.getMessage());
-                        }
-                    }
-                    MyListAdapter adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
-                    l.setAdapter(adapter);
-                    l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            if (HomeActivity.menuMultipleActions.isExpanded()) {
-                                HomeActivity.menuMultipleActions.collapse();
-                            } else {
-                                Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
-                                toPass.putExtra("position", position);
-                                //passo la lista delle foto al fragment
-                                toPass.putExtra("lista", photo);
-                                startActivity(toPass);
-                            }
-                        }
-                    });
-                } else {
-                    //errore nel reperire gli oggetti Photo dal database
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-        return photo;
-    }
-
+                     } catch (ParseException e1) {
+                         check(e.getCode(), vi, e.getMessage());
+                     }
+                 }
+                 adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
+                 l.setAdapter(adapter);
+                 l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                     @Override
+                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                         if (HomeActivity.menuMultipleActions.isExpanded()) {
+                             HomeActivity.menuMultipleActions.collapse();
+                         } else {
+                             Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                             toPass.putExtra("position", position);
+                             //passo la lista delle foto al fragment
+                             toPass.putExtra("lista", photo);
+                             startActivity(toPass);
+                         }
+                     }
+                 });
+             } else {
+                 //errore nel reperire gli oggetti Photo dal database
+                 check(e.getCode(), vi, e.getMessage());
+             }
+         }
+     });
+ }
 
 }

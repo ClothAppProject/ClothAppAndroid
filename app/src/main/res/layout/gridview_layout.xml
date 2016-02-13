@@ -17,10 +17,4 @@
         android:padding="2dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true" />
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

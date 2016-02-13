@@ -73,7 +73,7 @@ public class HomeMostRecentFragment extends Fragment {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
                                     //aggiorno la galleria
-                                    loadSplashImage(gridview);
+                                    imageGridViewAdapter.notifyDataSetChanged();
                                 }
                             }
                             swipeRefreshLayout.setRefreshing(false);
