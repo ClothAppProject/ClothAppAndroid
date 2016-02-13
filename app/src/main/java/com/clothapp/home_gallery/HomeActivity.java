@@ -84,8 +84,7 @@ public class HomeActivity extends BaseActivity {
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
         // Load icons from strings.xml
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
         set(navMenuTitles, navMenuIcons, 0);
 

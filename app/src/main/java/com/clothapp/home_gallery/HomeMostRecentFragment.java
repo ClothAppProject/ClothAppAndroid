@@ -37,11 +37,6 @@ public class HomeMostRecentFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     ImageGridViewAdapter imageGridViewAdapter;
     GridView gridview;
-
-    public ImageGridViewAdapter getImageGridViewAdapter() {
-        return imageGridViewAdapter;
-    }
-
     Boolean canLoad = true;
 
     @Override

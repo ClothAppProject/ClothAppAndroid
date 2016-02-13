@@ -64,7 +64,39 @@ public class ImageFragment extends FragmentActivity {
         if (extraCurrentItem != -1) {
             mPager.setCurrentItem(extraCurrentItem);
         }
+    }
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        private int npages;
 
+        public ScreenSlidePagerAdapter(FragmentManager fm, int npages) {
+            super(fm);
+            this.npages = npages;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new ImageDetailFragment().newInstance(lista.get(position).getObjectId(),getApplicationContext());
+        }
+
+        @Override
+        public int getCount() {
+            return npages;
+        }
+
+
+    }
+
+
+
+
+
+
+        /*
+        //TODO cosi' non va bene non aggiorni immagini e prendi immagini sbagliate
         //se arrivo in fondo carico nuove foto
         n=mPager.getCurrentItem();
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -93,39 +125,6 @@ public class ImageFragment extends FragmentActivity {
 
             }
         });
-
-
-
-    }
-
-
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private int npages;
-
-        public ScreenSlidePagerAdapter(FragmentManager fm, int npages) {
-            super(fm);
-            this.npages = npages;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return new ImageDetailFragment().newInstance(lista.get(position).getObjectId(),getApplicationContext());
-        }
-
-        @Override
-        public int getCount() {
-            return npages;
-        }
-
-
-    }
-
-
-//TODO:fare la query giusta
     public void findMostRecent(int start,int n){
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         ParseObject o= null;
@@ -137,6 +136,5 @@ public class ImageFragment extends FragmentActivity {
             e.printStackTrace();
         }
     }
-
-
+*/
 }

@@ -38,9 +38,7 @@ public class Image implements Parcelable{
     public Image(ParseObject o)  {
         try {
             this.file=o.getParseFile("photo").getFile();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        } catch (ParseException e) {}
         this.objectId=o.getObjectId();
         this.user=o.getString("user");
         this.nLike=(int)o.get("nLike");
