@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     private LinearLayout drawerll;
 
     //image view for profile pic
-    private ImageView imageView = (ImageView) findViewById(R.id.noProfileP);
+   // private ImageView imageView = (ImageView) findViewById(R.id.noProfileP);
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -64,6 +64,7 @@ public class BaseActivity extends AppCompatActivity {
         // }
     }
 
+    /*
     private void setProfileP(){
         Glide.with(getApplicationContext())
                 .load(R.mipmap.profile)
@@ -71,6 +72,7 @@ public class BaseActivity extends AppCompatActivity {
                 .transform(new CircleTransform(BaseActivity.this))
                 .into(imageView);
     }
+    */
 
     public void set(String[] navMenuTitles, TypedArray navMenuIcons, int selected) {
         mTitle = mDrawerTitle = getTitle();
