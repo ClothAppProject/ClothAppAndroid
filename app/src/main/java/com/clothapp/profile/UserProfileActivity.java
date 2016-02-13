@@ -13,18 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.HeaderViewListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.clothapp.R;
 import com.parse.GetCallback;
@@ -172,60 +166,6 @@ public class UserProfileActivity extends AppCompatActivity {
             ProfileInfoAdapter adapter = new ProfileInfoAdapter(items);
             viewProfileInfo.setAdapter(adapter);
 
-            /*
-            // Test ListView
-            listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
-
-            View header =  inflater.inflate(R.layout.fragment_profile_info_list_header, null);
-            TextView txtHeaderTitle = (TextView) header.findViewById(R.id.profile_info_list_header_title);
-            String strHeaderTitle = UserProfileActivity.username.substring(0, 1).toUpperCase() + UserProfileActivity.username.substring(1);
-            txtHeaderTitle.setText(strHeaderTitle);
-
-            listProfileInfo.addHeaderView(header);
-
-            ArrayList<ProfileInfoListItem> items = new ArrayList<>();
-
-            ProfileInfoListItem itemName = new ProfileInfoListItem("NAME", "Loading...");
-            ProfileInfoListItem itemAge = new ProfileInfoListItem("AGE", "Loading...");
-            ProfileInfoListItem itemCity = new ProfileInfoListItem("CITY", "Loading...");
-            ProfileInfoListItem itemEmail = new ProfileInfoListItem("EMAIL", "Loading...");
-            ProfileInfoListItem itemDescription = new ProfileInfoListItem("DESCRIPTION", "Loading...");
-
-            items.add(itemName);
-            items.add(itemAge);
-            items.add(itemCity);
-            items.add(itemEmail);
-            items.add(itemDescription);
-
-            ProfileInfoListViewAdapter adapter = new ProfileInfoListViewAdapter(items, UserProfileActivity.context);
-
-            listProfileInfo.setAdapter(adapter);
-
-            */
-
-            /*
-            viewProfileInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    // ListView Clicked item index
-                    int itemPosition = position;
-
-                    // ListView Clicked item value
-                    // String itemValue = (String) listProfileInfo.getItemAtPosition(position);
-
-                    // Show Alert
-                    Toast.makeText(UserProfileActivity.context,
-                            "Clicked on item " + itemPosition, Toast.LENGTH_LONG)
-                            .show();
-
-                }
-
-            });*/
-
-
             // Get user info from Parse
             ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
 
@@ -353,23 +293,10 @@ class ProfileUtils {
 
     private static void updateListItem(int position, String text) {
 
-        /*
-        HeaderViewListAdapter wrapperAdapter = (HeaderViewListAdapter) UserProfileActivity.listProfileInfo.getAdapter();
-        ProfileInfoListViewAdapter wrappedAdapter = (ProfileInfoListViewAdapter) wrapperAdapter.getWrappedAdapter();
-
-
-        ProfileInfoListItem item = (ProfileInfoListItem) wrappedAdapter.getItem(position);
-        item.setContent(text);
-
-        wrappedAdapter.notifyDataSetChanged();*/
-
-
         ProfileInfoAdapter adapter = (ProfileInfoAdapter) UserProfileActivity.viewProfileInfo.getAdapter();
 
         ProfileInfoListItem item = adapter.items.get(position + 1);
         item.setContent(text);
-
-        // Log.d("UserProfileActivity", "Setting content of " + position + " to " + text);
 
         adapter.notifyDataSetChanged();
     }
@@ -430,56 +357,6 @@ class ProfileInfoListItem {
         this.content = content;
     }
 }
-
-/*
-class ProfileInfoListViewAdapter extends BaseAdapter {
-
-    private List<ProfileInfoListItem> items;
-    private Context context;
-
-    public ProfileInfoListViewAdapter(List<ProfileInfoListItem> items, Context context) {
-        this.items = items;
-        this.context = context;
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
-    }
-
-    public void setItem(int position, ProfileInfoListItem item) {
-        items.set(position, item);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return items.get(position).hashCode();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_profile_info_list_item, null);
-        }
-
-        ProfileInfoListItem item = (ProfileInfoListItem) getItem(position);
-
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.profile_info_list_item_title);
-        txtTitle.setText(item.getTitle());
-
-        TextView txtContent = (TextView) convertView.findViewById(R.id.profile_info_list_item_content);
-        txtContent.setText(item.getContent());
-
-        return convertView;
-    }
-}*/
-
 
 class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

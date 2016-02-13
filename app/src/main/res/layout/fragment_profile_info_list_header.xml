@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
     android:paddingLeft="15dp"
-    android:paddingTop="15dp"
     android:paddingRight="15dp"
-    android:paddingBottom="20dp">
+    android:paddingTop="15dp">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/profile_info_list_header_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_info_list_header_icon"
-            android:src="@drawable/ic_account_box_black_36dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:tint="@color/colorPrimaryDark"
-            android:adjustViewBounds="false" />
+            android:adjustViewBounds="false"
+            android:src="@drawable/ic_account_box_black_36dp"
+            android:tint="@color/colorPrimaryDark" />
 
         <TextView
+            android:id="@+id/profile_info_list_header_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="List Header"
-            android:id="@+id/profile_info_list_header_title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="30dp" />
 
     </LinearLayout>
