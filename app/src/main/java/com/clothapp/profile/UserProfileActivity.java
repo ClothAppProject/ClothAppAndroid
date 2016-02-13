@@ -56,6 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
         context = UserProfileActivity.this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the
