@@ -41,6 +41,8 @@ public class ImageDetailFragment extends Fragment {
     private List<Cloth> vestiti;
     private ListView listView;
     private TextView hashtag;
+    private ImageView person;
+    private ImageView share;
 
     public static ImageDetailFragment newInstance(String id, Context c) {
         context = c;
@@ -64,6 +66,8 @@ public class ImageDetailFragment extends Fragment {
         v=(ImageView) rootView.findViewById(R.id.photo);
         listView=(ListView)rootView.findViewById(R.id.listInfo);
         hashtag=(TextView)rootView.findViewById(R.id.hashtag);
+        person=(ImageView)rootView.findViewById(R.id.person);
+        share=(ImageView)rootView.findViewById(R.id.share);
 
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
@@ -82,6 +86,18 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //setto il listener sull'icona person
+        person.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
+                i.putExtra("user", user);
+                startActivity(i);
+                getActivity().finish();
+            }
+        });
+
 
 
         //faccio query al database per scaricare la foto
@@ -143,7 +159,7 @@ public class ImageDetailFragment extends Fragment {
 
             objects.get(0).getParseFile("photo").getFileInBackground(new GetFileCallback() {
                 @Override
-                public void done(File file, ParseException e) {
+                public void done(final File file, ParseException e) {
                     if (e == null) {
                         //nascondo caricamento mostro immagine
                         //donutProgress.setVisibility(View.INVISIBLE);
@@ -152,6 +168,25 @@ public class ImageDetailFragment extends Fragment {
                                 .load(file)
                                 .into(v);
 
+                        //TODO: problemi di permesso di lettura
+                    /*
+                        //setto il listener sull'icona share
+                        share.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent shareIntent = new Intent();
+                                shareIntent.setAction(Intent.ACTION_SEND);
+                                Log.d("Share", file.toURI().toString());
+
+                                //context.grantUriPermission (String.valueOf(contentUri), contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                shareIntent.putExtra(Intent.EXTRA_STREAM, file.toURI());
+                                shareIntent.setType("image/jpeg");
+                                shareIntent.setFlags( Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+
+                            }
+                        });
+*/
 
                     }
                 }
@@ -169,6 +204,7 @@ public class ImageDetailFragment extends Fragment {
             //errore chiamata
         }
     }
+
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
