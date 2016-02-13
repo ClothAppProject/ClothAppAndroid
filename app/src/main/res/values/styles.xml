@@ -21,7 +21,7 @@
 
     <!--Home-->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabMaxWidth">@dimen/tab_max_width</item>
+        <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
         <item name="tabIndicatorColor">@color/white</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabPaddingStart">1dp</item>

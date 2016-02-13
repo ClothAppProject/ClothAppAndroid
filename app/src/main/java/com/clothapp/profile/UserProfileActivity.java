@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +46,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     static String username;
 
-    static ListView listProfileInfo;
+    // static ListView listProfileInfo;
+
+    static RecyclerView viewProfileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +63,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
+
+        // Create the adapter that will return a fragment for each of the
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.profile_viewpager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -143,6 +148,31 @@ public class UserProfileActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
+            viewProfileInfo = (RecyclerView) rootView.findViewById(R.id.profile_info_recycler_view);
+
+            LinearLayoutManager llm = new LinearLayoutManager(context);
+            viewProfileInfo.setLayoutManager(llm);
+
+            ArrayList<ProfileInfoListItem> items = new ArrayList<>();
+
+            ProfileInfoListItem itemDummy = new ProfileInfoListItem("DUMMY", "Loading...");
+            ProfileInfoListItem itemName = new ProfileInfoListItem("NAME", "Loading...");
+            ProfileInfoListItem itemAge = new ProfileInfoListItem("AGE", "Loading...");
+            ProfileInfoListItem itemCity = new ProfileInfoListItem("CITY", "Loading...");
+            ProfileInfoListItem itemEmail = new ProfileInfoListItem("EMAIL", "Loading...");
+            ProfileInfoListItem itemDescription = new ProfileInfoListItem("DESCRIPTION", "Loading...");
+
+            items.add(itemDummy);
+            items.add(itemName);
+            items.add(itemAge);
+            items.add(itemCity);
+            items.add(itemEmail);
+            items.add(itemDescription);
+
+            ProfileInfoAdapter adapter = new ProfileInfoAdapter(items);
+            viewProfileInfo.setAdapter(adapter);
+
+            /*
             // Test ListView
             listProfileInfo = (ListView) rootView.findViewById(R.id.profile_info_list_view);
 
@@ -171,7 +201,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
             listProfileInfo.setAdapter(adapter);
 
-            listProfileInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            */
+
+            /*
+            viewProfileInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -190,7 +223,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 }
 
-            });
+            });*/
+
 
             // Get user info from Parse
             ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
@@ -319,6 +353,7 @@ class ProfileUtils {
 
     private static void updateListItem(int position, String text) {
 
+        /*
         HeaderViewListAdapter wrapperAdapter = (HeaderViewListAdapter) UserProfileActivity.listProfileInfo.getAdapter();
         ProfileInfoListViewAdapter wrappedAdapter = (ProfileInfoListViewAdapter) wrapperAdapter.getWrappedAdapter();
 
@@ -326,7 +361,17 @@ class ProfileUtils {
         ProfileInfoListItem item = (ProfileInfoListItem) wrappedAdapter.getItem(position);
         item.setContent(text);
 
-        wrappedAdapter.notifyDataSetChanged();
+        wrappedAdapter.notifyDataSetChanged();*/
+
+
+        ProfileInfoAdapter adapter = (ProfileInfoAdapter) UserProfileActivity.viewProfileInfo.getAdapter();
+
+        ProfileInfoListItem item = adapter.items.get(position + 1);
+        item.setContent(text);
+
+        // Log.d("UserProfileActivity", "Setting content of " + position + " to " + text);
+
+        adapter.notifyDataSetChanged();
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
@@ -386,6 +431,7 @@ class ProfileInfoListItem {
     }
 }
 
+/*
 class ProfileInfoListViewAdapter extends BaseAdapter {
 
     private List<ProfileInfoListItem> items;
@@ -432,4 +478,95 @@ class ProfileInfoListViewAdapter extends BaseAdapter {
 
         return convertView;
     }
+}*/
+
+
+class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    List<ProfileInfoListItem> items;
+
+    private final static int ITEM_TYPE_HEADER = 0;
+    private final static int ITEM_TYPE_INFO = 1;
+
+    public ProfileInfoAdapter(List<ProfileInfoListItem> items) {
+        this.items = items;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        switch (viewType) {
+
+            case (ITEM_TYPE_HEADER): {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile_info_list_header, parent, false);
+                HeaderViewHolder headerViewHolder = new HeaderViewHolder(v);
+                return headerViewHolder;
+            }
+
+            case (ITEM_TYPE_INFO): {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile_info_list_item, parent, false);
+                InfoViewHolder infoViewHolder = new InfoViewHolder(v);
+                return infoViewHolder;
+            }
+
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        switch (getItemViewType(position)) {
+
+            case ITEM_TYPE_HEADER:
+                HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+                String username = UserProfileActivity.username.substring(0, 1).toUpperCase() + UserProfileActivity.username.substring(1);
+                headerViewHolder.txtUsername.setText(username);
+
+                break;
+
+            case ITEM_TYPE_INFO:
+                InfoViewHolder infoViewHolder = (InfoViewHolder) holder;
+                infoViewHolder.txtTitle.setText(items.get(position).getTitle());
+                infoViewHolder.txtContent.setText(items.get(position).getContent());
+
+                break;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position == ITEM_TYPE_HEADER) ? ITEM_TYPE_HEADER : ITEM_TYPE_INFO;
+    }
+
+    public static class InfoViewHolder extends RecyclerView.ViewHolder {
+
+        TextView txtTitle;
+        TextView txtContent;
+
+        InfoViewHolder(View itemView) {
+            super(itemView);
+
+            txtTitle = (TextView) itemView.findViewById(R.id.profile_info_list_item_title);
+            txtContent = (TextView) itemView.findViewById(R.id.profile_info_list_item_content);
+        }
+    }
+
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView txtUsername;
+
+        HeaderViewHolder(View itemView) {
+            super(itemView);
+
+            txtUsername = (TextView) itemView.findViewById(R.id.profile_info_list_header_title);
+        }
+    }
+
 }
