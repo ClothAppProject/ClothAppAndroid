@@ -7,11 +7,28 @@
     android:paddingRight="15dp"
     android:paddingBottom="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="List Header"
-        android:id="@+id/profile_info_list_header_title"
-        android:textSize="30dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_info_list_header_icon"
+            android:src="@drawable/ic_account_box_black_36dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:tint="@color/colorPrimaryDark"
+            android:adjustViewBounds="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="List Header"
+            android:id="@+id/profile_info_list_header_title"
+            android:textSize="30dp" />
+
+    </LinearLayout>
 </LinearLayout>

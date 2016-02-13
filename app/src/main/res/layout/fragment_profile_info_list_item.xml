@@ -9,7 +9,7 @@
     android:paddingBottom="15dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="List Item"
         android:id="@+id/profile_info_list_item_title"
@@ -17,7 +17,7 @@
         android:paddingBottom="10dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Loading..."
