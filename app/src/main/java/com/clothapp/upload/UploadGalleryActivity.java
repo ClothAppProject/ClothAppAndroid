@@ -32,6 +32,7 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
@@ -76,6 +77,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 linearLayout.addView(vestito);
             }
         });
+        final EditText hash = (EditText) findViewById(R.id.hashtag);
 
         // Add an OnClick listener to the send button
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +128,8 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 final ParseObject picture = new ParseObject("Photo");
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
+                String[] hashtags = hash.getText().toString().split(" ");
+                picture.put("hashtag", Arrays.asList(hashtags));
 
                 // Invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {

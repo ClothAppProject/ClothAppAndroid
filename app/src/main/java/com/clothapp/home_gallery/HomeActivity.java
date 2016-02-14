@@ -164,7 +164,6 @@ public class HomeActivity extends BaseActivity {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
                 startActivity(i);
-                finish();
             }
         });
         com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
@@ -178,7 +177,6 @@ public class HomeActivity extends BaseActivity {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
                 startActivity(i);
-                finish();
             }
         });
         menuMultipleActions.addButton(camera);

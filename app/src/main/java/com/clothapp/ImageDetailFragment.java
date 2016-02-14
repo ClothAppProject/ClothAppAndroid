@@ -208,7 +208,7 @@ public class ImageDetailFragment extends Fragment {
                     cuore.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (object.getList("like").contains(username)) {
+                            if (immagine.getLike().contains(username)) {
                                 //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                                 //rimuovo il like e cambio la lista
                                 immagine.remLike(username);
