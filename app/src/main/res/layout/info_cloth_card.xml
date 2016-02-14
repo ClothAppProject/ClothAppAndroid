@@ -48,7 +48,9 @@
 
                     android:textColor="@color/transparent_black"
                     android:textSize="20sp"
-                    android:text="Cloth 1" />
+                    android:text="Cloth 1"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="italic"/>
             </LinearLayout>
 
             <LinearLayout
@@ -69,7 +71,9 @@
                     android:textColor="@color/info_text"
                     android:id="@+id/address"
                     android:textSize="15sp"
-                    android:text="Address" />
+                    android:text="Address"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="italic"/>
             </LinearLayout>
 
             <LinearLayout
@@ -82,8 +86,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/shop_icon"
-                    />
+                    android:src="@drawable/shop_icon" />
 
                 <!--
                 android:src="@mipmap/ic_local_offer_white_48dp"
@@ -94,7 +97,9 @@
                     android:textColor="@color/info_text"
                     android:id="@+id/shop"
                     android:textSize="15sp"
-                    android:text="Shop" />
+                    android:text="Shop"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="italic"/>
 
             </LinearLayout>
 
@@ -118,7 +123,9 @@
                     android:textColor="@color/info_text"
                     android:id="@+id/brand"
                     android:textSize="15sp"
-                    android:text="Brand" />
+                    android:text="Brand"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="italic"/>
 
             </LinearLayout>
 
@@ -144,7 +151,10 @@
                     android:textColor="@color/info_text"
                     android:id="@+id/price"
                     android:textSize="15sp"
-                    android:text="Price" />
+                    android:text="Price"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="italic"/>
+
             </LinearLayout>
 
 
