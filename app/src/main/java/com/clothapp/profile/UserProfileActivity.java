@@ -37,8 +37,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -327,7 +331,11 @@ class ProfileUtils {
                     person = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
-                    updateListItem(1, person.get("date").toString());
+                    long age = getAge(person.get("date").toString());
+
+                    if (age < 0) updateListItem(1, "Not found");
+                    else updateListItem(1, age + " years old");
+
                     updateListItem(2, person.get("city").toString());
 
                 } else {
@@ -346,6 +354,22 @@ class ProfileUtils {
         item.setContent(text);
 
         adapter.notifyDataSetChanged();
+    }
+
+    private static long getAge(String text) {
+
+        try {
+            DateFormat format = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
+            Date birthday = format.parse(text);
+            Date now = new Date();
+
+            long diffInMillies = now.getTime() - birthday.getTime();
+            return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+
+        }  catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
