@@ -30,11 +30,12 @@ import static android.widget.ImageView.ScaleType.CENTER_CROP;
 
 public class ImageGridViewAdapter extends BaseAdapter {
     private final Context context;
-    private List<Image> files=new ArrayList<>();
+    private List<Image> files;
 
     public ImageGridViewAdapter(Context context, List<Image> photos) {
         this.context = context;
-        files = photos;
+        if (photos!=null)   files = photos;
+        else files = new ArrayList<>();
     }
     public void addToGridView(Image foto)   {files.add(foto);}
 
@@ -53,7 +54,7 @@ public class ImageGridViewAdapter extends BaseAdapter {
         final ImageView cuore = (ImageView) row.findViewById(R.id.cuore);
         final String username = ParseUser.getCurrentUser().getUsername();
         //controllo se ho messo like sull'attuale foto
-        if ((image.getLike().contains(username)))    {
+        if (image.getLike().contains(username))    {
             cuore.setImageResource(R.mipmap.cuore_pressed);
         }else{
             cuore.setImageResource(R.mipmap.cuore);
@@ -62,7 +63,6 @@ public class ImageGridViewAdapter extends BaseAdapter {
         cuore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("cuore cliccato");
                 ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
                 if(HomeActivity.menuMultipleActions.isExpanded()) HomeActivity.menuMultipleActions.collapse();
                 else {
@@ -71,16 +71,16 @@ public class ImageGridViewAdapter extends BaseAdapter {
                         //rimuovo il like e cambio la lista
                         image.remLike(username);
                         point.put("like", image.getLike());
-                        point.put("nLike", image.getLike().size());
+                        point.put("nLike", image.getNumLike());
                         point.saveInBackground();
-                        cuore.setImageResource(R.mipmap.cuore);
+                        notifyDataSetChanged();
                     } else {
                         //aggiungo like e aggiorno anche in parse
                         image.addLike(username);
                         point.add("like", username);
-                        point.put("nLike", image.getLike().size());
+                        point.put("nLike", image.getNumLike());
                         point.saveInBackground();
-                        cuore.setImageResource(R.mipmap.cuore_pressed);
+                        notifyDataSetChanged();
                     }
                 }
             }

@@ -37,7 +37,9 @@ import static com.clothapp.resources.ExceptionCheck.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by giacomoceribelli on 29/12/15.
@@ -71,21 +73,6 @@ public class UploadCameraActivity extends AppCompatActivity {
 
         Log.d("UploadCameraActivity", "Inizializzazione UploadCameraActivity");
 
-        imageView = (ImageView) findViewById(R.id.view_immagine);
-        ImageView add=(ImageView)findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.lista);
-                EditText vestito=new EditText(UploadCameraActivity.this);
-                vestito.setHint(R.string.cloth);
-                EditText tipo = (EditText) findViewById(R.id.tipo);
-                vestito.setWidth(tipo.getWidth());
-                vestito.setGravity(Gravity.CENTER_HORIZONTAL);
-                linearLayout.addView(vestito);
-            }
-        });
         // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
         // dell'apertura della fotocamera
         if (savedInstanceState != null) {
@@ -119,6 +106,21 @@ public class UploadCameraActivity extends AppCompatActivity {
         final TextView percentuale = (TextView) findViewById(R.id.percentuale);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.barraProgresso);
         final Button btnSend = (Button) findViewById(R.id.send);
+        imageView = (ImageView) findViewById(R.id.view_immagine);
+        ImageView add=(ImageView)findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.lista);
+                EditText vestito=new EditText(UploadCameraActivity.this);
+                vestito.setHint(R.string.cloth);
+                EditText tipo = (EditText) findViewById(R.id.tipo);
+                vestito.setWidth(tipo.getWidth());
+                vestito.setGravity(Gravity.CENTER_HORIZONTAL);
+                linearLayout.addView(vestito);
+            }
+        });
+        final EditText hash = (EditText) findViewById(R.id.hashtag);
 
         // Add an OnClick listener to the send button
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +133,6 @@ public class UploadCameraActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 percentuale.setVisibility(View.VISIBLE);
 
-                System.out.println("debug: compressione immagine");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 // e la funzione a fine file checkToCompress()
 
@@ -143,7 +144,6 @@ public class UploadCameraActivity extends AppCompatActivity {
                 Log.d("UploadCameraActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
 
                 // Creazione di un ParseFile
-                Log.d("UploadCameraActivity", "Creazione di un ParseFile");
                 ParseFile file = new ParseFile(photoFileName, byteImg);
 
                 // Save the file to Parse
@@ -169,6 +169,8 @@ public class UploadCameraActivity extends AppCompatActivity {
                 final ParseObject picture = new ParseObject("Photo");
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
+                String[] hashtags = hash.getText().toString().split(" ");
+                picture.put("hashtag",Arrays.asList(hashtags));
 
                 // Invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {
@@ -254,7 +256,6 @@ public class UploadCameraActivity extends AppCompatActivity {
         // Reinderizzo l'utente alla homePage activity
         Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
-
         finish();
     }
 
@@ -276,7 +277,6 @@ public class UploadCameraActivity extends AppCompatActivity {
     public void deleteImage()   {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + directoryName;
         File f = new File(path, photoFileName);
-
         // Controllo se esiste
         if (f.exists() && !f.isDirectory()) {
             // Se esiste lo elimino

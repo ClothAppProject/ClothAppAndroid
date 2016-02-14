@@ -86,7 +86,7 @@ public class ImageFragment extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new ImageDetailFragment().newInstance(lista.get(position).getObjectId(),getApplicationContext());
+            return new ImageDetailFragment().newInstance(lista.get(position),getApplicationContext());
         }
 
         @Override
@@ -116,9 +116,7 @@ public class ImageFragment extends AppCompatActivity {
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 //controllo di essere arrivata in fondo
@@ -133,10 +131,8 @@ public class ImageFragment extends AppCompatActivity {
                     load=true;
                 }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     public void findMostRecent(int start,int n){

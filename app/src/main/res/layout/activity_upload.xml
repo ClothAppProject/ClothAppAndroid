@@ -27,7 +27,7 @@
             <EditText
                 android:layout_width="174dp"
                 android:layout_height="146dp"
-                android:id="@+id/editText"
+                android:id="@+id/hashtag"
                 android:layout_gravity="right|top"
                 android:layout_weight="0.27"
                 android:autoText="false"
@@ -38,7 +38,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="105dp"
+            android:layout_height="110dp"
             android:weightSum="1"
             android:layout_weight="0.28">
 
