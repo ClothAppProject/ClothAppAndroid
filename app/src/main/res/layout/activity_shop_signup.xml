@@ -114,13 +114,14 @@
                 android:textColorHint="@color/input_text_hint"
                 android:layout_marginBottom="10dp"/>
 
+            <!--
             <CheckBox android:id="@+id/checkbox_shop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/info_negozio_onLine"
                 android:onClick="onCheckboxClicked"
                 android:checked="false"/>
-
+            -->
 
             <EditText
                 android:id="@+id/edit_website"

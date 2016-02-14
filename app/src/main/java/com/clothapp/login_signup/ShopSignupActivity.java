@@ -30,7 +30,7 @@ import static com.clothapp.resources.RegisterUtil.passWordChecker;
 
 public class ShopSignupActivity extends AppCompatActivity {
 
-    static CheckBox checkOnline;
+    //static CheckBox checkOnline;
 
 
     @Override
@@ -50,7 +50,7 @@ public class ShopSignupActivity extends AppCompatActivity {
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
 
-        checkOnline = (CheckBox) findViewById(R.id.checkbox_shop);
+        //checkOnline = (CheckBox) findViewById(R.id.checkbox_shop);
 
         try {
             getSupportActionBar().setTitle(R.string.signup);
