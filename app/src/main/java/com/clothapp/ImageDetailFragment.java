@@ -14,13 +14,16 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile.ProfileActivity;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.MyCardListAdapter;
 import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -33,6 +36,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ImageDetailFragment extends Fragment {
 
@@ -50,6 +55,8 @@ public class ImageDetailFragment extends Fragment {
     private ImageView share;
     private ImageView cuore;
     private TextView like;
+    private ImageView profilePic;
+    private View vi;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
         this.context = c;
@@ -77,6 +84,9 @@ public class ImageDetailFragment extends Fragment {
         share=(ImageView)rootView.findViewById(R.id.share);
         cuore=(ImageView)rootView.findViewById(R.id.heart);
         like=(TextView)rootView.findViewById(R.id.like);
+        profilePic = (ImageView)rootView.findViewById(R.id.pic);
+
+        vi = new View(context);
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
         //donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
@@ -121,6 +131,8 @@ public class ImageDetailFragment extends Fragment {
                             getActivity().finish();
                         }
                     });
+
+
 
                     //setto gli hashtag
                     ArrayList tag = (ArrayList) object.get("hashtag");
@@ -231,6 +243,39 @@ public class ImageDetailFragment extends Fragment {
                     });
             }
         });
+
+        //TODO fare query a parse per la profile pic
+        /*
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", user);
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    //  if the user has a profile pic it will be shown in the side menu
+                    //  else the app logo will be shown
+                    if (objects.size() != 0) {
+                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+
+                        try {
+                            File file = f.getFile();
+                            Glide.with(context)
+                                    .load(file)
+                                    .centerCrop()
+                                   // .transform(new CircleTransform(ImageDetailFragment.this))
+                                    .into(profilePic);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+
+        */
+
     }
 
 
