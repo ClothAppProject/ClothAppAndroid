@@ -6,8 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,7 +32,7 @@ import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
-public class ImageFragment extends FragmentActivity {
+public class ImageFragment extends AppCompatActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
@@ -48,6 +52,9 @@ public class ImageFragment extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //setto pulsante indietro
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //prendo la lista delle immagini
         lista = getIntent().getParcelableArrayListExtra("lista");
@@ -89,8 +96,15 @@ public class ImageFragment extends FragmentActivity {
 
 
     }
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
