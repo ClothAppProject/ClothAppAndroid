@@ -102,7 +102,6 @@ public class HomeMostRecentFragment extends Fragment {
                         canLoad = false;
                         int toDownload = 10;
                         if (photos.size() % 2 == 0) toDownload = 11;
-                        Toast.makeText(getActivity(),"ATTENDERE, CARICAMENTO FOTO...",Toast.LENGTH_SHORT).show();
                         ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
                         updatePhotos.whereLessThan("createdAt", global.getLastDate());
                         updatePhotos.orderByDescending("createdAt");
@@ -126,7 +125,6 @@ public class HomeMostRecentFragment extends Fragment {
                                             }
                                         }
                                         canLoad = true;
-                                        Toast.makeText(getActivity(),"CARICAMENTO COMPLETATO",Toast.LENGTH_SHORT).show();
                                         //modifico la data dell'utlima foto
                                         global.setLastDate(objects.get(i - 1).getCreatedAt());
                                     }
@@ -162,10 +160,18 @@ public class HomeMostRecentFragment extends Fragment {
                     //passo la lista delle foto al fragment
                     toPass.putExtra("lista", photos);
                     startActivity(toPass);
+                    onPause();
                 }
             }
 
         });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        //System.out.println("debug: rientrato in onresume dim="+photos.size());
+        //System.out.println("debug: rientrato "+photos.get(0).getObjectId()+" con "+photos.get(0).getNumLike()+" like");
+        imageGridViewAdapter.notifyDataSetChanged();
     }
 
 

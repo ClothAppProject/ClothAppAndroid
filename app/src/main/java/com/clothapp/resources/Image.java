@@ -20,7 +20,7 @@ public class Image implements Parcelable{
     private File file;
     private String objectId;
     private String user;
-    private List like;
+    private List<String> like;
     private int nLike;
 
 
@@ -33,6 +33,7 @@ public class Image implements Parcelable{
         }else {
             this.like = likes;
         }
+        this.nLike=like.size();
     }
 
     public Image(ParseObject o)  {
@@ -41,7 +42,7 @@ public class Image implements Parcelable{
         } catch (ParseException e) {}
         this.objectId=o.getObjectId();
         this.user=o.getString("user");
-        this.nLike=(int)o.get("nLike");
+        this.nLike=o.getInt("nLike");
         this.like=(ArrayList)o.get("like");
     }
 
@@ -50,9 +51,9 @@ public class Image implements Parcelable{
     }
 
     public List getLike() {return like;}
-    public int getNumLike() {return like.size();}
-    public void addLike(Object o) {like.add(o);}
-    public void remLike(Object o) {like.remove(o);}
+    public int getNumLike() {return nLike;}
+    public void addLike(String o) {like.add(o); nLike++;}
+    public void remLike(String o) {like.remove(o); nLike--;}
     public void setLike(List like) {this.like = like;}
 
     public File getFile(){
@@ -65,8 +66,35 @@ public class Image implements Parcelable{
     //funzioni per dell'interfaccia parcelable, per poter passare un ArrayList<Image> da una classe all'imageFragment
     protected Image(Parcel in) {
         objectId = in.readString();
+        user = in.readString();
+        if (in.readByte() == 0x01) {
+            like = new ArrayList<String>();
+            in.readList(like, String.class.getClassLoader());
+        } else {
+            like = null;
+        }
+        nLike = in.readInt();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(objectId);
+        dest.writeString(user);
+        if (like == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(like);
+        }
+        dest.writeInt(nLike);
+    }
+
+    @SuppressWarnings("unused")
     public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
         @Override
         public Image createFromParcel(Parcel in) {
@@ -78,14 +106,4 @@ public class Image implements Parcelable{
             return new Image[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(objectId);
-    }
 }

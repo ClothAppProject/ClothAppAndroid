@@ -41,6 +41,7 @@ public class ImageDetailFragment extends Fragment {
     private TextView t;
     private DonutProgress donutProgress;
     private String Id;
+    private Image immagine;
     private static Context context;
     private List<Cloth> vestiti;
     private ListView listView;
@@ -50,11 +51,11 @@ public class ImageDetailFragment extends Fragment {
     private ImageView cuore;
     private TextView like;
 
-    public static ImageDetailFragment newInstance(String id, Context c) {
-        context = c;
+    public ImageDetailFragment newInstance(Image image, Context c) {
+        this.context = c;
         final ImageDetailFragment f = new ImageDetailFragment();
         final Bundle args = new Bundle();
-        args.putString("ID", id);
+        args.putParcelable("ID", image);
         f.setArguments(args);
         return f;
     }
@@ -62,7 +63,7 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.Id = getArguments() != null ? getArguments().getString("ID") : null;
+        this.immagine = getArguments()!=null ? (Image) getArguments().getParcelable("ID") : null;
     }
 
     @Override
@@ -76,10 +77,8 @@ public class ImageDetailFragment extends Fragment {
         share=(ImageView)rootView.findViewById(R.id.share);
         cuore=(ImageView)rootView.findViewById(R.id.heart);
         like=(TextView)rootView.findViewById(R.id.like);
-
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
-
         //donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         return rootView;
     }
@@ -87,9 +86,7 @@ public class ImageDetailFragment extends Fragment {
     //TODO:fare la query giusta
     public void findInfoPhoto(){
         //qui scarico le foto
-
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -108,71 +105,69 @@ public class ImageDetailFragment extends Fragment {
 
         //faccio query al database per scaricare la foto
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.whereEqualTo("objectId", Id);
+        query.whereEqualTo("objectId", immagine.getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(final ParseObject object, ParseException e) {
-                final Image image=new Image(object);
-
-                //setto username e listener
-                user = object.getString("user");
-                t.setText(user);
-                t.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
-                        i.putExtra("user", user);
-                        startActivity(i);
-                        getActivity().finish();
-                    }
-                });
-
-                //setto gli hashtag
-                ArrayList tag=(ArrayList)object.get("hashtag");
-                String s=" ";
-                if(tag!=null) {
-                    for (int i = 0; i < tag.size(); i++) {
-                        s += tag.get(i).toString() + " ";
-                    }
-                }
-                hashtag.setText((CharSequence) s);
-
-                //per ogni vestito cerco le informazioni
-                ArrayList arrayList= (ArrayList) object.get("vestiti");
-                if(arrayList==null) arrayList=new ArrayList<Cloth>();
-                vestiti=new ArrayList<Cloth>(arrayList.size());
-                for(int i=0;i<arrayList.size();i++) {
-                    ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Vestito");
-                    query1.whereEqualTo("codice", arrayList.get(i));
-                    query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                    //setto username e listener
+                    user = object.getString("user");
+                    t.setText(user);
+                    t.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void done(ParseObject info, ParseException e) {
-                            if (e == null) {
-                                Cloth c = new Cloth(info.getString("tipo"),
-                                        info.getString("luogoAcquisto"),
-                                        info.getString("prezzo"),
-                                        info.getString("shop"),
-                                        info.getString("brand"));
-                                vestiti.add(c);
-                                MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
-                                listView.setAdapter(adapter);
-                                setListViewHeightBasedOnItems(listView);
-                            }
-
+                        public void onClick(View v) {
+                            Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
+                            i.putExtra("user", user);
+                            startActivity(i);
+                            getActivity().finish();
                         }
                     });
-                }
 
-                object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
-                    @Override
-                    public void done(final File file, ParseException e) {
-                        if (e == null) {
-                            //nascondo caricamento mostro immagine
-                            //donutProgress.setVisibility(View.INVISIBLE);
-                            //v.setVisibility(View.VISIBLE);
-                            Glide.with(context)
-                                    .load(file)
-                                    .into(v);
+                    //setto gli hashtag
+                    ArrayList tag = (ArrayList) object.get("hashtag");
+                    String s = " ";
+                    if (tag != null) {
+                        for (int i = 0; i < tag.size(); i++) {
+                            s += tag.get(i).toString() + " ";
+                        }
+                    }
+                    hashtag.setText((CharSequence) s);
+
+                    //per ogni vestito cerco le informazioni
+                    ArrayList arrayList = (ArrayList) object.get("vestiti");
+                    if (arrayList == null) arrayList = new ArrayList<Cloth>();
+                    vestiti = new ArrayList<Cloth>(arrayList.size());
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Vestito");
+                        query1.whereEqualTo("codice", arrayList.get(i));
+                        query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject info, ParseException e) {
+                                if (e == null) {
+                                    Cloth c = new Cloth(info.getString("tipo"),
+                                            info.getString("luogoAcquisto"),
+                                            info.getString("prezzo"),
+                                            info.getString("shop"),
+                                            info.getString("brand"));
+                                    vestiti.add(c);
+                                    MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
+                                    listView.setAdapter(adapter);
+                                    setListViewHeightBasedOnItems(listView);
+                                }
+
+                            }
+                        });
+                    }
+
+                    object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(final File file, ParseException e) {
+                            if (e == null) {
+                                //nascondo caricamento mostro immagine
+                                //donutProgress.setVisibility(View.INVISIBLE);
+                                //v.setVisibility(View.VISIBLE);
+                                Glide.with(context)
+                                        .load(file)
+                                        .into(v);
                             /*TODO: problemi di permesso di lettura
                             //setto il listener sull'icona share
                             share.setOnClickListener(new View.OnClickListener() {
@@ -189,54 +184,51 @@ public class ImageDetailFragment extends Fragment {
                                 }
                             });
                             */
+                            }
                         }
-                    }
-                }, new ProgressCallback() {
-                    @Override
-                    public void done(Integer percentDone) {
-                        //passo percentuale
-                        // donutProgress.setProgress(percentDone);
-                    }
-                });
-
-                //mostro il numero di like
-                like.setText(object.get("nLike").toString());
-
-                //controllo se ho messo like sull'attuale foto
-                final String username = ParseUser.getCurrentUser().getUsername();
-                if ((image.getLike().contains(username)))    {
-                    cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                }else{
-                    cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-                }
-
-                //metto i listener sul cuore
-                cuore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ParseObject point = ParseObject.createWithoutData("Photo", image.getObjectId());
-                        if ((image.getLike().contains(username))) {
-                            //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
-                            //rimuovo il like e cambio la lista
-                            image.remLike(username);
-                            point.put("like", image.getLike());
-                            point.put("nLike", image.getLike().size());
-                            point.saveInBackground();
-                            cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-                            //aggiorno il numero di like
-                            like.setText(object.get("nLike").toString());
-                        } else {
-                            //aggiungo like e aggiorno anche in parse
-                            image.addLike(username);
-                            point.add("like", username);
-                            point.put("nLike", image.getLike().size());
-                            point.saveInBackground();
-                            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                            //aggiorno il numero di like
-                            like.setText(object.get("nLike").toString());
+                    }, new ProgressCallback() {
+                        @Override
+                        public void done(Integer percentDone) {
+                            //passo percentuale
+                            // donutProgress.setProgress(percentDone);
                         }
+                    });
+
+                    //mostro il numero di like
+                    like.setText(Integer.toString(object.getInt("nLike")));
+
+                    //controllo se ho messo like sull'attuale foto
+                    final String username = ParseUser.getCurrentUser().getUsername();
+                    if (immagine.getLike().contains(username)) {
+                        cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                    } else {
+                        cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
                     }
-                });
+                    //metto i listener sul cuore
+                    cuore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (object.getList("like").contains(username)) {
+                                //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
+                                //rimuovo il like e cambio la lista
+                                immagine.remLike(username);
+                                object.put("like", immagine.getLike());
+                                object.put("nLike", immagine.getNumLike());
+                                object.saveInBackground();
+                                cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+                            } else {
+                                //aggiungo like e aggiorno anche in parse
+                                immagine.addLike(username);
+                                object.add("like", username);
+                                object.put("nLike", immagine.getNumLike());
+                                object.saveInBackground();
+                                cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                            }
+                            //aggiorno il numero di like
+                            //System.out.println("debug: cuore premuto su "+immagine.getObjectId()+" con "+immagine.getNumLike());
+                            like.setText(Integer.toString(object.getInt("nLike")));
+                        }
+                    });
             }
         });
     }
