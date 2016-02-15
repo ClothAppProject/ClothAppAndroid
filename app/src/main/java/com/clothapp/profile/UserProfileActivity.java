@@ -48,13 +48,17 @@ public class UserProfileActivity extends AppCompatActivity {
         context = UserProfileActivity.this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Set toolbar title to empty string so that it won't overlap with the tabs.
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+        // Set up drawer button
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
         ab.setDisplayHomeAsUpEnabled(true);
 
+        // Get the drawer view
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -62,27 +66,10 @@ public class UserProfileActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
-
-        RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-
-        rounded.setCornerRadius(bitmap.getWidth());
-
-        // ImageView drawerProfile = (ImageView) findViewById(R.id.menu_profile_side_drawer_image);
-        View headerLayout = navigationView.getHeaderView(0);
-        ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
-        drawerProfile.setImageDrawable(rounded);
-
-        // Create the adapter that will return a fragment for each of the
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.profile_viewpager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
+        if (viewPager != null) {
+            setupViewPagerContent(viewPager);
+        }
     }
 
     @Override
@@ -111,6 +98,24 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
+
+        // Get default bitmap for user profile photo
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
+
+        // Create a rounded bitmap from the user profile photo
+        RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        rounded.setCornerRadius(bitmap.getWidth());
+
+        // Get drawer header
+        View headerLayout = navigationView.getHeaderView(0);
+
+        // Get the image view containing the user profile photo
+        ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
+
+        // Set the user profile photo to the just created rounded image
+        drawerProfile.setImageDrawable(rounded);
+
+        // Set up onClickListener for each drawer item
         navigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -120,5 +125,18 @@ public class UserProfileActivity extends AppCompatActivity {
                     return true;
                 }
             });
+    }
+
+    private void setupViewPagerContent(ViewPager viewPager) {
+
+        // Create new adapter for ViewPager
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set ViewPager adapter
+        viewPager.setAdapter(sectionsPagerAdapter);
+
+        // Set up TabLayout
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
