@@ -25,7 +25,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class SearchUtiliy {
 
 // Cerco tutti le photo per hashtag e restituisco una lista di immagini
- public static ArrayList<Image> searchHashtag(String s, final View vi) throws ParseException {
+ public static ArrayList<Image> searchHashtag(String s, final View vi)  {
 
      ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
      queryFoto.whereContains("hashtag",s);
@@ -48,10 +48,10 @@ public class SearchUtiliy {
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
-    public static ArrayList<Image> searchVestiti(String s, final View vi) throws ParseException {
+    public static ArrayList<Image> searchVestiti(String s, final View vi) {
 
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        queryFoto.whereContains("vestiti", s);
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Vestito");
+        queryFoto.whereContains("tipo", s.toString());
         final ArrayList<Image> lista=new ArrayList<Image>();
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -68,8 +68,9 @@ public class SearchUtiliy {
             }
         });
         return lista;}
+
 //cerco il primo utente con quel nome
-    public static Image searchUtente(String s) throws ParseException {
+    public static Image searchUtente(String s){
 //TODO fare in modo che restituisca più utenti durante la rcerca in tempo reale
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereContains("username", s);

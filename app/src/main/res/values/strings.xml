@@ -35,6 +35,7 @@
 
 
     <string name="homepage_button">HomePage</string>
+    <string name="upload">Upload</string>
     <string name="logout_button">Logout</string>
     <string name="profile_button">Profilo</string>
     <string name="barra_separatrice">____________________________________________</string>

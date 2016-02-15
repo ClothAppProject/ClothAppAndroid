@@ -106,12 +106,10 @@ public class HomeActivity extends BaseActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                try {
-                    SearchUtiliy.searchVestiti(query,findViewById(R.id.content_frame));
-                    //TODO: unire alla classe di niccolò
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                System.out.println(query);
+                SearchUtiliy.searchVestiti(query,findViewById(R.id.content_frame));
+                //TODO: unire alla classe di niccolò
+
                 return false;
             }
 
