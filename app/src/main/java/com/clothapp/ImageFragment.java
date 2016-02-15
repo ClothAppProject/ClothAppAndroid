@@ -54,7 +54,7 @@ public class ImageFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //setto pulsante indietro
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //prendo la lista delle immagini
         lista = getIntent().getParcelableArrayListExtra("lista");

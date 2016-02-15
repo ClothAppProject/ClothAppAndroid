@@ -34,10 +34,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/cloth_info"
+                    android:src="@mipmap/ic_attach_file_white_48dp"
                     android:tint="@color/red"/>
                     <!--
                     android:src="@mipmap/ic_attach_file_white_48dp"
+                    android:src="@drawable/cloth_info"
                     -->
 
                 <TextView
@@ -86,10 +87,13 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/shop_icon" />
+                    android:src="@mipmap/ic_local_offer_white_48dp"
+                    android:tint="@color/red"
+                     />
 
                 <!--
                 android:src="@mipmap/ic_local_offer_white_48dp"
+                android:src="@drawable/shop_icon"
                 -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -139,11 +143,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/price_tag_euro"
+                    android:src="@mipmap/ic_attach_money_white_48dp"
                     android:tint="@color/red"/>
 
                 <!--
                 android:src="@mipmap/ic_attach_money_white_48dp"
+                android:src="@drawable/price_tag_euro"
                 -->
                 <TextView
                     android:layout_width="wrap_content"

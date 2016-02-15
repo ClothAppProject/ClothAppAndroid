@@ -44,9 +44,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".BaseActivity">
+
+        </activity>
+
         <activity
             android:name=".home_gallery.HomeActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:parentActivityName="com.clothapp.BaseActivity">
+
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.clothapp.BaseActivity"/>
+        </activity>
         <activity
             android:name=".login_signup.MainActivity"
             android:label="@string/app_name"
