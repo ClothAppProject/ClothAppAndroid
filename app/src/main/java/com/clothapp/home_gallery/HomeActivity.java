@@ -7,8 +7,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +49,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
  */
 public class HomeActivity extends BaseActivity {
     static FloatingActionsMenu menuMultipleActions;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class HomeActivity extends BaseActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(R.string.homepage_button);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 /*
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -193,6 +198,16 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupFloatingButton(){
