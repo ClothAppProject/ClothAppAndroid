@@ -1,9 +1,13 @@
-package com.clothapp.profile;
+package com.clothapp.profile.adapters;
 
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.fragments.PlaceholderFragment;
+import com.clothapp.profile.fragments.ProfileInfoFragment;
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapter extends FragmentPagerAdapter {

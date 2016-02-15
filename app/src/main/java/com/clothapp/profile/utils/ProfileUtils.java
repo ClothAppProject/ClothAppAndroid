@@ -1,9 +1,11 @@
-package com.clothapp.profile;
+package com.clothapp.profile.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import com.clothapp.profile.adapters.ProfileInfoAdapter;
+import com.clothapp.profile.UserProfileActivity;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -16,17 +18,17 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 // This class helps keeping the code clean and modular.
-class ProfileUtils {
+public class ProfileUtils {
 
     // Object to store info about the user (not necessarily the current user).
-    static ParseUser user;
+    private static ParseUser user;
     // Object to store info about the "Persona" associated with the user above.
-    static ParseObject person;
+    private static ParseObject person;
 
 
     // Get info about the user from Parse.
     // Call getParseUser() and getParsePerson().
-    static void getParseInfo(final Context context, String username) {
+    public static void getParseInfo(final Context context, String username) {
         getParseUser(context, username);
         getParsePerson(context, username);
     }

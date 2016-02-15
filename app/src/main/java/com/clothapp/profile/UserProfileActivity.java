@@ -21,20 +21,17 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.clothapp.R;
+import com.clothapp.profile.adapters.SectionsPagerAdapter;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    private ViewPager mViewPager;
-
     private DrawerLayout mDrawerLayout;
 
-    static Context context;
+    public static Context context;
 
-    static String username;
+    public static String username;
 
-    static RecyclerView viewProfileInfo;
+    public static RecyclerView viewProfileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

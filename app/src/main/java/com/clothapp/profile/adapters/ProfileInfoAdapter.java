@@ -1,4 +1,4 @@
-package com.clothapp.profile;
+package com.clothapp.profile.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clothapp.R;
+import com.clothapp.profile.utils.ProfileInfoListItem;
+import com.clothapp.profile.UserProfileActivity;
 
 import java.util.List;
 
-class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<ProfileInfoListItem> items;
+    public List<ProfileInfoListItem> items;
 
     private final static int ITEM_TYPE_HEADER = 0;
     private final static int ITEM_TYPE_INFO = 1;

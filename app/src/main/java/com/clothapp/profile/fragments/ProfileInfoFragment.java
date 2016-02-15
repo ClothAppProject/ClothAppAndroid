@@ -1,4 +1,4 @@
-package com.clothapp.profile;
+package com.clothapp.profile.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.R;
+import com.clothapp.profile.adapters.ProfileInfoAdapter;
+import com.clothapp.profile.utils.ProfileInfoListItem;
+import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 
 import java.util.ArrayList;
 

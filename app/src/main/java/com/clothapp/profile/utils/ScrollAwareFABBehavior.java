@@ -1,4 +1,4 @@
-package com.clothapp.profile;
+package com.clothapp.profile.utils;
 
 import android.content.Context;
 import android.os.Build;

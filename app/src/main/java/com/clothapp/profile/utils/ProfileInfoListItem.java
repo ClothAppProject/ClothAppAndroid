@@ -1,6 +1,6 @@
-package com.clothapp.profile;
+package com.clothapp.profile.utils;
 
-class ProfileInfoListItem {
+public class ProfileInfoListItem {
 
     private String title;
     private String content;

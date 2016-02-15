@@ -1,4 +1,4 @@
-package com.clothapp.profile;
+package com.clothapp.profile.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
