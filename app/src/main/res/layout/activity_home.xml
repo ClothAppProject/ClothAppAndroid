@@ -78,6 +78,7 @@
     android:layout_width="300dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
+    android:layout_marginTop="58dp"
     android:orientation="vertical" >
 
         <LinearLayout
@@ -85,7 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:layout_gravity="start"
-            android:layout_marginTop="58dp"
             android:background="@drawable/menu_background"
             android:gravity="center_vertical"
             android:orientation="vertical" >
