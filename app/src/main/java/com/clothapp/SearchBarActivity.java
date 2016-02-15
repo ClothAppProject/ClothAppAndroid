@@ -25,7 +25,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by nc94 on 2/15/16.
  */
 public class SearchBarActivity extends BaseActivity{
-    @Override
+   /* @Override
     protected void onCreate(Bundle savedInstanceState) {
         // nascondo la status bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -40,7 +40,7 @@ public class SearchBarActivity extends BaseActivity{
          */
 
         //qui scarico le foto
-        final View vi = new View(this.getApplicationContext());
+      /*  final View vi = new View(this.getApplicationContext());
         final ArrayList<Image> photo = new ArrayList<>();
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -77,7 +77,7 @@ public class SearchBarActivity extends BaseActivity{
             }
         });
         Log.d("SplashScreenActivity", "Finito il prefetch dei dati.");
-    }
+    }*/
 
 }
 

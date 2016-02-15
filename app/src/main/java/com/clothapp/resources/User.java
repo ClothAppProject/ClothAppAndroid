@@ -13,18 +13,18 @@ import java.util.List;
 /**
  * Created by nc94 on 2/15/16.
  */
-public class Users {
+public class User{
 
     private String username;
     private String surname;
     private String city;
-    public Users(String username, String surname, String city) {
+    public User(String username, String surname, String city) {
         this.username = username;
         this.surname = surname;
         this.city = city;
     }
 
-    public Users(ParseObject o) {
+    public User(ParseObject o) {
 
         this.username=o.getString("username");
         this.surname=o.getString("surname");

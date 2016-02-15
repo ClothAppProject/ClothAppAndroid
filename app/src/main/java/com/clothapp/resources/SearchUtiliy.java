@@ -70,14 +70,14 @@ public class SearchUtiliy {
         return lista;}
 
 //cerco il primo utente con quel nome
-    public static Image searchUtente(String s){
+    public static User searchUtente(String s){
 //TODO fare in modo che restituisca più utenti durante la rcerca in tempo reale
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereContains("username", s);
-        Image p=null;
+        User p=null;
         try{
         ParseObject o=queryFoto.getFirst();
-        p=new Image(o);}
+        p=new User(o);}
         catch( ParseException e){
             System.out.println(e.getCode());
         }
