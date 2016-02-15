@@ -110,6 +110,9 @@
     <string name="cloth">Vestito</string>
     <string name="title_template_step">ciao</string>
     <string name="title_activity_new_profile">NewProfileActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="clothes">Clothes</string>
+    <string name="Users">Users</string>
+    <string name="tag">Tag</string>>
 
 </resources>
