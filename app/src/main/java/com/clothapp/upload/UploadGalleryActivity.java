@@ -130,6 +130,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 picture.put("photo", file);
                 String[] hashtags = hash.getText().toString().split(" ");
                 picture.put("hashtag", Arrays.asList(hashtags));
+                picture.put("nLike",0);
 
                 // Invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {

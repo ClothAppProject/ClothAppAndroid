@@ -19,7 +19,23 @@
 
     <style name="AppTheme.Login" parent="AppTheme.NoActionBar" />
 
-    <!--Home-->
+    <!--style Home-->
+    <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/darkred</item>
+        <item name="colorAccent">@color/red</item>
+        <item name="android:windowBackground">@color/sfondo</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="actionBarStyle">@style/ActionBar</item>
+    </style>
+
+    <style name="ActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/red</item>
+        <item name="background">@color/red</item>
+    </style>
+
+    <!--tablayout Home-->
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
         <item name="tabMaxWidth">@dimen/tab_max_width</item>
         <item name="tabIndicatorColor">@color/white</item>

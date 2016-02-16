@@ -49,7 +49,6 @@ public class Image implements Parcelable{
     public String getUser() {
         return user;
     }
-
     public List getLike() {return like;}
     public int getNumLike() {return nLike;}
     public void addLike(String o) {like.add(o); nLike++;}
@@ -61,6 +60,19 @@ public class Image implements Parcelable{
     }
     public String getObjectId() {
         return this.objectId;
+    }
+
+    //metodi equals e hashcode che controllano se un oggetto è uguale, basta controllare sull'objectId
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return objectId.equals(image.objectId);
+    }
+    @Override
+    public int hashCode() {
+        return objectId.hashCode();
     }
 
     //funzioni per dell'interfaccia parcelable, per poter passare un ArrayList<Image> da una classe all'imageFragment

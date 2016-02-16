@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,12 +45,12 @@ public class HomeTopRatedFragment extends Fragment {
     private View rootView;
     SwipeRefreshLayout swipeRefreshLayout;
     MyListAdapter adapter;
-    private View view;
     private ListView l;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Image> photo = new ArrayList<>();
+    Boolean canLoad = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -70,68 +71,118 @@ public class HomeTopRatedFragment extends Fragment {
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 
+        //setto il listener sullo scroller quando arrivo in fondo
+        l.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                    if (canLoad && photo.size()>0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                        canLoad = false;
+                        int toDownload = 10;
+                        final int maxNumLike = photo.get(photo.size()-1).getNumLike();
+                        ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+                        updatePhotos.whereLessThanOrEqualTo("nLike", maxNumLike);
+                        updatePhotos.orderByDescending("nLike");
+                        updatePhotos.setLimit(toDownload);
+                        updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> objects, ParseException e) {
+                                if (e == null) {
+                                    if (objects.size() > 0) {
+                                        int i;
+                                        for (i = 0; i < objects.size(); i++) {
+                                            //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
+                                            //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
+                                            if (objects.get(i).getInt("nLike")==maxNumLike) {
+                                                if (photo.contains(new Image(null,objects.get(i).getObjectId(),null,null)))  continue;
+                                            }
+                                            ParseFile f = objects.get(i).getParseFile("thumbnail");
+                                            try {
+                                                //ottengo la foto e la aggiungo
+                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like"));
+                                                photo.add(toAdd);
+                                                //notifico l'image adapter di aggiornarsi
+                                                adapter.notifyDataSetChanged();
+                                            } catch (ParseException e1) {
+                                                check(e1.getCode(), rootView, e1.getMessage());
+                                            }
+                                        }
+                                        canLoad = true;
+                                    }
+                                } else {
+                                    check(e.getCode(), rootView, e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+        });
         //setCardViews(findTopRated(),container);
         return rootView;
     }
-/*
-    public void setCardViews(List<Image>images,ViewGroup container){
-        int i;
-        for(i=0;i<images.size();i++){
-           // Card c=new Card();
-            ImageView imageView= (ImageView) getActivity().findViewById(R.id.topfoto);
-            l.addView(imageView);
-            TextView user=(TextView)rootView.findViewById(R.id.user);
-            user.setText(images.get(i).getUser());
-
-            Glide.with(this)
-                    .load(images.get(i).getFile())
-                    .into(imageView);
+    /*
+        public void setCardViews(List<Image>images,ViewGroup container){
+            int i;
+            for(i=0;i<images.size();i++){
+               // Card c=new Card();
+                ImageView imageView= (ImageView) getActivity().findViewById(R.id.topfoto);
+                l.addView(imageView);
+                TextView user=(TextView)rootView.findViewById(R.id.user);
+                user.setText(images.get(i).getUser());
+                Glide.with(this)
+                        .load(images.get(i).getFile())
+                        .into(imageView);
+            }
         }
-    }
-*/
- public void findRated(int n)    {
-     photo = new ArrayList<>();
-     //qui scarico le foto
-     final View vi = new View(getActivity().getApplicationContext());
-     final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-     query.setLimit(n);
-     query.orderByDescending("nLike");
-     query.findInBackground(new FindCallback<ParseObject>() {
-         public void done(List<ParseObject> fotos, ParseException e) {
-             if (e == null) {
-                 for (int i = 0; i < fotos.size(); i++) {
-                     ParseObject obj = fotos.get(i);
-                     ParseFile file = obj.getParseFile("thumbnail");
-                     try {
-                         //inserisco le foto in una lista
-                         photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
+    */
+    public void findRated(int n)    {
+        photo = new ArrayList<>();
+        //qui scarico le foto
+        final View vi = new View(getActivity().getApplicationContext());
+        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        query.setLimit(n);
+        query.orderByDescending("nLike");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> fotos, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < fotos.size(); i++) {
+                        ParseObject obj = fotos.get(i);
+                        ParseFile file = obj.getParseFile("thumbnail");
+                        try {
+                            //inserisco le foto in una lista
+                            photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
 
-                     } catch (ParseException e1) {
-                         check(e.getCode(), vi, e.getMessage());
-                     }
-                 }
-                 adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
-                 l.setAdapter(adapter);
-                 l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                     @Override
-                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                         if (HomeActivity.menuMultipleActions.isExpanded()) {
-                             HomeActivity.menuMultipleActions.collapse();
-                         } else {
-                             Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
-                             toPass.putExtra("position", position);
-                             //passo la lista delle foto al fragment
-                             toPass.putExtra("lista", photo);
-                             startActivity(toPass);
-                         }
-                     }
-                 });
-             } else {
-                 //errore nel reperire gli oggetti Photo dal database
-                 check(e.getCode(), vi, e.getMessage());
-             }
-         }
-     });
- }
+                        } catch (ParseException e1) {
+                            check(e.getCode(), vi, e.getMessage());
+                        }
+                    }
+                    adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
+                    l.setAdapter(adapter);
+                    l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (HomeActivity.menuMultipleActions.isExpanded()) {
+                                HomeActivity.menuMultipleActions.collapse();
+                            } else {
+                                Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                                toPass.putExtra("position", position);
+                                //passo la lista delle foto al fragment
+                                toPass.putExtra("lista", photo);
+                                startActivity(toPass);
+                            }
+                        }
+                    });
+                } else {
+                    //errore nel reperire gli oggetti Photo dal database
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+        });
+    }
 
 }
