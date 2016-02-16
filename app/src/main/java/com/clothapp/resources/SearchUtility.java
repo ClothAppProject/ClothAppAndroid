@@ -22,7 +22,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 
 //FUNZIONI PER LA SEARCH BAR
 
-public class SearchUtiliy {
+public class SearchUtility {
 
 // Cerco tutti le photo per hashtag e restituisco una lista di immagini
  public static ArrayList<Image> searchHashtag(String s, final View vi)  {

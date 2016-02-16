@@ -15,7 +15,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.clothapp.resources.SearchUtiliy;
+import com.clothapp.resources.SearchUtility;
+import com.clothapp.resources.SearchUtility;
+import com.clothapp.resources.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
@@ -53,7 +59,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             View v=(View)findViewById(R.id.searchview);
 
             TextView t=(TextView)findViewById(R.id.user_find);
-            t.setText(SearchUtiliy.searchUser(query,v).toString());
+            List<User> results=SearchUtility.searchUser(query, v);
+            ListIterator<User> i=results.listIterator();
+           String res="niente";
+            while(i.hasNext()){
+           res=res.concat(i.next().getUsername()+"\n");
         }
-    }
-}
+      t.setText(res);
+         }
+    }}
