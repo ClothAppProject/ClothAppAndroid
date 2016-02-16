@@ -35,7 +35,6 @@
 
 
     <string name="homepage_button">HomePage</string>
-    <string name="upload">Upload</string>
     <string name="logout_button">Logout</string>
     <string name="profile_button">Profilo</string>
     <string name="barra_separatrice">____________________________________________</string>
@@ -115,6 +114,6 @@
     <string name="clothes">Clothes</string>
     <string name="Users">Users</string>
     <string name="tag">Tag</string>
-    <string name="action_search">search</string>>
+    <string name="action_search">Search</string>>
 
 </resources>

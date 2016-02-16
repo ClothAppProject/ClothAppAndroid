@@ -1,22 +1,18 @@
 package com.clothapp.home_gallery;
 
+
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,7 +24,7 @@ import com.clothapp.BaseActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.resources.CircleTransform;
-import com.clothapp.resources.SearchUtiliy;
+
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -49,25 +45,13 @@ import static com.clothapp.resources.ExceptionCheck.check;
  */
 public class HomeActivity extends BaseActivity {
     static FloatingActionsMenu menuMultipleActions;
-    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // my_child_toolbar is defined in the layout file
-        Toolbar myChildToolbar =(Toolbar) findViewById(R.id.my_home_toolbar);
-        setSupportActionBar(myChildToolbar);
-
-        // Get a support ActionBar corresponding to this toolbar
-        final ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.homepage_button);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        handleIntent(getIntent());
 
 /*
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -97,31 +81,30 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_app_bar, menu);
+        MenuInflater inflater = getMenuInflater();
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.home_app_bar, menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        System.out.println("searchView="+searchView);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Configure the search info and add any event listeners...
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                System.out.println(query);
-                SearchUtiliy.searchVestiti(query,findViewById(R.id.content_frame));
-                //TODO: unire alla classe di niccolò
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search
+        }
+    }
 
     private void setUpMenu() {
 
@@ -181,7 +164,7 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user", ParseUser.getCurrentUser().getUsername());
+                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
                 startActivity(i);
                 finish();
             }
@@ -196,16 +179,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setupFloatingButton(){
@@ -227,7 +200,7 @@ public class HomeActivity extends BaseActivity {
         com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
         gallery.setTitle("Gallery");
         gallery.setIcon(R.mipmap.gallery_icon);
-        gallery.setColorNormal(Color.rgb(210,36,37));
+        gallery.setColorNormal(Color.rgb(210, 36, 37));
         gallery.setColorPressed(Color.RED);
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
