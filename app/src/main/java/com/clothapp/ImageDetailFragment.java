@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,8 +111,36 @@ public class ImageDetailFragment extends Fragment {
                 i.putExtra("user", user);
                 startActivity(i);
                 getActivity().finish();
+
             }
         });
+        Log.d("PROFILEPIC","prima prova");
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        queryFoto.whereEqualTo("username", immagine.getUser());
+        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    //  if the user has a profile pic it will be shown in the side menu
+                    //  else the app logo will be shown
+                    if (objects.size() != 0) {
+                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+                        try {
+                            File file = f.getFile();
+                            Glide.with(context)
+                                    .load(file)
+                                    .centerCrop()
+                                    .transform(new CircleTransform(context))
+                                    .into(profilePic);
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } else {
+                    check(e.getCode(), vi, e.getMessage());
+                }
+            }
+            });
 
         //faccio query al database per scaricare la foto
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -243,39 +272,6 @@ public class ImageDetailFragment extends Fragment {
                     });
             }
         });
-
-        //TODO fare query a parse per la profile pic
-        /*
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-        queryFoto.whereEqualTo("username", user);
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-
-                        try {
-                            File file = f.getFile();
-                            Glide.with(context)
-                                    .load(file)
-                                    .centerCrop()
-                                   // .transform(new CircleTransform(ImageDetailFragment.this))
-                                    .into(profilePic);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-
-        */
-
     }
 
 

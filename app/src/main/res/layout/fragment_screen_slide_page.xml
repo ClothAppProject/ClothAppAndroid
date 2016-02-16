@@ -55,13 +55,13 @@
                         android:layout_marginTop="5dp"
                         android:orientation="horizontal"
                         android:background="@drawable/back"
+                        android:backgroundTint="@color/red"
                         android:id="@+id/prof">
 
                         <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="25dp"
-                            android:layout_margin="6dp"
-                            android:src="@mipmap/logo"
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/logo_circle"
                             android:id="@+id/pic" />
 
                         <TextView
@@ -70,7 +70,7 @@
                             android:textColor="#000000"
                             android:textSize="20sp"
                             android:paddingTop="3dp"
-                            android:paddingLeft="10dp"
+                            android:layout_marginLeft="14dp"
                             android:id="@+id/user"
                             android:fontFamily="sans-serif-medium"
                             android:textStyle="italic"/>
