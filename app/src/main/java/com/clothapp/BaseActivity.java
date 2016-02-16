@@ -4,13 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +24,10 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.NavDrawerItem;
 import com.clothapp.resources.NavDrawerListAdapter;
-import com.clothapp.resources.SearchUtiliy;
 import com.clothapp.settings.SettingsActivity;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import android.support.v7.app.ActionBar;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -44,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     private LinearLayout drawerll;
 
     //image view for profile pic
-   // private ImageView imageView = (ImageView) findViewById(R.id.noProfileP);
+    // private ImageView imageView = (ImageView) findViewById(R.id.noProfileP);
 
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -58,17 +53,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.drawer);
-
-        setContentView(R.layout.activity_base);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        // Get a support ActionBar corresponding to this toolbar
-        final ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.app_name);
+        setContentView(R.layout.drawer);
 
         //setProfileP();
 
@@ -171,19 +156,14 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // getSupportMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.base_app_bar, menu);
         return true;
     }
 
-
-
-
-/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
-        //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
+            //TODO qui (todo che mi sono serviti a vedere delle cose nel codice per non sbagliare) Roberto
             if (mDrawerLayout.isDrawerOpen(drawerll)) {
                 mDrawerLayout.closeDrawer(drawerll);
             } else {
@@ -192,9 +172,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    */
-
-
 
     /***
      * Called when invalidateOptionsMenu() is triggered

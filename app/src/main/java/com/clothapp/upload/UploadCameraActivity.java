@@ -73,17 +73,7 @@ public class UploadCameraActivity extends AppCompatActivity {
         //inizializzo layout e tasto indietro
 
         setContentView(R.layout.activity_upload);
-
-        // my_child_toolbar is defined in the layout file
-        Toolbar myChildToolbar =(Toolbar) findViewById(R.id.my_home_toolbar);
-        setSupportActionBar(myChildToolbar);
-
-        // Get a support ActionBar corresponding to this toolbar
-        final ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.upload);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Log.d("UploadCameraActivity", "Inizializzazione UploadCameraActivity");
 
@@ -326,10 +316,5 @@ public class UploadCameraActivity extends AppCompatActivity {
         return state.equals(Environment.MEDIA_MOUNTED);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // getSupportMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.base_app_bar, menu);
-        return true;
-    }
+
 }
