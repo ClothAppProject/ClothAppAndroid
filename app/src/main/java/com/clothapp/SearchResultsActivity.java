@@ -12,6 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import com.clothapp.resources.SearchUtiliy;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
@@ -46,6 +50,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search
+            View v=(View)findViewById(R.id.searchview);
+
+            TextView t=(TextView)findViewById(R.id.user_find);
+            t.setText(SearchUtiliy.searchUser(query,v).toString());
         }
     }
 }
