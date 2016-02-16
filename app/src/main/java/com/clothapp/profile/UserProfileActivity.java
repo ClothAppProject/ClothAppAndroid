@@ -32,6 +32,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public static String username;
 
     public static RecyclerView viewProfileInfo;
+    public static RecyclerView viewProfileUploadedPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

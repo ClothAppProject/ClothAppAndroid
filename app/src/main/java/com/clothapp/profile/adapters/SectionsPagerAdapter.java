@@ -1,6 +1,5 @@
 package com.clothapp.profile.adapters;
 
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.PlaceholderFragment;
 import com.clothapp.profile.fragments.ProfileInfoFragment;
+import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -23,6 +23,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return ProfileInfoFragment.newInstance(UserProfileActivity.username);
+            case 1:
+                return ProfileUploadedPhotosFragment.newInstance(UserProfileActivity.username);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }
