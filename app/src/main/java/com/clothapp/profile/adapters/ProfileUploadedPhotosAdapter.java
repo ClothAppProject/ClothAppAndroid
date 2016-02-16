@@ -3,7 +3,6 @@ package com.clothapp.profile.adapters;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile.utils.ProfileInfoListItem;
 import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 
 import java.io.File;
