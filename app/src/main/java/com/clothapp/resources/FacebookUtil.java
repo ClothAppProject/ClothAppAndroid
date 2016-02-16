@@ -61,7 +61,7 @@ public class FacebookUtil {
         Bundle parameters = new Bundle();
 
         // specifico i parametri che voglio ottenere da facebook
-        parameters.putString("fields", "email,first_name,last_name,birthday,picture");
+        parameters.putString("fields", "email,first_name,last_name,birthday,picture.type(large)");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
