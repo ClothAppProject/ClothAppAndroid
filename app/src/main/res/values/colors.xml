@@ -20,5 +20,7 @@
     <color name="sfondo">#e9e9e9</color>
     <color name="info_text">#666666</color>
 
+    <color name="giallo">#eeff00</color>
+
 
 </resources>

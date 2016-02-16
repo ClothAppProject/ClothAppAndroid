@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".login_signup.SignupActivity">
+    tools:context=".login_signup.SignupActivity"
+    android:theme="@style/AppTheme">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -57,6 +58,7 @@
                 android:id="@+id/form_register_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:theme="@android:style/Theme.Material.Light"
                 android:text="@string/send" />
         </LinearLayout>
     </ScrollView>

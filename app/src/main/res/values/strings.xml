@@ -113,6 +113,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="clothes">Clothes</string>
     <string name="Users">Users</string>
-    <string name="tag">Tag</string>>
+    <string name="tag">Tag</string>
+    <string name="action_search">Search</string>>
 
 </resources>

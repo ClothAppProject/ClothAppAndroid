@@ -52,13 +52,13 @@ public class ImageFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.fragment_image);
         //setto pulsante indietro
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+ //       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //prendo la lista delle immagini
         lista = getIntent().getParcelableArrayListExtra("lista");
-        setContentView(R.layout.fragment_image);
+
         mPager = (ViewPager) findViewById(R.id.pager);
 
 

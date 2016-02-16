@@ -227,7 +227,8 @@
                     android:id="@+id/form_register_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/send" />
+                    android:text="@string/send"
+                    android:theme="@android:style/Theme.Material.Light" />
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
