@@ -194,15 +194,20 @@ public class BaseActivity extends AppCompatActivity {
             case 0:
                 //homepage
                 i = new Intent(this, HomeActivity.class);
+                startActivity(i);
+                finish();
                 break;
             case 1:
                 //profilo
                 i = new Intent(this, ProfileActivity.class);
                 i.putExtra("user", ParseUser.getCurrentUser().getUsername().toString());
+                startActivity(i);
+                finish();
                 break;
             case 2:
                 //settings
                 i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
                 break;
             case 3:
                 //logout
@@ -218,12 +223,12 @@ public class BaseActivity extends AppCompatActivity {
                 logout.start();
                 i = new Intent(this, MainActivity.class);
                 dialog.dismiss();
+                startActivity(i);
+                finish();
                 break;
             default:
                 break;
         }
-        startActivity(i);
-        finish();
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         mDrawerList.setSelection(position);

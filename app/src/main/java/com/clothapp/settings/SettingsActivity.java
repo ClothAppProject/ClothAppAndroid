@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
@@ -13,6 +14,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setto pulsante indietro
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
@@ -24,10 +27,18 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Reinderizzo l'utente alla homePage activity
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(i);
+        // cesso questa activity e resto a quella precedente
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
