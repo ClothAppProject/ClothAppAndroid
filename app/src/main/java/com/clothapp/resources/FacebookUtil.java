@@ -2,22 +2,36 @@ package com.clothapp.resources;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.clothapp.SplashScreenActivity;
+import com.clothapp.http.Get;
+import com.clothapp.profile.ProfileActivity;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,7 +61,7 @@ public class FacebookUtil {
         Bundle parameters = new Bundle();
 
         // specifico i parametri che voglio ottenere da facebook
-        parameters.putString("fields", "email,first_name,last_name,birthday");
+        parameters.putString("fields", "email,first_name,last_name,birthday,picture");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
@@ -62,6 +76,11 @@ public class FacebookUtil {
                     String dateStr = (String) response.getJSONObject().get("birthday");
                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                     birthday = sdf.parse(dateStr);
+
+                    JSONObject picture = response.getJSONObject().getJSONObject("picture");
+                    JSONObject data = picture.getJSONObject("data");
+                    //  Returns a 50x50 profile picture
+                    String pictureUrl = data.getString("url");
 
                     Log.d("FacebookUtil", "Informazioni prelevate da Facebook");
 
@@ -79,10 +98,39 @@ public class FacebookUtil {
                         persona.put("date",birthday);
                         //persona.put("city",citta.trim());
                         persona.save();
+
+                        //scarico l'immagine presa da facebook
+                        URL aURL = new URL(pictureUrl);
+                        URLConnection conn = aURL.openConnection();
+                        conn.connect();
+                        InputStream is = conn.getInputStream();
+                        BufferedInputStream bis = new BufferedInputStream(is);
+
+                        //comprilo l'immagine in byte[] e la invio come parseFile
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        (BitmapFactory.decodeStream(bis)).compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                        byte[] pp = stream.toByteArray();
+
+                        ParseFile file = new ParseFile("facebook_picture.jpg", pp);
+                        file.save();
+                        // Creazione di un ParseObject da inviare
+                        ParseObject userPhoto = new ParseObject("UserPhoto");
+                        userPhoto.put("username", user.getUsername());
+                        userPhoto.put("profilePhoto", file);
+                        userPhoto.save();
+
+                        //chiamata get per salvare il thumbnail
+                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+userPhoto.getObjectId();
+                        Get g = new Get();
+                        g.execute(url);
                     } catch (ParseException e) {
                         ret = e;
                         System.out.println("debug: ret = "+ret.getMessage().toString());
 
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 } catch (JSONException e) {
                     System.out.println("debug: eccezione nell'ottenere info da facebook");

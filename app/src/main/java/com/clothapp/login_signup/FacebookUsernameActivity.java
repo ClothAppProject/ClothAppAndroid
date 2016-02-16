@@ -96,6 +96,16 @@ public class FacebookUsernameActivity extends AppCompatActivity {
                                                 @Override
                                                 public void done(ParseException e) {
                                                     if (e==null) {
+                                                        ParseQuery<ParseObject> userPhoto = new ParseQuery<ParseObject>("UserPhoto");
+                                                        userPhoto.whereEqualTo("username", nomevecchio);
+                                                        try {
+                                                            List<ParseObject> pp = userPhoto.find();
+                                                            ParseObject picture = pp.get(0);
+                                                            picture.put("username",user.getUsername());
+                                                            picture.saveInBackground();
+                                                        } catch (ParseException e1) {
+                                                            check(e1.getCode(), vi, e1.getMessage());
+                                                        }
                                                         // Redirect user to Splash Screen Activity.
                                                         Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
                                                         startActivity(form_intent);
@@ -108,7 +118,7 @@ public class FacebookUsernameActivity extends AppCompatActivity {
                                                 }
                                             });
                                         } catch (ParseException e1) {
-                                            check(e.getCode(), vi, e.getMessage());
+                                            check(e1.getCode(), vi, e1.getMessage());
                                         }
                                     } else {
                                         // Chiudo la dialogBar
