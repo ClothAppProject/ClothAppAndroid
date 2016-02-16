@@ -48,24 +48,24 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
         UserProfileActivity.viewProfileUploadedPhotos.setLayoutManager(llm);
-
-        ProfileUploadedPhotosListItem itemTest1 = new ProfileUploadedPhotosListItem("Hello!");
-        ProfileUploadedPhotosListItem itemTest2 = new ProfileUploadedPhotosListItem("Hello!");
-        ProfileUploadedPhotosListItem itemTest3 = new ProfileUploadedPhotosListItem("Hello!");
+//
+//        ProfileUploadedPhotosListItem itemTest1 = new ProfileUploadedPhotosListItem("Hello!");
+//        ProfileUploadedPhotosListItem itemTest2 = new ProfileUploadedPhotosListItem("Hello!");
+//        ProfileUploadedPhotosListItem itemTest3 = new ProfileUploadedPhotosListItem("Hello!");
 
         // Create an array and add the previously created items to it.
         ArrayList<ProfileUploadedPhotosListItem> items = new ArrayList<>();
 
-        items.add(itemTest1);
-        items.add(itemTest2);
-        items.add(itemTest3);
+//        items.add(itemTest1);
+//        items.add(itemTest2);
+//        items.add(itemTest3);
 
         // Create a new adapter for the recycler view
         ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items);
         UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        // ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
+        ProfileUtils.getParseUploadedPhotos("Jacopo", 0, 10);
 
         // Return the fragment
         return rootView;

@@ -1,10 +1,13 @@
 package com.clothapp.profile.adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.clothapp.R;
@@ -12,6 +15,7 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.utils.ProfileInfoListItem;
 import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 
+import java.io.File;
 import java.util.List;
 
 public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -34,8 +38,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
-        String username = UserProfileActivity.username;
-        photoViewHolder.txtTitle.setText(username);
+        photoViewHolder.txtTitle.setText(items.get(position).getTitle());
+
+        File imageFile = items.get(position).getImageFile();
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+
+        photoViewHolder.photo.setImageBitmap(imageBitmap);
 
     }
 
@@ -47,11 +55,13 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtTitle;
+        ImageView photo;
 
         PhotoViewHolder(View itemView) {
             super(itemView);
 
             txtTitle = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_list_item_title);
+            photo = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_image);
         }
     }
 
