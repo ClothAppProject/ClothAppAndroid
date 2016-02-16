@@ -1,7 +1,7 @@
 package com.clothapp.profile.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
-import com.clothapp.profile.utils.ProfileInfoListItem;
 import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 import com.clothapp.profile.utils.ProfileUtils;
 
