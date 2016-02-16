@@ -35,13 +35,44 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
-        photoViewHolder.txtTitle.setText(items.get(position).getTitle());
+        photoViewHolder.txtUsername.setText(items.get(position).getObjectId());
 
         File imageFile = items.get(position).getImageFile();
         Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 
         photoViewHolder.photo.setImageBitmap(imageBitmap);
 
+        List<String> hashtagList = items.get(position).hashtags;
+
+        if (hashtagList != null) {
+
+            StringBuilder sb = new StringBuilder();
+
+            for (String hashtag : hashtagList) {
+                sb.append(hashtag).append(" ");
+            }
+
+            photoViewHolder.txtHashtags.setText(sb.toString());
+
+        } else {
+            photoViewHolder.txtHashtags.setText("");
+        }
+
+        List<String> clothesList = items.get(position).clothes;
+
+        if (clothesList != null) {
+
+            StringBuilder sb = new StringBuilder();
+
+            for (String clothing : clothesList) {
+                sb.append(clothing).append(" & ");
+            }
+
+            String result = sb.toString();
+            result = result.substring(0, result.length() - 2);
+
+            photoViewHolder.txtItems.setText(result);
+        }
     }
 
     @Override
@@ -51,13 +82,17 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtTitle;
+        TextView txtUsername;
+        TextView txtItems;
+        TextView txtHashtags;
         ImageView photo;
 
         PhotoViewHolder(View itemView) {
             super(itemView);
 
-            txtTitle = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_list_item_title);
+            txtUsername = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_list_item_title);
+            txtItems = (TextView) itemView.findViewById(R.id.profile_uplaoded_photos_card_item_name);
+            txtHashtags = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_hashtags);
             photo = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_image);
         }
     }

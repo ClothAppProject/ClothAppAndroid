@@ -22,6 +22,7 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -128,16 +129,17 @@ public class ProfileUtils {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("user", username);
+        query.addDescendingOrder("createdAt");
         query.setSkip(start);
         query.setLimit(limit);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
+                    // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
 
                     for (final ParseObject photo : photos) {
-                        Log.d("ProfileUtils", photo.getObjectId());
+                        // Log.d("ProfileUtils", photo.getObjectId());
 
                         ParseFile parseFile = photo.getParseFile("thumbnail");
                         parseFile.getFileInBackground(new GetFileCallback() {
@@ -146,13 +148,23 @@ public class ProfileUtils {
 
                                 if (e == null) {
 
-                                    Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
+                                    // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
 
                                     RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
                                     ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
-                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(photo.getObjectId(), file);
+                                    String objectId = photo.getObjectId();
+                                    String username = photo.get("user").toString();
+                                    int nLikes = photo.getInt("nLike");
+
+                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
+
+                                    item.hashtags = photo.getList("hashtag");
+                                    item.clothes = photo.getList("vestiti");
+                                    item.users = photo.getList("like");
+
                                     adapter.items.add(item);
+
 
                                     adapter.notifyDataSetChanged();
 
