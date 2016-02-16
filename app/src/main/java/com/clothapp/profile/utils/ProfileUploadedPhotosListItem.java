@@ -16,7 +16,9 @@ public class ProfileUploadedPhotosListItem {
 
     private int nLikes;
 
-    public ProfileUploadedPhotosListItem (String objectId, File file, String username, int nLikes) {
+    // Constructor
+    public ProfileUploadedPhotosListItem(String objectId, File file, String username, int nLikes) {
+
         this.objectId = objectId;
         this.imgFile = file;
         this.username = username;
@@ -27,35 +29,24 @@ public class ProfileUploadedPhotosListItem {
         users = new ArrayList<>();
     }
 
+    // Get ParseObject objectId
     public String getObjectId() {
         return objectId;
     }
 
+    // Get the File object of the uploaded photo
+    // This file is the thumbnail image
     public File getImageFile() {
         return imgFile;
     }
 
-    public void setObjectId(String title) {
-        this.objectId = title;
-    }
-
-    public void setImgFile(File imgFile) {
-        this.imgFile = imgFile;
-    }
-
+    // Get the username of the user who uploaded the photo
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    // Get the number of likes for this photo
     public int getnLikes() {
         return nLikes;
-    }
-
-    public void setnLikes(int nLikes) {
-        this.nLikes = nLikes;
     }
 }

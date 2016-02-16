@@ -37,11 +37,13 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
         photoViewHolder.txtUsername.setText(items.get(position).getObjectId());
 
+        // Create a bitmap from a file
         File imageFile = items.get(position).getImageFile();
         Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 
         photoViewHolder.photo.setImageBitmap(imageBitmap);
 
+        // Display hashtags, if any
         List<String> hashtagList = items.get(position).hashtags;
 
         if (hashtagList != null) {
@@ -58,6 +60,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photoViewHolder.txtHashtags.setText("");
         }
 
+        // Display item (clothing) name, if any
         List<String> clothesList = items.get(position).clothes;
 
         if (clothesList != null) {
