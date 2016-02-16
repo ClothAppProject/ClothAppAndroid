@@ -53,14 +53,14 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                       // In caso sia premuto il pulsante indietro termino semplicemente l'activity
-                                case android.R.id.home:
-                               onBackPressed();
-                       }
-               return super.onOptionsItemSelected(item);
-           }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @Override
@@ -87,7 +87,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             List<User> user= SearchUtility.searchUser(query,rootView);
 
             for(int i=0;i<user.size();i++){
-                System.out.println(user.get(i).getUsername());
+                System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
             }
             System.out.println("ricerca finita di:"+query);
 

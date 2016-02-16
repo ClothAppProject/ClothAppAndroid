@@ -42,15 +42,16 @@ public class SearchAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView row = (TextView) convertView;
+        View row = convertView;
         if (row==null) {
             //se la convertView di quest'immagine è nulla la inizializzo
-            //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            //row = inflater.inflate(R.layout.fragment_cardlist, parent, false);
-            row=new TextView(context);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.search_item_user, parent, false);
+
         }
 
-        row.setText(getItem(position).getUsername());
+        TextView t=(TextView)row.findViewById(R.id.user);
+        t.setText(getItem(position).getUsername());
         return row;
     }
 }

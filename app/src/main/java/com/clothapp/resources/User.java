@@ -16,18 +16,18 @@ import java.util.List;
 public class User{
 
     private String username;
-    private String surname;
+    private String name;
     private String city;
-    public User(String username, String surname, String city) {
+    public User(String username, String name, String city) {
         this.username = username;
-        this.surname = surname;
+        this.name = name;
         this.city = city;
     }
 
     public User(ParseObject o) {
 
         this.username=o.getString("username");
-        this.surname=o.getString("surname");
+        this.name=o.getString("name");
         this.city=o.getString("city");
     }
 
@@ -35,8 +35,8 @@ public class User{
         return username;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getName() {
+        return name;
     }
 
     public String getCity() {

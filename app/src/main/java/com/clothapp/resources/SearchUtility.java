@@ -3,6 +3,7 @@ package com.clothapp.resources;
 import android.view.View;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -48,7 +49,7 @@ public class SearchUtility {
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
-    public static ArrayList<Image> searchVestiti(String s, final View vi) {
+    public static List<Image> searchVestiti(String s, final View vi) {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Vestito");
         queryFoto.whereContains("tipo", s.toString());
@@ -69,15 +70,21 @@ public class SearchUtility {
         });
         return lista;}
 
+
+
 //cerco il primo utente con quel nome
     public static List<User> searchUser(String s,View vi){
 //TODO fare in modo che restituisca più utenti durante la rcerca in tempo reale
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+        ParseQuery<ParseUser> queryFoto = ParseUser.getQuery();
         queryFoto.whereContains("username", s);
         List<User> p=new ArrayList<User>();
+        System.out.println(s);
         try{
-            List<ParseObject> o= queryFoto.find();
+            System.out.println(s);
+            List<ParseUser> o= queryFoto.find();
+            System.out.println(o.size());
             for(int i=0;i<o.size();i++){
+                System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
                 p.add(new User(o.get(i)));
             }
         }
