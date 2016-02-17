@@ -141,6 +141,8 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
 
+        viewPager.setCurrentItem(1, false);
+
         // Set up TabLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);

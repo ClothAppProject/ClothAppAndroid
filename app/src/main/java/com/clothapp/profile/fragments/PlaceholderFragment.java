@@ -30,7 +30,8 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile_placeholder, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+        // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+        textView.setText("Unimplemented Section. Thank you for your patience.");
         return rootView;
     }
 }
