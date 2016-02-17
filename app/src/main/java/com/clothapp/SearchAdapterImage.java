@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.clothapp.resources.User;
@@ -31,9 +30,10 @@ public class SearchAdapterImage extends BaseAdapter {
     }
 
     @Override
-    public Image getItem(int position) {
+    public Object getItem(int position) {
         return image.get(position);
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -50,10 +50,8 @@ public class SearchAdapterImage extends BaseAdapter {
 
         }
 
-        TextView t=(TextView)row.findViewById(R.id.user);
-        t.setText(getItem(position).getUser());
-        ImageView w=(ImageView) row.findViewById(R.id.photo);
-
+        TextView t=(TextView)row.findViewById(R.id.hashtag);
+        t.setText(getItem(position).hashCode());
         return row;
     }
 

@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.resources.Cloth;
+import com.clothapp.resources.Image;
 import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.User;
@@ -35,6 +37,7 @@ import java.util.ListIterator;
 public class SearchResultsActivity extends AppCompatActivity {
     private SearchView searchView;
     private ListView listUser;
+    private ListView listCloth;
 
 
     @Override
@@ -128,10 +131,13 @@ public class SearchResultsActivity extends AppCompatActivity {
             //prendo la listview e la rootView
             RelativeLayout rootView=(RelativeLayout)findViewById(R.id.searchview);
             listUser=(ListView)findViewById(R.id.user_find);
+            listCloth=(ListView)findViewById(R.id.image_find);
 
             //faccio la query a Parse
             List<User> user= SearchUtility.searchUser(query,rootView);
+            //List<Image> cloth=SearchUtility.searchCloth(query,rootView);
 
+            //stampa di DEBUG
             for(int i=0;i<user.size();i++){
                 System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
             }
@@ -141,14 +147,14 @@ public class SearchResultsActivity extends AppCompatActivity {
             final SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
             listUser.setAdapter(adapter);
 
+            //se clicco su un user mi apre il suo profilo
             listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //Intent toPass = new Intent(getApplicationContext(), UserProfileActivity.class);
-                    //toPass.putExtra("user", adapter.getItem(position).getUsername());
-
-                    //startActivity(toPass);
-                    //finish();
+                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                    i.putExtra("user", adapter.getItem(position).getUsername());
+                    startActivity(i);
+                    finish();
                 }
             });
 

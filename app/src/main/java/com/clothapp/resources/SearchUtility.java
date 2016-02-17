@@ -49,11 +49,12 @@ public class SearchUtility {
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
-    public static List<Image> searchVestiti(String s, final View vi) {
+    public static List<Image> searchCloth(String s, final View vi) {
 
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Vestito");
-        queryFoto.whereContains("tipo", s.toString());
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+        queryFoto.whereEqualTo("tipo", s.toString());
         final ArrayList<Image> lista=new ArrayList<Image>();
+        List<String>cloth=new ArrayList<String>();
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
