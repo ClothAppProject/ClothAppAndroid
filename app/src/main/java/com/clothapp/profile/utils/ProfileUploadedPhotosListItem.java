@@ -14,15 +14,15 @@ public class ProfileUploadedPhotosListItem {
     public List<String> clothes;
     public List<String> users;
 
-    private int nLikes;
+    private int likeCount;
 
     // Constructor
-    public ProfileUploadedPhotosListItem(String objectId, File file, String username, int nLikes) {
+    public ProfileUploadedPhotosListItem(String objectId, File file, String username, int likeCount) {
 
         this.objectId = objectId;
         this.imgFile = file;
         this.username = username;
-        this.nLikes = nLikes;
+        this.likeCount = likeCount;
 
         hashtags = new ArrayList<>();
         clothes = new ArrayList<>();
@@ -46,7 +46,7 @@ public class ProfileUploadedPhotosListItem {
     }
 
     // Get the number of likes for this photo
-    public int getnLikes() {
-        return nLikes;
+    public int getLikeCount() {
+        return likeCount;
     }
 }
