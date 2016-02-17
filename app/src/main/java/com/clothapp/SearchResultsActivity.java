@@ -38,7 +38,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private SearchView searchView;
     private ListView listUser;
     private ListView listCloth;
-
+    private ListView listTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,16 +132,18 @@ public class SearchResultsActivity extends AppCompatActivity {
             RelativeLayout rootView=(RelativeLayout)findViewById(R.id.searchview);
             listUser=(ListView)findViewById(R.id.user_find);
             listCloth=(ListView)findViewById(R.id.image_find);
+            listTag=(ListView) findViewById(R.id.tag_find);
 
             //faccio la query a Parse
             List<User> user= SearchUtility.searchUser(query,rootView);
+            List<Image> tag= SearchUtility.searchHashtag(query,rootView);
             //List<Image> cloth=SearchUtility.searchCloth(query,rootView);
 
             //stampa di DEBUG
             for(int i=0;i<user.size();i++){
                 System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
             }
-            System.out.println("ricerca finita di:"+query);
+            System.out.println("ricerca finita di:" + query);
 
             //chiama l'adattatore che inserisce gli item nella listview
             final SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
@@ -157,11 +159,19 @@ public class SearchResultsActivity extends AppCompatActivity {
                     finish();
                 }
             });
-
+            final SearchAdapterImage adapterI=new SearchAdapterImage(getBaseContext(),tag);
+            listTag.setAdapter(adapterI);
+            listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(), ImageFragment.class);
+                startActivity(i);
+                finish();
             //allungo l'altezza della list view
             //setListViewHeightBasedOnItems(listView);
         }
-    }
+    });
+        }}
 
     //funzione di ausilio per una nuova ricerca
     public void research(String query){
@@ -182,7 +192,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         for(int i=0;i<user.size();i++){
             System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
         }
-        System.out.println("ricerca finita di:"+query);
+        System.out.println("ricerca finita di:" + query);
 
         //chiama l'adattatore che inserisce gli item nella listview
         SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
