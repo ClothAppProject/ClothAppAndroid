@@ -22,7 +22,7 @@
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_gravity="left"
-        android:id="@+id/topfoto" />
+        android:id="@+id/foto" />
 
     <TextView
         android:id="@+id/user"
