@@ -1,60 +1,38 @@
 package com.clothapp.profile;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.clothapp.BaseActivity;
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
-import com.clothapp.resources.CircleTransform;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+import com.clothapp.profile.adapters.SectionsPagerAdapter;
 
-import java.io.File;
-import java.util.List;
+public class UserProfileActivity extends AppCompatActivity {
 
-import static com.clothapp.resources.ExceptionCheck.check;
+    private DrawerLayout mDrawerLayout;
 
+    public static Context context;
 
-public class UserProfileActivity extends BaseActivity {
+    public static String username;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    private ViewPager mViewPager;
-
-    static Context context;
-
-    static String username;
-
-    static TextView txtName;
-    static TextView txtAge;
-    static TextView txtCity;
-    static TextView txtEmail;
-    static TextView txtDescription;
+    public static RecyclerView viewProfileInfo;
+    public static RecyclerView viewProfileUploadedPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,22 +46,29 @@ public class UserProfileActivity extends BaseActivity {
         context = UserProfileActivity.this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Set toolbar title to empty string so that it won't overlap with the tabs.
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Set up drawer button
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
+        ab.setDisplayHomeAsUpEnabled(true);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        // Get the drawer view
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        setUpSideMenu();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
+        if (viewPager != null) {
+            setupViewPagerContent(viewPager);
+        }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,311 +79,62 @@ public class UserProfileActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                // Log.d("UserProfileActivity", "android.R.id.home");
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+            case R.id.action_settings:
+                // Log.d("UserProfileActivity", "R.id.action_settings");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupDrawerContent(NavigationView navigationView) {
 
-    // This is a placeholder fragment for unimplemented sections.
-    public static class PlaceholderFragment extends Fragment {
+        // Get default bitmap for user profile photo
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
 
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        // Create a rounded bitmap from the user profile photo
+        RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        rounded.setCornerRadius(bitmap.getWidth());
 
-        public PlaceholderFragment() {
-        }
+        // Get drawer header
+        View headerLayout = navigationView.getHeaderView(0);
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
+        // Get the image view containing the user profile photo
+        ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_profile_placeholder, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
+        // Set the user profile photo to the just created rounded image
+        drawerProfile.setImageDrawable(rounded);
 
-    // This fragment contains info about the user.
-    public static class ProfileInfoFragment extends Fragment {
-
-        private static final String PARSE_USERNAME = "username";
-
-        public ProfileInfoFragment() {
-
-        }
-
-        public static ProfileInfoFragment newInstance(String username) {
-            ProfileInfoFragment fragment = new ProfileInfoFragment();
-            Bundle args = new Bundle();
-            args.putString(PARSE_USERNAME, username);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
-
-            TextView txtUsername = (TextView) rootView.findViewById(R.id.profile_card_username);
-            txtUsername.setText(getArguments().getString(PARSE_USERNAME));
-
-            UserProfileActivity.txtName = (TextView) rootView.findViewById(R.id.profile_card_name);
-            UserProfileActivity.txtAge = (TextView) rootView.findViewById(R.id.profile_card_age);
-            UserProfileActivity.txtCity = (TextView) rootView.findViewById(R.id.profile_card_city);
-            UserProfileActivity.txtEmail = (TextView) rootView.findViewById(R.id.profile_card_email);
-            UserProfileActivity.txtDescription = (TextView) rootView.findViewById(R.id.profile_card_description);
-
-            txtName.setText("Loading...");
-            txtAge.setText("Loading...");
-            txtCity.setText("Loading...");
-            txtEmail.setText("Loading...");
-            txtDescription.setText("Loading...");
-
-            // Get user info from Parse
-            ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
-
-            return rootView;
-        }
-
-
-    }
-
-    // PagerAdapter for tabs and associated fragments.
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-
-            switch (position) {
-                case 0:
-                    return ProfileInfoFragment.newInstance(username);
-                default:
-                    return PlaceholderFragment.newInstance(position + 1);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Number of pages.
-            return 7;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "INFO";
-                case 1:
-                    return "UPLOADED PHOTOS";
-                case 2:
-                    return "FOLLOWERS";
-                case 3:
-                    return "FOLLOWING";
-                case 4:
-                    return "FAVORITE PHOTOS";
-                case 5:
-                    return "FAVORITE BRANDS";
-                case 6:
-                    return "FAVORITE SHOPS";
-            }
-            return null;
-        }
-    }
-
-    // Create a side menu
-    private void setUpSideMenu() {
-        String[] navMenuTitles;
-        TypedArray navMenuIcons;
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
-
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
-
-        set(navMenuTitles, navMenuIcons, 1);
-
-        final ImageView imageView = (ImageView) findViewById(R.id.ppProfile);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.profProfile);
-
-        TextView textView = (TextView) findViewById(R.id.nameMenu);
-        textView.setText(ParseUser.getCurrentUser().getString("name"));
-
-        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
-        textView2.setText(ParseUser.getCurrentUser().getUsername());
-
-
-        final View vi = new View(this.getApplicationContext());
-
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-
-                        try {
-                            File file = f.getFile();
-                            Glide.with(getApplicationContext())
-                                    .load(file)
-                                    .centerCrop()
-                                    .transform(new CircleTransform(UserProfileActivity.this))
-                                    .into(imageView);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
+        // Set up onClickListener for each drawer item
+        navigationView.setNavigationItemSelectedListener(
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    menuItem.setChecked(true);
+                    mDrawerLayout.closeDrawers();
+                    return true;
                 }
-            }
-        });
-
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
-                startActivity(i);
-                finish();
-            }
-        });
-
-
-        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
-        l.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+            });
     }
 
-}
+    private void setupViewPagerContent(ViewPager viewPager) {
 
+        // Create new adapter for ViewPager
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-// This class helps keeping the code clean and modular.
-class ProfileUtils {
+        // Set ViewPager adapter
+        viewPager.setAdapter(sectionsPagerAdapter);
 
-    // Object to store info about the user (not necessarily the current user).
-    static ParseUser user;
-    // Object to store info about the "Persona" associated with the user above.
-    static ParseObject person;
-
-
-    // Get info about the user from Parse.
-    // Call getParseUser() and getParsePerson().
-    static void getParseInfo(final Context context, String username) {
-        getParseUser(context, username);
-        getParsePerson(context, username);
+        // Set up TabLayout
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
-
-    // Gets a ParseUser object for the given username.
-    // The context arguments is needed to show a dialog in case of success or failure.
-    private static void getParseUser(final Context context, final String username) {
-
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username", username);
-
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-
-            @Override
-            public void done(ParseUser object, ParseException e) {
-                if (e == null) {
-                    user = object;
-                    // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
-
-                    UserProfileActivity.txtName.setText("NAME: " + user.get("name"));
-                    UserProfileActivity.txtEmail.setText("EMAIL: " + user.get("email"));
-
-                } else {
-                    e.printStackTrace();
-                    // showDialog(context, "Error", "Failed to retrieve user info. Check your Internet connection.");
-                }
-            }
-        });
-    }
-
-    // Gets a ParseObject ("Persona") object for the given username.
-    // The context arguments is needed to show a dialog in case of success or failure.
-    private static void getParsePerson(final Context context, String username) {
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Persona");
-        query.whereEqualTo("username", username);
-
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    person = object;
-                    // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
-
-                    UserProfileActivity.txtAge.setText("AGE: " + person.get("date"));
-                    UserProfileActivity.txtCity.setText("CITY: " + person.get("city"));
-
-                } else {
-                    e.printStackTrace();
-                    // showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
-                }
-            }
-        });
-    }
-
-    // Shows a simple dialog with a title, a message and two buttons.
-    // The context argument is needed to show the dialog inside the UserProfileActivity activity.
-    private static void showDialog(Context context, String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(message);
-
-        String positiveText = "OK";
-        builder.setPositiveButton(positiveText,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // positive button logic
-                    }
-                });
-
-        String negativeText = "CANCEL";
-        builder.setNegativeButton(negativeText,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // negative button logic
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-        // display dialog
-        dialog.show();
-    }
-
 }
