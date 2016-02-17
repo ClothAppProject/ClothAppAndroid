@@ -35,6 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
+
         /**
          * Showing splashscreen while making network calls to download necessary
          * data before launching the app Will use AsyncTask to make http call
