@@ -25,6 +25,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // nascondo la status bar
@@ -33,6 +34,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
+
 
         /**
          * Showing splashscreen while making network calls to download necessary
