@@ -29,6 +29,11 @@ public class SearchAdapterImage extends BaseAdapter {
         return image.size();
     }
 
+    @Override
+    public Object getItem(int position) {
+        return image.get(position);
+    }
+
 
     @Override
     public long getItemId(int position) {

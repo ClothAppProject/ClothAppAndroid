@@ -114,7 +114,6 @@ public class ImageDetailFragment extends Fragment {
 
             }
         });
-        Log.d("PROFILEPIC","prima prova");
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
         queryFoto.whereEqualTo("username", immagine.getUser());
         queryFoto.findInBackground(new FindCallback<ParseObject>() {

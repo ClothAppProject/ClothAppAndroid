@@ -135,7 +135,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             //faccio la query a Parse
             List<User> user= SearchUtility.searchUser(query,rootView);
-            List<Image> cloth=SearchUtility.searchCloth(query,rootView);
+            //List<Image> cloth=SearchUtility.searchCloth(query,rootView);
 
             //stampa di DEBUG
             for(int i=0;i<user.size();i++){
