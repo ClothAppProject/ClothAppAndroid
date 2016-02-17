@@ -150,7 +150,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         //faccio la query a Parse
         List<User> user= SearchUtility.searchUser(query, rootView);
         final ArrayList<Image> tag= SearchUtility.searchHashtag(query, rootView);
-        List<Image> cloth=SearchUtility.searchCloth(query, rootView);
+        final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
 
 
         //chiama l'adattatore che inserisce gli item nella listview
@@ -185,6 +185,17 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         SearchAdapterImage adapterCloth=new SearchAdapterImage(getBaseContext(),cloth);
         listCloth.setAdapter(adapterCloth);
+        listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(), ImageFragment.class);
+                i.putExtra("position", position);
+                //passo la lista delle foto al fragment
+                i.putExtra("lista", cloth);
+                startActivity(i);
+                finish();
+            }
+        });
         //allungo l'altezza della list view
         //setListViewHeightBasedOnItems(listView);
     }

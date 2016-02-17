@@ -62,7 +62,7 @@ public class SearchUtility {
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
-    public static List<Image> searchCloth(String s, final View vi) {
+    public static ArrayList<Image> searchCloth(String s, final View vi) {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         final ArrayList<Image> lista=new ArrayList<Image>();
