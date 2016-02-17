@@ -1,8 +1,10 @@
 package com.clothapp.resources;
 
+import android.util.Log;
 import android.view.View;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -26,66 +28,83 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class SearchUtility {
 
 // Cerco tutti le photo per hashtag e restituisco una lista di immagini
- public static ArrayList<Image> searchHashtag(String s, final View vi)  {
+ public static ArrayList<Image> searchHashtag(final String s, final View vi)  {
 
      ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-     queryFoto.whereContains("hashtag",s);
+
      final ArrayList<Image> lista=new ArrayList<Image>();
-     queryFoto.findInBackground(new FindCallback<ParseObject>() {
-         @Override
-         public void done(List<ParseObject> objects, ParseException e) {
-             if (e == null) {
-                 ListIterator<ParseObject> i=objects.listIterator();
-                 while(i.hasNext()){
-                     ParseObject o=i.next();
-                     lista.add(new Image(o));
+     List<ParseObject> objects= null;
+     try {
+         objects = queryFoto.find();
+         ListIterator<ParseObject> i = objects.listIterator();
+         while (i.hasNext()) {
+             List<String> tag = new ArrayList<String>();
+             ParseObject o = i.next();
+             tag = (ArrayList) o.get("hashtag");
+             if (tag == null) tag = new ArrayList<String>(0);
+             for (int j = 0; j < tag.size(); j++) {
+                 if (tag.get(j).contains(s)) {
+                     Log.d("SearchUtility", "trovato");
+                     ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+                     query.whereEqualTo("objectId", o.getObjectId());
+                     ParseObject ob=query.getFirst();
+                     lista.add(new Image(ob));
+                     break;
+
                  }
-             } else {
-                 check(e.getCode(),vi, e.getMessage());;
              }
          }
-     });
-     return lista;}
+     } catch (ParseException e) {
+         e.printStackTrace();
+     }
+     return lista;
+ }
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
     public static List<Image> searchCloth(String s, final View vi) {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        queryFoto.whereEqualTo("tipo", s.toString());
         final ArrayList<Image> lista=new ArrayList<Image>();
-        List<String>cloth=new ArrayList<String>();
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    ListIterator<ParseObject> i=objects.listIterator();
-                    while(i.hasNext()){
-                        ParseObject o=i.next();
-                        lista.add(new Image(o));
+        List<ParseObject> objects= null;
+        try {
+            objects = queryFoto.find();
+            ListIterator<ParseObject> i = objects.listIterator();
+            while (i.hasNext()) {
+                List<String> tag = new ArrayList<String>();
+                ParseObject o = i.next();
+                tag = (ArrayList) o.get("tipo");
+                if (tag == null) tag = new ArrayList<String>(0);
+                for (int j = 0; j < tag.size(); j++) {
+                    if (tag.get(j).contains(s)) {
+                        Log.d("SearchUtility", "trovato");
+                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+                        query.whereEqualTo("objectId", o.getObjectId());
+                        ParseObject ob=query.getFirst();
+                        lista.add(new Image(ob));
+                        break;
+
                     }
-                } else {
-                    check(e.getCode(),vi, e.getMessage());
                 }
             }
-        });
-        return lista;}
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 
 
 
-//cerco il primo utente con quel nome
+
     public static List<User> searchUser(String s,View vi){
 //TODO fare in modo che restituisca più utenti durante la rcerca in tempo reale
         ParseQuery<ParseUser> queryFoto = ParseUser.getQuery();
         queryFoto.whereContains("username", s);
         List<User> p=new ArrayList<User>();
-        System.out.println(s);
         try{
-            System.out.println(s);
             List<ParseUser> o= queryFoto.find();
-            System.out.println(o.size());
             for(int i=0;i<o.size();i++){
-                System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
+                //System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
                 p.add(new User(o.get(i)));
             }
         }
