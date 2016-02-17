@@ -22,6 +22,7 @@ import android.widget.ImageView;
 
 import com.clothapp.R;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.utils.ProfileUtils;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -68,6 +69,8 @@ public class UserProfileActivity extends AppCompatActivity {
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
         }
+
+        loadProfilePicture();
     }
 
     @Override
@@ -141,5 +144,13 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set up TabLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void loadProfilePicture() {
+
+        ImageView imageView = (ImageView) findViewById(R.id.profile_user_image);
+
+        ProfileUtils.getParseUserProfileImage(username, imageView);
+
     }
 }

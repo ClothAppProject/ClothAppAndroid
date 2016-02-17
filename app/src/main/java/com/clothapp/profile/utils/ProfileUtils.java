@@ -2,9 +2,14 @@ package com.clothapp.profile.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.UserProfileActivity;
@@ -41,6 +46,99 @@ public class ProfileUtils {
     public static void getParseInfo(final Context context, String username) {
         getParseUser(context, username);
         getParsePerson(context, username);
+    }
+
+    public static void getParseUploadedPhotos(String username, int start, int limit) {
+
+        ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
+        query.whereEqualTo("user", username);
+        query.addDescendingOrder("createdAt");
+        query.setSkip(start);
+        query.setLimit(limit);
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> photos, ParseException e) {
+                if (e == null) {
+                    // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
+
+                    for (final ParseObject photo : photos) {
+                        // Log.d("ProfileUtils", photo.getObjectId());
+
+                        ParseFile parseFile = photo.getParseFile("thumbnail");
+                        parseFile.getFileInBackground(new GetFileCallback() {
+                            @Override
+                            public void done(File file, ParseException e) {
+
+                                if (e == null) {
+
+                                    // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
+
+                                    RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
+                                    ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
+
+                                    String objectId = photo.getObjectId();
+                                    String username = photo.get("user").toString();
+                                    int nLikes = photo.getInt("nLike");
+
+                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
+
+                                    item.hashtags = photo.getList("hashtag");
+                                    item.clothes = photo.getList("vestiti");
+                                    item.users = photo.getList("like");
+
+                                    adapter.items.add(item);
+
+
+                                    adapter.notifyDataSetChanged();
+
+                                } else {
+                                    Log.d("ProfileUtils", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                    }
+
+                } else {
+                    Log.d("ProfileUtils", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public static void getParseUserProfileImage(String username, final ImageView imageView) {
+
+        ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
+        query.whereEqualTo("username", username);
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject photo, ParseException e) {
+
+                if (e == null) {
+                    Log.d("ProfileUtils", "ParseObject for profile image found!");
+
+                    ParseFile parseFile = photo.getParseFile("thumbnail");
+                    parseFile.getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(File file, ParseException e) {
+
+                            if (e == null) {
+                                Log.d("ProfileUtils", "File for profile image found!");
+
+                                Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                imageView.setImageBitmap(imageBitmap);
+
+                            } else {
+                                Log.d("ProfileUtils", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+
+                } else {
+                    Log.d("ProfileUtils", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     // Gets a ParseUser object for the given username.
@@ -123,63 +221,6 @@ public class ProfileUtils {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    public static void getParseUploadedPhotos(String username, int start, int limit) {
-
-        ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
-        query.whereEqualTo("user", username);
-        query.addDescendingOrder("createdAt");
-        query.setSkip(start);
-        query.setLimit(limit);
-
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> photos, ParseException e) {
-                if (e == null) {
-                    // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
-
-                    for (final ParseObject photo : photos) {
-                        // Log.d("ProfileUtils", photo.getObjectId());
-
-                        ParseFile parseFile = photo.getParseFile("thumbnail");
-                        parseFile.getFileInBackground(new GetFileCallback() {
-                            @Override
-                            public void done(File file, ParseException e) {
-
-                                if (e == null) {
-
-                                    // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
-
-                                    RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
-                                    ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
-
-                                    String objectId = photo.getObjectId();
-                                    String username = photo.get("user").toString();
-                                    int nLikes = photo.getInt("nLike");
-
-                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
-
-                                    item.hashtags = photo.getList("hashtag");
-                                    item.clothes = photo.getList("vestiti");
-                                    item.users = photo.getList("like");
-
-                                    adapter.items.add(item);
-
-
-                                    adapter.notifyDataSetChanged();
-
-                                } else {
-                                    Log.d("ProfileUtils", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
-                    }
-
-                } else {
-                    Log.d("ProfileUtils", "Error: " + e.getMessage());
-                }
-            }
-        });
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
