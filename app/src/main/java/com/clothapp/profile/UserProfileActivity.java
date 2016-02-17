@@ -95,6 +95,11 @@ public class UserProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
 
         // Get default bitmap for user profile photo
