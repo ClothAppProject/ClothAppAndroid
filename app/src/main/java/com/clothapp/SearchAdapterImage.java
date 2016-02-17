@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.resources.User;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class SearchAdapterImage extends BaseAdapter {
         return image.get(position);
     }
 
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -49,10 +51,13 @@ public class SearchAdapterImage extends BaseAdapter {
             row = inflater.inflate(R.layout.search_item_image, parent, false);
 
         }
+        ImageView imageView=(ImageView)row.findViewById(R.id.foto);
+        Glide.with(context)
+                .load(image.get(position).getThumbnail())
+                .into(imageView);
 
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUser());
-        ImageView w=(ImageView) row.findViewById(R.id.photo);
 
         return row;
     }

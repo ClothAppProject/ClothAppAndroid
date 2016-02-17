@@ -173,10 +173,6 @@ public class HomeActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
-            case android.R.id.home:
-                onBackPressed();
-                break;
             case R.id.action_settings:
                 Intent i=new Intent(getBaseContext(),SettingsActivity.class);
                 startActivity(i);

@@ -29,6 +29,7 @@ import com.clothapp.resources.Image;
 import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.User;
+import com.clothapp.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +108,10 @@ public class SearchResultsActivity extends AppCompatActivity {
             // In caso sia premuto il pulsante indietro termino semplicemente l'activity
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.action_settings:
+                Intent i=new Intent(getBaseContext(),SettingsActivity.class);
+                startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,64 +123,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
-            query=query.trim();
-
-            //use the query to search
-            View v=(View)findViewById(R.id.searchview);
-
-            //prendo la listview e la rootView
-            RelativeLayout rootView=(RelativeLayout)findViewById(R.id.searchview);
-            listUser=(ListView)findViewById(R.id.user_find);
-            listCloth=(ListView)findViewById(R.id.image_find);
-            listTag=(ListView) findViewById(R.id.tag_find);
-
-            //faccio la query a Parse
-            List<User> user= SearchUtility.searchUser(query,rootView);
-            List<Image> tag= SearchUtility.searchHashtag(query,rootView);
-            //List<Image> cloth=SearchUtility.searchCloth(query,rootView);
-
-            //stampa di DEBUG
-            for(int i=0;i<user.size();i++){
-                System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
-            }
-            System.out.println("ricerca finita di:" + query);
-
-            //chiama l'adattatore che inserisce gli item nella listview
-            final SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
-            listUser.setAdapter(adapter);
-
-            //se clicco su un user mi apre il suo profilo
-            listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                    i.putExtra("user", adapter.getItem(position).getUsername());
-                    startActivity(i);
-                    finish();
-                }
-            });
-            final SearchAdapterImage adapterI=new SearchAdapterImage(getBaseContext(),tag);
-            listTag.setAdapter(adapterI);
-            listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), ImageFragment.class);
-                startActivity(i);
-                finish();
-            //allungo l'altezza della list view
-            //setListViewHeightBasedOnItems(listView);
+            search(query);
         }
-    });
-        }}
+    }
 
     //funzione di ausilio per una nuova ricerca
     public void research(String query){
+        search(query);
+    }
 
+    public void search(String query){
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query=query.trim();
 
@@ -184,24 +143,51 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //prendo la listview e la rootView
         RelativeLayout rootView=(RelativeLayout)findViewById(R.id.searchview);
-        ListView listView=(ListView)findViewById(R.id.user_find);
+        listUser=(ListView)findViewById(R.id.user_find);
+        listCloth=(ListView)findViewById(R.id.image_find);
+        listTag=(ListView) findViewById(R.id.tag_find);
 
         //faccio la query a Parse
-        List<User> user= SearchUtility.searchUser(query,rootView);
+        List<User> user= SearchUtility.searchUser(query, rootView);
+        final ArrayList<Image> tag= SearchUtility.searchHashtag(query, rootView);
+        List<Image> cloth=SearchUtility.searchCloth(query, rootView);
 
-        for(int i=0;i<user.size();i++){
-            System.out.println("utente"+user.get(i).getUsername()+"id"+user.get(i));
-        }
-        System.out.println("ricerca finita di:" + query);
 
         //chiama l'adattatore che inserisce gli item nella listview
-        SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
-        listView.setAdapter(adapter);
+        final SearchAdapter adapter =new SearchAdapter(getBaseContext(),user);
+        listUser.setAdapter(adapter);
 
+        //se clicco su un user mi apre il suo profilo
+        listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra("user", adapter.getItem(position).getUsername());
+                startActivity(i);
+                finish();
+            }
+        });
+
+        //tag
+        final SearchAdapterImage adapterI=new SearchAdapterImage(getBaseContext(),tag);
+        listTag.setAdapter(adapterI);
+        listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(), ImageFragment.class);
+                i.putExtra("position", position);
+                //passo la lista delle foto al fragment
+                i.putExtra("lista", tag);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        SearchAdapterImage adapterCloth=new SearchAdapterImage(getBaseContext(),cloth);
+        listCloth.setAdapter(adapterCloth);
         //allungo l'altezza della list view
         //setListViewHeightBasedOnItems(listView);
     }
-
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
