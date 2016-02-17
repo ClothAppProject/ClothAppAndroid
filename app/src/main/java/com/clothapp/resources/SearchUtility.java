@@ -49,7 +49,7 @@ public class SearchUtility {
 
 
     // Cerco tutti le photo per vestito e restituisco una lista di immagini
-    public static List<Image> searchVestiti(String s, final View vi) {
+    public static List<Image> searchCloth(String s, final View vi) {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Vestito");
         queryFoto.whereContains("tipo", s.toString());
