@@ -77,10 +77,10 @@
             android:name=".ImageFragment"
             android:label="@string/app_name" />
         <activity
-            android:name=".profile.utils.ProfileCameraActivity"
+            android:name=".profile.utils.ProfilePictureCameraActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".profile.utils.ProfileGalleryActivity"
+            android:name=".profile.utils.ProfilePictureGalleryActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".upload.UploadCameraActivity"

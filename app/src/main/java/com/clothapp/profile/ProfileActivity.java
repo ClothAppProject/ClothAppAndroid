@@ -19,8 +19,8 @@ import com.clothapp.BaseActivity;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
-import com.clothapp.profile.utils.ProfileCameraActivity;
-import com.clothapp.profile.utils.ProfileGalleryActivity;
+import com.clothapp.profile.utils.ProfilePictureCameraActivity;
+import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
 import com.clothapp.resources.Image;
@@ -393,13 +393,13 @@ public class ProfileActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0:
-                                        // Redirect the user to the ProfileCameraActivity Activity
-                                        Intent intentCamera = new Intent(activity.getApplicationContext(), ProfileCameraActivity.class);
+                                        // Redirect the user to the ProfilePictureCameraActivity Activity
+                                        Intent intentCamera = new Intent(activity.getApplicationContext(), ProfilePictureCameraActivity.class);
                                         activity.startActivity(intentCamera);
                                         break;
                                     case 1:
-                                        // Redirect the user to the ProfileGalleryActivity Activity
-                                        Intent intentGallery = new Intent(activity.getApplicationContext(), ProfileGalleryActivity.class);
+                                        // Redirect the user to the ProfilePictureGalleryActivity Activity
+                                        Intent intentGallery = new Intent(activity.getApplicationContext(), ProfilePictureGalleryActivity.class);
                                         activity.startActivity(intentGallery);
                                         break;
                                     case 2:

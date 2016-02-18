@@ -32,7 +32,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 26/01/16.
  */
-public class ProfileGalleryActivity extends AppCompatActivity {
+public class ProfilePictureGalleryActivity extends AppCompatActivity {
     final static int RESULT_LOAD_IMG = 2187;
     String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'").format(new Date());
     Uri takenPhotoUri;
@@ -79,7 +79,7 @@ public class ProfileGalleryActivity extends AppCompatActivity {
 
     public void upload()    {
         //inizializzo barra di caricamento
-        final ProgressDialog dialog = ProgressDialog.show(ProfileGalleryActivity.this, "",
+        final ProgressDialog dialog = ProgressDialog.show(ProfilePictureGalleryActivity.this, "",
                 getResources().getString(R.string.setting_pp), true);
 
         //controllo se c'è un'altra immagine del profilo online per lo stesso utente e la elimino
@@ -113,11 +113,11 @@ public class ProfileGalleryActivity extends AppCompatActivity {
         file.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("ProfileGalleryActivity", "File inviato correttamente");
+                    Log.d("ProfilePictureGalleryActivity", "File inviato correttamente");
                 } else {
                     // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
-                    Log.d("ProfileGalleryActivity", "Errore durante l'invio del file");
+                    Log.d("ProfilePictureGalleryActivity", "Errore durante l'invio del file");
                 }
             }
         });
@@ -138,7 +138,7 @@ public class ProfileGalleryActivity extends AppCompatActivity {
                     Get g = new Get();
                     g.execute(url);
 
-                    Log.d("ProfileGalleryActivity", "Oggetto immagine inviato correttamente");
+                    Log.d("ProfilePictureGalleryActivity", "Oggetto immagine inviato correttamente");
                     // Redirecting the user to the profile activity
                     Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                     i.putExtra("user",ParseUser.getCurrentUser().getUsername().toString());
@@ -149,7 +149,7 @@ public class ProfileGalleryActivity extends AppCompatActivity {
                     // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
 
-                    Log.d("ProfileGalleryActivity", "Errore durante l'invio dell'oggetto immagine");
+                    Log.d("ProfilePictureGalleryActivity", "Errore durante l'invio dell'oggetto immagine");
                 }
             }
         });

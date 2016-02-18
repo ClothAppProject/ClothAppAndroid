@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by giacomoceribelli on 29/12/15.
  */
-public class ProfileCameraActivity extends AppCompatActivity {
+public class ProfilePictureCameraActivity extends AppCompatActivity {
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
     /* --------------------------------------- */
     boolean first = true;
@@ -58,13 +58,13 @@ public class ProfileCameraActivity extends AppCompatActivity {
             first = savedInstanceState.getBoolean("first");
             photoFileName = savedInstanceState.getString("photoFileName");
 
-            Log.d("ProfileCameraActivity", "First è false, quindi non avvia la fotocamera");
+            Log.d("ProfilePictureCameraActivity", "First è false, quindi non avvia la fotocamera");
             // Inizializzo parse perchè l'activity è stata chiusa
         }
         if (first) {
             // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
             // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-            Log.d("ProfileCameraActivity", "E' il first");
+            Log.d("ProfilePictureCameraActivity", "E' il first");
 
             // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -123,7 +123,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
         // Inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
         savedInstanceState.putString("photoFileName", photoFileName);
 
-        Log.d("ProfileCameraActivity", "First è stato messo a false");
+        Log.d("ProfilePictureCameraActivity", "First è stato messo a false");
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -138,7 +138,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
             // Se esiste lo elimino
             f.delete();
 
-            Log.d("ProfileCameraActivity", "File eliminato");
+            Log.d("ProfilePictureCameraActivity", "File eliminato");
         }
     }
     // Ritorna l'Uri dell'immagine su disco
@@ -151,7 +151,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
 
             // Creo la directory di storage se non esiste
             if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-                Log.d("ProfileCameraActivity", "Impossibile creare cartella");
+                Log.d("ProfilePictureCameraActivity", "Impossibile creare cartella");
             }
 
             // Ritorna l'uri alla foto in base al fileName
@@ -168,7 +168,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
 
     public void upload()    {
         //inizializzo barra di caricamento
-        final ProgressDialog dialog = ProgressDialog.show(ProfileCameraActivity.this, "",
+        final ProgressDialog dialog = ProgressDialog.show(ProfilePictureCameraActivity.this, "",
                 getResources().getString(R.string.setting_pp), true);
 
         //controllo se c'è un'altra immagine del profilo online per lo stesso utente e la elimino
@@ -202,11 +202,11 @@ public class ProfileCameraActivity extends AppCompatActivity {
         file.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("ProfileCameraActivity", "File inviato correttamente");
+                    Log.d("ProfilePictureCameraActivity", "File inviato correttamente");
                 } else {
                     // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
-                    Log.d("ProfileCameraActivity", "Errore durante l'invio del file");
+                    Log.d("ProfilePictureCameraActivity", "Errore durante l'invio del file");
                 }
             }
         });
@@ -221,7 +221,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     dialog.dismiss();
-                    Log.d("ProfileCameraActivity", "Oggetto immagine inviato correttamente");
+                    Log.d("ProfilePictureCameraActivity", "Oggetto immagine inviato correttamente");
                     deleteImage();
 
 
@@ -240,7 +240,7 @@ public class ProfileCameraActivity extends AppCompatActivity {
                     // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
 
-                    Log.d("ProfileCameraActivity", "Errore durante l'invio dell'oggetto immagine");
+                    Log.d("ProfilePictureCameraActivity", "Errore durante l'invio dell'oggetto immagine");
                 }
             }
         });

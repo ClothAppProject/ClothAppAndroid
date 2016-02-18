@@ -237,12 +237,12 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
                                     case 0:
-                                        // Redirect the user to the ProfileCameraActivity Activity
+                                        // Redirect the user to the ProfilePictureCameraActivity Activity
                                         Intent profilo = new Intent(getApplicationContext(), SignupActivity.class);
                                         startActivity(profilo);
                                         break;
                                     case 1:
-                                        // Redirect the user to the ProfileGalleryActivity Activity
+                                        // Redirect the user to the ProfilePictureGalleryActivity Activity
                                         Intent negozio = new Intent(getApplicationContext(), ShopSignupActivity.class);
                                         startActivity(negozio);
                                         break;
