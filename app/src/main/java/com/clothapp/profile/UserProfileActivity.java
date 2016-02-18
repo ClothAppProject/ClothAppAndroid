@@ -1,6 +1,7 @@
 package com.clothapp.profile;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.parse.ParseUser;
@@ -167,6 +169,26 @@ public class UserProfileActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
 
+                            break;
+
+                        case R.id.nav_logout:
+                            Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
+
+                            final ProgressDialog dialog = ProgressDialog.show(UserProfileActivity.this, "", "Logging out. Please wait...", true);
+                            Thread logout = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ParseUser.logOut();
+                                    System.out.println("debug: logout eseguito");
+                                }
+                            });
+                            logout.start();
+
+                            intent = new Intent(UserProfileActivity.activity, MainActivity.class);
+                            dialog.dismiss();
+                            startActivity(intent);
+
+                            finish();
                             break;
                     }
 
