@@ -109,7 +109,7 @@ public class ProfileUtils {
     public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView, final ImageView drawerImageView) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-        query.whereEqualTo("username", "ceribbo");
+        query.whereEqualTo("username", username);
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override

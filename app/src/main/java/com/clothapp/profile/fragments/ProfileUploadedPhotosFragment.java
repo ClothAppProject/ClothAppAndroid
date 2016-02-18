@@ -55,7 +55,7 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getParseUploadedPhotos("Jacopo", 0, 10);
+        ProfileUtils.getParseUploadedPhotos(UserProfileActivity.username, 0, 10);
 
         // Return the fragment
         return rootView;
