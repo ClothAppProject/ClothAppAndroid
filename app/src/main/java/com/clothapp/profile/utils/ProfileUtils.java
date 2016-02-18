@@ -1,5 +1,6 @@
 package com.clothapp.profile.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -105,10 +106,10 @@ public class ProfileUtils {
         });
     }
 
-    public static void getParseUserProfileImage(String username, final ImageView imageView) {
+    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView, final ImageView drawerImageView) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-        query.whereEqualTo("username", username);
+        query.whereEqualTo("username", "ceribbo");
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -126,7 +127,12 @@ public class ProfileUtils {
                                 Log.d("ProfileUtils", "File for profile image found!");
 
                                 Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                                imageView.setImageBitmap(imageBitmap);
+
+                                RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(activity.getResources(), imageBitmap);
+                                rounded.setCornerRadius(imageBitmap.getWidth());
+
+                                mainImageView.setImageDrawable(rounded);
+                                drawerImageView.setImageDrawable(rounded);
 
                             } else {
                                 Log.d("ProfileUtils", "Error: " + e.getMessage());

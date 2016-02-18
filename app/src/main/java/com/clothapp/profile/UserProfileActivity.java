@@ -1,6 +1,8 @@
 package com.clothapp.profile;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,14 +17,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.clothapp.R;
+import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.parse.ParseUser;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -35,6 +40,8 @@ public class UserProfileActivity extends AppCompatActivity {
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
 
+    public static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // Set context to current context.
         context = UserProfileActivity.this;
+
+        // Set activity to current activity.
+        activity = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -70,7 +80,7 @@ public class UserProfileActivity extends AppCompatActivity {
             setupViewPagerContent(viewPager);
         }
 
-        loadProfilePicture();
+        loadProfilePicture(navigationView);
     }
 
     @Override
@@ -126,7 +136,36 @@ public class UserProfileActivity extends AppCompatActivity {
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem menuItem) {
-                    menuItem.setChecked(true);
+
+                    Intent intent;
+
+                    switch (menuItem.getItemId()) {
+
+                        case R.id.nav_home:
+                            Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
+
+                            intent = new Intent(UserProfileActivity.activity, HomeActivity.class);
+                            startActivity(intent);
+
+                            finish();
+                            break;
+
+                        case R.id.nav_profile:
+                            Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
+
+                            String currentUser = ParseUser.getCurrentUser().getUsername();
+
+                            if (!currentUser.equals(username)) {
+                                Log.d("UserProfileActivity", currentUser + "!=" + username);
+                                intent = new Intent(UserProfileActivity.activity, UserProfileActivity.class);
+                                intent.putExtra("user", username);
+                                startActivity(intent);
+                            }
+
+                            break;
+                    }
+
+                    // menuItem.setChecked(true);
                     mDrawerLayout.closeDrawers();
                     return true;
                 }
@@ -148,11 +187,14 @@ public class UserProfileActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void loadProfilePicture() {
+    private void loadProfilePicture(NavigationView navigationView) {
 
-        ImageView imageView = (ImageView) findViewById(R.id.profile_user_image);
+        View headerLayout = navigationView.getHeaderView(0);
+        ImageView drawerImageView = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
-        ProfileUtils.getParseUserProfileImage(username, imageView);
+        ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
+
+        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, drawerImageView);
 
     }
 }
