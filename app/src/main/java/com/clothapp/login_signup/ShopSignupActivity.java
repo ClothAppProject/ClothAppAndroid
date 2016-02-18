@@ -112,8 +112,8 @@ public class ShopSignupActivity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     System.out.println("debug: lunghezza pswd sbagliata");
                     // Checking if pswd is acceptable. See SignupActivity.Util.passWordChecker for the parameters accepted
-                } else if (passWordChecker(edit_password.getText().toString().trim()) != 0) {
-                    String pswd = edit_password.getText().toString().trim();
+                } else if (passWordChecker(edit_password.getText().toString()) != 0) {
+                    String pswd = edit_password.getText().toString();
                     int result = passWordChecker(pswd);
 
                     switch (result) {
@@ -147,6 +147,12 @@ public class ShopSignupActivity extends AppCompatActivity {
 
                             Log.d("SignupActivity", "La password contiene caratteri speciali");
                             break;
+                        case -6:
+                            Snackbar.make(v, "La password non può contenere spazi", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+
+                            Log.d("SignupActivity", "La password contiene spazi");
+                            break;
                     }
                 } else {
 
@@ -165,6 +171,7 @@ public class ShopSignupActivity extends AppCompatActivity {
                             user.put("name", edit_name.getText().toString().trim());
                             //TODO check fisico o virtuale
                             user.put("flagISA", "Negozio");
+
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {
@@ -172,8 +179,17 @@ public class ShopSignupActivity extends AppCompatActivity {
                                         Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
 
                                         ParseObject negozio = new ParseObject("LocalShop");
+
                                         negozio.put("username", user.getUsername());
-                                        negozio.put("sito", edit_address.getText().toString().trim());
+
+                                        negozio.put("name", edit_name.getText().toString().trim());
+
+                                        //  checking if the shop has a physical address
+                                        if(edit_address.getText()!= null ) negozio.put("address", edit_address.getText().toString().trim());
+
+                                        //  checking if the shop has a webisite
+                                        if(edit_webSite.getText()!= null ) negozio.put("webSite", edit_webSite.getText().toString().trim());
+
                                         negozio.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(ParseException e) {
@@ -214,7 +230,6 @@ public class ShopSignupActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     //funzione di supporto per il tasto indietro

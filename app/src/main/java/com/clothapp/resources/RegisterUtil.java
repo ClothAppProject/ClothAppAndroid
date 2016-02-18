@@ -94,6 +94,7 @@ public class RegisterUtil {
  *  -3 if there are no digits characters
  *  -4 if there space characters (tab new line ecc)
  *  -5 if there are other special characters (like comma, question mark ecc)
+ *  -6 if there spaces in the password
  */
     public static int passWordChecker (String input) {
         Pattern[] passwordRegexes = new Pattern[3];
@@ -112,22 +113,8 @@ public class RegisterUtil {
         if(specialChars.matcher(input).matches()) {
             return -(passwordRegexes.length+2);
         }
+        if(input.contains(" ")) return -6;
         return 0;
     }
 
-    public static String cryptoPswd(String a){
-        String finale = "";
-        int length = a.length();
-        for (int i = 0; i<length; i++){
-            finale += (a.charAt(i)*13+11)%7;
-        }
-        return finale;
-    }
-
-    //TODO funzione che decripta la pswd
-    public static String deCryptoPswd(String a){
-        String finale = "";
-        int length = a.length();
-        return finale;
-    }
 }
