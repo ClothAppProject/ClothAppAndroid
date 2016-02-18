@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- The main content view -->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="*"
+                    android:touchscreenBlocksFocus="false">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:stretchColumns="1">
+                        <RelativeLayout android:layout_gravity="center">
+                            <com.github.lzyzsd.circleprogress.DonutProgress
+                                android:id="@+id/donut_progress_profile"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="50dp" />
+
+                        </RelativeLayout>
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/username_field"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_marginTop="20dp"
+                                android:textStyle="bold"
+                                android:text="username"
+                                android:textSize="30dp"/>
+
+                            <TextView
+                                android:id="@+id/name_field"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_marginTop="20dp"
+                                android:text="nome"
+                                android:textSize="20dp" />
+
+                            <Button
+                                android:id="@+id/follow_edit"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="30dp" />
+
+                        </LinearLayout>
+                    </TableRow>
+                </TableLayout>
+                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:stretchColumns="*"
+                    android:touchscreenBlocksFocus="false">
+
+                    <TableRow
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content">
+
+                        <TextView
+                            android:id="@+id/nfoto"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="0"/>
+
+                        <TextView
+                            android:id="@+id/nfollowing"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="0"/>
+
+                        <TextView
+                            android:id="@+id/nfollowers"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="0"/>
+                    </TableRow>
+
+                    <TableRow android:layout_gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/nfoto_text"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="foto"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/nfollowing_text"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="following"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/nfollowers_text"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="followers"
+                            android:textAlignment="center" />
+                    </TableRow>
+                </TableLayout>
+
+
+                <TextView
+                    android:id="@+id/galleria_personale"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="galleria_personale" />
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                    <LinearLayout
+                        android:id="@+id/personal_gallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        />
+                </HorizontalScrollView>
+
+                <TextView
+                    android:id="@+id/negozi_seguiti"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="negozi_seguiti" />
+
+                <TextView
+                    android:id="@+id/negozi_preferiti"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="negozi_preferiti" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
+    <!--
+        <LinearLayout
+            android:id="@+id/drawerll"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="240dp"
+                android:layout_height="120dp"
+                android:background="@color/background"
+                android:src="@mipmap/logo" />
+
+            <ListView
+                android:id="@+id/left_drawer"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="#ffffff"
+                android:choiceMode="singleChoice"
+                android:divider="#000000"
+                android:dividerHeight="0.5dp"
+                android:listSelector="#C0C0C0" />
+
+        </LinearLayout>
+    -->
+    <!-- The navigation drawer -->
+
+    <LinearLayout
+        android:id="@+id/drawerll"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/drawer"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_gravity="start"
+            android:background="@drawable/menu_background"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="30dp"
+                android:background="@drawable/back"
+                android:id="@+id/profProfile1">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginLeft="0dp"
+                    android:src="@mipmap/logo"
+                    android:id="@+id/ppProfile1" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/nameMenu"
+                    android:textSize="30sp"
+                    android:fontFamily="sans-serif-medium"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="-30dp"
+                android:id="@+id/nameUsername"
+                android:textSize="30sp"
+                android:fontFamily="sans-serif-medium"/>
+
+        </LinearLayout>
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#ffffff" />
+
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.DrawerLayout>
