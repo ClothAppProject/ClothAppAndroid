@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.search.SplashScreenActivity;
 import com.parse.ParseUser;
 
 import java.security.MessageDigest;

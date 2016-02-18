@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.search;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;

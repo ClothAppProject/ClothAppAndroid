@@ -1,39 +1,42 @@
-package com.clothapp;
+package com.clothapp.search;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.clothapp.R;
 import com.clothapp.resources.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.clothapp.resources.Image;
 
 /**
- * Created by jack1 on 16/02/2016.
+ * Created by nc94 on 2/17/16.
  */
-public class SearchAdapter extends BaseAdapter {
+public class SearchAdapterImage extends BaseAdapter {
     private final Context context;
-    private List<User> users=new ArrayList<>();
+    private List< Image > image=new ArrayList<>();
 
-    public SearchAdapter(Context context, List<User> users) {
+    public SearchAdapterImage(Context context, List<Image> image) {
         this.context = context;
-        this.users = users;
+        this.image = image;
     }
-
     @Override
     public int getCount() {
-        return users.size();
+        return image.size();
     }
 
     @Override
-    public User getItem(int position) {
-        return users.get(position);
+    public Image getItem(int position) {
+        return image.get(position);
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -46,12 +49,21 @@ public class SearchAdapter extends BaseAdapter {
         if (row==null) {
             //se la convertView di quest'immagine è nulla la inizializzo
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.search_item_user, parent, false);
+            row = inflater.inflate(R.layout.search_item_image, parent, false);
 
         }
+        ImageView imageView=(ImageView)row.findViewById(R.id.foto);
+        Glide.with(context)
+                .load(image.get(position).getThumbnail())
+                .into(imageView);
 
         TextView t=(TextView)row.findViewById(R.id.user);
-        t.setText(getItem(position).getUsername());
+        t.setText(getItem(position).getUser());
+
         return row;
     }
+
+
+
+
 }

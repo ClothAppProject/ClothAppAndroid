@@ -1,17 +1,12 @@
 package com.clothapp.resources;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.clothapp.SplashScreenActivity;
 import com.clothapp.http.Get;
-import com.clothapp.profile.ProfileActivity;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -20,7 +15,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +28,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.clothapp.resources.ExceptionCheck.check;
 
 /**
  * Created by giacomoceribelli on 06/01/16.

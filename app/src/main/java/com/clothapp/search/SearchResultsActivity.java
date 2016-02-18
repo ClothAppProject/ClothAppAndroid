@@ -1,18 +1,15 @@
-package com.clothapp;
+package com.clothapp.search;
 
 /**
  * Created by nc94 on 2/15/16.
  */
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +17,17 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.clothapp.ImageFragment;
+import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
-import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
-import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.SearchUtility;
 import com.clothapp.resources.User;
 import com.clothapp.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class SearchResultsActivity extends AppCompatActivity {
     private SearchView searchView;

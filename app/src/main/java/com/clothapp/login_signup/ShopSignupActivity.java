@@ -11,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.clothapp.R;
-import com.clothapp.SplashScreenActivity;
+import com.clothapp.search.SplashScreenActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
