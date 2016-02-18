@@ -1,4 +1,4 @@
-package com.clothapp.profilepicture;
+package com.clothapp.profile.utils;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,7 +28,6 @@ import static com.clothapp.resources.ExceptionCheck.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

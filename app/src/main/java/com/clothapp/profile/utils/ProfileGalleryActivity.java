@@ -1,4 +1,4 @@
-package com.clothapp.profilepicture;
+package com.clothapp.profile.utils;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

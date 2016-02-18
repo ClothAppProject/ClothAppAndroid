@@ -17,14 +17,9 @@ import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.SplashScreenActivity;
-import com.clothapp.profilepicture.ProfileCameraActivity;
-import com.clothapp.profilepicture.ProfileGalleryActivity;
-import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
