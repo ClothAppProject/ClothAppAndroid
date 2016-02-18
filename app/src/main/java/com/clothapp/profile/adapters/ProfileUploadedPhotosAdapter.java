@@ -80,7 +80,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         String username = ParseUser.getCurrentUser().getUsername();
-        if (items.get(position).users.contains(username)) {
+        if (items.get(position).users != null && items.get(position).users.contains(username)) {
             Log.d("PUPAdapter", "Item " + position + ": already clicked like.");
 
             photoViewHolder.likeImage.setColorFilter(Color.argb(255, 181, 47, 41));
