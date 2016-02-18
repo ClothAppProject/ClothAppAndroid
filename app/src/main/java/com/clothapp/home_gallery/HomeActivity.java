@@ -1,17 +1,27 @@
 package com.clothapp.home_gallery;
 
-import android.app.ActionBar;
+//import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +34,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.BaseActivity;
+import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
@@ -49,29 +60,51 @@ import static com.clothapp.resources.ExceptionCheck.check;
 /**
  * Created by giacomoceribelli on 02/02/16.
  */
-public class HomeActivity extends BaseActivity {
+// public class HomeActivity extends BaseActivity {
+public class HomeActivity extends AppCompatActivity {
+
     static FloatingActionsMenu menuMultipleActions;
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getSupportActionBar().setTitle(R.string.homepage_button);
 
-/*
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        ImageView imageView=new ImageView(getBaseContext());
-        imageView.setImageResource(R.mipmap.camera_icon);
-        //System.out.println(actionBar+"   "+imageView);
-        actionBar.setCustomView(imageView);
-*/
+//        setSupportActionBar(null);
+//
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Ciao");
 
-        setUpMenu();
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
+        ab.setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setElevation(4);
+//
+///*
+//        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+//        ImageView imageView=new ImageView(getBaseContext());
+//        imageView.setImageResource(R.mipmap.camera_icon);
+//        //System.out.println(actionBar+"   "+imageView);
+//        actionBar.setCustomView(imageView);
+//*/
+//
+//        // setUpMenu();
+//
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_home);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
 
         String[] titles = getResources().getStringArray(R.array.home_titles);
 
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
 
         //set adapter to  ViewPager
         viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(),titles));
@@ -97,6 +130,107 @@ public class HomeActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_search:
+                Log.d("HomeActivity", "Clicked on menu search");
+
+            case android.R.id.home:
+                // Log.d("UserProfileActivity", "android.R.id.home");
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+            case R.id.action_settings:
+                // Log.d("UserProfileActivity", "R.id.action_settings");
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+
+        // Get default bitmap for user profile photo
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
+
+        // Create a rounded bitmap from the user profile photo
+        RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+        rounded.setCornerRadius(bitmap.getWidth());
+
+        // Get drawer header
+        View headerLayout = navigationView.getHeaderView(0);
+
+        // Get the image view containing the user profile photo
+        ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
+
+        // Set the user profile photo to the just created rounded image
+        drawerProfile.setImageDrawable(rounded);
+
+        final String username = ParseUser.getCurrentUser().getUsername();
+
+        // Set the drawer username
+        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.menu_profile_side_drawer_username);
+        drawerUsername.setText(username);
+
+        // Set up onClickListener for each drawer item
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                        Intent intent;
+
+                        switch (menuItem.getItemId()) {
+
+                            case R.id.nav_home:
+                                Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
+
+                                intent = new Intent(HomeActivity.this, HomeActivity.class);
+                                startActivity(intent);
+
+                                finish();
+                                break;
+
+                            case R.id.nav_profile:
+                                Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
+
+                                intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+                                intent.putExtra("user", username);
+                                startActivity(intent);
+
+                                break;
+
+                            case R.id.nav_logout:
+                                Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
+
+                                final ProgressDialog dialog = ProgressDialog.show(HomeActivity.this, "", "Logging out. Please wait...", true);
+                                Thread logout = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ParseUser.logOut();
+                                        System.out.println("debug: logout eseguito");
+                                    }
+                                });
+                                logout.start();
+
+                                intent = new Intent(UserProfileActivity.activity, MainActivity.class);
+                                dialog.dismiss();
+                                startActivity(intent);
+
+                                finish();
+                                break;
+                        }
+
+                        // menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
     private void setUpMenu() {
 
         String[] navMenuTitles;
@@ -108,9 +242,9 @@ public class HomeActivity extends BaseActivity {
         // Load icons from strings.xml
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
-        set(navMenuTitles, navMenuIcons, 0);
+        // set(navMenuTitles, navMenuIcons, 0);
 
-        final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
+        /*final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
         final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.prof);
 
         TextView textView = (TextView) findViewById(R.id.nameMenu);
@@ -154,7 +288,7 @@ public class HomeActivity extends BaseActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), UserProfileActivity.class);
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                 i.putExtra("user",ParseUser.getCurrentUser().getUsername());
                 startActivity(i);
                 finish();
@@ -168,18 +302,8 @@ public class HomeActivity extends BaseActivity {
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent i=new Intent(getBaseContext(),SettingsActivity.class);
-                startActivity(i);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setupFloatingButton(){
@@ -220,12 +344,6 @@ public class HomeActivity extends BaseActivity {
         //  closing the floating action button if it is open
         if(menuMultipleActions.isExpanded()) {
             menuMultipleActions.collapse();
-            return;
-        }
-
-        //  closing the side menu if it is open
-        if(super.isOpen()) {
-            super.closeDrawer();
             return;
         }
 
