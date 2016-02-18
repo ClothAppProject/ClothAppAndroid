@@ -158,7 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             if (!currentUser.equals(username)) {
                                 Log.d("UserProfileActivity", currentUser + "!=" + username);
                                 intent = new Intent(UserProfileActivity.activity, UserProfileActivity.class);
-                                intent.putExtra("user", username);
+                                intent.putExtra("user", currentUser);
                                 startActivity(intent);
                             }
 
