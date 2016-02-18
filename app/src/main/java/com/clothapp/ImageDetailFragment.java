@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.home_gallery.HomeActivity;
-import com.clothapp.profile.ProfileActivity;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -107,7 +106,7 @@ public class ImageDetailFragment extends Fragment {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
+                Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
                 i.putExtra("user", user);
                 startActivity(i);
                 getActivity().finish();
@@ -153,7 +152,7 @@ public class ImageDetailFragment extends Fragment {
                     t.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
+                            Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
                             i.putExtra("user", user);
                             startActivity(i);
                             getActivity().finish();
