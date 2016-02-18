@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.http.Get;
@@ -216,13 +217,18 @@ public class UploadCameraActivity extends AppCompatActivity {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
             // A questo punto l'immagine è stata salvata sullo storage
-            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+            //imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
 
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
-            imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap,takenPhotoUri);
-            imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
+            //imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap,takenPhotoUri);
+            Glide.with(getApplicationContext())
+                    .load(takenPhotoUri)
+                    .centerCrop()
+                    .placeholder(R.mipmap.gallery_icon)
+                    .into(imageView);
+            //imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
 
         } else {
             // Errore della fotocamera

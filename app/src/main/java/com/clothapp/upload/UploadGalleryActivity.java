@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.BaseActivity;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
@@ -182,10 +183,15 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 cursor.close();
 
                 imageView = (ImageView) findViewById(R.id.view_immagine);
-                imageBitmap = BitmapFactory.decodeFile(picturePath);
+                //imageBitmap = BitmapFactory.decodeFile(picturePath);
 
-                imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
-                imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
+                //imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
+                Glide.with(getApplicationContext())
+                        .load(takenPhotoUri)
+                        .centerCrop()
+                        .placeholder(R.mipmap.gallery_icon)
+                        .into(imageView);
+                //imageView.setImageBitmap(BitmapUtil.scala(imageBitmap));
 
             } else {
                 // L'utente non ha scelto nessuna immagine lo rimando indietro
