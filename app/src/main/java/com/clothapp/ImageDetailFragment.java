@@ -107,7 +107,7 @@ public class ImageDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
-                i.putExtra("user", user);
+                i.putExtra("user", immagine.getUser());
                 startActivity(i);
                 getActivity().finish();
 
@@ -153,7 +153,7 @@ public class ImageDetailFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
-                            i.putExtra("user", user);
+                            i.putExtra("user", immagine.getUser());
                             startActivity(i);
                             getActivity().finish();
                         }
