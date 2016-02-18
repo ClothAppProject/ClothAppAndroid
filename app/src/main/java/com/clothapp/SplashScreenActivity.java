@@ -1,4 +1,4 @@
-package com.clothapp.search;
+package com.clothapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

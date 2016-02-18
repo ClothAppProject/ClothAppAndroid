@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.clothapp.R;
-import com.clothapp.search.SplashScreenActivity;
+import com.clothapp.SplashScreenActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
