@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.SearchUtility;
@@ -160,8 +160,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), UserProfileActivity.class);
-                i.putExtra("user", adapter.getItem(position).getUsername());
+                Intent i = ProfileUtils.goToProfile(getApplicationContext(),adapter.getItem(position).getUsername());
                 startActivity(i);
                 finish();
             }

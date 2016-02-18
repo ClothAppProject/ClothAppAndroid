@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -106,8 +106,7 @@ public class ImageDetailFragment extends Fragment {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
-                i.putExtra("user", immagine.getUser());
+                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
                 startActivity(i);
 
             }
@@ -154,8 +153,7 @@ public class ImageDetailFragment extends Fragment {
                     t.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
-                            i.putExtra("user", immagine.getUser());
+                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
                             startActivity(i);
                         }
                     });
@@ -165,8 +163,7 @@ public class ImageDetailFragment extends Fragment {
                     profilePic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
-                            i.putExtra("user", user);
+                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
                             startActivity(i);
                             getActivity().finish();
                         }

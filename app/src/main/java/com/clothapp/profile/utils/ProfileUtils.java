@@ -3,6 +3,7 @@ package com.clothapp.profile.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -10,6 +11,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
@@ -33,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.clothapp.resources.ExceptionCheck.check;
+
 // This class helps keeping the code clean and modular.
 public class ProfileUtils {
 
@@ -48,6 +52,7 @@ public class ProfileUtils {
         getParseUser(context, username);
         getParsePerson(context, username);
     }
+
 
     public static void getParseUploadedPhotos(String username, int start, int limit) {
 
@@ -257,5 +262,22 @@ public class ProfileUtils {
         AlertDialog dialog = builder.create();
         // display dialog
         dialog.show();
+    }
+    public static Intent goToProfile(Context contesto, String utente) {
+        Intent i = null;
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", utente);
+        try {
+            ParseUser user = query.getFirst();
+            if (user.getString("flagISA").equals("Persona")) {
+                i = new Intent(contesto, UserProfileActivity.class);
+            }else{
+                //i = new Intent(contesto, ShopProfileActivity.class);
+            }
+        } catch (ParseException e) {
+            check(e.getCode(), new View(contesto), e.getMessage());
+        }
+        i.putExtra("user", utente);
+        return i;
     }
 }
