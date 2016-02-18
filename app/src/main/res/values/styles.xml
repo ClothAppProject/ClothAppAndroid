@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryDark">@color/darkred</item>
-        <item name="colorAccent">@color/red</item>
+        <item name="colorAccent">@color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -23,7 +23,7 @@
     <style name="Theme.MyCompatTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryDark">@color/darkred</item>
-        <item name="colorAccent">@color/red</item>
+        <item name="colorAccent">@color/white</item>
         <item name="android:windowBackground">@color/sfondo</item>
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="actionBarStyle">@style/ActionBar</item>
