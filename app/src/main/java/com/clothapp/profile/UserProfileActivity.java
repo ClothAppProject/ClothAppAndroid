@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
@@ -130,6 +131,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // Set the user profile photo to the just created rounded image
         drawerProfile.setImageDrawable(rounded);
+
+        // Set the drawer username
+        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.menu_profile_side_drawer_username);
+        drawerUsername.setText(username);
 
         // Set up onClickListener for each drawer item
         navigationView.setNavigationItemSelectedListener(

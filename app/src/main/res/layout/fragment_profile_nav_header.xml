@@ -15,11 +15,12 @@
         android:scaleType="centerCrop"
         android:src="@drawable/com_facebook_profile_picture_blank_square"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="25dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp" />
 
     <TextView
+        android:id="@+id/menu_profile_side_drawer_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Username"
