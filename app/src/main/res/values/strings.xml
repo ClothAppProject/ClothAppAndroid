@@ -107,6 +107,12 @@
         <item>ClothApper</item>
         <item>Negozio</item>
     </array>
+
+    <array name="search_titles">
+        <item>Users</item>
+        <item>Clothes</item>
+        <item>HashTag</item>
+    </array>
     <string name="cloth">Vestito</string>
     <string name="title_template_step">ciao</string>
     <string name="title_activity_new_profile">NewProfileActivity</string>
@@ -115,5 +121,6 @@
     <string name="Users">Users</string>
     <string name="tag">Tag</string>
     <string name="action_search">Search</string>>
+
 
 </resources>

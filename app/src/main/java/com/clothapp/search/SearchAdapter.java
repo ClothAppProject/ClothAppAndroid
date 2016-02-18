@@ -1,58 +1,53 @@
 package com.clothapp.search;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.clothapp.R;
-import com.clothapp.resources.User;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.clothapp.home_gallery.HomeMostRecentFragment;
+import com.clothapp.home_gallery.HomePopularShopsFragment;
+import com.clothapp.home_gallery.HomeTopRatedFragment;
 
 /**
- * Created by jack1 on 16/02/2016.
+ * Created by jack1 on 18/02/2016.
  */
-public class SearchAdapter extends BaseAdapter {
-    private final Context context;
-    private List<User> users=new ArrayList<>();
+public class SearchAdapter extends FragmentPagerAdapter {
 
-    public SearchAdapter(Context context, List<User> users) {
-        this.context = context;
-        this.users = users;
+    String[]titles;
+
+    public SearchAdapter(FragmentManager fm,String[] titles) {
+        //passo il fragment manager e i titoli delle tab
+        super(fm);
+        this.titles=titles;
+    }
+
+    //do il titolo alla tab
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles[position];
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return 3;
     }
 
-    @Override
-    public User getItem(int position) {
-        return users.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        if (row==null) {
-            //se la convertView di quest'immagine è nulla la inizializzo
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.search_item_user, parent, false);
-
+    //ritorno il fragment della pagina che voglio mostrare
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                // HomeMostRecentFragment
+                return new FindUserFragment();
+            case 1:
+                // HomeRatedFragment
+                return new FindClothFragment();
+            case 2:
+                // HomePopularShopsFragment
+                return new FindTagFragment();
         }
 
-        TextView t=(TextView)row.findViewById(R.id.user);
-        t.setText(getItem(position).getUsername());
-        return row;
+        return null;
     }
+
+
 }

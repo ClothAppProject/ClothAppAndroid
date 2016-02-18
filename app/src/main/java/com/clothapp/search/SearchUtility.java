@@ -1,8 +1,10 @@
-package com.clothapp.resources;
+package com.clothapp.search;
 
 import android.util.Log;
 import android.view.View;
 
+import com.clothapp.resources.Image;
+import com.clothapp.resources.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;

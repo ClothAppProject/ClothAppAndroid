@@ -51,7 +51,7 @@
 
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity" />
+                android:value=".search.SearchResultsActivity" />
         </activity>
 
         <activity

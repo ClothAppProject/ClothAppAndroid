@@ -29,6 +29,7 @@ import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
+import com.clothapp.search.SearchAdapter;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadCameraActivity;
 import com.clothapp.upload.UploadGalleryActivity;
