@@ -217,12 +217,12 @@ public class UploadCameraActivity extends AppCompatActivity {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
             // A questo punto l'immagine è stata salvata sullo storage
-            //imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
 
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
-            //imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap,takenPhotoUri);
+            imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap,takenPhotoUri);
             Glide.with(getApplicationContext())
                     .load(takenPhotoUri)
                     .centerCrop()

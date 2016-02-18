@@ -183,9 +183,9 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 cursor.close();
 
                 imageView = (ImageView) findViewById(R.id.view_immagine);
-                //imageBitmap = BitmapFactory.decodeFile(picturePath);
+                imageBitmap = BitmapFactory.decodeFile(picturePath);
 
-                //imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
+                imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
                 Glide.with(getApplicationContext())
                         .load(takenPhotoUri)
                         .centerCrop()
