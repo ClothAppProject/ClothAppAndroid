@@ -109,10 +109,11 @@ public class ImageDetailFragment extends Fragment {
                 Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
                 i.putExtra("user", immagine.getUser());
                 startActivity(i);
-                getActivity().finish();
 
             }
         });
+
+
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
         queryFoto.whereEqualTo("username", immagine.getUser());
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
@@ -140,6 +141,7 @@ public class ImageDetailFragment extends Fragment {
             }
             });
 
+
         //faccio query al database per scaricare la foto
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.whereEqualTo("objectId", immagine.getObjectId());
@@ -155,11 +157,21 @@ public class ImageDetailFragment extends Fragment {
                             Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
                             i.putExtra("user", immagine.getUser());
                             startActivity(i);
-                            getActivity().finish();
                         }
                     });
 
-
+                /*
+                    //  setting listener on the profile pic
+                    profilePic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getActivity().getApplicationContext(), UserProfileActivity.class);
+                            i.putExtra("user", user);
+                            startActivity(i);
+                            getActivity().finish();
+                        }
+                    });
+               */
 
                     //setto gli hashtag
                     ArrayList tag = (ArrayList) object.get("hashtag");
@@ -169,6 +181,7 @@ public class ImageDetailFragment extends Fragment {
                             s += tag.get(i).toString() + " ";
                         }
                     }
+
                     hashtag.setText((CharSequence) s);
 
                     //per ogni vestito cerco le informazioni

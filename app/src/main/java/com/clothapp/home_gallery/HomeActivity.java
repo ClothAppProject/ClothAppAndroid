@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.BaseActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.settings.SettingsActivity;
@@ -152,7 +153,7 @@ public class HomeActivity extends BaseActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent i = new Intent(getApplicationContext(), UserProfileActivity.class);
                 i.putExtra("user",ParseUser.getCurrentUser().getUsername());
                 startActivity(i);
                 finish();
@@ -215,9 +216,21 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        //  closing the floating action button if it is open
+        if(menuMultipleActions.isExpanded()) {
+            menuMultipleActions.collapse();
+            return;
+        }
 
-        if(super.isOpen()) super.closeDrawer();
-        else super.onBackPressed();
+        //  closing the side menu if it is open
+        if(super.isOpen()) {
+            super.closeDrawer();
+            return;
+        }
+
+        finish();
+
+
 
     }
 }

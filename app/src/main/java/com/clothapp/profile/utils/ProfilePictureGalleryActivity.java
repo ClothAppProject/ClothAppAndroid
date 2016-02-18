@@ -113,11 +113,11 @@ public class ProfilePictureGalleryActivity extends AppCompatActivity {
         file.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("ProfilePictureGalleryActivity", "File inviato correttamente");
+                    Log.d("ProfilePictureGalleryAc", "File inviato correttamente");
                 } else {
                     // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
-                    Log.d("ProfilePictureGalleryActivity", "Errore durante l'invio del file");
+                    Log.d("ProfilePictureGalleryAc", "Errore durante l'invio del file");
                 }
             }
         });
@@ -138,7 +138,7 @@ public class ProfilePictureGalleryActivity extends AppCompatActivity {
                     Get g = new Get();
                     g.execute(url);
 
-                    Log.d("ProfilePictureGalleryActivity", "Oggetto immagine inviato correttamente");
+                    Log.d("ProfilePictureGalleryAc", "Oggetto immagine inviato correttamente");
                     // Redirecting the user to the profile activity
                     Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                     i.putExtra("user",ParseUser.getCurrentUser().getUsername().toString());
@@ -149,7 +149,7 @@ public class ProfilePictureGalleryActivity extends AppCompatActivity {
                     // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
 
-                    Log.d("ProfilePictureGalleryActivity", "Errore durante l'invio dell'oggetto immagine");
+                    Log.d("ProfilePictureGalleryAc", "Errore durante l'invio dell'oggetto immagine");
                 }
             }
         });
