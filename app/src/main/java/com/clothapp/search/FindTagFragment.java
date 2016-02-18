@@ -1,5 +1,6 @@
 package com.clothapp.search;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,18 +26,18 @@ import java.util.List;
 public class FindTagFragment extends Fragment {
     private View rootView;
     private ListView listTag;
+    private Context context;
+    private String query;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listTag = (ListView) rootView.findViewById(R.id.userlist);
-        SearchResultsActivity activity = (SearchResultsActivity) getActivity();
-        String query = activity.getQuery();
-        search(query);
+        search();
         return rootView;
     }
 
-    public void search(String query){
+    public void search(){
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query=query.trim();
 
@@ -69,5 +70,31 @@ public class FindTagFragment extends Fragment {
 
         //allungo l'altezza della list view
         //setListViewHeightBasedOnItems(listView);
+    }
+
+    public Fragment newIstance(String query, Context context) {
+        this.context = context;
+        final FindTagFragment f = new FindTagFragment();
+        final Bundle args = new Bundle();
+        args.putString("query", query);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+    }
+
+    public void refresh(String query) {
+        this.query=query;
+        // The reload fragment code here !
+        if (! this.isDetached()) {
+            getFragmentManager().beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

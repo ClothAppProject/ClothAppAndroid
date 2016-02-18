@@ -1,5 +1,6 @@
 package com.clothapp.search;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,18 +26,18 @@ import java.util.List;
 public class FindClothFragment extends Fragment {
     private View rootView;
     private ListView listCloth;
+    private Context context;
+    private String query;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_cloth, container, false);
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
-        SearchResultsActivity activity = (SearchResultsActivity) getActivity();
-        String query = activity.getQuery();
-        search(query);
+        search();
         return rootView;
     }
 
-    public void search(String query){
+    public void search(){
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query=query.trim();
 
@@ -44,28 +45,12 @@ public class FindClothFragment extends Fragment {
 
 
         //faccio la query a Parse
-        //List<User> user= SearchUtility.searchUser(query, rootView);
-        //final ArrayList<Image> tag= SearchUtility.searchHashtag(query, rootView);
         final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
 
 
 
 
-  /*      //tag
-        final SearchAdapterImage adapterI=new SearchAdapterImage(getBaseContext(),tag);
-        listTag.setAdapter(adapterI);
-        listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), ImageFragment.class);
-                i.putExtra("position", position);
-                //passo la lista delle foto al fragment
-                i.putExtra("lista", tag);
-                startActivity(i);
-                finish();
-            }
-        });
-*/
+
         SearchAdapterImage adapterCloth=new SearchAdapterImage(getActivity().getBaseContext(),cloth);
         listCloth.setAdapter(adapterCloth);
         listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,7 +64,32 @@ public class FindClothFragment extends Fragment {
             }
         });
 
-        //allungo l'altezza della list view
-        //setListViewHeightBasedOnItems(listView);
+
+    }
+
+    public Fragment newIstance(String query, Context context) {
+        this.context = context;
+        final FindClothFragment f = new FindClothFragment();
+        final Bundle args = new Bundle();
+        args.putString("query", query);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+    }
+
+    public void refresh(String query) {
+        this.query=query;
+        // The reload fragment code here !
+        if (! this.isDetached()) {
+            getFragmentManager().beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

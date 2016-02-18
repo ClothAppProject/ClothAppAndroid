@@ -7,6 +7,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -40,23 +41,31 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private String query;
 
+    private String[] titles;
+    private SearchAdapter searchAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
-        String[] titles = getResources().getStringArray(R.array.search_titles);
+        titles = getResources().getStringArray(R.array.search_titles);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+
+        query= handleIntent(getIntent());
 
         //set adapter to  ViewPager
-        viewPager.setAdapter(new SearchAdapter(getSupportFragmentManager(), titles));
+        searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext());
+        viewPager.setAdapter(searchAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        Log.d("SearchA","oncreate");
-        handleIntent(getIntent());
+        //Log.d("SearchA","oncreate");
+
     }
 
 
@@ -66,17 +75,16 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.home_appbar, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        final MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView =
                 (SearchView) MenuItemCompat.getActionView(searchItem);
 
         //quando faccio una nuova ricerca aggiorno questa activity invece di crearne una nuova
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            public String queryL;
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                this.queryL=searchView.getQuery().toString();
+                searchAdapter.setQuery(query);
                 return false;
             }
 
@@ -134,49 +142,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
-    private void handleIntent(Intent intent) {
+    private String handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            this.query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d("SearchA",query);
+            return intent.getStringExtra(SearchManager.QUERY);
         }
+        return null;
     }
 
 
-    public String getQuery() {
-        return query;
-    }
 
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            int itemPos;
-            for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listView);
-                item.measure(0, 0);
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listView.getDividerHeight() *
-                    (numberOfItems - 1);
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight;
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-
-            return true;
-
-        } else {
-            return false;
-        }
-
-    }
 }
