@@ -99,40 +99,42 @@ public class HomeMostRecentFragment extends Fragment {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad) {
-                        canLoad = false;
-                        int toDownload = 10;
-                        if (photos.size() % 2 == 0) toDownload = 11;
-                        ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                        updatePhotos.whereLessThan("createdAt", global.getLastDate());
-                        updatePhotos.orderByDescending("createdAt");
-                        updatePhotos.setLimit(toDownload);
-                        updatePhotos.findInBackground(new FindCallback<ParseObject>() {
-                            @Override
-                            public void done(List<ParseObject> objects, ParseException e) {
-                                if (e == null) {
-                                    if (objects.size() > 0) {
-                                        int i;
-                                        for (i = 0; i < objects.size(); i++) {
-                                            ParseFile f = objects.get(i).getParseFile("thumbnail");
-                                            try {
-                                                //ottengo la foto e la aggiungo per ultima
-                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like"));
-                                                global.addLastPhoto(toAdd);
-                                                //notifico l'image adapter di aggiornarsi
-                                                imageGridViewAdapter.notifyDataSetChanged();
-                                            } catch (ParseException e1) {
-                                                check(e1.getCode(), vi, e1.getMessage());
+                        if (photos!=null) {
+                            canLoad = false;
+                            int toDownload = 10;
+                            if (photos.size() % 2 == 0) toDownload = 11;
+                            ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+                            updatePhotos.whereLessThan("createdAt", global.getLastDate());
+                            updatePhotos.orderByDescending("createdAt");
+                            updatePhotos.setLimit(toDownload);
+                            updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    if (e == null) {
+                                        if (objects.size() > 0) {
+                                            int i;
+                                            for (i = 0; i < objects.size(); i++) {
+                                                ParseFile f = objects.get(i).getParseFile("thumbnail");
+                                                try {
+                                                    //ottengo la foto e la aggiungo per ultima
+                                                    Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(), objects.get(i).getString("user"), objects.get(i).getList("like"));
+                                                    global.addLastPhoto(toAdd);
+                                                    //notifico l'image adapter di aggiornarsi
+                                                    imageGridViewAdapter.notifyDataSetChanged();
+                                                } catch (ParseException e1) {
+                                                    check(e1.getCode(), vi, e1.getMessage());
+                                                }
                                             }
+                                            canLoad = true;
+                                            //modifico la data dell'utlima foto
+                                            global.setLastDate(objects.get(i - 1).getCreatedAt());
                                         }
-                                        canLoad = true;
-                                        //modifico la data dell'utlima foto
-                                        global.setLastDate(objects.get(i - 1).getCreatedAt());
+                                    } else {
+                                        check(e.getCode(), vi, e.getMessage());
                                     }
-                                } else {
-                                    check(e.getCode(), vi, e.getMessage());
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }

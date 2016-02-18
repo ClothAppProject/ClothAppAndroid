@@ -78,43 +78,46 @@ public class HomeTopRatedFragment extends Fragment {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad && photo.size()>0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
-                        canLoad = false;
-                        int toDownload = 10;
-                        final int maxNumLike = photo.get(photo.size()-1).getNumLike();
-                        ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                        updatePhotos.whereLessThanOrEqualTo("nLike", maxNumLike);
-                        updatePhotos.orderByDescending("nLike");
-                        updatePhotos.setLimit(toDownload);
-                        updatePhotos.findInBackground(new FindCallback<ParseObject>() {
-                            @Override
-                            public void done(List<ParseObject> objects, ParseException e) {
-                                if (e == null) {
-                                    if (objects.size() > 0) {
-                                        int i;
-                                        for (i = 0; i < objects.size(); i++) {
-                                            //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
-                                            //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
-                                            if (objects.get(i).getInt("nLike")==maxNumLike) {
-                                                if (photo.contains(new Image(null,objects.get(i).getObjectId(),null,null)))  continue;
+                        if (photo != null) {
+                            canLoad = false;
+                            int toDownload = 10;
+                            final int maxNumLike = photo.get(photo.size() - 1).getNumLike();
+                            ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+                            updatePhotos.whereLessThanOrEqualTo("nLike", maxNumLike);
+                            updatePhotos.orderByDescending("nLike");
+                            updatePhotos.setLimit(toDownload);
+                            updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    if (e == null) {
+                                        if (objects.size() > 0) {
+                                            int i;
+                                            for (i = 0; i < objects.size(); i++) {
+                                                //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
+                                                //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
+                                                if (objects.get(i).getInt("nLike") == maxNumLike) {
+                                                    if (photo.contains(new Image(null, objects.get(i).getObjectId(), null, null)))
+                                                        continue;
+                                                }
+                                                ParseFile f = objects.get(i).getParseFile("thumbnail");
+                                                try {
+                                                    //ottengo la foto e la aggiungo
+                                                    Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(), objects.get(i).getString("user"), objects.get(i).getList("like"));
+                                                    photo.add(toAdd);
+                                                    //notifico l'image adapter di aggiornarsi
+                                                    adapter.notifyDataSetChanged();
+                                                } catch (ParseException e1) {
+                                                    check(e1.getCode(), rootView, e1.getMessage());
+                                                }
                                             }
-                                            ParseFile f = objects.get(i).getParseFile("thumbnail");
-                                            try {
-                                                //ottengo la foto e la aggiungo
-                                                Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like"));
-                                                photo.add(toAdd);
-                                                //notifico l'image adapter di aggiornarsi
-                                                adapter.notifyDataSetChanged();
-                                            } catch (ParseException e1) {
-                                                check(e1.getCode(), rootView, e1.getMessage());
-                                            }
+                                            canLoad = true;
                                         }
-                                        canLoad = true;
+                                    } else {
+                                        check(e.getCode(), rootView, e.getMessage());
                                     }
-                                } else {
-                                    check(e.getCode(), rootView, e.getMessage());
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
