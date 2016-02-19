@@ -34,6 +34,7 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -290,10 +291,16 @@ public class ProfileUtils {
     }
     private static void getParseUserShop(final Context context, final String username) {
 
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username", username);
+        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+        query1.whereEqualTo("username", username);
 
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
+        ParseQuery<ParseUser> query2 = ParseUser.getQuery();
+        query2.whereEqualTo("name", username);
+
+        List<ParseQuery<ParseUser>> l= new ArrayList<>();
+        l.add(query1);
+        l.add(query2);
+        ParseQuery.or(l).getFirstInBackground(new GetCallback<ParseUser>() {
 
             @Override
             public void done(ParseUser object, ParseException e) {
@@ -342,10 +349,9 @@ public class ProfileUtils {
         });
     }
 
-    private static void getParseShop(final Context context, String username)    {
+    private static void getParseShop(final Context context, final String username)    {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
         query.whereEqualTo("username", username);
-
         query.getFirstInBackground(new GetCallback<ParseObject>() {
 
             @Override
@@ -358,6 +364,32 @@ public class ProfileUtils {
                     updateShopListItem(4, shop.getString("webSite"));
 
                 } else {
+                    if (e.getCode()==101)   {
+                        ParseQuery<ParseUser> queryNeg = ParseUser.getQuery();
+                        queryNeg.whereEqualTo("name", username);
+                        queryNeg.getFirstInBackground(new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser negozio, ParseException e) {
+                                if (e==null) {
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
+                                    query.whereEqualTo("username", negozio.getUsername());
+                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(ParseObject object1, ParseException e) {
+                                            if (e == null) {
+                                                shop = object1;
+                                                updateShopListItem(1, shop.getString("address"));
+                                                updateShopListItem(2, shop.getString("Citta"));
+                                                updateShopListItem(4, shop.getString("webSite"));
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    System.out.println("debug: messaggio =" +e.getMessage());
+                                }
+                            }
+                        });
+                    }
                     e.printStackTrace();
                     // showDialog(context, "Error", "Failed to retrieve shop info. Check your Internet connection.");
                 }

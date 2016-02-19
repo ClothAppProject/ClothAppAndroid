@@ -53,7 +53,7 @@ public class MyCardListAdapter extends BaseAdapter {
         TextView shop=(TextView)row.findViewById(R.id.shop);
         TextView price=(TextView)row.findViewById(R.id.price);
         TextView brand = (TextView) row.findViewById(R.id.brand);
-        final TextView cloth=(TextView)row.findViewById(R.id.cloth);
+        TextView cloth=(TextView)row.findViewById(R.id.cloth);
         address.setText((CharSequence)cloths.get(position).getAddress());
         shop.setText((CharSequence)cloths.get(position).getShop());
         price.setText((CharSequence) cloths.get(position).getPrice());
