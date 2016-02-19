@@ -463,6 +463,7 @@ public class ProfileUtils {
     }
     public static Intent goToProfile(Context contesto, String utente) {
         Intent i = null;
+        System.out.println("debug: "+utente);
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", utente);
         try {
