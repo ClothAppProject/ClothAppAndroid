@@ -54,6 +54,7 @@ public class ImageDetailFragment extends Fragment {
     private ImageView share;
     private ImageView cuore;
     private TextView like;
+    private TextView percentuale;
     private ImageView profilePic;
     private View vi;
 
@@ -84,6 +85,7 @@ public class ImageDetailFragment extends Fragment {
         cuore=(ImageView)rootView.findViewById(R.id.heart);
         like=(TextView)rootView.findViewById(R.id.like);
         profilePic = (ImageView)rootView.findViewById(R.id.pic);
+        percentuale = (TextView)rootView.findViewById(R.id.percentuale);
 
         vi = new View(context);
         //trovo le info delle foto e le inserisco nella view
@@ -237,7 +239,10 @@ public class ImageDetailFragment extends Fragment {
                         @Override
                         public void done(Integer percentDone) {
                             //passo percentuale
-                            // donutProgress.setProgress(percentDone);
+                            if (percentDone==100)   {
+                                percentuale.setVisibility(View.INVISIBLE);
+                            }
+                            percentuale.setText(percentDone+"%");
                         }
                     });
 
