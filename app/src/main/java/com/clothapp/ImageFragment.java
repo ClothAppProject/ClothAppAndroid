@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.home_gallery.HomeMostRecentFragment;
+import com.clothapp.home_gallery.HomeTopRatedFragment;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.resources.ApplicationSupport;
@@ -62,7 +63,7 @@ public class ImageFragment extends AppCompatActivity {
                 lista = HomeMostRecentFragment.photos;
                 break;
             case "topRated":
-                lista = HomeMostRecentFragment.photos;
+                lista = HomeTopRatedFragment.photos;
                 break;
             case "profilo":
                 //bisogna ancora implementare il listener

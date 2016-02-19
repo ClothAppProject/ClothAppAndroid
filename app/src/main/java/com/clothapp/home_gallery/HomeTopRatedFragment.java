@@ -49,7 +49,7 @@ public class HomeTopRatedFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public static ArrayList<Image> photo = new ArrayList<>();
+    public static ArrayList<Image> photos = new ArrayList<>();
     Boolean canLoad = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class HomeTopRatedFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                findRated(photo.size());
+                findRated(photos.size());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -77,11 +77,11 @@ public class HomeTopRatedFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                    if (canLoad && photo.size()>0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
-                        if (photo != null) {
+                    if (canLoad && photos.size()>0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                        if (photos != null) {
                             canLoad = false;
                             int toDownload = 10;
-                            final int maxNumLike = photo.get(photo.size() - 1).getNumLike();
+                            final int maxNumLike = photos.get(photos.size() - 1).getNumLike();
                             ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
                             updatePhotos.whereLessThanOrEqualTo("nLike", maxNumLike);
                             updatePhotos.orderByDescending("nLike");
@@ -96,14 +96,14 @@ public class HomeTopRatedFragment extends Fragment {
                                                 //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
                                                 //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
                                                 if (objects.get(i).getInt("nLike") == maxNumLike) {
-                                                    if (photo.contains(new Image(null, objects.get(i).getObjectId(), null, null)))
+                                                    if (photos.contains(new Image(null, objects.get(i).getObjectId(), null, null)))
                                                         continue;
                                                 }
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo
                                                     Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(), objects.get(i).getString("user"), objects.get(i).getList("like"));
-                                                    photo.add(toAdd);
+                                                    photos.add(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     adapter.notifyDataSetChanged();
                                                 } catch (ParseException e1) {
@@ -144,7 +144,7 @@ public class HomeTopRatedFragment extends Fragment {
         }
     */
     public void findRated(int n)    {
-        photo = new ArrayList<>();
+        photos = new ArrayList<>();
         //qui scarico le foto
         final View vi = new View(getActivity().getApplicationContext());
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -158,13 +158,13 @@ public class HomeTopRatedFragment extends Fragment {
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista
-                            photo.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
+                            photos.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
 
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());
                         }
                     }
-                    adapter=new MyListAdapter(getActivity().getApplicationContext(), photo);
+                    adapter=new MyListAdapter(getActivity().getApplicationContext(), photos);
                     l.setAdapter(adapter);
                     l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
