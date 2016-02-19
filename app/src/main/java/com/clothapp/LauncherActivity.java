@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.parse.ParseUser;
 
 import java.io.IOException;
@@ -37,9 +39,12 @@ public class LauncherActivity extends AppCompatActivity {
 
 
         //prima cosa da fare è controllare se c'è connessione ad internet!!
-        /*if (!hasActiveInternetConnection(getApplicationContext()))   {
-                    android.os.Process.killProcess(android.os.Process.myPid());
-          }*/
+        if (!isNetworkAvailable()) {
+            Log.d("LauncherActivity", "Killing the application...");
+            showDialog(LauncherActivity.this, "Error!", "Please check your Internet connection.");
+        } else {
+            Log.d("LauncherActivity", "Network OK");
+        }
 
         // nascondo la status bar
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -49,7 +54,6 @@ public class LauncherActivity extends AppCompatActivity {
         //Then, from the onCreate() method in your application's main activity—and in any other activity
         // through which the user may enter your application for the first time—call setDefaultValues():
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
@@ -98,7 +102,7 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     //funzioni per controllare se è presente connessione
-    public boolean hasActiveInternetConnection(Context context) {
+    /*public boolean hasActiveInternetConnection(Context context) {
         if (isNetworkAvailable(context)) {
             try {
                 HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
@@ -106,19 +110,47 @@ public class LauncherActivity extends AppCompatActivity {
                 urlc.setRequestProperty("Connection", "close");
                 urlc.setConnectTimeout(500);
                 urlc.connect();
-                Log.d("debug","debug: risposta è "+urlc.getResponseCode());
+                Log.d("debug", "debug: risposta è " + urlc.getResponseCode());
                 return (urlc.getResponseCode() == 200);
             } catch (IOException e) {
+                Log.d("LauncherActivity", "Error message: " + e.getMessage());
                 return false;
             }
         }
         return false;
+    }*/
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(conMan.getActiveNetworkInfo() != null && conMan.getActiveNetworkInfo().isConnected())
-            return true;
-        else
-            return false;
+
+    private static void showDialog(Context context, String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        String positiveText = "CLOSE APP";
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                });
+
+//        String negativeText = "CANCEL";
+//        builder.setNegativeButton(negativeText,
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // negative button logic
+//                    }
+//                });
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 }

@@ -434,7 +434,7 @@ public class ProfileUtils {
 
     // Shows a simple dialog with a title, a message and two buttons.
     // The context argument is needed to show the dialog inside the UserProfileActivity activity.
-    private static void showDialog(Context context, String title, String message) {
+    public static void showDialog(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);
