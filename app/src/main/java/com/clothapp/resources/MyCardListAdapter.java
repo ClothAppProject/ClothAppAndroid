@@ -1,6 +1,7 @@
 package com.clothapp.resources;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.ImageDetailFragment;
+import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile_shop.ShopProfileActivity;
+import com.parse.FindCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,13 +53,21 @@ public class MyCardListAdapter extends BaseAdapter {
         TextView shop=(TextView)row.findViewById(R.id.shop);
         TextView price=(TextView)row.findViewById(R.id.price);
         TextView brand = (TextView) row.findViewById(R.id.brand);
-        TextView cloth=(TextView)row.findViewById(R.id.cloth);
+        final TextView cloth=(TextView)row.findViewById(R.id.cloth);
         address.setText((CharSequence)cloths.get(position).getAddress());
         shop.setText((CharSequence)cloths.get(position).getShop());
         price.setText((CharSequence) cloths.get(position).getPrice());
         brand.setText((CharSequence)cloths.get(position).getBrand());
         cloth.setText((CharSequence) cloths.get(position).getCloth());
-
+        shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ShopProfileActivity.class);
+                i.putExtra("user",cloths.get(position).getShop());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+        });
 
         return row;
     }

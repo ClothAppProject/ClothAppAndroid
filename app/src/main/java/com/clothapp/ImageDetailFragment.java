@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -319,5 +320,4 @@ public class ImageDetailFragment extends Fragment {
         }
 
     }
-
 }
