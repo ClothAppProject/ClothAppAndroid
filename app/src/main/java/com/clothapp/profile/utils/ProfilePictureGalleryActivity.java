@@ -140,7 +140,7 @@ public class ProfilePictureGalleryActivity extends AppCompatActivity {
 
                     Log.d("ProfilePictureGalleryAc", "Oggetto immagine inviato correttamente");
                     // Redirecting the user to the profile activity
-                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                    Intent i = ProfileUtils.goToProfile(getApplicationContext(),ParseUser.getCurrentUser().getUsername());
                     i.putExtra("user",ParseUser.getCurrentUser().getUsername().toString());
                     startActivity(i);
 

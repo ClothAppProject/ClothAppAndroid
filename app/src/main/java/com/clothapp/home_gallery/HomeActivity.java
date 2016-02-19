@@ -38,6 +38,7 @@ import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.search.SearchAdapter;
@@ -194,10 +195,9 @@ public class HomeActivity extends AppCompatActivity {
                             case R.id.nav_profile:
                                 Log.d("HomeActivity", "Clicked on R.id.nav_profile");
 
-                                intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+                                intent = ProfileUtils.goToProfile(getApplication(), ParseUser.getCurrentUser().getUsername());
                                 intent.putExtra("user", username);
                                 startActivity(intent);
-
                                 break;
 
                             case R.id.nav_logout:
@@ -212,8 +212,7 @@ public class HomeActivity extends AppCompatActivity {
                                     }
                                 });
                                 logout.start();
-
-                                intent = new Intent(UserProfileActivity.activity, MainActivity.class);
+                                intent = new Intent(HomeActivity.this, MainActivity.class);
                                 dialog.dismiss();
                                 startActivity(intent);
 

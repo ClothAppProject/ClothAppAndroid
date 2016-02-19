@@ -37,9 +37,9 @@ public class LauncherActivity extends AppCompatActivity {
 
 
         //prima cosa da fare è controllare se c'è connessione ad internet!!
-        if (!hasActiveInternetConnection(getApplicationContext()))   {
+        /*if (!hasActiveInternetConnection(getApplicationContext()))   {
                     android.os.Process.killProcess(android.os.Process.myPid());
-                }
+          }*/
 
         // nascondo la status bar
         // requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -104,7 +104,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
             Log.d("UploadCameraActivity", "L'Immagine non è stata scattata");
 
             // Reinderizzo l'utente alla profile activity
-            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+            Intent i = ProfileUtils.goToProfile(getApplicationContext(),ParseUser.getCurrentUser().getUsername());
             i.putExtra("user",ParseUser.getCurrentUser().getUsername());
             startActivity(i);
 
@@ -231,7 +231,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
                     g.execute(url);
 
                     // Redirecting the user to the profile activity
-                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                    Intent i = ProfileUtils.goToProfile(getApplicationContext(),ParseUser.getCurrentUser().getUsername());
                     i.putExtra("user",ParseUser.getCurrentUser().getUsername().toString());
                     startActivity(i);
 

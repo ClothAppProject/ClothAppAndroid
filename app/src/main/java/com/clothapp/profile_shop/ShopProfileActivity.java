@@ -1,8 +1,10 @@
 package com.clothapp.profile_shop;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,10 +32,20 @@ import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.utils.ProfilePictureCameraActivity;
+import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
+
+import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ShopProfileActivity extends AppCompatActivity {
 
@@ -230,6 +242,53 @@ public class ShopProfileActivity extends AppCompatActivity {
         ImageView background = (ImageView) findViewById(R.id.profile_cover_image);
 
         ProfileUtils.getParseUserCopertina(this, username, background, drawerImageView, getApplicationContext());
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (username.equals(ParseUser.getCurrentUser().getUsername().toString())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShopProfileActivity.this);
+                    builder.setTitle(R.string.choose_profile_picture)
+                            //.set
+                            .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            // Redirect the user to the ProfilePictureCameraActivity Activity
+                                            Intent intentCamera = new Intent(activity.getApplicationContext(), ProfilePictureCameraActivity.class);
+                                            activity.startActivity(intentCamera);
+                                            break;
+                                        case 1:
+                                            // Redirect the user to the ProfilePictureGalleryActivity Activity
+                                            Intent intentGallery = new Intent(activity.getApplicationContext(), ProfilePictureGalleryActivity.class);
+                                            activity.startActivity(intentGallery);
+                                            break;
+                                        case 2:
+                                            //delete profile picture
+                                            ParseQuery<ParseObject> queryFotoProfilo = new ParseQuery<ParseObject>("UserPhoto");
+                                            queryFotoProfilo.whereEqualTo("username", username);
+                                            queryFotoProfilo.findInBackground(new FindCallback<ParseObject>() {
+                                                @Override
+                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                    if (e == null) {
+                                                        if (objects.size() > 0) {
+                                                            objects.get(0).deleteInBackground();
+                                                            activity.finish();
+                                                            activity.startActivity(activity.getIntent());
+                                                        }
+                                                    } else {
+                                                        check(e.getCode(), v, e.getMessage());
+                                                    }
+                                                }
+                                            });
+                                            break;
+                                    }
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
 
     }
 }
