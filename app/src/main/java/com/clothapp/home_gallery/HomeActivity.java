@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
 
         //set adapter to  ViewPager
-        viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(),titles));
+        viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(), titles));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -270,8 +270,5 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         finish();
-
-
-
     }
 }
