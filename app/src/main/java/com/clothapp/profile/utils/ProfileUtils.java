@@ -103,7 +103,7 @@ public class ProfileUtils {
                                     ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
 
                                     item.hashtags = photo.getList("hashtag");
-                                    item.clothes = photo.getList("vestiti");
+                                    item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
                                     adapter.items.add(item);
@@ -162,7 +162,7 @@ public class ProfileUtils {
                                     ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
 
                                     item.hashtags = photo.getList("hashtag");
-                                    item.clothes = photo.getList("vestiti");
+                                    item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
                                     adapter.items.add(item);
