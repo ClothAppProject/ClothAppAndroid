@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 
 import com.clothapp.R;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
-import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.ShopProfileActivity;
+import com.clothapp.resources.Image;
 
 import java.util.ArrayList;
 
 public class ProfileShopUploadedPhotosFragment extends Fragment {
+
+    public static ArrayList<Image> photos = new ArrayList<>();
 
     private static final String PARSE_USERNAME = "username";
 
@@ -29,6 +31,7 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(PARSE_USERNAME, username);
         fragment.setArguments(args);
+        photos = new ArrayList<>();
         return fragment;
     }
 
@@ -48,10 +51,10 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
         ShopProfileActivity.viewProfileUploadedPhotos.setLayoutManager(llm);
 
         // Create an array and add the previously created items to it.
-        ArrayList<ProfileUploadedPhotosListItem> items = new ArrayList<>();
+        ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-        ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items);
+        ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items,"negozio");
         ShopProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse

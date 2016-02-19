@@ -22,11 +22,12 @@ public class Image implements Parcelable{
     private String user;
     private List<String> like;
     private int nLike;
-    private List<String> hashtag;
     private List<String> vestiti;
+    public List<String> hashtags;
+    public List<String> clothes;
+    public List<String> users;
 
-
-    public Image(File f, String Id, String user,List likes)   {
+    public Image(File f, String Id, String user,List likes, int nLike)   {
         this.user=user;
         this.objectId = Id;
         this.file=f;
@@ -35,7 +36,7 @@ public class Image implements Parcelable{
         }else {
             this.like = likes;
         }
-        this.nLike=like.size();
+        this.nLike = nLike;
     }
 
     public Image(ParseObject o)  {
@@ -47,12 +48,12 @@ public class Image implements Parcelable{
         this.nLike=o.getInt("nLike");
         this.like=(ArrayList)o.get("like");
         this.vestiti=(ArrayList)o.get("tipo");
-        this.hashtag=(ArrayList)o.get("hashtag");
+        this.hashtags=(ArrayList)o.get("hashtag");
 
     }
 
     public List<String> getHashtag() {
-        return hashtag;
+        return hashtags;
     }
 
     public List<String> getVestiti() {
@@ -61,9 +62,9 @@ public class Image implements Parcelable{
 
     public String getHashtagToString() {
         String res="";
-        if(hashtag!=(null)) {
-            for (int i = 0; i < hashtag.size(); i++) {
-                res += (" " + hashtag.get(i));
+        if(hashtags!=(null)) {
+            for (int i = 0; i < hashtags.size(); i++) {
+                res += (" " + hashtags.get(i));
             }
         }
         return res;

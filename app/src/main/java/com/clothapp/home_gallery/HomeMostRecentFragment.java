@@ -66,10 +66,11 @@ public class HomeMostRecentFragment extends Fragment {
                                 //modifico la data della prima foto
                                 global.setFirstDate(objects.get(0).getCreatedAt());
                                 for (int i = objects.size() - 1; i >= 0; i--) {
+                                    ParseObject object = objects.get(i);
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        global.addFirstPhoto(new Image(f.getFile(), objects.get(i).getObjectId(),objects.get(i).getString("user"),objects.get(i).getList("like")));
+                                        global.addFirstPhoto(new Image(f.getFile(), object.getObjectId(),object.getString("user"),object.getList("like"),object.getInt("nLike")));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -114,10 +115,11 @@ public class HomeMostRecentFragment extends Fragment {
                                         if (objects.size() > 0) {
                                             int i;
                                             for (i = 0; i < objects.size(); i++) {
+                                                ParseObject object = objects.get(i);
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo per ultima
-                                                    Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(), objects.get(i).getString("user"), objects.get(i).getList("like"));
+                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"), object.getList("like"),object.getInt("nLike"));
                                                     global.addLastPhoto(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     imageGridViewAdapter.notifyDataSetChanged();

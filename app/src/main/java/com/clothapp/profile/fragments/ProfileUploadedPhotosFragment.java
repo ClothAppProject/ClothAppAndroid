@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
-import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.Image;
 
@@ -52,10 +51,10 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         UserProfileActivity.viewProfileUploadedPhotos.setLayoutManager(llm);
 
         // Create an array and add the previously created items to it.
-        ArrayList<ProfileUploadedPhotosListItem> items = new ArrayList<>();
+        ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-        ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items);
+        ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items,"persona");
         UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse

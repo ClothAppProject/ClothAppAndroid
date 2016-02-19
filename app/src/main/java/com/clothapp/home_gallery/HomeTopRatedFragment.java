@@ -93,16 +93,17 @@ public class HomeTopRatedFragment extends Fragment {
                                         if (objects.size() > 0) {
                                             int i;
                                             for (i = 0; i < objects.size(); i++) {
+                                                ParseObject object = objects.get(i);
                                                 //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
                                                 //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
-                                                if (objects.get(i).getInt("nLike") == maxNumLike) {
-                                                    if (photos.contains(new Image(null, objects.get(i).getObjectId(), null, null)))
+                                                if (object.getInt("nLike") == maxNumLike) {
+                                                    if (photos.contains(new Image(null, objects.get(i).getObjectId(), null, null,0)))
                                                         continue;
                                                 }
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo
-                                                    Image toAdd = new Image(f.getFile(), objects.get(i).getObjectId(), objects.get(i).getString("user"), objects.get(i).getList("like"));
+                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"), object.getList("like"),object.getInt("nLike"));
                                                     photos.add(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     adapter.notifyDataSetChanged();
@@ -158,7 +159,7 @@ public class HomeTopRatedFragment extends Fragment {
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista
-                            photos.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like")));
+                            photos.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like"),obj.getInt("nLike")));
 
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());

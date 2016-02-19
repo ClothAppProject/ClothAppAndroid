@@ -22,6 +22,7 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.resources.Image;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -99,14 +100,15 @@ public class ProfileUtils {
                                     String objectId = photo.getObjectId();
                                     String username = photo.get("user").toString();
                                     int nLikes = photo.getInt("nLike");
+                                    List <String> likes = photo.getList("like");
 
-                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
+                                    Image item = new Image(file, objectId, username, likes, nLikes);
 
                                     item.hashtags = photo.getList("hashtag");
                                     item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
-                                    adapter.items.add(item);
+                                    adapter.photos.add(item);
 
 
                                     adapter.notifyDataSetChanged();
@@ -158,14 +160,15 @@ public class ProfileUtils {
                                     String objectId = photo.getObjectId();
                                     String username = photo.get("user").toString();
                                     int nLikes = photo.getInt("nLike");
+                                    List <String> like = photo.getList("like");
 
-                                    ProfileUploadedPhotosListItem item = new ProfileUploadedPhotosListItem(objectId, file, username, nLikes);
+                                    Image item = new Image(file, objectId, username, like, nLikes);
 
                                     item.hashtags = photo.getList("hashtag");
                                     item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
-                                    adapter.items.add(item);
+                                    adapter.photos.add(item);
 
 
                                     adapter.notifyDataSetChanged();

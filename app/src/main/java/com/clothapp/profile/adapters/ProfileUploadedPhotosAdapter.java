@@ -18,7 +18,7 @@ import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
-import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
+import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
 import com.parse.ParseUser;
 
@@ -28,19 +28,20 @@ import java.util.List;
 
 public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private String profilo;
+    public static List<Image> photos;
 
-    public static List<ProfileUploadedPhotosListItem> items;
-
-    public ProfileUploadedPhotosAdapter(List<ProfileUploadedPhotosListItem> items) {
+    public ProfileUploadedPhotosAdapter(List<Image> items, String profilo) {
+        this.profilo = profilo;
         PhotoViewHolder.count = 0;
-        ProfileUploadedPhotosAdapter.items = items;
+        ProfileUploadedPhotosAdapter.photos = items;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile_uploaded_photos_list_item, parent, false);
-        return new PhotoViewHolder(v);
+        return new PhotoViewHolder(v,profilo);
     }
 
     @Override
@@ -49,13 +50,13 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
 
         // Create a bitmap from a file
-        File imageFile = items.get(position).getImageFile();
+        File imageFile = photos.get(position).getFile();
         Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 
         photoViewHolder.photo.setImageBitmap(imageBitmap);
 
         // Display hashtags, if any
-        List<String> hashtagList = items.get(position).hashtags;
+        List<String> hashtagList = photos.get(position).hashtags;
 
         if (hashtagList != null) {
 
@@ -72,7 +73,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         // Display item (clothing) name, if any
-        List<String> clothesList = items.get(position).clothes;
+        List<String> clothesList = photos.get(position).clothes;
 
         if (clothesList != null) {
 
@@ -89,18 +90,18 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         String username = ParseUser.getCurrentUser().getUsername();
-        if (items.get(position).users != null && items.get(position).users.contains(username)) {
+        if (photos.get(position).users != null && photos.get(position).users.contains(username)) {
             Log.d("PUPAdapter", "Item " + position + ": already clicked like.");
 
             photoViewHolder.likeImage.setColorFilter(Color.argb(255, 181, 47, 41));
         }
 
-        photoViewHolder.txtLikeCount.setText(items.get(position).getLikeCount() + "");
+        photoViewHolder.txtLikeCount.setText(photos.get(position).getNumLike() + "");
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return photos.size();
     }
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -115,7 +116,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         TextView txtLikeCount;
         ImageView likeImage;
 
-        PhotoViewHolder(View itemView) {
+        PhotoViewHolder(View itemView, final String profilo) {
             super(itemView);
 
             txtItemNames = (TextView) itemView.findViewById(R.id.profile_uplaoded_photos_card_item_name);
@@ -128,22 +129,29 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                 ProfileUploadedPhotosFragment.photos = new ArrayList<>();
             }
 
-            ProfileUploadedPhotosListItem item = items.get(count);
+            Image item = photos.get(count);
 
             position = count;
 
             count++;
 
-            Image image = new Image(item.getImageFile(), item.getObjectId(), item.getUsername(), item.users);
+            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.users, item.getNumLike());
             ProfileUploadedPhotosFragment.photos.add(image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
-                    intent.putExtra("classe", "profilo");
-                    intent.putExtra("position", position);
-                    UserProfileActivity.activity.startActivity(intent);
+                    if (profilo.equals("persona")) {
+                        Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
+                        intent.putExtra("classe", "profilo");
+                        intent.putExtra("position", position);
+                        UserProfileActivity.activity.startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(ShopProfileActivity.context, ImageFragment.class);
+                        intent.putExtra("classe", "profilo");
+                        intent.putExtra("position", position);
+                        ShopProfileActivity.activity.startActivity(intent);
+                    }
                 }
             });
         }

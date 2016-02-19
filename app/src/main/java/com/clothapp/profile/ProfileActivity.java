@@ -256,7 +256,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void done(File file, ParseException e) {
                 if (e == null) {
-                    lista.add(new Image(file,p.getObjectId(),p.getString("user"),p.getList("like")));
+                    lista.add(new Image(file,p.getObjectId(),p.getString("user"),p.getList("like"),p.getInt("nLike")));
                     Glide.with(mContext)
                             .load(file)
                             .centerCrop()
