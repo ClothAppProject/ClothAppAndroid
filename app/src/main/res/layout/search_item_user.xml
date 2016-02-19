@@ -4,10 +4,27 @@
     android:layout_height="match_parent">
 
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="User"
-        android:id="@+id/user"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="56dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/foto"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="16dp"
+            android:text="User"
+            android:id="@+id/user"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:gravity="fill_vertical" />
+    </LinearLayout>
+
 </LinearLayout>

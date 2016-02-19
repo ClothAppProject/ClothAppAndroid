@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.resources.Cloth;
 import com.clothapp.resources.User;
 
 import java.util.ArrayList;
@@ -23,9 +24,11 @@ public class SearchAdapterImage extends BaseAdapter {
     private final Context context;
     private List< Image > image=new ArrayList<>();
 
+
     public SearchAdapterImage(Context context, List<Image> image) {
         this.context = context;
         this.image = image;
+
     }
     @Override
     public int getCount() {
@@ -52,6 +55,14 @@ public class SearchAdapterImage extends BaseAdapter {
             row = inflater.inflate(R.layout.search_item_image, parent, false);
 
         }
+
+        TextView tipi=(TextView)row.findViewById(R.id.tipo);
+        tipi.setText((CharSequence) image.get(position).getVestitiToString());
+
+
+        TextView hashtag=(TextView)row.findViewById(R.id.hashtag);
+        hashtag.setText((CharSequence) image.get(position).getHashtagToString());
+
         ImageView imageView=(ImageView)row.findViewById(R.id.foto);
         Glide.with(context)
                 .load(image.get(position).getFile())
@@ -62,8 +73,5 @@ public class SearchAdapterImage extends BaseAdapter {
 
         return row;
     }
-
-
-
 
 }
