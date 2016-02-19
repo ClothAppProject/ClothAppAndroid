@@ -54,7 +54,7 @@ public class SearchAdapterImage extends BaseAdapter {
         }
         ImageView imageView=(ImageView)row.findViewById(R.id.foto);
         Glide.with(context)
-                .load(image.get(position).getThumbnail())
+                .load(image.get(position).getFile())
                 .into(imageView);
 
         TextView t=(TextView)row.findViewById(R.id.user);

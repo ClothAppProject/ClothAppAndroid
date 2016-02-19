@@ -49,7 +49,7 @@ public class HomeTopRatedFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<Image> photo = new ArrayList<>();
+    public static ArrayList<Image> photo = new ArrayList<>();
     Boolean canLoad = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -173,9 +173,8 @@ public class HomeTopRatedFragment extends Fragment {
                                 HomeActivity.menuMultipleActions.collapse();
                             } else {
                                 Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                                toPass.putExtra("classe","topRated");
                                 toPass.putExtra("position", position);
-                                //passo la lista delle foto al fragment
-                                toPass.putExtra("lista", photo);
                                 startActivity(toPass);
                             }
                         }

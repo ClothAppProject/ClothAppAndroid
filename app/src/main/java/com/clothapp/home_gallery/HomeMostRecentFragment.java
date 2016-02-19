@@ -33,7 +33,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
  */
 public class HomeMostRecentFragment extends Fragment {
     ApplicationSupport global;
-    ArrayList<Image> photos;
+    public static ArrayList<Image> photos;
     SwipeRefreshLayout swipeRefreshLayout;
     ImageGridViewAdapter imageGridViewAdapter;
     GridView gridview;
@@ -62,7 +62,7 @@ public class HomeMostRecentFragment extends Fragment {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if (e == null) {
-                            if (objects.size() > 0) {
+                            if (!objects.isEmpty()) {
                                 //modifico la data della prima foto
                                 global.setFirstDate(objects.get(0).getCreatedAt());
                                 for (int i = objects.size() - 1; i >= 0; i--) {
@@ -158,9 +158,8 @@ public class HomeMostRecentFragment extends Fragment {
                     HomeActivity.menuMultipleActions.collapse();
                 } else {
                     Intent toPass = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                    toPass.putExtra("classe","mostRecent");
                     toPass.putExtra("position", position);
-                    //passo la lista delle foto al fragment
-                    toPass.putExtra("lista", photos);
                     startActivity(toPass);
                     onPause();
                 }

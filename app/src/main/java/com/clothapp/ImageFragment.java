@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.home_gallery.HomeMostRecentFragment;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -48,16 +49,25 @@ public class ImageFragment extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private ScreenSlidePagerAdapter mPagerAdapter;
-    List<Image> lista;
+    ArrayList<Image> lista;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //prendo la lista delle immagini
-        lista = getIntent().getParcelableArrayListExtra("lista");
+        switch (getIntent().getStringExtra("classe"))   {
+            case "mostRecent":
+                lista = HomeMostRecentFragment.photos;
+                break;
+            case "topRated":
+                lista = HomeMostRecentFragment.photos;
+                break;
+            case "profilo":
+                //bisogna ancora implementare il listener
+                //lista = UserProfileActivity.photos;
+                break;
+        }
         setContentView(R.layout.fragment_image);
         mPager = (ViewPager) findViewById(R.id.pager);
 

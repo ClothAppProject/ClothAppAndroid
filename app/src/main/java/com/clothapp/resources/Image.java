@@ -18,7 +18,6 @@ import java.util.Objects;
 //classe che prende sia il tipo l'id di una foto che il file stesso
 public class Image implements Parcelable{
     private File file;
-    private File thumbnail;
     private String objectId;
     private String user;
     private List<String> like;
@@ -39,8 +38,7 @@ public class Image implements Parcelable{
 
     public Image(ParseObject o)  {
         try {
-            this.file=o.getParseFile("photo").getFile();
-            this.thumbnail=o.getParseFile("thumbnail").getFile();
+            this.file=o.getParseFile("thumbnail").getFile();
         } catch (ParseException e) {}
         this.objectId=o.getObjectId();
         this.user=o.getString("user");
@@ -63,14 +61,6 @@ public class Image implements Parcelable{
     }
     public String getObjectId() {
         return this.objectId;
-    }
-
-    public File getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(File thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     //metodi equals e hashcode che controllano se un oggetto è uguale, basta controllare sull'objectId
