@@ -22,6 +22,8 @@ public class Image implements Parcelable{
     private String user;
     private List<String> like;
     private int nLike;
+    private List<String> hashtag;
+    private List<String> vestiti;
 
 
     public Image(File f, String Id, String user,List likes)   {
@@ -44,7 +46,37 @@ public class Image implements Parcelable{
         this.user=o.getString("user");
         this.nLike=o.getInt("nLike");
         this.like=(ArrayList)o.get("like");
+        this.vestiti=(ArrayList)o.get("tipo");
+        this.hashtag=(ArrayList)o.get("hashtag");
 
+    }
+
+    public List<String> getHashtag() {
+        return hashtag;
+    }
+
+    public List<String> getVestiti() {
+        return vestiti;
+    }
+
+    public String getHashtagToString() {
+        String res="";
+        if(hashtag!=(null)) {
+            for (int i = 0; i < hashtag.size(); i++) {
+                res += (" " + hashtag.get(i));
+            }
+        }
+        return res;
+    }
+
+    public String getVestitiToString() {
+        String res="";
+        if(vestiti!=(null)){
+            for(int i=0;i<vestiti.size();i++){
+                res+=(" "+vestiti.get(i));
+            }
+        }
+        return res;
     }
 
     public String getUser() {

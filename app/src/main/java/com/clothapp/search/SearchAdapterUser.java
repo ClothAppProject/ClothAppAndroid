@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.resources.Image;
 import com.clothapp.resources.User;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.List;
 public class SearchAdapterUser extends BaseAdapter {
     private final Context context;
     private List<User> users=new ArrayList<>();
+    List<Image> foto= new ArrayList<>();
 
     public SearchAdapterUser(Context context, List<User> users) {
         this.context = context;
@@ -51,6 +55,8 @@ public class SearchAdapterUser extends BaseAdapter {
 
         }
 
+        ImageView i=(ImageView)row.findViewById(R.id.foto);
+   //     Glide.with(context)            .load(foto.get(position).getFile()) .into(i);
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUsername());
         return row;
