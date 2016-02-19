@@ -21,10 +21,13 @@ import com.clothapp.resources.Image;
 
 import com.clothapp.resources.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,7 @@ public class FindUserFragment extends Fragment {
     private ListView listUser;
     private Context context;
     private String query;
+    private List<File> foto=new ArrayList<File>();
 
 
     @Override
@@ -61,18 +65,36 @@ public class FindUserFragment extends Fragment {
        // List<User> user= SearchUtility.searchUser(query, rootView);
 
 
-        ParseQuery<ParseUser> queryFoto = ParseUser.getQuery();
-        queryFoto.whereContains("username", query);
+        ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+        queryUser.whereContains("username", query);
         final List<User> user=new ArrayList<User>();
 
-        queryFoto.findInBackground(new FindCallback<ParseUser>() {
+        queryUser.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> o, ParseException e) {
+            public void done(final List<ParseUser> o, ParseException e) {
                 if(e==null) {
                     for (int i = 0; i < o.size(); i++) {
                         //System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
-                        user.add(new User(o.get(i)));
+                        final ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");
+                        queryFoto.whereEqualTo("username", o.get(i).getString("username"));
+
+                        User u=new User(o.get(i));
+
+
+                        try {
+                            ParseObject object=queryFoto.getFirst();
+                            u.setProfilo(object.getParseFile("profilePhoto").getFile());
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+                        user.add(u);
                         setListViewHeightBasedOnItems();
+
+
+
+
                     }
                 }
                 else check(e.getCode(), rootView, e.getMessage());

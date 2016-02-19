@@ -106,7 +106,7 @@ public class FindClothFragment extends Fragment {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         cloth=new ArrayList<Image>();
-        queryFoto.setLimit(4);
+        //queryFoto.setLimit(4);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {

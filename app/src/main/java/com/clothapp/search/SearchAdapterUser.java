@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.User;
 
@@ -56,7 +57,12 @@ public class SearchAdapterUser extends BaseAdapter {
         }
 
         ImageView i=(ImageView)row.findViewById(R.id.foto);
-   //     Glide.with(context)            .load(foto.get(position).getFile()) .into(i);
+        if (getItem(position).getProfilo()!=null) {
+            Glide.with(context)
+                    .load(users.get(position).getProfilo())
+                    .transform(new CircleTransform(context))
+                    .into(i);
+        }
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUsername());
         return row;

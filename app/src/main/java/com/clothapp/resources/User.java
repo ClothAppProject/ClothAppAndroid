@@ -14,7 +14,8 @@ import java.util.List;
  * Created by nc94 on 2/15/16.
  */
 public class User{
-
+    
+    private File profilo;
     private String username;
     private String name;
     private String city;
@@ -31,6 +32,10 @@ public class User{
         this.city=o.getString("city");
     }
 
+    public void setProfilo(File profilo) {
+        this.profilo = profilo;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -42,4 +47,8 @@ public class User{
     public String getCity() {
         return city;
     }
+
+    public File getProfilo() {
+        return profilo;
     }
+}
