@@ -1,10 +1,18 @@
 package com.clothapp;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -13,6 +21,9 @@ import android.util.Log;
 import com.clothapp.login_signup.MainActivity;
 import com.parse.ParseUser;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,6 +32,15 @@ public class LauncherActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splashscreen);
+
+
+        //prima cosa da fare è controllare se c'è connessione ad internet!!
+        if (!hasActiveInternetConnection(getApplicationContext()))   {
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                }
+
         // nascondo la status bar
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -30,7 +50,6 @@ public class LauncherActivity extends AppCompatActivity {
         // through which the user may enter your application for the first time—call setDefaultValues():
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        super.onCreate(savedInstanceState);
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
@@ -76,28 +95,30 @@ public class LauncherActivity extends AppCompatActivity {
             finish();
         }
 
-//        if (checkIfLogged()) {
-//            System.out.println("debug: logged");
-//            //  redirecting user to splash screen to fetch the images and then go to the homepage
-//            Intent i = new Intent(getApplicationContext(), SplashScreenActivity.class);
-//            startActivity(i);
-//            finish();
-//        } else {
-//            System.out.println("debug: not logged");
-//            // redirecting the user to the main activity where he can decides to log in or sign up
-//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(i);
-//            finish();
-//        }
-
     }
 
-    //  checking if the user is logged.
-    //  returns true  if the user is logged else false
-//    private boolean checkIfLogged(){
-//        SharedPreferences userInformation = getSharedPreferences(getString(R.string.info), MODE_PRIVATE);
-//
-//        //controllo se esiste il valore isLogged nelle sharedPreferences, se non esiste o è false ritorna false
-//        return userInformation.getBoolean("isLogged",false);
-//    }
+    //funzioni per controllare se è presente connessione
+    public boolean hasActiveInternetConnection(Context context) {
+        if (isNetworkAvailable(context)) {
+            try {
+                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+                urlc.setRequestProperty("User-Agent", "Test");
+                urlc.setRequestProperty("Connection", "close");
+                urlc.setConnectTimeout(500);
+                urlc.connect();
+                Log.d("debug","debug: risposta è "+urlc.getResponseCode());
+                return (urlc.getResponseCode() == 200);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return false;
+    }
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(conMan.getActiveNetworkInfo() != null && conMan.getActiveNetworkInfo().isConnected())
+            return true;
+        else
+            return false;
+    }
 }
