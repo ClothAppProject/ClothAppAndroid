@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 
-//UN ADATTATORE PER DOMINARLI TUTTI!
+// UN ADATTATORE PER DOMINARLI TUTTI!
 public class HomeAdapter extends FragmentPagerAdapter {
 
     String[]titles;
@@ -16,7 +16,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
         this.titles=titles;
     }
 
-    //do il titolo alla tab
+    // do il titolo alla tab
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];
@@ -27,7 +27,7 @@ public class HomeAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
-    //ritorno il fragment della pagina che voglio mostrare
+    // ritorno il fragment della pagina che voglio mostrare
     public Fragment getItem(int position) {
         switch (position) {
             case 0:

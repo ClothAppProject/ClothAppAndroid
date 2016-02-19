@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
 
         //set adapter to  ViewPager
-        viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(),titles));
+        viewPager.setAdapter(new HomeAdapter(getSupportFragmentManager(), titles));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -134,9 +134,6 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-
-            case R.id.menu_search:
-                Log.d("HomeActivity", "Clicked on menu search");
 
             case android.R.id.home:
                 // Log.d("UserProfileActivity", "android.R.id.home");
@@ -231,81 +228,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
     }
 
-    private void setUpMenu() {
-
-        String[] navMenuTitles;
-        TypedArray navMenuIcons;
-
-        // Load titles from string.xml
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-
-        // Load icons from strings.xml
-        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-
-        // set(navMenuTitles, navMenuIcons, 0);
-
-        /*final ImageView imageView = (ImageView) findViewById(R.id.ppMenu);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.prof);
-
-        TextView textView = (TextView) findViewById(R.id.nameMenu);
-        textView.setText(ParseUser.getCurrentUser().getString("name"));
-
-        TextView textView2 = (TextView) findViewById(R.id.nameUsername);
-        textView2.setText(ParseUser.getCurrentUser().getUsername());
-
-
-        final View vi = new View(this.getApplicationContext());
-
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-        queryFoto.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-
-                        try {
-                            File file = f.getFile();
-                            Glide.with(getApplicationContext())
-                                    .load(file)
-                                    .centerCrop()
-                                    .transform(new CircleTransform(HomeActivity.this))
-                                    .into(imageView);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                } else {
-                    check(e.getCode(), vi, e.getMessage());
-                }
-            }
-        });
-
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                i.putExtra("user",ParseUser.getCurrentUser().getUsername());
-                startActivity(i);
-                finish();
-            }
-        });
-
-
-        LinearLayout l = (LinearLayout) findViewById(R.id.drawer);
-        l.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
-
-    }
-
     private void setupFloatingButton(){
         menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
 
@@ -348,8 +270,5 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         finish();
-
-
-
     }
 }
