@@ -186,7 +186,7 @@ public class HomeActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
 
                             case R.id.nav_home:
-                                Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
+                                Log.d("HomeActivity", "Clicked on R.id.nav_home");
 
                                 intent = new Intent(HomeActivity.this, HomeActivity.class);
                                 startActivity(intent);
@@ -195,7 +195,7 @@ public class HomeActivity extends AppCompatActivity {
                                 break;
 
                             case R.id.nav_profile:
-                                Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
+                                Log.d("HomeActivity", "Clicked on R.id.nav_profile");
 
                                 intent = new Intent(HomeActivity.this, UserProfileActivity.class);
                                 intent.putExtra("user", username);
@@ -204,14 +204,14 @@ public class HomeActivity extends AppCompatActivity {
                                 break;
 
                             case R.id.nav_logout:
-                                Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
+                                Log.d("HomeActivity", "Clicked on R.id.nav_logout");
 
                                 final ProgressDialog dialog = ProgressDialog.show(HomeActivity.this, "", "Logging out. Please wait...", true);
                                 Thread logout = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         ParseUser.logOut();
-                                        System.out.println("debug: logout eseguito");
+                                        Log.d("HomeActivity", "Logging out...");
                                     }
                                 });
                                 logout.start();
