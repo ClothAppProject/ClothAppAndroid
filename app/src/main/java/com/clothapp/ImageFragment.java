@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.clothapp.home_gallery.HomeMostRecentFragment;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -65,7 +66,7 @@ public class ImageFragment extends AppCompatActivity {
                 break;
             case "profilo":
                 //bisogna ancora implementare il listener
-                //lista = UserProfileActivity.photos;
+                lista = ProfileUploadedPhotosFragment.photos;
                 break;
         }
         setContentView(R.layout.fragment_image);

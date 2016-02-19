@@ -13,10 +13,13 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.profile.utils.ProfileUploadedPhotosListItem;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.resources.Image;
 
 import java.util.ArrayList;
 
 public class ProfileUploadedPhotosFragment extends Fragment {
+
+    public static ArrayList<Image> photos = new ArrayList<>();
 
     private static final String PARSE_USERNAME = "username";
 
@@ -29,6 +32,7 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(PARSE_USERNAME, username);
         fragment.setArguments(args);
+        photos = new ArrayList<>();
         return fragment;
     }
 
