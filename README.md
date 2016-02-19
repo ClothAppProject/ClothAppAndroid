@@ -1,5 +1,7 @@
-<img src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%">
+<img href="http://www.clothapp.it" src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%">
 # ClothApp
+
+<a href="http://www.clothapp.it">ClothApp Landing page</a>
 
 Quick way to help people to find out their friends opinion about any clothes they want to buy!
 
@@ -29,11 +31,13 @@ Let everybody know about your fashion skills!
 
 -Invite other people to test our app (alpha version)
 
-<a href="https://www.clothapp.it">ClothApp Landing page</a>
+<a href="https://docs.google.com/presentation/d/1IVHUUHgL3tFHkTFAf8R6Q-FazIAPwUzy8d3uyJKMEDI/edit?usp=sharing">Milestone 2 Presentation</a>
+
+<a href="https://www.youtube.com/watch?v=xy_4AmtxX3I">Video Demonstration</a>
 
 <a href="https://www.clothapp.it/webapp">ClothApp Web Client</a>
 
-<a href="https://drive.google.com/drive/u/0/folders/0B9L9fgnPwZntS1BfUmJ2SG9yaVk">Android APK file</a>
+<a href="https://drive.google.com/open?id=0B9L9fgnPwZntTU9ZcUFsV0phenM">Android APK file</a>
 
 <a href="https://docs.google.com/document/d/1Oz0-bGhi9H724wei3maeqoo8ga_PGFZu32Api91oAkU/edit?usp=drive_web">Instructions for APK installation</a>
 
