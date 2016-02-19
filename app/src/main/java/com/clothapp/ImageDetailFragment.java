@@ -41,7 +41,6 @@ import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ImageDetailFragment extends Fragment {
 
-    private String user;
     private ImageView v;
     private TextView t;
     private DonutProgress donutProgress;
@@ -148,8 +147,7 @@ public class ImageDetailFragment extends Fragment {
             @Override
             public void done(final ParseObject object, ParseException e) {
                     //setto username e listener
-                    user = object.getString("user");
-                    t.setText(user);
+                    t.setText(immagine.getUser());
                     t.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

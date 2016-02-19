@@ -332,7 +332,7 @@ public class ProfileUtils {
                     if (age < 0) updateListItem(1, "Not found");
                     else updateListItem(1, age + " years old");
 
-                    updateListItem(2, persona.get("city").toString());
+                    updateListItem(2, persona.getString("city"));
 
                 } else {
                     e.printStackTrace();
