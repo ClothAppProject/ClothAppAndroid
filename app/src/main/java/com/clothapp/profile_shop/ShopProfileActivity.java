@@ -1,4 +1,4 @@
-package com.clothapp.profile;
+package com.clothapp.profile_shop;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,14 +25,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
+import com.clothapp.resources.CircleTransform;
 import com.parse.ParseUser;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class ShopProfileActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
 
@@ -48,13 +51,13 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_user);
+        setContentView(R.layout.activity_profile_shop);
 
         // Get username from the calling activity.
         username = getIntent().getExtras().getString("user");
 
         // Set context to current context.
-        context = UserProfileActivity.this;
+        context = ShopProfileActivity.this;
 
         // Set activity to current activity.
         activity = this;
@@ -99,12 +102,12 @@ public class UserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                // Log.d("UserProfileActivity", "android.R.id.home");
+                // Log.d("ShopProfileActivity", "android.R.id.home");
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
             case R.id.action_settings:
-                // Log.d("UserProfileActivity", "R.id.action_settings");
+                // Log.d("ShopProfileActivity", "R.id.action_settings");
                 return true;
         }
 
@@ -117,14 +120,14 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-
+        /*
         // Get default bitmap for user profile photo
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
 
         // Create a rounded bitmap from the user profile photo
         RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         rounded.setCornerRadius(bitmap.getWidth());
-
+        */
         // Get drawer header
         View headerLayout = navigationView.getHeaderView(0);
 
@@ -132,7 +135,12 @@ public class UserProfileActivity extends AppCompatActivity {
         ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
         // Set the user profile photo to the just created rounded image
-        drawerProfile.setImageDrawable(rounded);
+        Glide.with(context)
+                .load(R.drawable.com_facebook_profile_picture_blank_square)
+                .centerCrop()
+                .transform(new CircleTransform(ShopProfileActivity.this))
+                .into(drawerProfile);
+        //drawerProfile.setImageDrawable(rounded);
 
         // Set the drawer username
         TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.menu_profile_side_drawer_username);
@@ -140,69 +148,69 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // Set up onClickListener for each drawer item
         navigationView.setNavigationItemSelectedListener(
-            new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                    Intent intent;
+                        Intent intent;
 
-                    switch (menuItem.getItemId()) {
+                        switch (menuItem.getItemId()) {
 
-                        case R.id.nav_home:
-                            Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
+                            case R.id.nav_home:
+                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_home");
 
-                            intent = new Intent(UserProfileActivity.activity, HomeActivity.class);
-                            startActivity(intent);
-
-                            finish();
-                            break;
-
-                        case R.id.nav_profile:
-                            Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
-
-                            String currentUser = ParseUser.getCurrentUser().getUsername();
-
-                            if (!currentUser.equals(username)) {
-                                Log.d("UserProfileActivity", currentUser + "!=" + username);
-                                intent = new Intent(UserProfileActivity.activity, UserProfileActivity.class);
-                                intent.putExtra("user", currentUser);
+                                intent = new Intent(ShopProfileActivity.activity, HomeActivity.class);
                                 startActivity(intent);
-                            }
 
-                            break;
+                                finish();
+                                break;
 
-                        case R.id.nav_logout:
-                            Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
+                            case R.id.nav_profile:
+                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_profile");
 
-                            final ProgressDialog dialog = ProgressDialog.show(UserProfileActivity.this, "", "Logging out. Please wait...", true);
-                            Thread logout = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ParseUser.logOut();
-                                    System.out.println("debug: logout eseguito");
+                                String currentUser = ParseUser.getCurrentUser().getUsername();
+
+                                if (!currentUser.equals(username)) {
+                                    Log.d("ShopProfileActivity", currentUser + "!=" + username);
+                                    intent = new Intent(ShopProfileActivity.activity, ShopProfileActivity.class);
+                                    intent.putExtra("user", currentUser);
+                                    startActivity(intent);
                                 }
-                            });
-                            logout.start();
 
-                            intent = new Intent(UserProfileActivity.activity, MainActivity.class);
-                            dialog.dismiss();
-                            startActivity(intent);
+                                break;
 
-                            finish();
-                            break;
+                            case R.id.nav_logout:
+                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_logout");
+
+                                final ProgressDialog dialog = ProgressDialog.show(ShopProfileActivity.this, "", "Logging out. Please wait...", true);
+                                Thread logout = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ParseUser.logOut();
+                                        System.out.println("debug: logout eseguito");
+                                    }
+                                });
+                                logout.start();
+
+                                intent = new Intent(ShopProfileActivity.activity, MainActivity.class);
+                                dialog.dismiss();
+                                startActivity(intent);
+
+                                finish();
+                                break;
+                        }
+
+                        // menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
                     }
-
-                    // menuItem.setChecked(true);
-                    mDrawerLayout.closeDrawers();
-                    return true;
-                }
-            });
+                });
     }
 
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager());
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -219,9 +227,9 @@ public class UserProfileActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         ImageView drawerImageView = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
-        ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
+        ImageView background = (ImageView) findViewById(R.id.profile_cover_image);
 
-        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, drawerImageView);
+        ProfileUtils.getParseUserCopertina(this, username, background, drawerImageView, getApplicationContext());
 
     }
 }
