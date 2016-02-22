@@ -23,6 +23,8 @@ import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.MyCardListAdapter;
+import com.clothapp.search.FindClothFragment;
+import com.clothapp.search.FindTagFragment;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -68,6 +70,14 @@ public class ImageFragment extends AppCompatActivity {
             case "profilo":
                 //bisogna ancora implementare il listener
                 lista = ProfileUploadedPhotosFragment.photos;
+                break;
+            case "FindCloth":
+                //bisogna ancora implementare il listener
+                lista = FindClothFragment.getCloth();
+                break;
+            case "FindTag":
+                //bisogna ancora implementare il listener
+                lista = FindTagFragment.getCloth();
                 break;
         }
         setContentView(R.layout.fragment_image);

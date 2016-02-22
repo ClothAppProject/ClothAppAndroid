@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 
 import com.clothapp.resources.User;
@@ -39,25 +40,31 @@ public class FindClothFragment extends Fragment {
     private Context context;
     private String query;
     private boolean canLoad=true;
-    private ArrayList<Image> cloth;
+    private static ArrayList<Image> cloth;
+    private ApplicationSupport global;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_cloth, container, false);
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
+        global = (ApplicationSupport) getActivity().getApplicationContext();
+
         search();
         //setto il listener sullo scroller quando arrivo in fondo
         listCloth.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("cloth "+firstVisibleItem +"+"+ visibleItemCount +">="+ totalItemCount);
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad && cloth.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
-                            int toDownload = 6;
-                            final int maxNumLike = cloth.get(cloth.size() - 1).getNumLike();
+
                             ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+                            queryFoto.addDescendingOrder("nLike");
+                            queryFoto.setLimit(6);
+                            queryFoto.whereGreaterThan("createdAt", global.getLastCloth());
                             queryFoto.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
                                 public void done(List<ParseObject> objects, ParseException e) {
@@ -72,6 +79,7 @@ public class FindClothFragment extends Fragment {
                                                 if (tag.get(j).contains(query)) {
                                                     cloth.add(new Image(o));
                                                     setListViewHeightBasedOnItems();
+                                                    global.setLastCloth(o.getCreatedAt());
                                                     break;
 
                                                 }
@@ -91,6 +99,7 @@ public class FindClothFragment extends Fragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
         });
+
         return rootView;
     }
 
@@ -106,7 +115,8 @@ public class FindClothFragment extends Fragment {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         cloth=new ArrayList<Image>();
-        //queryFoto.setLimit(4);
+        queryFoto.addDescendingOrder("nLike");
+        queryFoto.setLimit(5);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -121,11 +131,14 @@ public class FindClothFragment extends Fragment {
                             if (tag.get(j).contains(query)) {
                                 cloth.add(new Image(o));
                                 setListViewHeightBasedOnItems();
+                                global.setLastCloth(o.getCreatedAt());
                                 break;
 
                             }
                         }
                     }
+                    canLoad = true;
+
                 }
                 else check(e.getCode(), rootView, e.getMessage());
             }
@@ -139,15 +152,13 @@ public class FindClothFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                i.putExtra("classe", "FindCloth");
                 i.putExtra("position", position);
-                //passo la lista delle foto al fragment
-                i.putExtra("lista", cloth);
                 startActivity(i);
             }
         });
 
-        TextView t=(TextView)rootView.findViewById(R.id.textView);
-        if(adapterCloth.getCount()==0) t.setVisibility(View.INVISIBLE);
+
 
     }
 
@@ -209,5 +220,9 @@ public class FindClothFragment extends Fragment {
             return false;
         }
 
+    }
+
+    public static ArrayList<Image> getCloth() {
+        return cloth;
     }
 }

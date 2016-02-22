@@ -25,6 +25,9 @@ public class ApplicationSupport extends Application {
     private ArrayList<Image> photos;
     private Date firstDate;
     private Date lastDate;
+    private User lastUser;
+    private Date lastCloth;
+    private Date lastTag;
 
     public String getId(int i)  {return photos.get(i).getObjectId();}
     //getter e setter variabili globali
@@ -54,5 +57,29 @@ public class ApplicationSupport extends Application {
             //errore nell'aggiornare il profilo locale
         }
 
+    }
+
+    public User getLastUser() {
+        return lastUser;
+    }
+
+    public void setLastUser(User lastUser) {
+        this.lastUser = lastUser;
+    }
+
+    public void setLastCloth(Date lastCloth) {
+        this.lastCloth = lastCloth;
+    }
+
+    public Date getLastCloth() {
+        return lastCloth;
+    }
+
+    public Date getLastTag() {
+        return lastTag;
+    }
+
+    public void setLastTag(Date lastTag) {
+        this.lastTag = lastTag;
     }
 }

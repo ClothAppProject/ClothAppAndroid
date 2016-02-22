@@ -17,6 +17,7 @@ import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
 
+import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.User;
 import com.parse.FindCallback;
@@ -40,25 +41,31 @@ public class FindTagFragment extends Fragment {
     private Context context;
     private String query;
     private boolean canLoad=true;
-    private ArrayList<Image> tag;
+    private static ArrayList<Image> tag;
+    private ApplicationSupport global;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listTag = (ListView) rootView.findViewById(R.id.userlist);
+        global = (ApplicationSupport) getActivity().getApplicationContext();
+
         search();
         //setto il listener sullo scroller quando arrivo in fondo
         listTag.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("tag "+firstVisibleItem +"+"+ visibleItemCount +">="+ totalItemCount);
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad && tag.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (tag != null) {
                             canLoad = false;
-                            int toDownload = 6;
-                            final int maxNumLike = tag.get(tag.size() - 1).getNumLike();
                             ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+                            queryFoto.addDescendingOrder("nLike");
+                            queryFoto.setLimit(6);
+                            queryFoto.whereGreaterThan("createdAt", global.getLastTag());
                             queryFoto.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
                                 public void done(List<ParseObject> objects, ParseException e) {
@@ -68,17 +75,20 @@ public class FindTagFragment extends Fragment {
                                             List<String> hashtag = new ArrayList<String>();
                                             ParseObject o = i.next();
                                             hashtag = (ArrayList) o.get("hashtag");
+                                            if(hashtag==null) hashtag=new ArrayList<String>(0);
                                             if (hashtag == null) hashtag = new ArrayList<String>(0);
                                             for (int j = 0; j < hashtag.size(); j++) {
                                                 if (hashtag.get(j).contains(query)) {
 
                                                     tag.add(new Image(o));
                                                     setListViewHeightBasedOnItems();
+                                                    //global.setLastCloth(o.getCreatedAt());
                                                     break;
 
                                                 }
                                             }
                                         }
+
                                     }
                                     else check(e.getCode(), rootView, e.getMessage());
                                 }
@@ -93,6 +103,7 @@ public class FindTagFragment extends Fragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
         });
+
         return rootView;
     }
 
@@ -113,7 +124,8 @@ public class FindTagFragment extends Fragment {
 
          tag=new ArrayList<Image>();
         List<ParseObject> objects= null;
-        queryFoto.setLimit(4);
+        queryFoto.addDescendingOrder("nLike");
+        queryFoto.setLimit(5);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -123,17 +135,20 @@ public class FindTagFragment extends Fragment {
                         List<String> hashtag = new ArrayList<String>();
                         ParseObject o = i.next();
                         hashtag = (ArrayList) o.get("hashtag");
+                        if(hashtag==null) hashtag=new ArrayList<String>(0);
                         if (hashtag == null) hashtag = new ArrayList<String>(0);
                         for (int j = 0; j < hashtag.size(); j++) {
                             if (hashtag.get(j).contains(query)) {
 
                                 tag.add(new Image(o));
                                 setListViewHeightBasedOnItems();
+                                global.setLastCloth(o.getCreatedAt());
                                 break;
 
                             }
                         }
                     }
+                    canLoad = true;
                 }
                 else check(e.getCode(), rootView, e.getMessage());
             }
@@ -149,15 +164,13 @@ public class FindTagFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                i.putExtra("classe", "FindCloth");
                 i.putExtra("position", position);
-                //passo la lista delle foto al fragment
-                i.putExtra("lista", tag);
                 startActivity(i);
             }
         });
 
-        TextView t=(TextView)rootView.findViewById(R.id.textView);
-        if(adapterI.getCount()==0) t.setVisibility(View.INVISIBLE);
+;
 
         //allungo l'altezza della list view
         //setListViewHeightBasedOnItems(listView);
@@ -221,5 +234,9 @@ public class FindTagFragment extends Fragment {
             return false;
         }
 
+    }
+
+    public static ArrayList<Image> getCloth() {
+        return tag;
     }
 }

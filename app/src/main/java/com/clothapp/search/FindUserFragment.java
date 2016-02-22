@@ -2,21 +2,26 @@ package com.clothapp.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 
 import com.clothapp.resources.User;
@@ -30,6 +35,7 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
@@ -43,6 +49,9 @@ public class FindUserFragment extends Fragment {
     private Context context;
     private String query;
     private List<File> foto=new ArrayList<File>();
+    private boolean canLoad=true;
+    private ArrayList<User> user;
+    ApplicationSupport global;
 
 
     @Override
@@ -50,8 +59,68 @@ public class FindUserFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listUser = (ListView) rootView.findViewById(R.id.userlist);
         //String query=getArguments().getString("name");
+        global = (ApplicationSupport) getActivity().getApplicationContext();
 
         search();
+
+        listUser.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                System.out.println("user "+firstVisibleItem +"+"+ visibleItemCount +">="+ totalItemCount);
+                if (firstVisibleItem + visibleItemCount >=totalItemCount) {
+                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                    if (canLoad && user.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                        if (user != null) {
+                            canLoad = false;
+                            ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+                            queryUser.addAscendingOrder("username");
+                            queryUser.whereContains("username", query);
+                            //queryUser.orderByDescending("username");
+                            queryUser.setLimit(6);
+                            queryUser.whereGreaterThan("username", global.getLastUser().getUsername());
+                            queryUser.findInBackground(new FindCallback<ParseUser>() {
+                                @Override
+                                public void done(final List<ParseUser> o, ParseException e) {
+                                    if (e == null) {
+                                        User u = null;
+
+                                        for (int i = 0; i < o.size(); i++) {
+                                            //System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
+                                            final ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+                                            queryFoto.whereEqualTo("username", o.get(i).getString("username"));
+
+                                            u = new User(o.get(i));
+
+
+                                            try {
+
+                                                ParseObject object = queryFoto.getFirst();
+                                                u.setProfilo(object.getParseFile("profilePhoto").getFile());
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
+                                            }
+
+
+                                            user.add(u);
+                                            setListViewHeightBasedOnItems();
+
+
+                                        }
+                                        global.setLastUser(u);
+                                    } else check(e.getCode(), rootView, e.getMessage());
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+        });
+
         return rootView;
     }
 
@@ -66,36 +135,34 @@ public class FindUserFragment extends Fragment {
 
 
         ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+        queryUser.addAscendingOrder("username");
         queryUser.whereContains("username", query);
-        final List<User> user=new ArrayList<User>();
+        //queryUser.orderByDescending("username");
+        queryUser.setLimit(9);
+        user=new ArrayList<User>();
 
         queryUser.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(final List<ParseUser> o, ParseException e) {
                 if(e==null) {
+                    User u=null;
                     for (int i = 0; i < o.size(); i++) {
                         //System.out.println(o.get(i)+"aggiunto"+o.get(i).getString("username"));
                         final ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");
                         queryFoto.whereEqualTo("username", o.get(i).getString("username"));
-
-                        User u=new User(o.get(i));
-
-
+                        u=new User(o.get(i));
                         try {
                             ParseObject object=queryFoto.getFirst();
                             u.setProfilo(object.getParseFile("profilePhoto").getFile());
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
-
-
                         user.add(u);
                         setListViewHeightBasedOnItems();
 
-
-
-
                     }
+                    canLoad = true;
+                    global.setLastUser(u);
                 }
                 else check(e.getCode(), rootView, e.getMessage());
             }
@@ -115,7 +182,6 @@ public class FindUserFragment extends Fragment {
                 startActivity(i);
             }
         });
-
 
 
     }
@@ -179,5 +245,7 @@ public class FindUserFragment extends Fragment {
         }
 
     }
+
+
 }
 
