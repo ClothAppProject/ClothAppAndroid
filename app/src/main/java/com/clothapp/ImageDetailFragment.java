@@ -289,9 +289,8 @@ public class ImageDetailFragment extends Fragment {
 
                     //mostro il numero di like
                     int numLikes = object.getInt("nLike");
-                    String singPlur;
                     //  se ho zero likes scrivo like sennò likes
-                    singPlur = numLikes == 0 ? "like" : "likes";
+                    String singPlur = numLikes == 0 || numLikes == 1? "like" : "likes";
 
                     like.setText(Integer.toString(numLikes) + " " + singPlur);
 
@@ -309,11 +308,19 @@ public class ImageDetailFragment extends Fragment {
                             if (immagine.getLike().contains(username)) {
                                 //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                                 //rimuovo il like e cambio la lista
-                                LikeRes.deleteLike(object,immagine,immagine.getUser());
+                                LikeRes.deleteLike(object,immagine,username);
+
                                 cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+
+                                int numLikes = object.getInt("nLike");
+                                //  se ho zero likes scrivo like sennò likes
+                                String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
+                                like.setText(Integer.toString(numLikes) + " " + singPlur);
+
+
                             } else {
                                 //aggiungo like e aggiorno anche in parse
-                                LikeRes.addLike(object,immagine,immagine.getUser());
+                                LikeRes.addLike(object,immagine,username);
                                 cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                             }
                             //aggiorno il numero di like
@@ -322,10 +329,8 @@ public class ImageDetailFragment extends Fragment {
                             //like.setText(Integer.toString(object.getInt("nLike")));
 
                             int numLikes = object.getInt("nLike");
-                            String singPlur;
                             //  se ho zero likes scrivo like sennò likes
-                            singPlur = numLikes == 0 ? "like" : "likes";
-
+                            String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
                             like.setText(Integer.toString(numLikes) + " " + singPlur);
 
                         }
