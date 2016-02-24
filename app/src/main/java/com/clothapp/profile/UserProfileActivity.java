@@ -31,6 +31,7 @@ import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfilePictureCameraActivity;
 import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
@@ -282,4 +283,13 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+
+ /*   //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
+    if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+        follow_edit.setText("Modifica Profilo");
+        else {
+            if (FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),UserProfileActivity.username)){
+    }
+    }*/
 }
