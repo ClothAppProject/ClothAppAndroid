@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +54,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        final ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setElevation(0);
+
+
         titles = getResources().getStringArray(R.array.search_titles);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -75,10 +83,11 @@ public class SearchResultsActivity extends AppCompatActivity {
        // MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.home_appbar, menu);
 
-        getMenuInflater().inflate(R.menu.home_appbar, menu);
+        getMenuInflater().inflate(R.menu.searchbar, menu);
 
 
-        final MenuItem searchItem = menu.findItem(R.id.menu_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+
         searchView =
                 (SearchView) MenuItemCompat.getActionView(searchItem);
 
@@ -115,7 +124,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         };
 
         // Get the MenuItem for the action item
-        MenuItem actionMenuItem = menu.findItem(R.id.menu_search);
+        MenuItem actionMenuItem = menu.findItem(R.id.action_search);
 
         // Assign the listener to that action item
         MenuItemCompat.setOnActionExpandListener(actionMenuItem, expandListener);

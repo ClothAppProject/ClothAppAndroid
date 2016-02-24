@@ -22,6 +22,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="16dp"
             android:text="User"
+            android:textColor="@color/primaryText"
             android:id="@+id/user"
             android:layout_gravity="center_horizontal"
             android:textSize="18sp"
