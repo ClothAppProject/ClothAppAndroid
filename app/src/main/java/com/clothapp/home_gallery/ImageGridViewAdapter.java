@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.resources.Image;
+import com.clothapp.resources.LikeRes;
 import com.clothapp.resources.SquaredImageView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -69,17 +70,12 @@ public class ImageGridViewAdapter extends BaseAdapter {
                     if ((image.getLike().contains(username))) {
                         //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                         //rimuovo il like e cambio la lista
-                        image.remLike(username);
-                        point.put("like", image.getLike());
-                        point.put("nLike", image.getNumLike());
-                        point.saveInBackground();
+
+                        LikeRes.deleteLike(point,image,username);
                         notifyDataSetChanged();
                     } else {
                         //aggiungo like e aggiorno anche in parse
-                        image.addLike(username);
-                        point.add("like", username);
-                        point.put("nLike", image.getNumLike());
-                        point.saveInBackground();
+                        LikeRes.addLike(point,image,username);
                         notifyDataSetChanged();
                     }
                 }

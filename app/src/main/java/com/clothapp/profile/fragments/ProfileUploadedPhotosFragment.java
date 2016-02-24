@@ -17,7 +17,7 @@ import com.clothapp.resources.Image;
 import java.util.ArrayList;
 
 public class ProfileUploadedPhotosFragment extends Fragment {
-
+    private ProfileUploadedPhotosAdapter adapter;
     public static ArrayList<Image> photos = new ArrayList<>();
 
     private static final String PARSE_USERNAME = "username";
@@ -54,7 +54,7 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-        ProfileUploadedPhotosAdapter adapter = new ProfileUploadedPhotosAdapter(items,"persona");
+         adapter = new ProfileUploadedPhotosAdapter(items,"persona");
         UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
@@ -62,6 +62,11 @@ public class ProfileUploadedPhotosFragment extends Fragment {
 
         // Return the fragment
         return rootView;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        adapter.notifyDataSetChanged();
     }
 
 }

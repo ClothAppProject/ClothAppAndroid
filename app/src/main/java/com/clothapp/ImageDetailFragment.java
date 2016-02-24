@@ -3,11 +3,16 @@ package com.clothapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +23,7 @@ import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
+import com.clothapp.resources.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
@@ -44,7 +50,6 @@ public class ImageDetailFragment extends Fragment {
 
     private ImageView v;
     private TextView t;
-    private DonutProgress donutProgress;
     private String Id;
     private Image immagine;
     private static Context context;
@@ -71,9 +76,53 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         this.immagine = getArguments()!=null ? (Image) getArguments().getParcelable("ID") : null;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.image_fragment, menu);
+        MenuItem deletePhoto = menu.findItem(R.id.delete);
+        deletePhoto.setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante sulla toolbar
+            case R.id.segnala:
+                return true;
+            case R.id.delete:
+                System.out.println("debug: chiamata per eliminare foto");
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Vuoi Eliminare questa foto?");
+                String positiveText = "OK";
+                builder.setPositiveButton(positiveText,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.out.println("debug: elimina foto");
+                            }
+                        });
+
+                String negativeText = "CANCEL";
+                builder.setNegativeButton(negativeText,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                // display dialog
+                dialog.show();*/
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
@@ -93,11 +142,6 @@ public class ImageDetailFragment extends Fragment {
         //findInfoPhoto();
         //donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         return rootView;
-    }
-
-    //TODO:fare la query giusta
-    public void findInfoPhoto(){
-        //qui scarico le foto
     }
 
     @Override
@@ -265,17 +309,11 @@ public class ImageDetailFragment extends Fragment {
                             if (immagine.getLike().contains(username)) {
                                 //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                                 //rimuovo il like e cambio la lista
-                                immagine.remLike(username);
-                                object.put("like", immagine.getLike());
-                                object.put("nLike", immagine.getNumLike());
-                                object.saveInBackground();
+                                LikeRes.deleteLike(object,immagine,immagine.getUser());
                                 cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
                             } else {
                                 //aggiungo like e aggiorno anche in parse
-                                immagine.addLike(username);
-                                object.add("like", username);
-                                object.put("nLike", immagine.getNumLike());
-                                object.saveInBackground();
+                                LikeRes.addLike(object,immagine,immagine.getUser());
                                 cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                             }
                             //aggiorno il numero di like

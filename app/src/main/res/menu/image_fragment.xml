@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/segnala"
+        android:orderInCategory="100"
+        android:title="Segnala Foto" />
+
+    <item android:id="@+id/delete"
+        android:title="Elimina Foto"/>
+
+</menu>

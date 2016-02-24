@@ -1,5 +1,7 @@
 package com.clothapp;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,15 +74,12 @@ public class ImageFragment extends AppCompatActivity {
                 lista = HomeTopRatedFragment.photos;
                 break;
             case "profilo":
-                //bisogna ancora implementare il listener
                 lista = ProfileUploadedPhotosFragment.photos;
                 break;
             case "FindCloth":
-                //bisogna ancora implementare il listener
                 lista = FindClothFragment.getCloth();
                 break;
             case "FindTag":
-                //bisogna ancora implementare il listener
                 lista = FindTagFragment.getCloth();
                 break;
         }
@@ -115,21 +118,18 @@ public class ImageFragment extends AppCompatActivity {
         public int getCount() {
             return npages;
         }
-
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
+            // In caso sia premuto il pulsante sulla toolbar
             case android.R.id.home:
                 finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
         /*
         //TODO cosi' non va bene non aggiorni immagini e prendi immagini sbagliate
