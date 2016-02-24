@@ -77,9 +77,12 @@ public class FindClothFragment extends Fragment {
                                             if (tag == null) tag = new ArrayList<String>(0);
                                             for (int j = 0; j < tag.size(); j++) {
                                                 if (tag.get(j).contains(query)) {
-                                                    cloth.add(new Image(o));
+                                                    Image image=new Image(o);
+                                                    if(!cloth.contains(image)){
+                                                        cloth.add(image);
+                                                        global.setLastCloth(o.getCreatedAt());
+                                                    }
                                                     setListViewHeightBasedOnItems();
-                                                    global.setLastCloth(o.getCreatedAt());
                                                     break;
 
                                                 }
@@ -129,9 +132,13 @@ public class FindClothFragment extends Fragment {
                         if (tag == null) tag = new ArrayList<String>(0);
                         for (int j = 0; j < tag.size(); j++) {
                             if (tag.get(j).contains(query)) {
-                                cloth.add(new Image(o));
+                                Image image=new Image(o);
+                                if(!cloth.contains(image)){
+                                    cloth.add(image);
+                                    global.setLastCloth(o.getCreatedAt());
+                                }
                                 setListViewHeightBasedOnItems();
-                                global.setLastCloth(o.getCreatedAt());
+
                                 break;
 
                             }

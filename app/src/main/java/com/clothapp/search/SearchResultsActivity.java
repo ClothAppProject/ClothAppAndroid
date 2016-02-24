@@ -12,6 +12,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,8 +49,9 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         titles = getResources().getStringArray(R.array.search_titles);
 
@@ -74,6 +76,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         //inflater.inflate(R.menu.home_appbar, menu);
 
         getMenuInflater().inflate(R.menu.home_appbar, menu);
+
 
         final MenuItem searchItem = menu.findItem(R.id.menu_search);
         searchView =

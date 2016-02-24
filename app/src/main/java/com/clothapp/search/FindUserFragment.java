@@ -66,8 +66,8 @@ public class FindUserFragment extends Fragment {
         listUser.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                System.out.println("user "+firstVisibleItem +"+"+ visibleItemCount +">="+ totalItemCount);
-                if (firstVisibleItem + visibleItemCount >=totalItemCount) {
+                System.out.println("user " + firstVisibleItem + "+" + visibleItemCount + ">=" + totalItemCount);
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad && user.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (user != null) {
@@ -101,12 +101,15 @@ public class FindUserFragment extends Fragment {
                                             }
 
 
-                                            user.add(u);
+                                            if(!user.contains(u)){
+                                                user.add(u);
+                                                global.setLastUser(u);
+                                            }
                                             setListViewHeightBasedOnItems();
 
 
                                         }
-                                        global.setLastUser(u);
+
                                     } else check(e.getCode(), rootView, e.getMessage());
                                 }
                             });
@@ -157,12 +160,15 @@ public class FindUserFragment extends Fragment {
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
-                        user.add(u);
+                        if(!user.contains(u)){
+                            user.add(u);
+                            global.setLastUser(u);
+                        }
                         setListViewHeightBasedOnItems();
 
                     }
                     canLoad = true;
-                    global.setLastUser(u);
+
                 }
                 else check(e.getCode(), rootView, e.getMessage());
             }

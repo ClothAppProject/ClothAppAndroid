@@ -57,7 +57,7 @@
         <activity
             android:name=".search.SearchResultsActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MyCompatTheme">
+            android:theme="@style/Theme.MyCompatTheme.NoActionBar">
 
             <!-- to identify this activity as "searchable" -->
             <intent-filter>

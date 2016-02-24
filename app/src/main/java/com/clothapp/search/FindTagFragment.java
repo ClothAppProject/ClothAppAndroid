@@ -80,7 +80,11 @@ public class FindTagFragment extends Fragment {
                                             for (int j = 0; j < hashtag.size(); j++) {
                                                 if (hashtag.get(j).contains(query)) {
 
-                                                    tag.add(new Image(o));
+                                                    Image image=new Image(o);
+                                                    if(!tag.contains(image)){
+                                                        tag.add(image);
+                                                        global.setLastCloth(o.getCreatedAt());
+                                                    }
                                                     setListViewHeightBasedOnItems();
                                                     //global.setLastCloth(o.getCreatedAt());
                                                     break;
@@ -139,10 +143,13 @@ public class FindTagFragment extends Fragment {
                         if (hashtag == null) hashtag = new ArrayList<String>(0);
                         for (int j = 0; j < hashtag.size(); j++) {
                             if (hashtag.get(j).contains(query)) {
-
-                                tag.add(new Image(o));
+                                Image image=new Image(o);
+                                if(!tag.contains(image)){
+                                    tag.add(image);
+                                    global.setLastCloth(o.getCreatedAt());
+                                }
                                 setListViewHeightBasedOnItems();
-                                global.setLastCloth(o.getCreatedAt());
+
                                 break;
 
                             }
