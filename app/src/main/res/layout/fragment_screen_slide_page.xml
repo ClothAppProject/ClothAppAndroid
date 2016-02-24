@@ -29,16 +29,12 @@
                     android:id="@+id/card_foto"
                     android:focusable="true"
                     android:layout_gravity="top"
-                    android:elevation="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    card_view:cardCornerRadius="3dp"
                     card_view:cardUseCompatPadding="true"
                     android:focusableInTouchMode="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp">
+                    card_view:cardElevation="8dp"
+                    card_view:cardCornerRadius="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -46,57 +42,64 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp">
 
-                            android:layout_width="140dp"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="25dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/profile_uploaded_photos_user_rectangle"
-                            android:backgroundTint="@color/red"
-                            android:id="@+id/prof">
+                            <LinearLayout
 
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/com_facebook_profile_picture_blank_square"
-                                android:id="@+id/pic"/>
-
-                            <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:textColor="#ffffff"
-                                android:textSize="15sp"
-                                android:paddingTop="4dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="12dp"
-                                android:id="@+id/user"
-                                android:fontFamily="sans-serif-medium"
-                                android:textStyle="italic" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:layout_marginBottom="16dp"
+                                android:orientation="horizontal"
+                                android:id="@+id/prof">
+                                <!--
+                                android:background="@drawable/profile_uploaded_photos_user_rectangle"
+                                android:backgroundTint="@color/red"
+                                -->
 
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/com_facebook_profile_picture_blank_square"
+                                    android:layout_gravity="start"
+                                    android:id="@+id/pic"/>
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#000000"
+                                    android:textSize="14sp"
+                                    android:id="@+id/user"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginBottom="2dp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:textStyle="italic" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/percentuale"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0%"
-                            android:layout_centerInParent="true"
-                            android:textSize="20dp" />
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp"
-                            android:layout_marginTop="10dp"
-                            android:id="@+id/photo"
-                            android:layout_weight="0.76"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp" />
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/percentuale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0%"
+                                android:layout_centerInParent="true"
+                                android:textSize="20sp" />
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:id="@+id/photo"
+                                android:layout_centerHorizontal="true" />
+                        </RelativeLayout>
 
                         <!--
                             <TextView style="@android:style/TextAppearance.Medium"
@@ -110,35 +113,56 @@
                                 android:paddingTop="10dp"
                                 android:textColor="#2196F3" />
         -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
                         <TextView
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:id="@+id/like"
+                            android:textColor="@color/red"
+                            android:textColorHint="@color/red"
+                            android:hint="0 like"
+                            android:layout_gravity="start"
+                            android:fontFamily="sans-serif-medium"
+                            android:textStyle="italic"/>
+
+                        <TextView
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/hashtag"
                             android:textColor="@color/abc_secondary_text_material_light"
-                            android:textSize="16sp" />
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textStyle="italic"/>
                             <!--
                             android:background="@drawable/rectangle"
                             android:hint=" #hashtag"-->
 
-
+                    </LinearLayout>
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp">
 
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="2dp"
-                                android:id="@+id/share"
-                                android:src="@mipmap/ic_share_white_48dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginTop="8dp"
+                                android:id="@+id/heart"
+                                android:src="@mipmap/ic_favorite_border_white_48dp"
                                 android:tint="@color/red"
                                 android:layout_gravity="left"/>
 
@@ -146,34 +170,27 @@
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:id="@+id/heart"
-                                android:src="@mipmap/ic_favorite_border_white_48dp"
-                                android:tint="@color/red"
-                                android:layout_marginBottom="2dp"
-                                android:layout_gravity="right|center_vertical" />
-
-                            <TextView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:textSize="20sp"
-                                android:gravity="right"
-                                android:id="@+id/like"
-                                android:layout_marginRight="30dp"
-                                android:textColor="@color/red"
-                                android:textColorHint="@color/red"
                                 android:layout_marginBottom="8dp"
-                                android:hint="0"
-                                android:layout_weight="0.37"
-                                android:layout_gravity="right" />
+                                android:layout_marginTop="8dp"
+                                android:layout_marginLeft="40dp"
+                                android:id="@+id/person"
+                                android:src="@mipmap/ic_person_white_48dp"
+                                android:tint="@color/red"
+                                android:layout_gravity="start" />
+
+
 
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:id="@+id/person"
-                                android:src="@mipmap/ic_person_white_48dp"
-                                android:layout_marginLeft="36dp"
                                 android:tint="@color/red"
-                                android:layout_gravity="left" />
+                                android:id="@+id/share"
+                                android:src="@mipmap/ic_share_white_48dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_gravity="end" />
 
                         </FrameLayout>
                     </LinearLayout>

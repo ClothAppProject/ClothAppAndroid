@@ -244,7 +244,12 @@ public class ImageDetailFragment extends Fragment {
                     });
 
                     //mostro il numero di like
-                    like.setText(Integer.toString(object.getInt("nLike")));
+                    int numLikes = object.getInt("nLike");
+                    String singPlur;
+                    //  se ho zero likes scrivo like sennò likes
+                    singPlur = numLikes == 0 ? "like" : "likes";
+
+                    like.setText(Integer.toString(numLikes) + " " + singPlur);
 
                     //controllo se ho messo like sull'attuale foto
                     final String username = ParseUser.getCurrentUser().getUsername();
@@ -275,7 +280,16 @@ public class ImageDetailFragment extends Fragment {
                             }
                             //aggiorno il numero di like
                             //System.out.println("debug: cuore premuto su "+immagine.getObjectId()+" con "+immagine.getNumLike());
-                            like.setText(Integer.toString(object.getInt("nLike")));
+
+                            //like.setText(Integer.toString(object.getInt("nLike")));
+
+                            int numLikes = object.getInt("nLike");
+                            String singPlur;
+                            //  se ho zero likes scrivo like sennò likes
+                            singPlur = numLikes == 0 ? "like" : "likes";
+
+                            like.setText(Integer.toString(numLikes) + " " + singPlur);
+
                         }
                     });
             }
@@ -310,7 +324,6 @@ public class ImageDetailFragment extends Fragment {
             listView.requestLayout();
 
             return true;
-
         } else {
             return false;
         }
