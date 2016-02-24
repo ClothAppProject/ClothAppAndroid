@@ -159,8 +159,7 @@ public class ImageDetailFragment extends Fragment {
                         }
                     });
 
-                /*
-                    //  setting listener on the profile pic
+                    //listener on the profile pic
                     profilePic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -169,7 +168,6 @@ public class ImageDetailFragment extends Fragment {
                             getActivity().finish();
                         }
                     });
-               */
 
                     //setto gli hashtag
                     ArrayList tag = (ArrayList) object.get("hashtag");
@@ -197,6 +195,7 @@ public class ImageDetailFragment extends Fragment {
                                             info.getString("luogoAcquisto"),
                                             info.getString("prezzo"),
                                             info.getString("shop"),
+                                            info.getString("shopUsername"),
                                             info.getString("brand"));
                                     vestiti.add(c);
                                     MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);

@@ -18,6 +18,7 @@ import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
 import com.parse.ParseUser;
@@ -71,21 +72,16 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         } else {
             photoViewHolder.txtHashtags.setText("");
         }
-
         // Display item (clothing) name, if any
         List<String> clothesList = photos.get(position).clothes;
-
         if (clothesList != null) {
-
             StringBuilder sb = new StringBuilder();
-
             for (String clothing : clothesList) {
                 sb.append(clothing).append(" & ");
             }
 
             String result = sb.toString();
             result = result.substring(0, result.length() - 2);
-
             photoViewHolder.txtItemNames.setText(result);
         }
 

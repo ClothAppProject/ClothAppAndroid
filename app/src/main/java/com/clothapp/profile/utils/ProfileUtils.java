@@ -106,10 +106,6 @@ public class ProfileUtils {
 
                                     Image item = new Image(file, objectId, username, likes, nLikes, hashtag, vestiti);
 
-                                    item.hashtag = photo.getList("hashtag");
-                                    item.clothes = photo.getList("tipo");
-                                    item.users = photo.getList("like");
-
                                     adapter.photos.add(item);
 
 
@@ -298,16 +294,9 @@ public class ProfileUtils {
     }
     private static void getParseUserShop(final Context context, final String username) {
 
-        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
-        query1.whereEqualTo("username", username);
-
-        ParseQuery<ParseUser> query2 = ParseUser.getQuery();
-        query2.whereEqualTo("name", username);
-
-        List<ParseQuery<ParseUser>> l= new ArrayList<>();
-        l.add(query1);
-        l.add(query2);
-        ParseQuery.or(l).getFirstInBackground(new GetCallback<ParseUser>() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", username);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
 
             @Override
             public void done(ParseUser object, ParseException e) {
@@ -371,32 +360,6 @@ public class ProfileUtils {
                     updateShopListItem(4, shop.getString("webSite"));
 
                 } else {
-                    if (e.getCode()==101)   {
-                        ParseQuery<ParseUser> queryNeg = ParseUser.getQuery();
-                        queryNeg.whereEqualTo("name", username);
-                        queryNeg.getFirstInBackground(new GetCallback<ParseUser>() {
-                            @Override
-                            public void done(ParseUser negozio, ParseException e) {
-                                if (e==null) {
-                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
-                                    query.whereEqualTo("username", negozio.getUsername());
-                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                        @Override
-                                        public void done(ParseObject object1, ParseException e) {
-                                            if (e == null) {
-                                                shop = object1;
-                                                updateShopListItem(1, shop.getString("address"));
-                                                updateShopListItem(2, shop.getString("Citta"));
-                                                updateShopListItem(4, shop.getString("webSite"));
-                                            }
-                                        }
-                                    });
-                                }else{
-                                    System.out.println("debug: messaggio =" +e.getMessage());
-                                }
-                            }
-                        });
-                    }
                     e.printStackTrace();
                     // showDialog(context, "Error", "Failed to retrieve shop info. Check your Internet connection.");
                 }
@@ -470,7 +433,7 @@ public class ProfileUtils {
     }
     public static Intent goToProfile(Context contesto, String utente) {
         Intent i = null;
-        System.out.println("debug: "+utente);
+        //controllo se username è un negozio o una persona
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", utente);
         try {

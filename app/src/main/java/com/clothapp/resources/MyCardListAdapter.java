@@ -59,15 +59,19 @@ public class MyCardListAdapter extends BaseAdapter {
         price.setText((CharSequence) cloths.get(position).getPrice());
         brand.setText((CharSequence)cloths.get(position).getBrand());
         cloth.setText((CharSequence) cloths.get(position).getCloth());
-        shop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, ShopProfileActivity.class);
-                i.putExtra("user",cloths.get(position).getShop());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            }
-        });
+        if (cloths.get(position).getShopUsername()!=null) {
+            shop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, ShopProfileActivity.class);
+                    i.putExtra("user", cloths.get(position).getShopUsername());
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+            });
+        }else{
+            //TODO se il negozio non ha username e quindi non è registrato, lo rimando all'activity della search
+        }
 
         return row;
     }

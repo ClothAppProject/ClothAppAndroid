@@ -10,14 +10,16 @@ public class Cloth implements Parcelable {
     private String cloth;
     private String address;
     private String shop;
+    private String shopUsername;
     private String brand;
     private String price;
 
-    public Cloth(String cloth, String address, String price, String shop,String brand) {
+    public Cloth(String cloth, String address, String price, String shop, String shopUsername, String brand) {
         this.cloth = cloth;
         this.address = address;
         this.price = price;
         this.shop = shop;
+        this.shopUsername = shopUsername;
         this.brand=brand;
     }
 
@@ -37,6 +39,10 @@ public class Cloth implements Parcelable {
         return shop;
     }
 
+    public String getShopUsername() {
+        return shopUsername;
+    }
+
     public String getPrice() {
         return price;
     }
@@ -53,6 +59,10 @@ public class Cloth implements Parcelable {
         this.shop = shop;
     }
 
+    public void setShopUsernam(String shopUsername) {
+        this.shopUsername = shopUsername;
+    }
+
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -65,6 +75,7 @@ public class Cloth implements Parcelable {
         cloth = in.readString();
         address = in.readString();
         shop = in.readString();
+        shopUsername = in.readString();
         price = in.readString();
     }
 
@@ -90,6 +101,7 @@ public class Cloth implements Parcelable {
         dest.writeString(cloth);
         dest.writeString(address);
         dest.writeString(shop);
+        dest.writeString(shopUsername);
         dest.writeString(price);
     }
 }
