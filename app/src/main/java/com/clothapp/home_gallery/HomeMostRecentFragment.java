@@ -70,7 +70,8 @@ public class HomeMostRecentFragment extends Fragment {
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
                                     try {
                                         //ottengo la foto e la aggiungo per prima
-                                        global.addFirstPhoto(new Image(f.getFile(), object.getObjectId(),object.getString("user"),object.getList("like"),object.getInt("nLike")));
+                                        global.addFirstPhoto(new Image(f.getFile(), object.getObjectId(),object.getString("user"),
+                                                object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti")));
                                     } catch (ParseException e1) {
                                         check(e1.getCode(), vi, e1.getMessage());
                                     }
@@ -119,7 +120,8 @@ public class HomeMostRecentFragment extends Fragment {
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo per ultima
-                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"), object.getList("like"),object.getInt("nLike"));
+                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"),
+                                                            object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti"));
                                                     global.addLastPhoto(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     imageGridViewAdapter.notifyDataSetChanged();
@@ -172,8 +174,6 @@ public class HomeMostRecentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        //System.out.println("debug: rientrato in onresume dim="+photos.size());
-        //System.out.println("debug: rientrato "+photos.get(0).getObjectId()+" con "+photos.get(0).getNumLike()+" like");
         imageGridViewAdapter.notifyDataSetChanged();
     }
 

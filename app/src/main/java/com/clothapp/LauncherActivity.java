@@ -21,6 +21,10 @@ import android.util.Log;
 
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.IOException;
@@ -28,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LauncherActivity extends AppCompatActivity {
 
@@ -36,7 +42,6 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
-
 
         //prima cosa da fare è controllare se c'è connessione ad internet!!
         if (!isNetworkAvailable()) {

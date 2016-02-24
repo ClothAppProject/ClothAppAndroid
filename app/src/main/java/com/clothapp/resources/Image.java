@@ -23,19 +23,20 @@ public class Image implements Parcelable{
     private List<String> like;
     private int nLike;
     private List<String> vestiti;
-    public List<String> hashtags;
+    public List<String> hashtag;
     public List<String> clothes;
     public List<String> users;
 
-    public Image(File f, String Id, String user,List likes, int nLike)   {
+    public Image(File f, String Id, String user,List likes, int nLike, List hashtags, List vestitis)   {
         this.user=user;
         this.objectId = Id;
         this.file=f;
-        if (likes==null) {
-            like= new ArrayList();
-        }else {
-            this.like = likes;
-        }
+        if (likes==null) like= new ArrayList();
+        else this.like = likes;
+        if (hashtags==null) hashtag= new ArrayList();
+        else this.hashtag = hashtags;
+        if (vestitis==null) vestiti= new ArrayList();
+        else this.vestiti = vestitis;
         this.nLike = nLike;
     }
 
@@ -48,12 +49,12 @@ public class Image implements Parcelable{
         this.nLike=o.getInt("nLike");
         this.like=(ArrayList)o.get("like");
         this.vestiti=(ArrayList)o.get("tipo");
-        this.hashtags=(ArrayList)o.get("hashtag");
+        this.hashtag=(ArrayList)o.get("hashtag");
 
     }
 
     public List<String> getHashtag() {
-        return hashtags;
+        return hashtag;
     }
 
     public List<String> getVestiti() {
@@ -62,9 +63,9 @@ public class Image implements Parcelable{
 
     public String getHashtagToString() {
         String res="";
-        if(hashtags!=(null)) {
-            for (int i = 0; i < hashtags.size(); i++) {
-                res += (" " + hashtags.get(i));
+        if(hashtag!=(null)) {
+            for (int i = 0; i < hashtag.size(); i++) {
+                res += (" " + hashtag.get(i));
             }
         }
         return res;

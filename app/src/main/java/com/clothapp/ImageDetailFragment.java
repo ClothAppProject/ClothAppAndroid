@@ -188,7 +188,7 @@ public class ImageDetailFragment extends Fragment {
                     vestiti = new ArrayList<Cloth>(arrayList.size());
                     for (int i = 0; i < arrayList.size(); i++) {
                         ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Vestito");
-                        query1.whereEqualTo("codice", arrayList.get(i));
+                        query1.whereEqualTo("objectId", arrayList.get(i));
                         query1.getFirstInBackground(new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject info, ParseException e) {
@@ -212,9 +212,6 @@ public class ImageDetailFragment extends Fragment {
                         @Override
                         public void done(final File file, ParseException e) {
                             if (e == null) {
-                                //nascondo caricamento mostro immagine
-                                //donutProgress.setVisibility(View.INVISIBLE);
-                                //v.setVisibility(View.VISIBLE);
                                 Glide.with(context)
                                         .load(file)
                                         .into(v);

@@ -63,4 +63,5 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         // Return the fragment
         return rootView;
     }
+
 }

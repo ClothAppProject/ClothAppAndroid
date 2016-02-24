@@ -97,13 +97,14 @@ public class HomeTopRatedFragment extends Fragment {
                                                 //faccio un controllo, se ho stesso numero di like dell'ultima foto e poi se è già
                                                 //contenuta all'interno della lista di foto, allora passo alla prossima evitando di fare chiamate per parse
                                                 if (object.getInt("nLike") == maxNumLike) {
-                                                    if (photos.contains(new Image(null, objects.get(i).getObjectId(), null, null,0)))
+                                                    if (photos.contains(new Image(null, objects.get(i).getObjectId(), null, null,0,null,null)))
                                                         continue;
                                                 }
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo
-                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"), object.getList("like"),object.getInt("nLike"));
+                                                    Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"),
+                                                            object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti"));
                                                     photos.add(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     adapter.notifyDataSetChanged();
@@ -159,7 +160,8 @@ public class HomeTopRatedFragment extends Fragment {
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista
-                            photos.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),obj.getList("like"),obj.getInt("nLike")));
+                            photos.add(new com.clothapp.resources.Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
+                                    obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),obj.getList("vestiti")));
 
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());

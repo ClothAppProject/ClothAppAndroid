@@ -56,7 +56,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         photoViewHolder.photo.setImageBitmap(imageBitmap);
 
         // Display hashtags, if any
-        List<String> hashtagList = photos.get(position).hashtags;
+        List<String> hashtagList = photos.get(position).hashtag;
 
         if (hashtagList != null) {
 
@@ -135,7 +135,8 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
             count++;
 
-            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.users, item.getNumLike());
+            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.users,
+                    item.getNumLike(), item.getHashtag(),item.getVestiti());
             ProfileUploadedPhotosFragment.photos.add(image);
 
             itemView.setOnClickListener(new View.OnClickListener() {

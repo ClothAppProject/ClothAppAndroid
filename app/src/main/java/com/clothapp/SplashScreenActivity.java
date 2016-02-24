@@ -62,7 +62,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                         ParseFile file = obj.getParseFile("thumbnail");
                         try {
                             //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
-                            photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"), obj.getList("like"),obj.getInt("nLike")));
+                            photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
+                                    obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),obj.getList("vestiti")));
                         } catch (ParseException e1) {
                             check(e.getCode(), vi, e.getMessage());
                         }

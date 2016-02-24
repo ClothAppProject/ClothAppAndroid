@@ -56,7 +56,6 @@ public class ProfileInfoFragment extends Fragment {
         ProfileInfoListItem itemAge = new ProfileInfoListItem("AGE", "Loading...");
         ProfileInfoListItem itemCity = new ProfileInfoListItem("CITY", "Loading...");
         ProfileInfoListItem itemEmail = new ProfileInfoListItem("EMAIL", "Loading...");
-        ProfileInfoListItem itemDescription = new ProfileInfoListItem("DESCRIPTION", "Loading...");
 
         // Create an array and add the previously created items to it.
         ArrayList<ProfileInfoListItem> items = new ArrayList<>();
@@ -66,7 +65,6 @@ public class ProfileInfoFragment extends Fragment {
         items.add(itemAge);
         items.add(itemCity);
         items.add(itemEmail);
-        items.add(itemDescription);
 
         // Create a new adapter for the recycler view
         ProfileInfoAdapter adapter = new ProfileInfoAdapter(items);

@@ -101,10 +101,12 @@ public class ProfileUtils {
                                     String username = photo.get("user").toString();
                                     int nLikes = photo.getInt("nLike");
                                     List <String> likes = photo.getList("like");
+                                    List <String> hashtag = photo.getList("hashtag");
+                                    List <String> vestiti = photo.getList("vestiti");
 
-                                    Image item = new Image(file, objectId, username, likes, nLikes);
+                                    Image item = new Image(file, objectId, username, likes, nLikes, hashtag, vestiti);
 
-                                    item.hashtags = photo.getList("hashtag");
+                                    item.hashtag = photo.getList("hashtag");
                                     item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
@@ -161,10 +163,12 @@ public class ProfileUtils {
                                     String username = photo.get("user").toString();
                                     int nLikes = photo.getInt("nLike");
                                     List <String> like = photo.getList("like");
+                                    List <String> hashtag = photo.getList("hashtag");
+                                    List <String> vestiti = photo.getList("vestiti");
 
-                                    Image item = new Image(file, objectId, username, like, nLikes);
+                                    Image item = new Image(file, objectId, username, like, nLikes, hashtag, vestiti);
 
-                                    item.hashtags = photo.getList("hashtag");
+                                    item.hashtag = photo.getList("hashtag");
                                     item.clothes = photo.getList("tipo");
                                     item.users = photo.getList("like");
 
