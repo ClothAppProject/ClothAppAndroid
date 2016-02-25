@@ -24,6 +24,13 @@
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/darkred</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/primary_material_light</item>
+        <item name="android:statusBarColor">@color/darkred</item>
     </style>
 </resources>
 
