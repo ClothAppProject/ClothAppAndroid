@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfilePictureCameraActivity;
 import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
@@ -54,7 +56,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     public static Context context;
 
     public static String username;
-
+    private ParseObject relazione;
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
     public static ViewPager viewPager;
@@ -75,6 +77,8 @@ public class ShopProfileActivity extends AppCompatActivity {
         activity = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Loading follow Button
+        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
 
         // Set toolbar title to empty string so that it won't overlap with the tabs.
         toolbar.setTitle("");
@@ -99,6 +103,39 @@ public class ShopProfileActivity extends AppCompatActivity {
         }
 
         loadProfilePicture(navigationView);
+
+        //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
+        if (username.equals(ParseUser.getCurrentUser().getUsername())) {
+            follow_edit.setText(R.string.edit_profile);
+        }else {
+            relazione= FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),username);
+            if (relazione!=null){
+                //Seguo l'utente, posso smettere di seguirlo
+                follow_edit.setText(R.string.unfollow);
+
+            }else{
+                //Non seguo l'utente, posso seguirlo
+                follow_edit.setText(R.string.follow);
+            }
+            follow_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (relazione!=null)    {
+                        //elimino l'oggetto
+                        relazione.deleteInBackground();
+                        relazione = null;
+                        follow_edit.setText(R.string.follow);
+                    }else{
+                        //creo una nuova relazione
+                        relazione=new ParseObject("Follow");
+                        relazione.put("from",ParseUser.getCurrentUser().getUsername());
+                        relazione.put("to",username);
+                        relazione.saveInBackground();
+                        follow_edit.setText(R.string.unfollow);
+                    }
+                }
+            });
+        }
     }
 
     @Override

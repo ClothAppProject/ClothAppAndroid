@@ -43,8 +43,7 @@ import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.search.SearchAdapter;
 import com.clothapp.settings.SettingsActivity;
-import com.clothapp.upload.UploadCameraActivity;
-import com.clothapp.upload.UploadGalleryActivity;
+import com.clothapp.upload.UploadActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -239,7 +238,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
+                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
+                i.putExtra("photoType",2187);
                 startActivity(i);
             }
         });
@@ -252,7 +252,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
+                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
+                i.putExtra("photoType",1540);
                 startActivity(i);
             }
         });

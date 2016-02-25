@@ -2,6 +2,7 @@ package com.clothapp.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +37,9 @@ import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfilePictureCameraActivity;
 import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.resources.ExceptionCheck;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -52,7 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public static Context context;
 
     public static String username;
-
+    private ParseObject relazione;
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
     public static ViewPager viewPager;
@@ -73,6 +77,9 @@ public class UserProfileActivity extends AppCompatActivity {
         activity = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Loading follow Button
+        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
+
 
         // Set toolbar title to empty string so that it won't overlap with the tabs.
         toolbar.setTitle("");
@@ -97,6 +104,39 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         loadProfilePicture(navigationView);
+
+        //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
+        if (username.equals(ParseUser.getCurrentUser().getUsername())) {
+            follow_edit.setText(R.string.edit_profile);
+        }else {
+            relazione=FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),username);
+            if (relazione!=null){
+                //Seguo l'utente, posso smettere di seguirlo
+                follow_edit.setText(R.string.unfollow);
+
+            }else{
+                //Non seguo l'utente, posso seguirlo
+                follow_edit.setText(R.string.follow);
+            }
+            follow_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (relazione!=null)    {
+                        //elimino l'oggetto
+                        relazione.deleteInBackground();
+                        relazione = null;
+                        follow_edit.setText(R.string.follow);
+                    }else{
+                        //creo una nuova relazione
+                        relazione=new ParseObject("Follow");
+                        relazione.put("from",ParseUser.getCurrentUser().getUsername());
+                        relazione.put("to",username);
+                        relazione.saveInBackground();
+                        follow_edit.setText(R.string.unfollow);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -282,14 +322,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
 
- /*   //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
-    if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-        follow_edit.setText("Modifica Profilo");
-        else {
-            if (FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),UserProfileActivity.username)){
-    }
-    }*/
+
+
+
+
 }
+}
+

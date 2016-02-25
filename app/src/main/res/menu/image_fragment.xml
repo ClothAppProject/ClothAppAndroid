@@ -5,9 +5,9 @@
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/segnala"
         android:orderInCategory="100"
-        android:title="Segnala Foto" />
+        android:title="@string/signal_photo" />
 
     <item android:id="@+id/delete"
-        android:title="Elimina Foto"/>
+        android:title="@string/delete_photo"/>
 
 </menu>
