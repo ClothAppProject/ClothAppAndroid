@@ -5,6 +5,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -14,8 +15,8 @@ import java.util.ListIterator;
  */
 public class FollowUtil {
 
-    public static boolean isfollow(String from, final String to){
-        final boolean[] find={false};
+    public static ParseObject isfollow(String from, final String to){
+        final ParseObject[] find = {null};
 
         ParseQuery<ParseObject> queryfollow= new ParseQuery<ParseObject>("Follow");
         queryfollow.whereEqualTo("from", from);
@@ -24,11 +25,27 @@ public class FollowUtil {
             public void done(List<ParseObject> objects, ParseException e) {
                 for(ParseObject o: objects){
                    if( o.get("to").equals(to)){
-                    find[0]=true;
+                    find[0] =o;
                    }
                 }
             }
         } );
         return find[0];
+    }
+    public static ParseUser getParseUser(String username) {
+
+        ParseUser user = null;
+
+        ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+        queryUser.whereEqualTo("username", username);
+
+        try {
+            user = queryUser.find().get(0);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }
