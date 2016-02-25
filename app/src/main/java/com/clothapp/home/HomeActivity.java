@@ -28,14 +28,14 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_new_home);
 
         initToolbar();
         initViewPagerAndTabs();
     }
 
     private void initToolbar() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.home_toolbar);
         setSupportActionBar(mToolbar);
         setTitle(getString(R.string.app_name));
         mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
@@ -43,23 +43,23 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViewPagerAndTabs() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
         HomePagerAdapter pagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(MostRecentFragment.newInstance(20), "Tab 1");
         pagerAdapter.addFragment(MostRecentFragment.newInstance(4), "Tab 2");
         viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void initDrawer(Toolbar toolbar) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.open_navigation, R.string.close_navigation);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.home_nav_view);
         navigationView.setNavigationItemSelectedListener(new CustomListener());
     }
 
@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -109,19 +109,19 @@ public class HomeActivity extends AppCompatActivity {
             // Handle navigation view item clicks here.
             int id = item.getItemId();
 
-            if (id == R.id.nav_camera) {
-                // Handle the camera action
-            } else if (id == R.id.nav_gallery) {
-
-            } else if (id == R.id.nav_slideshow) {
-
-            } else if (id == R.id.nav_manage) {
-
-            } else if (id == R.id.nav_share) {
-
-            } else if (id == R.id.nav_send) {
-
-            }
+//            if (id == R.id.nav_camera) {
+//                // Handle the camera action
+//            } else if (id == R.id.nav_gallery) {
+//
+//            } else if (id == R.id.nav_slideshow) {
+//
+//            } else if (id == R.id.nav_manage) {
+//
+//            } else if (id == R.id.nav_share) {
+//
+//            } else if (id == R.id.nav_send) {
+//
+//            }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
