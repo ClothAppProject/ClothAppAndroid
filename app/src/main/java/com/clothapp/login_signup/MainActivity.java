@@ -20,7 +20,9 @@ import com.clothapp.SplashScreenActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -207,6 +209,11 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     // Login eseguito correttamente attraverso facebook
                                     Log.d("MainActivity", "Login eseguito correttamente attraverso Facebook");
+
+                                    //minuscolo
+                                    ParseUser persona = new ParseUser();
+                                    persona.put("lowercase", user.getUsername().toLowerCase());
+                                    persona.saveInBackground();
 
                                     // Redirect user to Splash Screen Activity
                                     Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);

@@ -96,7 +96,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchAdapter.setQuery(query);
+                searchAdapter.setQuery(query, searchAdapter);
                 return false;
             }
 

@@ -190,6 +190,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                                 ParseObject persona = new ParseObject("Persona");
                                                 persona.put("username",user.getUsername());
+                                                persona.put("lowercase", user.getUsername().toLowerCase());
                                                 persona.put("lastname", edit_lastname.getText().toString().trim());
                                                 persona.put("date",date);
                                                 //persona.put("city",edit_citta.getText().toString.trim());
@@ -205,7 +206,7 @@ public class SignupActivity extends AppCompatActivity {
                                                             dialog.dismiss();
 
                                                             finish();
-                                                        }else {
+                                                        } else {
                                                             // Chiudo la dialogBar
                                                             dialog.dismiss();
 
@@ -214,6 +215,10 @@ public class SignupActivity extends AppCompatActivity {
                                                         }
                                                     }
                                                 });
+
+
+
+
 
                                             } else {
                                                 // Chiudo la dialogBar

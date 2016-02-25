@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,11 +26,20 @@ public class User{
         this.city = city;
     }
 
-    public User(ParseObject o) {
+    public User(ParseUser o) {
 
         this.username=o.getString("username");
         this.name=o.getString("name");
         this.city=o.getString("city");
+    }
+
+    public User() {
+    }
+
+    public void setUser(ParseUser u){
+        this.username=u.getString("username");
+        this.name=u.getString("name");
+        this.city=u.getString("city");
     }
 
     public void setProfilo(File profilo) {

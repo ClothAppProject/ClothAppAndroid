@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeMostRecentFragment;
@@ -61,11 +62,14 @@ public class SearchAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    public void setQuery(String query) {
+    public void setQuery(String query,SearchAdapter pager) {
         this.query = query;
-        if(findUserFragment!=null) findUserFragment.refresh(query);
+        if(findUserFragment!=null){
+            findUserFragment.refresh(query,pager);
+        }
         if(findClothFragment!=null) findClothFragment.refresh(query);
         if(findTagFragment!=null) findTagFragment.refresh(query);
+        notifyDataSetChanged();
 
     }
 

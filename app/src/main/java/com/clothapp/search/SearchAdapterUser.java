@@ -1,6 +1,7 @@
 package com.clothapp.search;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +59,10 @@ public class SearchAdapterUser extends BaseAdapter {
 
         ImageView i=(ImageView)row.findViewById(R.id.foto);
         if (getItem(position).getProfilo()!=null) {
-            Glide.with(context)
-                    .load(users.get(position).getProfilo())
-                    .transform(new CircleTransform(context))
-                    .into(i);
+           Glide.with(context)
+                   .load(users.get(position).getProfilo())
+                   .transform(new CircleTransform(context))
+                   .into(i);
         }
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUsername());
