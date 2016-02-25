@@ -64,6 +64,10 @@ public class SearchAdapterUser extends BaseAdapter {
                    .transform(new CircleTransform(context))
                    .into(i);
         }
+        else Glide.with(context)
+                .load(R.mipmap.profile)
+                .transform(new CircleTransform(context))
+                .into(i);
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUsername());
         return row;
