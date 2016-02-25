@@ -78,15 +78,18 @@
             android:label="@string/app_name"/>
         <activity
             android:name=".profile.utils.ProfilePictureCameraActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:largeHeap="true"/>
         <activity
             android:name=".profile.utils.ProfilePictureGalleryActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:largeHeap="true"/>
         <activity
             android:name=".upload.UploadCameraActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:parentActivityName=".home_gallery.HomeActivity">
+            android:parentActivityName=".home_gallery.HomeActivity"
+            android:largeHeap="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home_gallery.HomeActivity" />
@@ -95,7 +98,8 @@
             android:name=".upload.UploadGalleryActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:parentActivityName=".home_gallery.HomeActivity">
+            android:parentActivityName=".home_gallery.HomeActivity"
+            android:largeHeap="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home_gallery.HomeActivity" />

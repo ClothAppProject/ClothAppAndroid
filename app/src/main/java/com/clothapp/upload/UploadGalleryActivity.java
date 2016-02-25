@@ -65,6 +65,7 @@ public class UploadGalleryActivity extends AppCompatActivity {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
 
+        imageView = (ImageView) findViewById(R.id.view_immagine);
         final TextView percentuale = (TextView) findViewById(R.id.percentuale);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.barraProgresso);
         final Button btnSend = (Button) findViewById(R.id.send);
@@ -182,8 +183,11 @@ public class UploadGalleryActivity extends AppCompatActivity {
                 String picturePath = cursor.getString(columnIndex);
                 cursor.close();
 
-                imageView = (ImageView) findViewById(R.id.view_immagine);
-                imageBitmap = BitmapFactory.decodeFile(picturePath);
+                //decodifico com bitmapfactory a 3
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 3;
+
+                imageBitmap = BitmapFactory.decodeFile(picturePath,options);
 
                 imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
                 Glide.with(getApplicationContext())

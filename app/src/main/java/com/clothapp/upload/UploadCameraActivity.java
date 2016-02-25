@@ -216,8 +216,12 @@ public class UploadCameraActivity extends AppCompatActivity {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY && resultCode == RESULT_OK) {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
+            //decodifico com bitmapfactory a 3
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 3;
+
             // A questo punto l'immagine è stata salvata sullo storage
-            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(),options);
 
 
             // Inserisco l'immagine nel bitmap
@@ -276,7 +280,6 @@ public class UploadCameraActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
-                deleteImage();
                 // Reinderizzo l'utente alla homePage activity
                 onBackPressed();
                 return true;
