@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/red</item>
         <item name="colorPrimaryDark">@color/darkred</item>
         <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/primary_material_light</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
