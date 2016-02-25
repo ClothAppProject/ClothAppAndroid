@@ -22,7 +22,7 @@ class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.fragment_home_most_recent_item, parent, false);
         return RecyclerItemViewHolder.newInstance(view);
     }
 
@@ -48,7 +48,7 @@ class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public static RecyclerItemViewHolder newInstance(View parent) {
-            TextView itemTextView = (TextView) parent.findViewById(R.id.itemTextView);
+            TextView itemTextView = (TextView) parent.findViewById(R.id.fragment_home_most_recent_item_title);
             return new RecyclerItemViewHolder(parent, itemTextView);
         }
 

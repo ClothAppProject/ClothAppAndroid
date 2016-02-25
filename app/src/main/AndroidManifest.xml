@@ -157,6 +157,14 @@
             android:name=".profile_shop.ShopProfileActivity"
             android:label="@string/title_activity_new_profile"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".home.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".search.SearchResultsActivity" />
+        </activity>
     </application>
 
 </manifest>
