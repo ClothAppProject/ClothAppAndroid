@@ -20,6 +20,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
     FindUserFragment findUserFragment;
     FindClothFragment findClothFragment;
     FindTagFragment findTagFragment;
+    private boolean primo=true;
 
     String[]titles;
     String query;
@@ -49,6 +50,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
+                System.out.println("get0");
 
                 return findUserFragment= (FindUserFragment) new FindUserFragment().newIstance(query,context);
             case 1:
@@ -62,14 +64,12 @@ public class SearchAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    public void setQuery(String query,SearchAdapter pager) {
+    public void setQuery(String query ) {
         this.query = query;
-        if(findUserFragment!=null){
-            findUserFragment.refresh(query,pager);
-        }
+        if(findUserFragment!=null) findUserFragment.refresh(query);
         if(findClothFragment!=null) findClothFragment.refresh(query);
         if(findTagFragment!=null) findTagFragment.refresh(query);
-        notifyDataSetChanged();
+
 
     }
 

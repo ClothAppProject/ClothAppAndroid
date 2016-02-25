@@ -3,28 +3,22 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ScrollView
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:id="@+id/clothlist"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:layout_gravity="center_horizontal" />
 
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="10dp"
-                android:id="@+id/clothlist"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="center_horizontal" />
 
-    </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>

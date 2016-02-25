@@ -47,20 +47,21 @@ public class FindUserFragment extends Fragment {
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //System.out.println("onCreateView"+query);
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listUser = (ListView) rootView.findViewById(R.id.userlist);
         //String query=getArguments().getString("name");
-        //global = (ApplicationSupport) getActivity().getApplicationContext();
+        global = (ApplicationSupport) getActivity().getApplicationContext();
 
-        user=new ArrayList<>();
+        user=global.getUsers();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterUser(getActivity().getBaseContext(), user);
         listUser.setAdapter(adapter);
         search();
 
-        System.out.println("create:" + query);
 
         listUser.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -97,7 +98,7 @@ public class FindUserFragment extends Fragment {
         //faccio la query a Parse. Questa in background è più veloce ma non consente di metterli ordinati alfabeticamente
         //BUG: foto profilo
 
-        ParseQuery<ParseUser>username=ParseUser.getQuery();
+        final ParseQuery<ParseUser>username=ParseUser.getQuery();
         username.addAscendingOrder("lowercase");
         username.orderByAscending("lowercase");
         username.whereContains("lowercase", query);
@@ -107,7 +108,7 @@ public class FindUserFragment extends Fragment {
         username.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
-                if(e==null) {
+                if (e == null) {
                     for (ParseUser parseUser : objects) {
                         final User u = new User();
                         //setto il profilo
@@ -131,15 +132,18 @@ public class FindUserFragment extends Fragment {
 
 
                                 //aggiungo l'utente nella lista
-                                user.add(u);
-                                adapter.notifyDataSetChanged();
+                                if (!user.contains(u)) {
+                                    user.add(u);
+                                    global.setUsers(user);
+                                    adapter.notifyDataSetChanged();
+                                }
 
 
                             }
                         });
 
                         i[0]++;
-                        if (i[0] == objects.size()-1) canLoad = true;
+                        if (i[0] == objects.size() - 1) canLoad = true;
                     }
                 } else check(e.getCode(), rootView, e.getMessage());
 
@@ -159,6 +163,8 @@ public class FindUserFragment extends Fragment {
 
     }
 
+
+
     public Fragment newIstance(String query, Context context) {
         this.context = context;
         final FindUserFragment f = new FindUserFragment();
@@ -168,13 +174,15 @@ public class FindUserFragment extends Fragment {
         return f;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+        //System.out.println("onCreate");
     }
 
-    public void refresh(String query,SearchAdapter pager) {
+    public void refresh(String query) {
         this.query=query.trim().toLowerCase();
         skip=0;
         user=new ArrayList<>();
@@ -182,7 +190,17 @@ public class FindUserFragment extends Fragment {
         listUser.setAdapter(adapter);
         search();
     }
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        //System.out.println("onresume"+user);
+        adapter.notifyDataSetChanged();
+    }
 
 
+    public void setQuery(String query) {
+        this.query=query;
+       //
+    }
 }
 

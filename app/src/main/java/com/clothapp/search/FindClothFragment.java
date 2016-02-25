@@ -42,6 +42,8 @@ public class FindClothFragment extends Fragment {
     private boolean canLoad=true;
     private static ArrayList<Image> cloth;
     private ApplicationSupport global;
+    private SearchAdapterImage adapter;
+    private int skip=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,49 +51,22 @@ public class FindClothFragment extends Fragment {
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
 
+        cloth=global.getCloth();
+        //chiama l'adattatore che inserisce gli item nella listview
+        adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
+        listCloth.setAdapter(adapter);
         search();
+
         //setto il listener sullo scroller quando arrivo in fondo
         listCloth.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                System.out.println("cloth "+firstVisibleItem +"+"+ visibleItemCount +">="+ totalItemCount);
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
                     if (canLoad && cloth.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
-
-                            ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-                            queryFoto.addDescendingOrder("nLike");
-                            queryFoto.setLimit(6);
-                            queryFoto.whereGreaterThan("createdAt", global.getLastCloth());
-                            queryFoto.findInBackground(new FindCallback<ParseObject>() {
-                                @Override
-                                public void done(List<ParseObject> objects, ParseException e) {
-                                    if(e==null) {
-                                        ListIterator<ParseObject> i = objects.listIterator();
-                                        while (i.hasNext()) {
-                                            List<String> tag = new ArrayList<String>();
-                                            ParseObject o = i.next();
-                                            tag = (ArrayList) o.get("tipo");
-                                            if (tag == null) tag = new ArrayList<String>(0);
-                                            for (int j = 0; j < tag.size(); j++) {
-                                                if (tag.get(j).contains(query)) {
-                                                    Image image=new Image(o);
-                                                    if(!cloth.contains(image)){
-                                                        cloth.add(image);
-                                                        global.setLastCloth(o.getCreatedAt());
-                                                    }
-                                                    setListViewHeightBasedOnItems();
-                                                    break;
-
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else check(e.getCode(), rootView, e.getMessage());
-                                }
-                            });
+                            search();
 
                         }
                     }
@@ -108,18 +83,16 @@ public class FindClothFragment extends Fragment {
 
     public void search(){
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
-        query=query.trim();
-
-
-
+        query=query.trim().toLowerCase();
 
         //faccio la query a Parse
         //final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        cloth=new ArrayList<Image>();
         queryFoto.addDescendingOrder("nLike");
+        queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
+        skip=skip+5;
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -135,9 +108,10 @@ public class FindClothFragment extends Fragment {
                                 Image image=new Image(o);
                                 if(!cloth.contains(image)){
                                     cloth.add(image);
-                                    global.setLastCloth(o.getCreatedAt());
+                                    global.setCloth(cloth);
+                                    adapter.notifyDataSetChanged();
+                                    //global.setLastCloth(o.getCreatedAt());
                                 }
-                                setListViewHeightBasedOnItems();
 
                                 break;
 
@@ -153,8 +127,7 @@ public class FindClothFragment extends Fragment {
 
 
 
-        SearchAdapterImage adapterCloth=new SearchAdapterImage(getActivity().getBaseContext(),cloth);
-        listCloth.setAdapter(adapterCloth);
+
         listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -186,48 +159,13 @@ public class FindClothFragment extends Fragment {
 
     public void refresh(String query) {
         this.query=query;
-        // The reload fragment code here !
-        if (! this.isDetached()) {
-            getFragmentManager().beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
+        skip=0;
+        cloth=new ArrayList<>();
+        adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
+        listCloth.setAdapter(adapter);
+        search();
     }
 
-    public boolean setListViewHeightBasedOnItems() {
-
-        ListAdapter listAdapter = listCloth.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            int itemPos;
-            for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listCloth);
-                item.measure(0, 0);
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listCloth.getDividerHeight() *
-                    (numberOfItems - 1);
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listCloth.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight;
-            listCloth.setLayoutParams(params);
-            listCloth.requestLayout();
-
-            return true;
-
-        } else {
-            return false;
-        }
-
-    }
 
     public static ArrayList<Image> getCloth() {
         return cloth;

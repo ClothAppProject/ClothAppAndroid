@@ -25,9 +25,38 @@ public class ApplicationSupport extends Application {
     private ArrayList<Image> photos;
     private Date firstDate;
     private Date lastDate;
-    private User lastUser;
-    private Date lastCloth;
-    private Date lastTag;
+    //private User lastUser;
+    //private Date lastCloth;
+    //private Date lastTag;
+    private ArrayList<User> users=new ArrayList<>();
+    private ArrayList<Image> cloth=new ArrayList<>();
+    private ArrayList<Image> tag=new ArrayList<>();
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+    public void addUser(User u){
+        users.add(u);
+    }
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public ArrayList<Image> getCloth() {
+        return cloth;
+    }
+
+    public void setCloth(ArrayList<Image> cloth) {
+        this.cloth = cloth;
+    }
+
+    public ArrayList<Image> getTag() {
+        return tag;
+    }
+
+    public void setTag(ArrayList<Image> tag) {
+        this.tag = tag;
+    }
 
     public String getId(int i)  {return photos.get(i).getObjectId();}
     //getter e setter variabili globali
@@ -58,7 +87,7 @@ public class ApplicationSupport extends Application {
         }
 
     }
-
+/*
     public User getLastUser() {
         return lastUser;
     }
@@ -82,4 +111,5 @@ public class ApplicationSupport extends Application {
     public void setLastTag(Date lastTag) {
         this.lastTag = lastTag;
     }
+    */
 }
