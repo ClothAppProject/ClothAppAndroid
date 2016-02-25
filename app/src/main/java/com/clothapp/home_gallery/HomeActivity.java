@@ -44,7 +44,6 @@ import com.clothapp.resources.Image;
 import com.clothapp.search.SearchAdapter;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadActivity;
-import com.clothapp.upload.UploadGalleryActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.FindCallback;
 import com.parse.ParseException;

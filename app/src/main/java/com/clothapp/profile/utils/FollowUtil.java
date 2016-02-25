@@ -1,6 +1,11 @@
 package com.clothapp.profile.utils;
 
+import android.view.View;
+import android.widget.Button;
+
+import com.clothapp.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -15,22 +20,19 @@ import java.util.ListIterator;
  */
 public class FollowUtil {
 
-    public static ParseObject isfollow(String from, final String to){
-        final ParseObject[] find = {null};
+    private static ParseObject found = null;
+    public static ParseObject isfollow(String from, String to){
 
-        ParseQuery<ParseObject> queryfollow= new ParseQuery<ParseObject>("Follow");
+        ParseQuery<ParseObject> queryfollow= new ParseQuery("Follow");
         queryfollow.whereEqualTo("from", from);
-        queryfollow.findInBackground(new FindCallback<ParseObject>(){
+        queryfollow.whereEqualTo("to", to);
+        queryfollow.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                for(ParseObject o: objects){
-                   if( o.get("to").equals(to)){
-                    find[0] =o;
-                   }
-                }
+            public void done(ParseObject object, ParseException e) {
+                found = object;
             }
-        } );
-        return find[0];
+        });
+        return found;
     }
     public static ParseUser getParseUser(String username) {
 

@@ -50,6 +50,11 @@
         <item>Logout</item>
     </string-array>
 
+    <string name="edit_profile">Modifica Profilo</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="delete_photo">Elimina Foto</string>
+    <string name="signal_photo">Segnala Foto</string>
     <string name="separator">-</string>
     <string name="info">Log-Info</string>
     <string name="open_navigation">Apri il menu</string>

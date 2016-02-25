@@ -56,12 +56,11 @@ public class UserProfileActivity extends AppCompatActivity {
     public static Context context;
 
     public static String username;
-
+    private ParseObject relazione;
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
     public static ViewPager viewPager;
     public static Activity activity;
-    public static ParseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +76,6 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set activity to current activity.
         activity = this;
 
-        //Set user to the current user
-        user=FollowUtil.getParseUser(username);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Loading follow Button
         final Button follow_edit = (Button) findViewById(R.id.follow_edit);
@@ -108,46 +105,39 @@ public class UserProfileActivity extends AppCompatActivity {
 
         loadProfilePicture(navigationView);
 
-
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
-        if (user.get("username").equals(ParseUser.getCurrentUser().getUsername())) {
-            follow_edit.setText("Edit profile");
+        if (username.equals(ParseUser.getCurrentUser().getUsername())) {
+            follow_edit.setText(R.string.edit_profile);
         }else {
-            final ParseObject relazione=FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),UserProfileActivity.username);
+            relazione=FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),username);
             if (relazione!=null){
-                follow_edit.setText("Unfollow");
-                follow_edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO problemi di permessi di scrittura sui follower di altri utenti
-                        //*List<String> yout = (user.getList("followers"));
-                        //List<String> pout = ParseUser.getCurrentUser().getList("following");
-                        //pout.remove(user.getUsername());
-                        try {
-                            relazione.delete();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                //Seguo l'utente, posso smettere di seguirlo
+                follow_edit.setText(R.string.unfollow);
 
-                    }
-                });
             }else{
-                //nel caso si può segurie l'utente
-                follow_edit.setText("Follow");
-                follow_edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //ParseQuery<ParseObject> aggiungi=ParseQuery<ParseObject>("Followed");
-                        ParseObject nuovarelazione=new ParseObject("Follow");
-                        nuovarelazione.put("from",ParseUser.getCurrentUser().getUsername());
-                        nuovarelazione.put("to",username);
-                        nuovarelazione.saveInBackground();
-
+                //Non seguo l'utente, posso seguirlo
+                follow_edit.setText(R.string.follow);
+            }
+            follow_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (relazione!=null)    {
+                        //elimino l'oggetto
+                        relazione.deleteInBackground();
+                        relazione = null;
+                        follow_edit.setText(R.string.follow);
+                    }else{
+                        //creo una nuova relazione
+                        relazione=new ParseObject("Follow");
+                        relazione.put("from",ParseUser.getCurrentUser().getUsername());
+                        relazione.put("to",username);
+                        relazione.saveInBackground();
+                        follow_edit.setText(R.string.unfollow);
+                    }
                 }
-                    });
+            });
         }
-
-    }}
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
