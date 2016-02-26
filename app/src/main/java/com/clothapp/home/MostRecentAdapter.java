@@ -66,17 +66,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     intent.putExtra("classe", "MostRecentPhotos");
                     intent.putExtra("position", 0);
                     com.clothapp.home.HomeActivity.activity.startActivity(intent);
-                    /*if (profilo.equals("persona")) {
-                        Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
-                        intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", position);
-                        UserProfileActivity.activity.startActivity(intent);
-                    }else{
-                        Intent intent = new Intent(ShopProfileActivity.context, ImageFragment.class);
-                        intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", position);
-                        ShopProfileActivity.activity.startActivity(intent);
-                    }*/
                 }
             });
         }
