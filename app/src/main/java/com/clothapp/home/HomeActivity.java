@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.home_toolbar);
         setSupportActionBar(mToolbar);
         setTitle(getString(R.string.app_name));
-        mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+        // mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
         initDrawer(mToolbar);
     }
 
