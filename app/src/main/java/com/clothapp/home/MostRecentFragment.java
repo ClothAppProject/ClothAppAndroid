@@ -32,8 +32,6 @@ import java.util.List;
 
 public class MostRecentFragment extends Fragment {
 
-    public final static String ITEMS_COUNT_KEY = "PartThreeFragment$ItemsCount";
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private MostRecentAdapter mostRecentAdapter;
     private Boolean loading = true;
