@@ -60,19 +60,6 @@ public class MostRecentFragment extends Fragment {
         getParseMostRecentPhotos(0, 20);
     }
 
-//    private List<String> createItemList() {
-//        List<String> itemList = new ArrayList<>();
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            int itemsCount = bundle.getInt(ITEMS_COUNT_KEY);
-//            for (int i = 0; i < itemsCount; i++) {
-//                itemList.add("Item " + i);
-//            }
-//        }
-//        return itemList;
-//    }
-
-
     private void getParseMostRecentPhotos(int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -85,11 +72,15 @@ public class MostRecentFragment extends Fragment {
             @Override
             public void done(List<ParseObject> photos, ParseException e) {
 
-                Log.d("MostRecentFragment", "Done: retrieved photos = " + photos.size());
+                // Log.d("MostRecentFragment", "Done: retrieved photos = " + photos.size());
 
                 if (e == null) {
 
                     for (final ParseObject photo : photos) {
+                        // TODO: Improve download speed
+                        // I don't like this: too slow...
+                        // Downloading image on main thread -> Download on a separate thread
+                        // Downloading is sequential -> Multiple downloads at the same time
                         mostRecentAdapter.itemList.add(new Image(photo));
                     }
 
