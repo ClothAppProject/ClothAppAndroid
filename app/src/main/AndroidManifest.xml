@@ -69,6 +69,11 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
+        <provider android:name=".resources.CustomContentProvider"
+            android:authorities=".resources.Categorie">
+        </provider>
+
         <activity
             android:name=".login_signup.MainActivity"
             android:label="@string/app_name"

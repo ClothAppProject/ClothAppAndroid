@@ -4,6 +4,8 @@ package com.clothapp.search;
  * Created by nc94 on 2/15/16.
  */
 import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -67,6 +69,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
         query= handleIntent(getIntent());
+        if(query==null)query="";
 
         //set adapter to  ViewPager
         searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext());
@@ -91,6 +94,20 @@ public class SearchResultsActivity extends AppCompatActivity {
         searchView =
                 (SearchView) MenuItemCompat.getActionView(searchItem);
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return false;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                return false;
+            }
+        });
+
         //quando faccio una nuova ricerca aggiorno questa activity invece di crearne una nuova
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -102,6 +119,8 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+
                 return false;
             }
         });

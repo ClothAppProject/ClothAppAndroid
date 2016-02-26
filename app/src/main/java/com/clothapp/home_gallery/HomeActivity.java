@@ -3,13 +3,17 @@ package com.clothapp.home_gallery;
 //import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -30,6 +34,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -40,6 +45,7 @@ import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.resources.CustomContentProvider;
 import com.clothapp.resources.Image;
 import com.clothapp.search.SearchAdapter;
 import com.clothapp.settings.SettingsActivity;
@@ -52,7 +58,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -114,6 +127,46 @@ public class HomeActivity extends AppCompatActivity {
 
         // UploadCameraActivity a new photo button menu initialization
         setupFloatingButton();
+
+        //funzione che popola il db
+/*
+        File f=new File( Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ClothApp/categorie.txt");
+        try {
+            FileReader r=new FileReader(f);
+            BufferedReader b=new BufferedReader(r);
+            System.out.println(getContentResolver().delete(CustomContentProvider.CONTENT_URI,null,null));
+            String s=null;
+            while((s=b.readLine())!=null){
+                System.out.println(s + "\n");
+
+
+                ContentValues values = new ContentValues();
+
+                values.put(CustomContentProvider.NAME, s);
+                Uri uri = getContentResolver().insert(CustomContentProvider.CONTENT_URI, values);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+        // Retrieve clothes records
+        String URL = "content://.resources.Categorie/vestiti";
+
+        Uri students = Uri.parse(URL);
+        Cursor c = managedQuery(students, null, null, null, "name");
+
+        if (c.moveToFirst()) {
+            do{
+                Toast.makeText(this,
+                        c.getString(c.getColumnIndex(CustomContentProvider._ID)) +
+                                ", " +  c.getString(c.getColumnIndex( CustomContentProvider.NAME)),
+                        Toast.LENGTH_SHORT).show();
+            } while (c.moveToNext());
+        }
+
+
 
     }
 

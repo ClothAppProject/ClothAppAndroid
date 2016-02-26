@@ -49,7 +49,6 @@ public class FindTagFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("oncreate");
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listTag = (ListView) rootView.findViewById(R.id.userlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
@@ -66,7 +65,7 @@ public class FindTagFragment extends Fragment {
 
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                    if (false && tag.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                    if (canLoad && tag.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (tag != null) {
                             canLoad = false;
                             search();
@@ -85,7 +84,6 @@ public class FindTagFragment extends Fragment {
     }
 
     public void search(){
-        System.out.println("search");
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query=query.trim().toLowerCase();
 
@@ -103,22 +101,24 @@ public class FindTagFragment extends Fragment {
 
         List<ParseObject> objects= null;
         queryFoto.addDescendingOrder("nLike");
+        queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
+        skip = skip + 5;
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null){
+                if (e == null) {
                     ListIterator<ParseObject> i = objects.listIterator();
                     while (i.hasNext()) {
                         List<String> hashtag = new ArrayList<String>();
                         ParseObject o = i.next();
                         hashtag = (ArrayList) o.get("hashtag");
-                        if(hashtag==null) hashtag=new ArrayList<String>(0);
+                        if (hashtag == null) hashtag = new ArrayList<String>(0);
                         if (hashtag == null) hashtag = new ArrayList<String>(0);
                         for (int j = 0; j < hashtag.size(); j++) {
                             if (hashtag.get(j).contains(query)) {
-                                Image image=new Image(o);
-                                if(!tag.contains(image)){
+                                Image image = new Image(o);
+                                if (!tag.contains(image)) {
                                     tag.add(image);
                                     global.setTag(tag);
                                     adapter.notifyDataSetChanged();
@@ -132,8 +132,7 @@ public class FindTagFragment extends Fragment {
                         }
                     }
                     canLoad = true;
-                }
-                else check(e.getCode(), rootView, e.getMessage());
+                } else check(e.getCode(), rootView, e.getMessage());
             }
         });
 
@@ -145,7 +144,7 @@ public class FindTagFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
-                i.putExtra("classe", "FindCloth");
+                i.putExtra("classe", "FindTag");
                 i.putExtra("position", position);
                 startActivity(i);
             }
