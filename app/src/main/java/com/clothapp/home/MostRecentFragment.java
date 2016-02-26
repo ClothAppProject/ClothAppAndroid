@@ -34,6 +34,7 @@ public class MostRecentFragment extends Fragment {
 
     public final static String ITEMS_COUNT_KEY = "PartThreeFragment$ItemsCount";
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private MostRecentAdapter mostRecentAdapter;
     private Boolean loading = true;
 
@@ -52,7 +53,10 @@ public class MostRecentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
+        setupSwipeRefreshLayout(swipeRefreshLayout);
+
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
 
@@ -62,9 +66,20 @@ public class MostRecentFragment extends Fragment {
         return swipeRefreshLayout;
     }
 
-    public void loadMorePhotos() {
-        int size = mostRecentAdapter.itemList.size();
-        getParseMostRecentPhotos(size, size + 12);
+    private void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Log.d("MostRecentFragment", "onRefresh");
+                if (mostRecentAdapter == null) return;
+
+                mostRecentAdapter.itemList = new ArrayList<>();
+                mostRecentAdapter.notifyDataSetChanged();
+
+                getParseMostRecentPhotos(0, 12);
+            }
+        });
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
@@ -137,6 +152,11 @@ public class MostRecentFragment extends Fragment {
                     // Log.d("MostRecentFragment", "Now itemList.size() is " + mostRecentAdapter.itemList.size());
 
                     mostRecentAdapter.notifyDataSetChanged();
+
+                    // Log.d("MostRecentFragment", "isRefreshing() is " + swipeRefreshLayout.isRefreshing());
+                    if (swipeRefreshLayout.isRefreshing()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
 
                 } else {
                     Log.d("MostRecentFragment", "Error: " + e.getMessage());
