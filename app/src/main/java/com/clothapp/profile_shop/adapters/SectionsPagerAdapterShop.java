@@ -5,11 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.clothapp.profile.fragments.PlaceholderFragment;
-import com.clothapp.profile.fragments.ProfileInfoFragment;
-import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
-import com.clothapp.profile_shop.fragments.ProfileShopInfoFragment;
-import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
+import com.clothapp.profile_shop.fragments.*;
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
@@ -27,6 +24,10 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
                 return ProfileShopInfoFragment.newInstance(ShopProfileActivity.username);
             case 1:
                 return ProfileShopUploadedPhotosFragment.newInstance(ShopProfileActivity.username);
+            case 2:
+                return ProfileShopFollowersFragment.newInstance(ShopProfileActivity.username);
+            case 3:
+                return ProfileShopFollowingFragment.newInstance(ShopProfileActivity.username);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }

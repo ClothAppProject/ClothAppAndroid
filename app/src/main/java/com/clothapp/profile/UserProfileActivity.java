@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
@@ -37,7 +38,9 @@ import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfilePictureCameraActivity;
 import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.ExceptionCheck;
+import com.clothapp.settings.SettingsActivity;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -56,9 +59,10 @@ public class UserProfileActivity extends AppCompatActivity {
     public static Context context;
 
     public static String username;
-    private ParseObject relazione;
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
+    public static RecyclerView viewProfileFollowers;
+    public static RecyclerView viewProfileFollowing;
     public static ViewPager viewPager;
     public static Activity activity;
 
@@ -109,33 +113,7 @@ public class UserProfileActivity extends AppCompatActivity {
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
         }else {
-            relazione=FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),username);
-            if (relazione!=null){
-                //Seguo l'utente, posso smettere di seguirlo
-                follow_edit.setText(R.string.unfollow);
-
-            }else{
-                //Non seguo l'utente, posso seguirlo
-                follow_edit.setText(R.string.follow);
-            }
-            follow_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (relazione!=null)    {
-                        //elimino l'oggetto
-                        relazione.deleteInBackground();
-                        relazione = null;
-                        follow_edit.setText(R.string.follow);
-                    }else{
-                        //creo una nuova relazione
-                        relazione=new ParseObject("Follow");
-                        relazione.put("from",ParseUser.getCurrentUser().getUsername());
-                        relazione.put("to",username);
-                        relazione.saveInBackground();
-                        follow_edit.setText(R.string.unfollow);
-                    }
-                }
-            });
+            FollowUtil.setFollow(follow_edit,username);
         }
     }
 
@@ -170,14 +148,14 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-
+        /*
         // Get default bitmap for user profile photo
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
 
         // Create a rounded bitmap from the user profile photo
         RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         rounded.setCornerRadius(bitmap.getWidth());
-
+        */
         // Get drawer header
         View headerLayout = navigationView.getHeaderView(0);
 
@@ -185,7 +163,12 @@ public class UserProfileActivity extends AppCompatActivity {
         ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
         // Set the user profile photo to the just created rounded image
-        drawerProfile.setImageDrawable(rounded);
+        Glide.with(context)
+                .load(R.drawable.com_facebook_profile_picture_blank_square)
+                .transform(new CircleTransform(context))
+                .into(drawerProfile);
+
+        //drawerProfile.setImageDrawable(rounded);
 
         // Set the drawer username
         TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.menu_profile_side_drawer_username);
@@ -217,11 +200,19 @@ public class UserProfileActivity extends AppCompatActivity {
 
                             if (!currentUser.equals(username)) {
                                 Log.d("UserProfileActivity", currentUser + "!=" + username);
-                                intent = new Intent(UserProfileActivity.activity, UserProfileActivity.class);
+                                intent = ProfileUtils.goToProfile(UserProfileActivity.context,currentUser);
                                 intent.putExtra("user", currentUser);
                                 startActivity(intent);
                             }
 
+                            break;
+
+
+                        case R.id.nav_settings:
+                            Log.d("HomeActivity", "Clicked on R.id.nav_settings");
+
+                            intent = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                            startActivity(intent);
                             break;
 
                         case R.id.nav_logout:

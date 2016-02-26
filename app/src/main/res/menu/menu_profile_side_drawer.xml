@@ -17,6 +17,7 @@
         android:checkableBehavior="single">
         <menu>
             <item
+                android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_black_24dp"
                 android:title="Settings" />
             <item

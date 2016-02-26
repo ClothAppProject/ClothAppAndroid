@@ -151,20 +151,25 @@ public class HomeActivity extends AppCompatActivity {
     private void setupDrawerContent(NavigationView navigationView) {
 
         // Get default bitmap for user profile photo
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
 
         // Create a rounded bitmap from the user profile photo
         RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         rounded.setCornerRadius(bitmap.getWidth());
-
+        */
         // Get drawer header
         View headerLayout = navigationView.getHeaderView(0);
 
         // Get the image view containing the user profile photo
         ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
 
+
         // Set the user profile photo to the just created rounded image
-        drawerProfile.setImageDrawable(rounded);
+        Glide.with(HomeActivity.this)
+                .load(R.drawable.com_facebook_profile_picture_blank_square)
+                .transform(new CircleTransform(HomeActivity.this))
+                .into(drawerProfile);
+        //drawerProfile.setImageDrawable(rounded);
 
         final String username = ParseUser.getCurrentUser().getUsername();
 
@@ -189,6 +194,13 @@ public class HomeActivity extends AppCompatActivity {
                                 startActivity(intent);
 
                                 finish();
+                                break;
+
+                            case R.id.nav_settings:
+                                Log.d("HomeActivity", "Clicked on R.id.nav_settings");
+
+                                intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                                startActivity(intent);
                                 break;
 
                             case R.id.nav_profile:

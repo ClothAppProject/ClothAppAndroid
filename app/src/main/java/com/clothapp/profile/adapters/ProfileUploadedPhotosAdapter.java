@@ -52,7 +52,9 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
         // Create a bitmap from a file
         File imageFile = photos.get(position).getFile();
-        Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 3;
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(),options);
 
         photoViewHolder.photo.setImageBitmap(imageBitmap);
 

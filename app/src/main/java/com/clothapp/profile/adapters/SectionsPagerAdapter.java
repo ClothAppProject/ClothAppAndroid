@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.PlaceholderFragment;
+import com.clothapp.profile.fragments.ProfileFollowersFragment;
+import com.clothapp.profile.fragments.ProfileFollowingFragment;
 import com.clothapp.profile.fragments.ProfileInfoFragment;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 
@@ -25,6 +27,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return ProfileInfoFragment.newInstance(UserProfileActivity.username);
             case 1:
                 return ProfileUploadedPhotosFragment.newInstance(UserProfileActivity.username);
+            case 2:
+                return ProfileFollowersFragment.newInstance(UserProfileActivity.username);
+            case 3:
+                return ProfileFollowingFragment.newInstance(UserProfileActivity.username);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }
