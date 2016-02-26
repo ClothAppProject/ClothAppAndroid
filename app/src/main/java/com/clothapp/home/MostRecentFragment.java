@@ -34,13 +34,18 @@ public class MostRecentFragment extends Fragment {
     public final static String ITEMS_COUNT_KEY = "PartThreeFragment$ItemsCount";
 
     private MostRecentAdapter mostRecentAdapter;
+    private Boolean loading = true;
 
-    public static MostRecentFragment newInstance(int itemsCount) {
-        MostRecentFragment mostRecentFragment = new MostRecentFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
-        mostRecentFragment.setArguments(bundle);
-        return mostRecentFragment;
+//    public static MostRecentFragment newInstance(int itemsCount) {
+//        MostRecentFragment mostRecentFragment = new MostRecentFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
+//        mostRecentFragment.setArguments(bundle);
+//        return mostRecentFragment;
+//    }
+
+    public static MostRecentFragment newInstance() {
+        return new MostRecentFragment();
     }
 
     @Nullable
@@ -52,12 +57,50 @@ public class MostRecentFragment extends Fragment {
         return recyclerView;
     }
 
+    public void loadMorePhotos() {
+        int size = mostRecentAdapter.itemList.size();
+        getParseMostRecentPhotos(size, size + 12);
+    }
+
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
         // recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         mostRecentAdapter = new MostRecentAdapter(new ArrayList<Image>());
         recyclerView.setAdapter(mostRecentAdapter);
-        getParseMostRecentPhotos(0, 20);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            private int previousTotal = 0;
+            private int visibleThreshold = 5;
+            int firstVisibleItem, visibleItemCount, totalItemCount;
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount = recyclerView.getChildCount();
+                totalItemCount = gridLayoutManager.getItemCount();
+                firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+
+                if (loading) {
+                    if (totalItemCount > previousTotal) {
+                        loading = false;
+                        previousTotal = totalItemCount;
+                    }
+                } else if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+                    loading = true;
+
+                    int size = mostRecentAdapter.itemList.size();
+                    Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+                    getParseMostRecentPhotos(size, 12);
+                }
+            }
+        });
+
+        int size = mostRecentAdapter.itemList.size();
+        getParseMostRecentPhotos(size, 12);
     }
 
     private void getParseMostRecentPhotos(int start, int limit) {
@@ -76,6 +119,8 @@ public class MostRecentFragment extends Fragment {
 
                 if (e == null) {
 
+                    Log.d("MostRecentFragment", "Successfully loaded " + photos.size() + " photos.");
+
                     for (final ParseObject photo : photos) {
                         // TODO: Improve download speed
                         // I don't like this: too slow...
@@ -83,6 +128,8 @@ public class MostRecentFragment extends Fragment {
                         // Downloading is sequential -> Multiple downloads at the same time
                         mostRecentAdapter.itemList.add(new Image(photo));
                     }
+
+                    Log.d("MostRecentFragment", "Now itemList.size() is " + mostRecentAdapter.itemList.size());
 
                     mostRecentAdapter.notifyDataSetChanged();
 

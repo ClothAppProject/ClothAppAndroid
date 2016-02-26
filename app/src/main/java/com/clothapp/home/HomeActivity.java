@@ -39,8 +39,9 @@ public class HomeActivity extends AppCompatActivity {
     private void initViewPagerAndTabs() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
         HomePagerAdapter pagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(MostRecentFragment.newInstance(20), "Tab 1");
-        pagerAdapter.addFragment(MostRecentFragment.newInstance(4), "Tab 2");
+//        pagerAdapter.addFragment(MostRecentFragment.newInstance(20), "Most Recent");
+//        pagerAdapter.addFragment(MostRecentFragment.newInstance(4), "Tab 2");
+        pagerAdapter.addFragment(MostRecentFragment.newInstance(), "Most Recent");
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
