@@ -95,12 +95,12 @@ public class HomeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                // Log.d("UserProfileActivity", "android.R.id.home");
+                // Log.d("HomeActivity", "android.R.id.home");
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
             case R.id.action_settings:
-                // Log.d("UserProfileActivity", "R.id.action_settings");
+                // Log.d("HomeActivity", "R.id.action_settings");
                 return true;
         }
 
@@ -121,20 +121,6 @@ public class HomeActivity extends AppCompatActivity {
         @SuppressWarnings("StatementWithEmptyBody")
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-
-//            if (id == R.id.nav_camera) {
-//                // Handle the camera action
-//            } else if (id == R.id.nav_gallery) {
-//
-//            } else if (id == R.id.nav_slideshow) {
-//
-//            } else if (id == R.id.nav_manage) {
-//
-//            } else if (id == R.id.nav_share) {
-//
-//            } else if (id == R.id.nav_send) {
-//
-//            }
 
             Intent intent;
 
