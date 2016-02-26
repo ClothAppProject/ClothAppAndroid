@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,10 +52,14 @@ public class MostRecentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
-                R.layout.fragment_home_most_recent, container, false);
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
+        RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
-        return recyclerView;
+
+//        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
+//                R.layout.fragment_home_most_recent, container, false);
+//        setupRecyclerView(recyclerView, container.getContext());
+        return swipeRefreshLayout;
     }
 
     public void loadMorePhotos() {
