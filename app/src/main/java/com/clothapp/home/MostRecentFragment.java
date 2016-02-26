@@ -32,8 +32,10 @@ import java.util.List;
 
 public class MostRecentFragment extends Fragment {
 
+
+    public static MostRecentAdapter mostRecentAdapter;
+
     private SwipeRefreshLayout swipeRefreshLayout;
-    private MostRecentAdapter mostRecentAdapter;
     private Boolean loading = true;
 
     public static MostRecentFragment newInstance() {

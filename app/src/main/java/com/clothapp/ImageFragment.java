@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.clothapp.home.MostRecentFragment;
 import com.clothapp.home_gallery.HomeMostRecentFragment;
 import com.clothapp.home_gallery.HomeTopRatedFragment;
 import com.clothapp.profile.UserProfileActivity;
@@ -63,6 +64,9 @@ public class ImageFragment extends AppCompatActivity {
         switch (getIntent().getStringExtra("classe"))   {
             case "mostRecent":
                 lista = HomeMostRecentFragment.photos;
+                break;
+            case "MostRecentPhotos":
+                lista = (ArrayList<Image>) MostRecentFragment.mostRecentAdapter.itemList;
                 break;
             case "topRated":
                 lista = HomeTopRatedFragment.photos;

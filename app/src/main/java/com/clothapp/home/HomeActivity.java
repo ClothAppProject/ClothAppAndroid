@@ -1,5 +1,6 @@
 package com.clothapp.home;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,10 +20,16 @@ import com.clothapp.R;
 
 public class HomeActivity extends AppCompatActivity {
 
+    public static Context context;
+    public static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_home);
+
+        context = HomeActivity.this;
+        activity = this;
 
         initToolbar();
         initViewPagerAndTabs();
