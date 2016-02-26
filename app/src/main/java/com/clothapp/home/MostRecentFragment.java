@@ -93,7 +93,7 @@ public class MostRecentFragment extends Fragment {
                     loading = true;
 
                     int size = mostRecentAdapter.itemList.size();
-                    Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+                    // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
                     getParseMostRecentPhotos(size, 12);
                 }
             }
@@ -119,7 +119,7 @@ public class MostRecentFragment extends Fragment {
 
                 if (e == null) {
 
-                    Log.d("MostRecentFragment", "Successfully loaded " + photos.size() + " photos.");
+                    // Log.d("MostRecentFragment", "Successfully loaded " + photos.size() + " photos.");
 
                     for (final ParseObject photo : photos) {
                         // TODO: Improve download speed
@@ -129,7 +129,7 @@ public class MostRecentFragment extends Fragment {
                         mostRecentAdapter.itemList.add(new Image(photo));
                     }
 
-                    Log.d("MostRecentFragment", "Now itemList.size() is " + mostRecentAdapter.itemList.size());
+                    // Log.d("MostRecentFragment", "Now itemList.size() is " + mostRecentAdapter.itemList.size());
 
                     mostRecentAdapter.notifyDataSetChanged();
 
