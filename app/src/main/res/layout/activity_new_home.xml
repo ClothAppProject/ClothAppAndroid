@@ -25,15 +25,15 @@
                 android:id="@+id/home_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways" />
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:titleTextColor="@android:color/white"
+                android:textColor="@android:color/white"/>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/home_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabIndicatorColor="@android:color/white"
-                app:tabIndicatorHeight="6dp"
                 app:tabSelectedTextColor="@android:color/white"
                 app:tabTextColor="@android:color/white" />
         </android.support.design.widget.AppBarLayout>
