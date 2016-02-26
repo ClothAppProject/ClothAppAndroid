@@ -5,6 +5,7 @@
 
 
     <LinearLayout
+        android:id="@+id/striscia"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:focusable="false"

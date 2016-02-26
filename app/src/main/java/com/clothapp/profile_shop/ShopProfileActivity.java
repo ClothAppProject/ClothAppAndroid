@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfilePictureCameraActivity;
@@ -39,6 +40,7 @@ import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.settings.SettingsActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -59,6 +61,8 @@ public class ShopProfileActivity extends AppCompatActivity {
     private ParseObject relazione;
     public static RecyclerView viewProfileInfo;
     public static RecyclerView viewProfileUploadedPhotos;
+    public static RecyclerView viewProfileShopFollowers;
+    public static RecyclerView viewProfileShopFollowing;
     public static ViewPager viewPager;
     public static Activity activity;
 
@@ -108,33 +112,7 @@ public class ShopProfileActivity extends AppCompatActivity {
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
         }else {
-            relazione= FollowUtil.isfollow(ParseUser.getCurrentUser().getUsername(),username);
-            if (relazione!=null){
-                //Seguo l'utente, posso smettere di seguirlo
-                follow_edit.setText(R.string.unfollow);
-
-            }else{
-                //Non seguo l'utente, posso seguirlo
-                follow_edit.setText(R.string.follow);
-            }
-            follow_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (relazione!=null)    {
-                        //elimino l'oggetto
-                        relazione.deleteInBackground();
-                        relazione = null;
-                        follow_edit.setText(R.string.follow);
-                    }else{
-                        //creo una nuova relazione
-                        relazione=new ParseObject("Follow");
-                        relazione.put("from",ParseUser.getCurrentUser().getUsername());
-                        relazione.put("to",username);
-                        relazione.saveInBackground();
-                        follow_edit.setText(R.string.unfollow);
-                    }
-                }
-            });
+            FollowUtil.setFollow(follow_edit,username);
         }
     }
 
@@ -221,11 +199,19 @@ public class ShopProfileActivity extends AppCompatActivity {
 
                                 if (!currentUser.equals(username)) {
                                     Log.d("ShopProfileActivity", currentUser + "!=" + username);
-                                    intent = new Intent(ShopProfileActivity.activity, ShopProfileActivity.class);
+                                    intent = ProfileUtils.goToProfile(ShopProfileActivity.context,currentUser);
                                     intent.putExtra("user", currentUser);
                                     startActivity(intent);
                                 }
 
+                                break;
+
+
+                            case R.id.nav_settings:
+                                Log.d("HomeActivity", "Clicked on R.id.nav_settings");
+
+                                intent = new Intent(ShopProfileActivity.this, SettingsActivity.class);
+                                startActivity(intent);
                                 break;
 
                             case R.id.nav_logout:
