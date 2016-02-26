@@ -17,11 +17,11 @@
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Share" />
+                android:title="Settings" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
-                android:title="Send" />
+                android:title="Logout" />
         </menu>
     </item>
 
