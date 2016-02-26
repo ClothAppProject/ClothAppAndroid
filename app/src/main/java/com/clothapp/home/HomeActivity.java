@@ -1,8 +1,10 @@
 package com.clothapp.home;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -13,15 +15,21 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.clothapp.R;
+import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.UserProfileActivity;
+import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
     public static Context context;
     public static Activity activity;
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +63,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initDrawer(Toolbar toolbar) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.home_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.open_navigation, R.string.close_navigation);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.home_nav_view);
@@ -83,11 +91,17 @@ public class HomeActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                // Log.d("UserProfileActivity", "android.R.id.home");
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+            case R.id.action_settings:
+                // Log.d("UserProfileActivity", "R.id.action_settings");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,9 +109,8 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -108,8 +121,6 @@ public class HomeActivity extends AppCompatActivity {
         @SuppressWarnings("StatementWithEmptyBody")
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-            // Handle navigation view item clicks here.
-            int id = item.getItemId();
 
 //            if (id == R.id.nav_camera) {
 //                // Handle the camera action
@@ -124,6 +135,46 @@ public class HomeActivity extends AppCompatActivity {
 //            } else if (id == R.id.nav_send) {
 //
 //            }
+
+            Intent intent;
+
+            switch (item.getItemId()) {
+
+                case R.id.nav_home:
+                    break;
+
+                case R.id.nav_profile:
+
+                    Log.d("HomeActivity", "Clicked on R.id.nav_profile");
+
+                    String currentUser = ParseUser.getCurrentUser().getUsername();
+                    intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
+                    intent.putExtra("user", currentUser);
+                    startActivity(intent);
+                    break;
+
+                case R.id.nav_logout:
+
+                    Log.d("HomeActivity", "Clicked on R.id.nav_logout");
+
+                    final ProgressDialog dialog = ProgressDialog.show(HomeActivity.this, "", "Logging out. Please wait...", true);
+                    Thread logout = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ParseUser.logOut();
+                            System.out.println("debug: logout eseguito");
+                        }
+                    });
+                    logout.start();
+
+                    intent = new Intent(HomeActivity.activity, MainActivity.class);
+                    dialog.dismiss();
+                    startActivity(intent);
+
+                    finish();
+                    break;
+
+            }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
