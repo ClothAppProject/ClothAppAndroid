@@ -24,19 +24,20 @@
             android:layout_height="wrap_content"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:id="@+id/fragment_home_most_recent_item_heart"
             android:src="@mipmap/cuore"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/fragment_home_most_recent_item_title"
             android:layout_width="wrap_content"
             android:layout_height="?attr/listPreferredItemHeight"
             android:gravity="center_vertical"
-            android:padding="8dp"
+            android:paddingLeft="14dp"
             android:textColor="@color/primary_text_default_material_light"
             android:text="Ciao"
             android:layout_alignParentLeft="true"
