@@ -5,9 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,9 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.clothapp.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -60,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.home_nav_view);
-        navigationView.setNavigationItemSelectedListener(new CustomListener());
+        navigationView.setNavigationItemSelectedListener(new HomeNavigationItemSelectedListener());
     }
 
     @Override
@@ -101,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    class CustomListener implements NavigationView.OnNavigationItemSelectedListener {
+    class HomeNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @SuppressWarnings("StatementWithEmptyBody")
         @Override
