@@ -62,23 +62,29 @@ public class ImageFragment extends AppCompatActivity {
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         switch (getIntent().getStringExtra("classe"))   {
+
             case "mostRecent":
                 lista = HomeMostRecentFragment.photos;
                 break;
+
             case "MostRecentPhotos":
                 lista = (ArrayList<Image>) MostRecentFragment.mostRecentAdapter.itemList;
                 break;
+
             case "topRated":
                 lista = HomeTopRatedFragment.photos;
                 break;
+
             case "profilo":
                 //bisogna ancora implementare il listener
                 lista = ProfileUploadedPhotosFragment.photos;
                 break;
+
             case "FindCloth":
                 //bisogna ancora implementare il listener
                 lista = FindClothFragment.getCloth();
                 break;
+
             case "FindTag":
                 //bisogna ancora implementare il listener
                 lista = FindTagFragment.getCloth();
