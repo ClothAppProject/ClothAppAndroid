@@ -38,14 +38,6 @@ public class MostRecentFragment extends Fragment {
     private MostRecentAdapter mostRecentAdapter;
     private Boolean loading = true;
 
-//    public static MostRecentFragment newInstance(int itemsCount) {
-//        MostRecentFragment mostRecentFragment = new MostRecentFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
-//        mostRecentFragment.setArguments(bundle);
-//        return mostRecentFragment;
-//    }
-
     public static MostRecentFragment newInstance() {
         return new MostRecentFragment();
     }
@@ -60,9 +52,6 @@ public class MostRecentFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
 
-//        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
-//                R.layout.fragment_home_most_recent, container, false);
-//        setupRecyclerView(recyclerView, container.getContext());
         return swipeRefreshLayout;
     }
 
