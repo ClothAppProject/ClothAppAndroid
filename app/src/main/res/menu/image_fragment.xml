@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/tools">
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/segnala"
+    <item android:id="@+id/report"
         android:orderInCategory="100"
-        android:title="@string/signal_photo" />
+        android:title="@string/report_photo" />
 
     <item android:id="@+id/delete"
         android:title="@string/delete_photo"/>

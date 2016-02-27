@@ -43,26 +43,26 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="72dp">
+                            android:layout_height="50dp">
 
                             <LinearLayout
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:layout_marginBottom="16dp"
+                                android:layout_marginBottom="10dp"
                                 android:orientation="horizontal"
-                                android:id="@+id/prof">
+                                android:id="@+id/prof"
+                                android:layout_marginTop="10dp">
                                 <!--
                                 android:background="@drawable/profile_uploaded_photos_user_rectangle"
                                 android:backgroundTint="@color/red"
                                 -->
 
                                 <ImageView
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:src="@drawable/com_facebook_profile_picture_blank_square"
                                     android:layout_gravity="start"
                                     android:id="@+id/pic"/>
@@ -72,7 +72,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#000000"
-                                    android:textSize="12sp"
+                                    android:textSize="20sp"
                                     android:id="@+id/user"
                                     android:layout_marginLeft="4dp"
                                     android:layout_marginTop="2dp"

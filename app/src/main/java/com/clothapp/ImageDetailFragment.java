@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -39,9 +41,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ProgressCallback;
+import com.parse.SaveCallback;
 
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
@@ -337,13 +341,55 @@ public class ImageDetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // In caso sia premuto il pulsante sulla toolbar
-            case R.id.segnala:
+            case R.id.report:
+                //cliccato su segnala foto, creo dialog per segnalare foto
+                AlertDialog.Builder report = new AlertDialog.Builder(getActivity());
+                // Get the layout inflater
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                // Inflate and set the layout for the dialog
+                View dialogView = inflater.inflate(R.layout.dialog_report, null);
+                report.setView(dialogView);
+
+                final EditText comment = (EditText) dialogView.findViewById(R.id.comment);
+                final Spinner spinner = (Spinner) dialogView.findViewById(R.id.select_reason);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                        R.array.select_reason, android.R.layout.simple_spinner_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                spinner.setAdapter(adapter);
+                // Add action buttons
+                report.setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                ParseObject segnalazione = new ParseObject("Report");
+                                segnalazione.put("comment",comment.getText().toString());
+                                segnalazione.put("from_username",ParseUser.getCurrentUser().getUsername());
+                                segnalazione.put("reason",spinner.getSelectedItem());
+                                segnalazione.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e!=null)    {
+                                            check(e.getCode(),getView(),e.getMessage());
+                                        }
+                                    }
+                                });
+                                dialog.dismiss();
+                            }
+                        });
+                report.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //segnalazione annullata
+                            }
+                        });
+                AlertDialog dialogReport = report.create();
+                // display dialog
+                dialogReport.show();
                 return true;
             case R.id.delete:
                 //cliccato su elimina foto, creo dialog per conferma elimina
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.ask_photo_delete);
-                builder.setPositiveButton(R.string.ok,
+                AlertDialog.Builder delete = new AlertDialog.Builder(getActivity());
+                delete.setTitle(R.string.ask_photo_delete);
+                delete.setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -361,18 +407,16 @@ public class ImageDetailFragment extends Fragment {
                                 getActivity().finish();
                             }
                         });
-
-                builder.setNegativeButton(R.string.cancel,
+                delete.setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                                //eliminazione foto annullata
                             }
                         });
-
-                AlertDialog dialog = builder.create();
+                AlertDialog dialogDelete = delete.create();
                 // display dialog
-                dialog.show();
+                dialogDelete.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
