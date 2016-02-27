@@ -36,6 +36,7 @@ public class MostRecentFragment extends Fragment {
     public static MostRecentAdapter mostRecentAdapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private MostRecentScrollListener mostRecentScrollListener;
     private Boolean loading = true;
 
     public static MostRecentFragment newInstance() {
@@ -47,15 +48,15 @@ public class MostRecentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
-        setupSwipeRefreshLayout(swipeRefreshLayout);
-
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
+
+        setupSwipeRefreshLayout(swipeRefreshLayout, recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
 
         return swipeRefreshLayout;
     }
 
-    private void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+    private void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout, final RecyclerView recyclerView) {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -63,8 +64,14 @@ public class MostRecentFragment extends Fragment {
                 // Log.d("MostRecentFragment", "onRefresh");
                 if (mostRecentAdapter == null) return;
 
-                mostRecentAdapter.itemList = new ArrayList<>();
+                MostRecentAdapter.itemList = new ArrayList<>();
                 mostRecentAdapter.notifyDataSetChanged();
+
+                loading = true;
+
+                recyclerView.removeOnScrollListener(mostRecentScrollListener);
+                mostRecentScrollListener = new MostRecentScrollListener((GridLayoutManager) recyclerView.getLayoutManager());
+                recyclerView.addOnScrollListener(mostRecentScrollListener);
 
                 getParseMostRecentPhotos(0, 12);
             }
@@ -78,37 +85,10 @@ public class MostRecentFragment extends Fragment {
         mostRecentAdapter = new MostRecentAdapter(new ArrayList<Image>());
         recyclerView.setAdapter(mostRecentAdapter);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
+        recyclerView.addOnScrollListener(mostRecentScrollListener);
 
-            private int previousTotal = 0;
-            private int visibleThreshold = 5;
-            int firstVisibleItem, visibleItemCount, totalItemCount;
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                visibleItemCount = recyclerView.getChildCount();
-                totalItemCount = gridLayoutManager.getItemCount();
-                firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
-
-                if (loading) {
-                    if (totalItemCount > previousTotal) {
-                        loading = false;
-                        previousTotal = totalItemCount;
-                    }
-                } else if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-
-                    loading = true;
-
-                    int size = mostRecentAdapter.itemList.size();
-                    // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
-                    getParseMostRecentPhotos(size, 12);
-                }
-            }
-        });
-
-        int size = mostRecentAdapter.itemList.size();
+        int size = MostRecentAdapter.itemList.size();
         getParseMostRecentPhotos(size, 12);
     }
 
@@ -135,10 +115,10 @@ public class MostRecentFragment extends Fragment {
                         // I don't like this: too slow...
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
-                        mostRecentAdapter.itemList.add(new Image(photo));
+                        MostRecentAdapter.itemList.add(new Image(photo));
                     }
 
-                    // Log.d("MostRecentFragment", "Now itemList.size() is " + mostRecentAdapter.itemList.size());
+                    // Log.d("MostRecentFragment", "Now itemList.size() is " + MostRecentAdapter.itemList.size());
 
                     mostRecentAdapter.notifyDataSetChanged();
 
@@ -152,6 +132,42 @@ public class MostRecentFragment extends Fragment {
                 }
             }
         });
+    }
+
+    class MostRecentScrollListener extends RecyclerView.OnScrollListener {
+
+        private GridLayoutManager gridLayoutManager;
+
+        private int previousTotal = 0;
+        private int visibleThreshold = 5;
+        int firstVisibleItem, visibleItemCount, totalItemCount;
+
+        public MostRecentScrollListener(GridLayoutManager gridLayoutManager) {
+            this.gridLayoutManager = gridLayoutManager;
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            visibleItemCount = recyclerView.getChildCount();
+            totalItemCount = gridLayoutManager.getItemCount();
+            firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+
+            if (loading) {
+                if (totalItemCount > previousTotal) {
+                    loading = false;
+                    previousTotal = totalItemCount;
+                }
+            } else if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+                loading = true;
+
+                int size = MostRecentAdapter.itemList.size();
+                // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+                getParseMostRecentPhotos(size, 12);
+            }
+        }
     }
 }
 
