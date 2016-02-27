@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home_gallery.*;
@@ -79,6 +80,11 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public void setItemImage(File file) {
             Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
             imgPhoto.setImageBitmap(imageBitmap);
+
+//            Glide.with(HomeActivity.context)
+//                    .load(file)
+//                    .centerCrop()
+//                    .into(imgPhoto);
         }
 
     }
