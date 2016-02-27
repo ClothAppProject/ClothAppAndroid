@@ -107,6 +107,47 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
+            imgHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d("TopRatedAdapter", "Clicked on photo with position: " + TopRatedItemViewHolder.this.getAdapterPosition());
+
+                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+
+                    final boolean add = !image.getLike().contains(username);
+                    if (add) {
+                        // Log.d("TopRatedAdapter", "Adding...");
+                        image.addLike(username);
+                    } else {
+                        // Log.d("TopRatedAdapter", "Removing...");
+                        image.remLike(username);
+                    }
+
+                    notifyDataSetChanged();
+
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+
+                    query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
+                        public void done(ParseObject photo, ParseException e) {
+                            if (e == null) {
+                                if (add) {
+                                    photo.addUnique("like", username);
+                                    photo.put("nLike", photo.getInt("nLike") + 1);
+                                    photo.saveInBackground();
+                                } else {
+                                    photo.removeAll("like", Collections.singletonList(username));
+                                    photo.put("nLike", photo.getInt("nLike") - 1);
+                                    photo.saveInBackground();
+                                }
+                            } else {
+                                Log.d("TopRatedAdapter", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+                }
+            });
+
         }
 
         public void setUsername(String username) {
