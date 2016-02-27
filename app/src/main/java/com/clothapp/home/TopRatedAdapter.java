@@ -97,6 +97,46 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfilePhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile_image);
             imgProfileIcon = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile);
 
+            setupPhotoOnClickListener(imgPhoto);
+            setupHeartImageOnClickListener(imgHeart);
+        }
+
+        public void setUsername(String username) {
+            txtUsername.setText(username);
+        }
+
+        public void setItemName(String itemName) {
+            txtItemName.setText(itemName);
+        }
+
+        public void setHashtags(String hashtags) {
+            txtHashtags.setText(hashtags);
+        }
+
+        public void setPhoto(File file) {
+            Glide.with(HomeActivity.context)
+                    .load(file)
+                    .centerCrop()
+                    .into(imgPhoto);
+        }
+
+        public void setProfilePhoto(File file) {
+            Glide.with(HomeActivity.context)
+                    .load(file)
+                    .centerCrop()
+                    .into(imgProfilePhoto);
+        }
+
+        public void setHeartImage(boolean red) {
+            if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
+            else imgHeart.setColorFilter(Color.rgb(205, 205, 205));
+        }
+
+        public void setLikeCount(int value) {
+            txtLikeCount.setText(value + "");
+        }
+
+        private void setupPhotoOnClickListener(ImageView imgPhoto) {
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,7 +146,9 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     HomeActivity.activity.startActivity(intent);
                 }
             });
+        }
 
+        private void setupHeartImageOnClickListener(ImageView imgHeart) {
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,42 +189,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     });
                 }
             });
-
         }
 
-        public void setUsername(String username) {
-            txtUsername.setText(username);
-        }
-
-        public void setItemName(String itemName) {
-            txtItemName.setText(itemName);
-        }
-
-        public void setHashtags(String hashtags) {
-            txtHashtags.setText(hashtags);
-        }
-
-        public void setPhoto(File file) {
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .into(imgPhoto);
-        }
-
-        public void setProfilePhoto(File file) {
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .into(imgProfilePhoto);
-        }
-
-        public void setHeartImage(boolean red) {
-            if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
-            else imgHeart.setColorFilter(Color.rgb(205, 205, 205));
-        }
-
-        public void setLikeCount(int value) {
-            txtLikeCount.setText(value + "");
-        }
     }
 }
