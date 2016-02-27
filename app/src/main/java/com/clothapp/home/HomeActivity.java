@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     public static Activity activity;
 
     private DrawerLayout mDrawerLayout;
-    private static FloatingActionsMenu menuMultipleActions;
+    public static FloatingActionsMenu menuMultipleActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
