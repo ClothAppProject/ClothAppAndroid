@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
+import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.parse.FindCallback;
@@ -87,7 +88,8 @@ public class LauncherActivity extends AppCompatActivity {
             Log.d("LauncherActivity", "Already logged in as " + currentUser.getUsername());
 
             // Skip log in page. Go directly to Splash Screen Activity.
-            Intent intent = new Intent(this, SplashScreenActivity.class);
+            // Intent intent = new Intent(this, SplashScreenActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
 
             // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
