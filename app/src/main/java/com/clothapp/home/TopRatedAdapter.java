@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.Image;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -97,8 +98,9 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfilePhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile_image);
             imgProfileIcon = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile);
 
-            setupPhotoOnClickListener(imgPhoto);
-            setupHeartImageOnClickListener(imgHeart);
+            setupPhotoOnClickListener();
+            setupHeartImageOnClickListener();
+            setupProfileIconOnClickListener();
         }
 
         public void setUsername(String username) {
@@ -136,7 +138,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtLikeCount.setText(value + "");
         }
 
-        private void setupPhotoOnClickListener(ImageView imgPhoto) {
+        private void setupPhotoOnClickListener() {
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -148,7 +150,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
         }
 
-        private void setupHeartImageOnClickListener(ImageView imgHeart) {
+        private void setupHeartImageOnClickListener() {
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,6 +189,18 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             }
                         }
                     });
+                }
+            });
+        }
+
+        private void setupProfileIconOnClickListener() {
+            imgProfileIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                    Intent intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
+                    intent.putExtra("user", image.getUser());
+                    HomeActivity.activity.startActivity(intent);
                 }
             });
         }
