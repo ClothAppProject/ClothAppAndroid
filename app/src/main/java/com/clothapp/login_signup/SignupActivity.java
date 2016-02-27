@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.clothapp.R;
 import com.clothapp.SplashScreenActivity;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -36,7 +39,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
         try {
             getSupportActionBar().setTitle(R.string.signup);
             //inizializzo layout e tasto indietro
@@ -64,6 +66,7 @@ public class SignupActivity extends AppCompatActivity {
                 final EditText edit_email = (EditText) findViewById(R.id.edit_email);
                 final EditText edit_name = (EditText) findViewById(R.id.edit_name);
                 final EditText edit_lastname = (EditText) findViewById(R.id.edit_lastname);
+                final RadioGroup edit_sex = (RadioGroup) findViewById(R.id.radioSex);
                 final EditText edit_day = (EditText) findViewById(R.id.edit_day);
                 final EditText edit_month = (EditText) findViewById(R.id.edit_month);
                 final EditText edit_year = (EditText) findViewById(R.id.edit_year);
@@ -192,6 +195,13 @@ public class SignupActivity extends AppCompatActivity {
                                                 persona.put("username",user.getUsername());
                                                 persona.put("lowercase", user.getUsername().toLowerCase());
                                                 persona.put("lastname", edit_lastname.getText().toString().trim());
+
+                                                RadioButton sex = (RadioButton) findViewById(edit_sex.getCheckedRadioButtonId());
+                                                if (sex.getText().equals(R.string.man)) {
+                                                    persona.put("sex", "m");
+                                                }else{
+                                                    persona.put("sex", "f");
+                                                }
                                                 persona.put("date",date);
                                                 //persona.put("city",edit_citta.getText().toString.trim());
                                                 persona.saveInBackground(new SaveCallback() {

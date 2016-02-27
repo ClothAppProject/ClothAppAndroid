@@ -24,6 +24,9 @@
     <string name="name">Nome</string>
     <string name="name_shop">Nome del Negozio</string>
     <string name="lastname">Cognome</string>
+    <string name="sex">Sesso</string>
+    <string name="man">Uomo</string>
+    <string name="woman">Donna</string>
     <string name="birthday">Data di Nascita</string>
     <string name="password_confirm">Conferma Password</string>
     <string name="reset_password">Inserisci la email del tuo account per richiedere una nuova password</string>
@@ -112,7 +115,7 @@
     </array>
     <string name="choose_user">Che tipo di utente sei?</string>
     <array name="signup">
-        <item>ClothApper</item>
+        <item>Persona</item>
         <item>Negozio</item>
     </array>
 

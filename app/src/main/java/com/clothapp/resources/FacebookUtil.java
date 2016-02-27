@@ -53,11 +53,11 @@ public class FacebookUtil {
         Bundle parameters = new Bundle();
 
         // specifico i parametri che voglio ottenere da facebook
-        parameters.putString("fields", "email,first_name,last_name,birthday,picture.type(large)");
+        parameters.putString("fields", "email,first_name,last_name,gender,birthday,picture.type(large)");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
-            public void onCompleted(GraphResponse response) {
+            public void onCompleted(final GraphResponse response) {
 
                 // Prelevo il risultato
                 try {
@@ -87,6 +87,11 @@ public class FacebookUtil {
                         ParseObject persona = new ParseObject("Persona");
                         persona.put("username",user.getUsername());
                         persona.put("lastname", lastname.trim());
+                        if (response.getJSONObject().getString("gender").equals("male")) {
+                            persona.put("sex","m");
+                        }else{
+                            persona.put("sex","f");
+                        }
                         persona.put("date",birthday);
                         //persona.put("city",citta.trim());
                         persona.save();
