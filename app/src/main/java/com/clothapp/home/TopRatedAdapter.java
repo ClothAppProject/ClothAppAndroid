@@ -53,6 +53,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.setUsername(image.getUser());
         holder.setItemName(image.getVestitiToString());
         holder.setHashtags(image.getHashtagToString());
+        holder.setLikeCount(image.getNumLike());
         holder.setPhoto(image.getFile());
 
         List likeUsers = image.getLike();
@@ -75,6 +76,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private final TextView txtUsername;
         private final TextView txtItemName;
         private final TextView txtHashtags;
+        private final TextView txtLikeCount;
 
         private final ImageView imgPhoto;
         private ImageView imgProfilePhoto;
@@ -88,6 +90,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtUsername = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_username);
             txtItemName = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_item_name);
             txtHashtags = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_hashtags);
+            txtLikeCount = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_like_count);
 
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_like);
@@ -125,6 +128,10 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void setHeartImage(boolean red) {
             if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
             else imgHeart.setColorFilter(Color.rgb(239, 239, 239));
+        }
+
+        public void setLikeCount(int value) {
+            txtLikeCount.setText(value + "");
         }
     }
 }
