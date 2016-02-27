@@ -127,7 +127,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void setHeartImage(boolean red) {
             if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
-            else imgHeart.setColorFilter(Color.rgb(239, 239, 239));
+            else imgHeart.setColorFilter(Color.rgb(205, 205, 205));
         }
 
         public void setLikeCount(int value) {
