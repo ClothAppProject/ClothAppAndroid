@@ -26,15 +26,18 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public List<Image> itemList;
 
+    private static int imgCount;
+
     public MostRecentAdapter(List<Image> itemList) {
         this.itemList = itemList;
+        imgCount = 0;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_home_most_recent_item, parent, false);
-        return new MostRecentItemViewHolder(view);
+        return new MostRecentItemViewHolder(view, imgCount++);
     }
 
     @Override
@@ -43,6 +46,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Image image = itemList.get(position);
         holder.setItemText(image.getUser());
         holder.setItemImage(image.getFile());
+        holder.setItemHeartImage(false);
     }
 
     @Override
@@ -54,19 +58,25 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         private final TextView txtTitle;
         private final ImageView imgPhoto;
+        private ImageView imgHeart;
+        private final int position;
 
-        public MostRecentItemViewHolder(final View parent) {
+        public MostRecentItemViewHolder(final View parent, int count) {
             super(parent);
+
             txtTitle = (TextView) parent.findViewById(R.id.fragment_home_most_recent_item_title);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
+            imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
+
+            this.position = count;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(com.clothapp.home.HomeActivity.context, ImageFragment.class);
+                    Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
                     intent.putExtra("classe", "MostRecentPhotos");
-                    intent.putExtra("position", 0);
-                    com.clothapp.home.HomeActivity.activity.startActivity(intent);
+                    intent.putExtra("position", position);
+                    HomeActivity.activity.startActivity(intent);
                 }
             });
         }
@@ -85,6 +95,11 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //                    .load(file)
 //                    .centerCrop()
 //                    .into(imgPhoto);
+        }
+
+        public void setItemHeartImage(boolean red) {
+            if (red) imgHeart.setImageResource(R.mipmap.cuore_pressed);
+            else imgHeart.setImageResource(R.mipmap.cuore);
         }
 
     }
