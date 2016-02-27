@@ -59,7 +59,7 @@ public class ImageFragment extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private ScreenSlidePagerAdapter mPagerAdapter;
-    ArrayList<Image> lista;
+    static ArrayList<Image> lista;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

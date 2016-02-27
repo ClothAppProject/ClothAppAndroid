@@ -1,7 +1,6 @@
 package com.clothapp;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,13 +25,11 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.profile.utils.ProfileUtils;
-import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
-import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -75,6 +71,7 @@ public class ImageDetailFragment extends Fragment {
     private TextView percentuale;
     private ImageView profilePic;
     private View vi;
+    private ParseObject parseObject;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
         this.context = c;
@@ -93,49 +90,6 @@ public class ImageDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate menu to add items to action bar if it is present.
-        inflater.inflate(R.menu.image_fragment, menu);
-        MenuItem deletePhoto = menu.findItem(R.id.delete);
-        deletePhoto.setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // In caso sia premuto il pulsante sulla toolbar
-            case R.id.segnala:
-                return true;
-            case R.id.delete:
-                System.out.println("debug: chiamata per eliminare foto");
-                /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Vuoi Eliminare questa foto?");
-                String positiveText = "OK";
-                builder.setPositiveButton(positiveText,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                System.out.println("debug: elimina foto");
-                            }
-                        });
-
-                String negativeText = "CANCEL";
-                builder.setNegativeButton(negativeText,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                AlertDialog dialog = builder.create();
-                // display dialog
-                dialog.show();*/
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         t=(TextView)rootView.findViewById(R.id.user);
@@ -153,7 +107,6 @@ public class ImageDetailFragment extends Fragment {
         vi = new View(context);
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
-        //donutProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
         return rootView;
     }
 
@@ -205,6 +158,7 @@ public class ImageDetailFragment extends Fragment {
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(final ParseObject object, ParseException e) {
+                parseObject = object;
                 //setto username e listener
                 t.setText(immagine.getUser());
                 t.setOnClickListener(new View.OnClickListener() {
@@ -371,6 +325,58 @@ public class ImageDetailFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.image_fragment, menu);
+        MenuItem deletePhoto = menu.findItem(R.id.delete);
+        deletePhoto.setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante sulla toolbar
+            case R.id.segnala:
+                return true;
+            case R.id.delete:
+                //cliccato su elimina foto, creo dialog per conferma elimina
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.ask_photo_delete);
+                builder.setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //prendo i vestiti della foto e li elimino
+                                if (parseObject.getList("vestiti")!=null) {
+                                    for (Object id : parseObject.getList("vestiti")) {
+                                        ParseObject vestito = ParseObject.createWithoutData("Vestito", (String) id);
+                                        vestito.deleteInBackground();
+                                    }
+                                }
+                                //prendo la foto e la elimino
+                                parseObject.deleteInBackground();
+                                //la tolgo dalla lista passata all'image fragment
+                                ImageFragment.lista.remove(immagine);
+                                getActivity().finish();
+                            }
+                        });
+
+                builder.setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                // display dialog
+                dialog.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
