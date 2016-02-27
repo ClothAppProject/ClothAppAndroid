@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -44,7 +48,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -277,6 +284,23 @@ public class ImageDetailFragment extends Fragment {
                             share.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Bitmap icon = BitmapFactory.decodeFile(file.getPath());
+                                    Intent share = new Intent(Intent.ACTION_SEND);
+                                    share.setType("image/jpeg");
+                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                    icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                    File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                                    try {
+                                        f.createNewFile();
+                                        FileOutputStream fo = new FileOutputStream(f);
+                                        fo.write(bytes.toByteArray());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                                    startActivity(Intent.createChooser(share, "Share Image"));
+                                    /*
                                     Intent shareIntent = new Intent();
                                     shareIntent.setAction(Intent.ACTION_SEND);
                                     Log.d("Share", file.toURI().toString());
@@ -285,6 +309,7 @@ public class ImageDetailFragment extends Fragment {
                                     shareIntent.setType("image/jpeg");
                                     shareIntent.setFlags( Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+                                    */
                                 }
                             });
 

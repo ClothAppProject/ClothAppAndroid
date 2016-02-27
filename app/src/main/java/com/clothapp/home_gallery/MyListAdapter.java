@@ -2,7 +2,10 @@ package com.clothapp.home_gallery;
 
 
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +45,10 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,14 +120,23 @@ public class MyListAdapter extends BaseAdapter {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                //context.grantUriPermission (String.valueOf(contentUri), contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, file.toURI());
-                shareIntent.setType("image/jpeg");
-                shareIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(Intent.createChooser(shareIntent, context.getResources().getText(R.string.send_to)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                Bitmap icon = BitmapFactory.decodeFile(file.getPath());
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                try {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                context.startActivity(Intent.createChooser(share, "Share Image").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
