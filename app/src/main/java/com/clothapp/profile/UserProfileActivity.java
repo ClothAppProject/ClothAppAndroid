@@ -113,7 +113,7 @@ public class UserProfileActivity extends AppCompatActivity {
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
         }else {
-            FollowUtil.setFollow(follow_edit,username);
+            FollowUtil.setFollowButton(follow_edit,username);
         }
     }
 

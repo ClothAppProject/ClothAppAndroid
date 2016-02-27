@@ -44,7 +44,7 @@ public class FollowUtil {
         });
         return found;
     }
-    public static void setFollow(final Button follow_edit, final String usernameTo)  {
+    public static void setFollowButton(final Button follow_edit, final String usernameTo)  {
         ParseQuery<ParseObject> queryfollow= new ParseQuery("Follow");
         queryfollow.whereEqualTo("from", ParseUser.getCurrentUser().getUsername());
         queryfollow.whereEqualTo("to", usernameTo);
@@ -149,15 +149,12 @@ public class FollowUtil {
                                             adapter.notifyDataSetChanged();
                                         }
                                     });
-                                }else{
-                                    users.add(u);
-                                    //adapter.add(u);
-                                    adapter.notifyDataSetChanged();
                                 }
                             }
                         });
-
-
+                        users.add(u);
+                        //adapter.add(u);
+                        adapter.notifyDataSetChanged();
                     }
                 }
                 else check(e.getCode(), rootView, e.getMessage());

@@ -56,7 +56,6 @@ public class ProfileFollowersFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
         UserProfileActivity.viewProfileFollowers.setLayoutManager(llm);
 
-
         users = new ArrayList<User>();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new PeopleListAdapter(users,"persona");
