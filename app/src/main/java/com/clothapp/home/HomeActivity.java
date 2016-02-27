@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
 //        pagerAdapter.addFragment(MostRecentFragment.newInstance(20), "Most Recent");
 //        pagerAdapter.addFragment(MostRecentFragment.newInstance(4), "Tab 2");
         pagerAdapter.addFragment(MostRecentFragment.newInstance(), "Most Recent");
+        pagerAdapter.addFragment(TopRatedFragment.newInstance(), "Top Rated");
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
