@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,10 +19,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.upload.UploadCameraActivity;
+import com.clothapp.upload.UploadGalleryActivity;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity {
@@ -30,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     public static Activity activity;
 
     private DrawerLayout mDrawerLayout;
+    private static FloatingActionsMenu menuMultipleActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
 
         initToolbar();
         initViewPagerAndTabs();
+        setupFloatingButton();
     }
 
     private void initToolbar() {
@@ -71,6 +78,39 @@ public class HomeActivity extends AppCompatActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.home_nav_view);
         navigationView.setNavigationItemSelectedListener(new HomeNavigationItemSelectedListener());
+    }
+
+    private void setupFloatingButton(){
+        menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.upload_action);
+
+        com.getbase.floatingactionbutton.FloatingActionButton camera = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        camera.setTitle("Camera");
+        camera.setIcon(R.mipmap.camera_icon);
+        camera.setColorNormal(Color.rgb(210,36,37));
+        camera.setColorPressed(Color.RED);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirect the user to the upload activity and upload a photo
+                Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
+                startActivity(i);
+            }
+        });
+        com.getbase.floatingactionbutton.FloatingActionButton gallery = new com.getbase.floatingactionbutton.FloatingActionButton(getBaseContext());
+        gallery.setTitle("Gallery");
+        gallery.setIcon(R.mipmap.gallery_icon);
+        gallery.setColorNormal(Color.rgb(210,36,37));
+        gallery.setColorPressed(Color.RED);
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirect the user to the upload activity and upload a photo
+                Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
+                startActivity(i);
+            }
+        });
+        menuMultipleActions.addButton(camera);
+        menuMultipleActions.addButton(gallery);
     }
 
     @Override
@@ -109,11 +149,20 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        // Close the floating action button if it is open
+        if(menuMultipleActions.isExpanded()) {
+            menuMultipleActions.collapse();
+            return;
+        }
+
+        // Close the navigation drawer if it is open
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+            return;
         }
+
+        super.onBackPressed();
     }
 
     class HomeNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {

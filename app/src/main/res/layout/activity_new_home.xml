@@ -48,6 +48,23 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/upload_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:fab_addButtonColorNormal="@color/red"
+            app:fab_addButtonColorPressed="@color/pressedred"
+            app:fab_addButtonPlusIconColor="@color/white">
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
