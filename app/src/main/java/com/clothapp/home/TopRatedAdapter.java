@@ -97,6 +97,16 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfilePhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile_image);
             imgProfileIcon = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile);
 
+            imgPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
+                    intent.putExtra("classe", "TopRatedPhotos");
+                    intent.putExtra("position", TopRatedItemViewHolder.this.getAdapterPosition());
+                    HomeActivity.activity.startActivity(intent);
+                }
+            });
+
         }
 
         public void setUsername(String username) {
