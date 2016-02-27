@@ -125,7 +125,8 @@
     <string name="clothes">Clothes</string>
     <string name="Users">Users</string>
     <string name="tag">Tag</string>
-    <string name="action_search">Search</string>>
+    <string name="action_search">Search</string>
+    <string name="send_to">Send To...</string>>
 
 
 </resources>

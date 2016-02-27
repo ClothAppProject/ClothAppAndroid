@@ -24,16 +24,22 @@
             android:layout_gravity="left"
             android:id="@+id/topfoto" />
 
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_gravity="right"
+            android:orientation="vertical"
+            android:layout_height="180dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp">
         <TextView
             android:id="@+id/user"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="50dp"
-            android:layout_marginRight="30dp"
             android:textColor="@color/transparent_black"
-            android:layout_gravity="right"
-            android:paddingTop="15dp"
-            android:paddingLeft="5dp"
-
+            android:gravity="center"
             android:textAllCaps="true"
             android:textSize="20dp"
             android:text="Jacopo" />
@@ -44,24 +50,39 @@
             android:tint="@color/dim_foreground_disabled_material_light"
             android:layout_gravity="right"
             android:id="@+id/more" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/hashtag"
-            android:layout_width="160dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingLeft="5dp"
             android:textColor="@color/input_text_hint"
             android:layout_gravity="right|center"
             android:text="#hashtag" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:id="@+id/like"
+            android:layout_gravity="left|center"
+            android:textColor="@color/red"
+            android:textColorHint="@color/red"
+            android:hint="0 like"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="italic"/>
+
         <LinearLayout
             android:layout_width="160dp"
             android:layout_height="35dp"
+            android:gravity="right"
+
             android:showDividers="middle"
             android:divider="@drawable/empty_tall_divider"
             android:dividerPadding="10dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="8dp"
             android:layout_gravity="bottom|right"
             android:orientation="horizontal">
 
@@ -78,19 +99,15 @@
                 android:src="@mipmap/ic_person_white_48dp"
                 android:tint="@color/red"
                 android:id="@+id/person" />
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@mipmap/ic_info_white_48dp"
-                android:tint="@color/red"
-                android:id="@+id/info" />
+
 
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@mipmap/ic_favorite_white_48dp"
+                android:src="@mipmap/ic_favorite_border_white_48dp"
                 android:tint="@color/red"
-                android:id="@+id/like" />
+                android:id="@+id/cuore" />
+        </LinearLayout>
         </LinearLayout>
 
 

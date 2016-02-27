@@ -272,7 +272,7 @@ public class ImageDetailFragment extends Fragment {
                                     return gd.onTouchEvent(event);
                                 }
                             });
-                            /*TODO: problemi di permesso di lettura
+                            //TODO: problemi di permesso di lettura
                             //setto il listener sull'icona share
                             share.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -287,7 +287,7 @@ public class ImageDetailFragment extends Fragment {
                                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
                                 }
                             });
-                            */
+
                         }
                     }
                 }, new ProgressCallback() {

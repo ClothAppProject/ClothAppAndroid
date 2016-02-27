@@ -152,6 +152,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 */
         // Retrieve clothes records
+  /*
         String URL = "content://.resources.Categorie/vestiti";
 
         Uri students = Uri.parse(URL);
@@ -165,7 +166,7 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } while (c.moveToNext());
         }
-
+*/
 
 
     }
