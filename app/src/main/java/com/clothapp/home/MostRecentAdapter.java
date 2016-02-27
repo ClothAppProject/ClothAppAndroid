@@ -98,7 +98,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View v) {
                     Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
                     intent.putExtra("classe", "MostRecentPhotos");
-                    intent.putExtra("position", position);
+                    intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
                     HomeActivity.activity.startActivity(intent);
                 }
             });
@@ -152,13 +152,13 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void setItemImage(File file) {
-            Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            imgPhoto.setImageBitmap(imageBitmap);
+//            Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//            imgPhoto.setImageBitmap(imageBitmap);
 
-//            Glide.with(HomeActivity.context)
-//                    .load(file)
-//                    .centerCrop()
-//                    .into(imgPhoto);
+            Glide.with(HomeActivity.context)
+                    .load(file)
+                    .centerCrop()
+                    .into(imgPhoto);
         }
 
         public void setItemHeartImage(boolean red) {
