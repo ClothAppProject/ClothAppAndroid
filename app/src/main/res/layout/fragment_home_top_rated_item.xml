@@ -3,9 +3,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="3dp"
     android:padding="0dp"
-    card_view:cardElevation="4dp"
+    card_view:cardElevation="6dp"
     card_view:cardBackgroundColor="#f9f9f9">
 
     <LinearLayout
@@ -14,11 +14,12 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <com.clothapp.resources.SquaredImageView
+        <ImageView
             android:id="@+id/fragment_home_top_rated_item_image"
             android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/com_facebook_profile_picture_blank_square" />
+            android:layout_height="200dp"
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            android:scaleType="centerCrop" />
         
         <LinearLayout
             android:layout_width="match_parent"
