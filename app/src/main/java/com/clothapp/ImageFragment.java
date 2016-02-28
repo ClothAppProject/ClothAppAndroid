@@ -20,6 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.clothapp.home.MostRecentAdapter;
+import com.clothapp.home.MostRecentFragment;
+import com.clothapp.home.TopRatedAdapter;
 import com.clothapp.home_gallery.HomeMostRecentFragment;
 import com.clothapp.home_gallery.HomeTopRatedFragment;
 import com.clothapp.profile.UserProfileActivity;
@@ -67,18 +70,31 @@ public class ImageFragment extends AppCompatActivity {
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         switch (getIntent().getStringExtra("classe"))   {
+
             case "mostRecent":
                 lista = HomeMostRecentFragment.photos;
                 break;
+
+            case "MostRecentPhotos":
+                lista = (ArrayList<Image>) MostRecentAdapter.itemList;
+                break;
+
             case "topRated":
                 lista = HomeTopRatedFragment.photos;
                 break;
+
+            case "TopRatedPhotos":
+                lista = (ArrayList<Image>) TopRatedAdapter.itemList;
+                break;
+
             case "profilo":
                 lista = ProfileUploadedPhotosFragment.photos;
                 break;
+
             case "FindCloth":
                 lista = FindClothFragment.getCloth();
                 break;
+
             case "FindTag":
                 lista = FindTagFragment.getCloth();
                 break;
