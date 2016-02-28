@@ -56,7 +56,7 @@ public class HomeMostRecentFragment extends Fragment {
             public void onRefresh() {
                 //query che prende tutte le foto più nuove rispetto a quelle già in memoria
                 ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                updatePhotos.whereGreaterThan("createdAt", global.getFirstDate());
+                //updatePhotos.whereGreaterThan("createdAt", global.getFirstDate());
                 updatePhotos.orderByDescending("createdAt");
                 updatePhotos.findInBackground(new FindCallback<ParseObject>() {
                     @Override
@@ -64,7 +64,7 @@ public class HomeMostRecentFragment extends Fragment {
                         if (e == null) {
                             if (!objects.isEmpty()) {
                                 //modifico la data della prima foto
-                                global.setFirstDate(objects.get(0).getCreatedAt());
+                                //global.setFirstDate(objects.get(0).getCreatedAt());
                                 for (int i = objects.size() - 1; i >= 0; i--) {
                                     ParseObject object = objects.get(i);
                                     ParseFile f = objects.get(i).getParseFile("thumbnail");
