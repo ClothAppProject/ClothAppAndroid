@@ -9,7 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.home.HomeActivity;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;

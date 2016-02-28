@@ -26,11 +26,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.upload.UploadProfilePictureActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
@@ -306,6 +308,11 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        if (ProfileUploadedPhotosFragment.adapter!=null) ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
 }
 

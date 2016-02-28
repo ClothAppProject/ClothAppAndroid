@@ -133,8 +133,6 @@ public class HomeMostRecentFragment extends Fragment {
                                                 }
                                             }
                                             canLoad = true;
-                                            //modifico la data dell'utlima foto
-                                            //global.setLastDate(objects.get(i - 1).getCreatedAt());
                                         }
                                     } else {
                                         check(e.getCode(), vi, e.getMessage());
@@ -177,8 +175,8 @@ public class HomeMostRecentFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        imageGridViewAdapter.notifyDataSetChanged();
+        super.onResume();
+        if(imageGridViewAdapter!=null)imageGridViewAdapter.notifyDataSetChanged();
     }
 
 

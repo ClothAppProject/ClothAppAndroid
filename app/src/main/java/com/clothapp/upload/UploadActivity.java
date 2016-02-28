@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.ParseException;

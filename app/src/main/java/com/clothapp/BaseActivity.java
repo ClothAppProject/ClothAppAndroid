@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.home_gallery.HomeActivity;
+import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.NavDrawerItem;

@@ -17,7 +17,7 @@ import com.clothapp.resources.Image;
 import java.util.ArrayList;
 
 public class ProfileShopUploadedPhotosFragment extends Fragment {
-    private ProfileUploadedPhotosAdapter adapter;
+    public static ProfileUploadedPhotosAdapter adapter;
     public static ArrayList<Image> photos = new ArrayList<>();
 
     private static final String PARSE_USERNAME = "username";
@@ -62,10 +62,5 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
 
         // Return the fragment
         return rootView;
-    }
-    @Override
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        adapter.notifyDataSetChanged();
     }
 }
