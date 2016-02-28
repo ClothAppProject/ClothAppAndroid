@@ -7,31 +7,23 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;
-import com.parse.GetFileCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MostRecentFragment extends Fragment {
-
 
     public static MostRecentAdapter mostRecentAdapter;
 
@@ -47,6 +39,7 @@ public class MostRecentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // Use SwipeRefreshLayout to allow pull to refresh
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
 
@@ -56,6 +49,7 @@ public class MostRecentFragment extends Fragment {
         return swipeRefreshLayout;
     }
 
+    // Setup the SwipeRefreshLayout by adding a custom OnScrollListener to it.
     private void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout, final RecyclerView recyclerView) {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -64,22 +58,32 @@ public class MostRecentFragment extends Fragment {
                 // Log.d("MostRecentFragment", "onRefresh");
                 if (mostRecentAdapter == null) return;
 
+                // Create a new empty list and pass it to the adapter while we wait for the Parse
+                // query to complete and update the list.
                 MostRecentAdapter.itemList = new ArrayList<>();
                 mostRecentAdapter.notifyDataSetChanged();
 
                 loading = true;
 
+                // It is needed to remove the previous OnScrollListener because the number of items
+                // in the list is reset to 0.
+
+                // Remove the previous custom OnScrollListener
                 recyclerView.removeOnScrollListener(mostRecentScrollListener);
+                // Create a new custom OnScrollListener
                 mostRecentScrollListener = new MostRecentScrollListener((GridLayoutManager) recyclerView.getLayoutManager());
+                // Add the new OnScrollListener
                 recyclerView.addOnScrollListener(mostRecentScrollListener);
 
+                // Update the itemList with the result of a query to Parse.
                 getParseMostRecentPhotos(0, 12);
             }
         });
     }
 
+    // Setup the RecyclerView with a GridLayoutManager (GridView), adding an OnScrollListener and
+    // loading the first 12 photos from Parse.
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
-        // recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         mostRecentAdapter = new MostRecentAdapter(new ArrayList<Image>());
@@ -92,6 +96,7 @@ public class MostRecentFragment extends Fragment {
         getParseMostRecentPhotos(size, 12);
     }
 
+    // Get the most recent photos from Parse from "start" to "start" + "limit"
     private void getParseMostRecentPhotos(int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -128,17 +133,21 @@ public class MostRecentFragment extends Fragment {
                     }
 
                 } else {
+                    // No result from Parse or something went wrong...
                     Log.d("MostRecentFragment", "Error: " + e.getMessage());
                 }
             }
         });
     }
 
+    // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class MostRecentScrollListener extends RecyclerView.OnScrollListener {
 
         private GridLayoutManager gridLayoutManager;
 
+        // Total number of loaded photos.
         private int previousTotal = 0;
+        // Number of remaining loaded photos before loading more photos.
         private int visibleThreshold = 5;
         int firstVisibleItem, visibleItemCount, totalItemCount;
 
@@ -165,6 +174,8 @@ public class MostRecentFragment extends Fragment {
 
                 int size = MostRecentAdapter.itemList.size();
                 // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+
+                // Get more photos from Parse.
                 getParseMostRecentPhotos(size, 12);
             }
         }
