@@ -1,12 +1,11 @@
 package com.clothapp.home;
 
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,6 +39,7 @@ public class TopRatedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // Use SwipeRefreshLayout to allow pull to refresh
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_top_rated_new, container, false);
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
 
@@ -49,6 +49,7 @@ public class TopRatedFragment extends Fragment {
         return swipeRefreshLayout;
     }
 
+    // Setup the SwipeRefreshLayout by adding a custom OnScrollListener to it.
     private void setupSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout, final RecyclerView recyclerView) {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -57,22 +58,32 @@ public class TopRatedFragment extends Fragment {
                 // Log.d("TopRatedFragment", "onRefresh");
                 if (topRatedAdapter == null) return;
 
+                // Create a new empty list and pass it to the adapter while we wait for the Parse
+                // query to complete and update the list.
                 TopRatedAdapter.itemList = new ArrayList<>();
                 topRatedAdapter.notifyDataSetChanged();
 
                 loading = true;
 
+                // It is needed to remove the previous OnScrollListener because the number of items
+                // in the list is reset to 0.
+
+                // Remove the previous custom OnScrollListener
                 recyclerView.removeOnScrollListener(topRatedScrollListener);
+                // Create a new custom OnScrollListener
                 topRatedScrollListener = new TopRatedScrollListener((LinearLayoutManager) recyclerView.getLayoutManager());
+                // Add the new OnScrollListener
                 recyclerView.addOnScrollListener(topRatedScrollListener);
 
+                // Update the itemList with the result of a query to Parse.
                 getParseTopRatedPhotos(0, 12);
             }
         });
     }
 
+    // Setup the RecyclerView with a LinearLayoutManager (ListView), adding an OnScrollListener and
+    // loading the first 12 photos from Parse.
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
-        // recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
         topRatedAdapter = new TopRatedAdapter(new ArrayList<Image>());
@@ -85,6 +96,7 @@ public class TopRatedFragment extends Fragment {
         getParseTopRatedPhotos(size, 12);
     }
 
+    // Get the top rated photos from Parse from "start" to "start" + "limit"
     private void getParseTopRatedPhotos(int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -127,6 +139,7 @@ public class TopRatedFragment extends Fragment {
         });
     }
 
+    // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class TopRatedScrollListener extends RecyclerView.OnScrollListener {
 
         private LinearLayoutManager linearLayoutManager;
@@ -158,6 +171,8 @@ public class TopRatedFragment extends Fragment {
 
                 int size = TopRatedAdapter.itemList.size();
                 // Log.d("TopRatedFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+
+                // Get more photos from Parse.
                 getParseTopRatedPhotos(size, 12);
             }
         }
