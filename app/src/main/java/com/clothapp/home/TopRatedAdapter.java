@@ -18,9 +18,7 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.parse.GetCallback;
-import com.parse.GetFileCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -31,7 +29,7 @@ import java.util.List;
 
 public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
+    // This list is used by the ImageFragment to display the photos.
     public static List<Image> itemList;
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
@@ -40,6 +38,9 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TopRatedAdapter.itemList = itemList;
     }
 
+    // This is called when a ViewHolder has been created.
+    // Note that a ViewHolder can be recycled to hold different items. This means
+    // that there may be more photos than ViewHolders.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -47,6 +48,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return new TopRatedItemViewHolder(view);
     }
 
+    // This is called when a ViewHolder has been "associated" with a view.
+    // It is used to set the data of the view according to an element of the itemList.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
@@ -89,11 +92,15 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });*/
     }
 
+    // Returns the number of items in the RecyclerView
     @Override
     public int getItemCount() {
         return itemList == null ? 0 : itemList.size();
     }
 
+    // This class is used to "hold a view".
+    // An object of this class contains references to the relevant subviews that
+    // may be needed later. For example setting the username after a Parse query.
     class TopRatedItemViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView txtUsername;
@@ -110,33 +117,40 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TopRatedItemViewHolder(final View parent) {
             super(parent);
 
+            // Initialize some TextViews
             txtUsername = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_username);
             txtItemName = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_item_name);
             txtHashtags = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_hashtags);
             txtLikeCount = (TextView) parent.findViewById(R.id.fragment_home_top_rated_item_like_count);
 
+            // Initialize some ImageViews
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_like);
             imgProfilePhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile_image);
             imgProfileIcon = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile);
 
+            // Setup some OnClickListeners
             setupPhotoOnClickListener();
             setupHeartImageOnClickListener();
             setupProfileIconOnClickListener();
         }
 
+        // Set the username for the current view. Example: Simone
         public void setUsername(String username) {
             txtUsername.setText(username);
         }
 
+        // Set the item name(s) for the current view. Example: Suit & Tie
         public void setItemName(String itemName) {
             txtItemName.setText(itemName);
         }
 
+        // Set the hashtags for the current view. Example: #Hashtag1, #Hashtag2
         public void setHashtags(String hashtags) {
             txtHashtags.setText(hashtags);
         }
 
+        // Set the photo for the Photo ImageView of the current view with the given File
         public void setPhoto(File file) {
             Glide.with(HomeActivity.context)
                     .load(file)
@@ -144,6 +158,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(imgPhoto);
         }
 
+        // Set the profile photo for the ProfilePhoto ImageView of the current view with the given File
         public void setProfilePhoto(File file) {
             Glide.with(HomeActivity.context)
                     .load(file)
@@ -152,15 +167,20 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(imgProfilePhoto);
         }
 
+        // Use this method to set the heart image color.
+        // Red = true
+        // White = false
         public void setHeartImage(boolean red) {
             if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
             else imgHeart.setColorFilter(Color.rgb(205, 205, 205));
         }
 
+        // Set the like count for the current photo
         public void setLikeCount(int value) {
             txtLikeCount.setText(value + "");
         }
 
+        // Redirect user to ImageFragment (gallery) if he/she clicks on the photo
         private void setupPhotoOnClickListener() {
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -173,6 +193,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
         }
 
+        // Add/Remove a like to the current photo both locally and on Parse database.
         private void setupHeartImageOnClickListener() {
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -216,6 +237,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
         }
 
+        // Redirect user to the profile page of the user/shop of the current photo.
         private void setupProfileIconOnClickListener() {
             imgProfileIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
