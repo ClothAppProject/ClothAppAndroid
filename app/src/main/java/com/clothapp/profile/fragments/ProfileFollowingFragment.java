@@ -62,7 +62,7 @@ public class ProfileFollowingFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"persona");
         UserProfileActivity.viewProfileFollowing.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollowing(users,rootView,UserProfileActivity.viewProfileFollowing);
+        FollowUtil.getFollowing(users,rootView,UserProfileActivity.viewProfileFollowing,UserProfileActivity.username);
 
         return rootView;
     }

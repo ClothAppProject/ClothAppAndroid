@@ -61,7 +61,7 @@ public class ProfileFollowersFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"persona");
         UserProfileActivity.viewProfileFollowers.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollower(users,rootView,UserProfileActivity.viewProfileFollowers);
+        FollowUtil.getFollower(users,rootView,UserProfileActivity.viewProfileFollowers, UserProfileActivity.username);
 
         return rootView;
     }

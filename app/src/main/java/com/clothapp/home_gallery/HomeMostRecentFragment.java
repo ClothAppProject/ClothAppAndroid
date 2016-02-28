@@ -106,7 +106,8 @@ public class HomeMostRecentFragment extends Fragment {
                             int toDownload = 10;
                             if (photos.size() % 2 == 0) toDownload = 11;
                             ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                            updatePhotos.whereLessThan("createdAt", global.getLastDate());
+                            updatePhotos.setSkip(photos.size());
+                            //updatePhotos.whereLessThan("createdAt", global.getLastDate());
                             updatePhotos.orderByDescending("createdAt");
                             updatePhotos.setLimit(toDownload);
                             updatePhotos.findInBackground(new FindCallback<ParseObject>() {
@@ -117,12 +118,14 @@ public class HomeMostRecentFragment extends Fragment {
                                             int i;
                                             for (i = 0; i < objects.size(); i++) {
                                                 ParseObject object = objects.get(i);
+                                                Image check = new Image(null,object.getObjectId(),null,null,0,null,null);
+                                                if (photos.contains(check)) continue;
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo per ultima
                                                     Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"),
                                                             object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti"));
-                                                    global.addLastPhoto(toAdd);
+                                                    photos.add(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     imageGridViewAdapter.notifyDataSetChanged();
                                                 } catch (ParseException e1) {
@@ -131,7 +134,7 @@ public class HomeMostRecentFragment extends Fragment {
                                             }
                                             canLoad = true;
                                             //modifico la data dell'utlima foto
-                                            global.setLastDate(objects.get(i - 1).getCreatedAt());
+                                            //global.setLastDate(objects.get(i - 1).getCreatedAt());
                                         }
                                     } else {
                                         check(e.getCode(), vi, e.getMessage());

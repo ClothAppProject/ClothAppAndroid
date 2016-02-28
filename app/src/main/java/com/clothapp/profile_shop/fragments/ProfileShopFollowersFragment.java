@@ -61,7 +61,7 @@ public class ProfileShopFollowersFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"negozio");
         ShopProfileActivity.viewProfileShopFollowers.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollower(users,rootView,ShopProfileActivity.viewProfileShopFollowers);
+        FollowUtil.getFollower(users,rootView,ShopProfileActivity.viewProfileShopFollowers,ShopProfileActivity.username);
 
         return rootView;
     }

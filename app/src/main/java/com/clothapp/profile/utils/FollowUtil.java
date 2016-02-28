@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.PeopleListAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.resources.User;
@@ -81,14 +80,14 @@ public class FollowUtil {
         });
     }
 
-    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view)   {
+    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view, String username)   {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
         ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
         queryUser.addDescendingOrder("createdAt");
         queryUser.setSkip(users.size());
         queryUser.setLimit(15);
-        queryUser.whereEqualTo("from", UserProfileActivity.username);
+        queryUser.whereEqualTo("from", username);
         queryUser.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
@@ -121,14 +120,14 @@ public class FollowUtil {
             }
         });
     }
-    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view)   {
+    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view, String username)   {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
         ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
         queryUser.addDescendingOrder("createdAt");
         queryUser.setSkip(users.size());
         queryUser.setLimit(15);
-        queryUser.whereEqualTo("to", UserProfileActivity.username);
+        queryUser.whereEqualTo("to", username);
         queryUser.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
