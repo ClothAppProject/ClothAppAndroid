@@ -89,7 +89,7 @@ public class LauncherActivity extends AppCompatActivity {
 
             // Skip log in page. Go directly to Splash Screen Activity.
             // Intent intent = new Intent(this, SplashScreenActivity.class);
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, SplashScreenActivity.class);
             startActivity(intent);
 
             // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.

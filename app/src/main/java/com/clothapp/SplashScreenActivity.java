@@ -43,42 +43,32 @@ public class SplashScreenActivity extends AppCompatActivity {
          */
 
         //qui scarico le foto
-        final View vi = new View(this.getApplicationContext());
         final ArrayList<Image> photo = new ArrayList<>();
 
         final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         query.setLimit(12);
         query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> fotos, ParseException e) {
-                if (e == null) {
-                    Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
-                    //aggiunto la data della prima foto
-                    ApplicationSupport photos = ((ApplicationSupport) getApplicationContext());
-                    photos.setFirstDate(fotos.get(0).getCreatedAt());
-                    int i;
-                    for (i = 0; i < fotos.size(); i++) {
-                        ParseObject obj = fotos.get(i);
-                        ParseFile file = obj.getParseFile("thumbnail");
-                        try {
-                            //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
-                            photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
-                                    obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),obj.getList("vestiti")));
-                        } catch (ParseException e1) {
-                            check(e.getCode(), vi, e.getMessage());
-                        }
-                    }
-                    Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-                    //prendo la variabile globale photos e ci metto dentro le immagini
-                    photos.setPhotos(photo);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    //errore nel reperire gli oggetti Photo dal database
-                    check(e.getCode(), vi, e.getMessage());
-                }
+        try {
+            List<ParseObject> fotos = query.find();
+            Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
+            //aggiunto la data della prima foto
+            ApplicationSupport appSupport = ((ApplicationSupport) getApplicationContext());
+            appSupport.setFirstDate(fotos.get(0).getCreatedAt());
+            for (ParseObject obj : fotos) {
+                ParseFile file = obj.getParseFile("thumbnail");
+                //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
+                photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
+                        obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),obj.getList("vestiti")));
             }
-        });
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+            //prendo la variabile globale photos e ci metto dentro le immagini
+            appSupport.setPhotos(photo);
+            startActivity(intent);
+            finish();
+        } catch (ParseException e) {
+            //errore nel reperire gli oggetti Photo dal database
+            check(e.getCode(), new View(getApplicationContext()), e.getMessage());
+        }
         Log.d("SplashScreenActivity", "Finito il prefetch dei dati.");
     }
 

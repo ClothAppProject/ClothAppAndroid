@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.R;
+import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -76,7 +77,8 @@ public class MostRecentFragment extends Fragment {
                 recyclerView.addOnScrollListener(mostRecentScrollListener);
 
                 // Update the itemList with the result of a query to Parse.
-                getParseMostRecentPhotos(0, 12);
+                ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
+                MostRecentAdapter.itemList = appSupport.getPhotos();
             }
         });
     }
