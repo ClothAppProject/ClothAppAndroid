@@ -12,9 +12,9 @@ public class Cloth implements Parcelable {
     private String shop;
     private String shopUsername;
     private String brand;
-    private String price;
+    private Float price;
 
-    public Cloth(String cloth, String address, String price, String shop, String shopUsername, String brand) {
+    public Cloth(String cloth, String address, Float price, String shop, String shopUsername, String brand) {
         this.cloth = cloth;
         this.address = address;
         this.price = price;
@@ -43,7 +43,7 @@ public class Cloth implements Parcelable {
         return shopUsername;
     }
 
-    public String getPrice() {
+    public Float getPrice() {
         return price;
     }
 
@@ -67,7 +67,7 @@ public class Cloth implements Parcelable {
         this.brand = brand;
     }
 
-    public void setPrize(String price) {
+    public void setPrize(Float price) {
         this.price = price;
     }
 
@@ -76,7 +76,7 @@ public class Cloth implements Parcelable {
         address = in.readString();
         shop = in.readString();
         shopUsername = in.readString();
-        price = in.readString();
+        price = in.readFloat();
     }
 
     public static final Creator<Cloth> CREATOR = new Creator<Cloth>() {
@@ -102,6 +102,6 @@ public class Cloth implements Parcelable {
         dest.writeString(address);
         dest.writeString(shop);
         dest.writeString(shopUsername);
-        dest.writeString(price);
+        dest.writeFloat(price);
     }
 }

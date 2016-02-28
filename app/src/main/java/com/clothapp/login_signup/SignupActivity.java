@@ -183,6 +183,7 @@ public class SignupActivity extends AppCompatActivity {
                                     user.setEmail(edit_email.getText().toString());
                                     user.put("name", edit_name.getText().toString().trim());
                                     user.put("flagISA","Persona");
+                                    user.put("lowercase", user.getUsername().toLowerCase());
                                     user.signUpInBackground(new SignUpCallback() {
                                         public void done(ParseException e) {
                                             if (e == null) {
@@ -193,7 +194,6 @@ public class SignupActivity extends AppCompatActivity {
 
                                                 ParseObject persona = new ParseObject("Persona");
                                                 persona.put("username",user.getUsername());
-                                                persona.put("lowercase", user.getUsername().toLowerCase());
                                                 persona.put("lastname", edit_lastname.getText().toString().trim());
 
                                                 RadioButton sex = (RadioButton) findViewById(edit_sex.getCheckedRadioButtonId());

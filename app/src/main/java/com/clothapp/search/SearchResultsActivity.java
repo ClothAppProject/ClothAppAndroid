@@ -58,7 +58,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-
+        //setto la toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -73,14 +73,14 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-
+        //gestisco gli intent
         query= handleIntent(getIntent());
         if(query==null)query="";
 
         //set adapter to  ViewPager
         searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext(),sex,pricefrom,priceto,order);
         viewPager.setAdapter(searchAdapter);
-
+        //viewPager.setCurrentItem(1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         //Log.d("SearchA","oncreate");
@@ -88,7 +88,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     }
 
-
+//aggiungo le icone del menu all'appbar
     public boolean onCreateOptionsMenu(Menu menu) {
        // MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.home_appbar, menu);
@@ -138,7 +138,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
 
-        // Define the listener
+        // Define the listener il listener sulla searchview
         MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
@@ -164,6 +164,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         return true;
     }
 
+    //quando un item nell'appbar viene selezionato
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -171,10 +172,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            //premuto settings
             case R.id.action_settings:
                 Intent i=new Intent(getBaseContext(),SettingsActivity.class);
                 startActivity(i);
                 break;
+            //premuto filter
             case R.id.filter:
                 Intent j=new Intent(getBaseContext(),FilterActivity.class);
                 j.putExtra("query",query);
@@ -191,7 +194,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
-
+//gestisco gli intent
     private String handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             return intent.getStringExtra(SearchManager.QUERY);

@@ -45,6 +45,10 @@ public class FindTagFragment extends Fragment {
     private ApplicationSupport global;
     private SearchAdapterImage adapter;
     private int skip=0;
+    private String sex;
+    private Float prezzoDa;
+    private Float prezzoA;
+    private String order;
 
 
     @Override
@@ -156,11 +160,15 @@ public class FindTagFragment extends Fragment {
         //setListViewHeightBasedOnItems(listView);
     }
 
-    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context) {
+    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context, String order) {
         this.context = context;
         final FindTagFragment f = new FindTagFragment();
         final Bundle args = new Bundle();
         args.putString("query", query);
+        args.putString("sex",sex);
+        args.putFloat("prezzoDa", priceFrom);
+        args.putFloat("prezzoA",priceTo);
+        args.putString("order",order);
         f.setArguments(args);
         return f;
     }
@@ -169,6 +177,11 @@ public class FindTagFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+        this.sex=getArguments()!=null ?(String) getArguments().getString("sex") :null;
+        this.prezzoDa = getArguments()!=null ? (Float) getArguments().getFloat("prezzoDa") : null;
+        this.prezzoA=getArguments()!=null ?(Float) getArguments().getFloat("prezzoA") :null;
+        this.order=getArguments()!=null ? (String)getArguments().getString("order") :null;
+
     }
 
     public void refresh(String query) {

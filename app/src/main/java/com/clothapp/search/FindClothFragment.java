@@ -47,6 +47,7 @@ public class FindClothFragment extends Fragment {
     private String sex;
     private Float prezzoDa;
     private Float prezzoA;
+    private String order;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +95,8 @@ public class FindClothFragment extends Fragment {
         //final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        queryFoto.addDescendingOrder("nLike");
+        if(order.equals(getResources().getStringArray(R.array.array_order)[0]))queryFoto.addDescendingOrder("nLike");
+        if(order.equals(getResources().getStringArray(R.array.array_order)[1])) queryFoto.addAscendingOrder("nLike");
         queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
         skip=skip+5;
@@ -146,14 +148,15 @@ public class FindClothFragment extends Fragment {
 
     }
 
-    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context) {
+    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context, String order) {
         this.context = context;
         final FindClothFragment f = new FindClothFragment();
         final Bundle args = new Bundle();
         args.putString("query", query);
         args.putString("sex",sex);
-        args.putFloat("prezzoDa",priceFrom);
+        args.putFloat("prezzoDa", priceFrom);
         args.putFloat("prezzoA",priceTo);
+        args.putString("order",order);
         f.setArguments(args);
         return f;
     }
@@ -162,6 +165,10 @@ public class FindClothFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+        this.sex=getArguments()!=null ?(String) getArguments().getString("sex") :null;
+        this.prezzoDa = getArguments()!=null ? (Float) getArguments().getFloat("prezzoDa") : null;
+        this.prezzoA=getArguments()!=null ?(Float) getArguments().getFloat("prezzoA") :null;
+        this.order=getArguments()!=null ? (String)getArguments().getString("order") :null;
 
     }
 

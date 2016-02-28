@@ -205,9 +205,15 @@ public class ImageDetailFragment extends Fragment {
                         @Override
                         public void done(ParseObject info, ParseException e) {
                             if (e == null) {
+                                Float fl=0.0f;
+                                if(info.get("prezzo")!=null){
+                                    if(info.get("prezzo").getClass()!=Float.class)
+                                        fl=Float.parseFloat(info.get("prezzo").toString());
+                                    else fl=(float)info.get("prezzo");
+                                }
                                 Cloth c = new Cloth(info.getString("tipo"),
                                     info.getString("luogoAcquisto"),
-                                    info.getString("prezzo"),
+                                        fl,
                                     info.getString("shop"),
                                     info.getString("shopUsername"),
                                     info.getString("brand"));

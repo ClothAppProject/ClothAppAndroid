@@ -24,6 +24,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
     String sex;
     Float priceFrom;
     Float priceTo;
+    String order;
 
     String[]titles;
     String query;
@@ -37,6 +38,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
         this.context=context;
         this.priceFrom=pricefrom;
         this.priceTo=priceto;
+        this.order=order;
     }
 
 
@@ -59,15 +61,16 @@ public class SearchAdapter extends FragmentPagerAdapter {
                 return findUserFragment= (FindUserFragment) new FindUserFragment().newIstance(query,context);
             case 1:
 
-                return findClothFragment= (FindClothFragment) new FindClothFragment().newIstance(query,sex,priceFrom,priceTo,context);
+                return findClothFragment= (FindClothFragment) new FindClothFragment().newIstance(query,sex,priceFrom,priceTo,context,order);
             case 2:
 
-                return findTagFragment= (FindTagFragment) new FindTagFragment().newIstance(query,sex,priceFrom,priceTo,context);
+                return findTagFragment= (FindTagFragment) new FindTagFragment().newIstance(query,sex,priceFrom,priceTo,context,order);
         }
 
         return null;
     }
 
+    //quando faccio una seconda query faccio un refresh dei fragment
     public void setQuery(String query ) {
         this.query = query;
         if(findUserFragment!=null) findUserFragment.refresh(query);

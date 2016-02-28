@@ -150,7 +150,7 @@
     <string name="order">Ordina per</string>>
 
 
-    <string-array name="order">
+    <string-array name="array_order">
         <item>Popolarità</item>
         <item>Prezzo Crescente</item>
         <item>Prezzo Decrescente</item>

@@ -169,6 +169,7 @@ public class ShopSignupActivity extends AppCompatActivity {
                             user.setPassword(edit_password.getText().toString().trim());
                             user.setEmail(edit_email.getText().toString());
                             user.put("name", edit_name.getText().toString().trim());
+                            user.put("lowercase", user.getUsername().toLowerCase());
                             //TODO check fisico o virtuale
                             user.put("flagISA", "Negozio");
 

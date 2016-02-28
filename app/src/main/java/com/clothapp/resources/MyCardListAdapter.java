@@ -56,7 +56,10 @@ public class MyCardListAdapter extends BaseAdapter {
         TextView cloth=(TextView)row.findViewById(R.id.cloth);
         address.setText((CharSequence)cloths.get(position).getAddress());
         shop.setText((CharSequence)cloths.get(position).getShop());
-        price.setText((CharSequence) cloths.get(position).getPrice());
+        String p= cloths.get(position).getPrice().toString();
+        if(p.split("[.  ]")[1].length()==1) p=p+"0";
+        //System.out.println(p.s());
+        price.setText(p);
         brand.setText((CharSequence)cloths.get(position).getBrand());
         cloth.setText((CharSequence) cloths.get(position).getCloth());
         if (cloths.get(position).getShopUsername()!=null) {
