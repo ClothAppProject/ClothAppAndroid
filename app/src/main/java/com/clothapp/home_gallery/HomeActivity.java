@@ -38,37 +38,14 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
-import com.clothapp.BaseActivity;
 import com.clothapp.login_signup.MainActivity;
-import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
-import com.clothapp.resources.CustomContentProvider;
-import com.clothapp.resources.Image;
-import com.clothapp.search.SearchAdapter;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.clothapp.resources.ExceptionCheck.check;
 
 /**
  * Created by giacomoceribelli on 02/02/16.

@@ -6,13 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -32,12 +28,9 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
-import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.FollowUtil;
-import com.clothapp.profile.utils.ProfilePictureCameraActivity;
-import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.upload.UploadProfilePictureActivity;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
@@ -274,16 +267,17 @@ public class ShopProfileActivity extends AppCompatActivity {
                             //.set
                             .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(getApplicationContext(), UploadProfilePictureActivity.class);
                                     switch (which) {
                                         case 0:
-                                            // Redirect the user to the ProfilePictureCameraActivity Activity
-                                            Intent intentCamera = new Intent(activity.getApplicationContext(), ProfilePictureCameraActivity.class);
-                                            activity.startActivity(intentCamera);
+                                            // Redirect the user to the ProfilePictureActivity with camera
+                                            i.putExtra("photoType",2187);
+                                            startActivity(i);
                                             break;
                                         case 1:
-                                            // Redirect the user to the ProfilePictureGalleryActivity Activity
-                                            Intent intentGallery = new Intent(activity.getApplicationContext(), ProfilePictureGalleryActivity.class);
-                                            activity.startActivity(intentGallery);
+                                            // Redirect the user to the ProfilePictureActivity with galery
+                                            i.putExtra("photoType",1540);
+                                            startActivity(i);
                                             break;
                                         case 2:
                                             //delete profile picture

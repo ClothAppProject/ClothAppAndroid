@@ -1,7 +1,8 @@
-package com.clothapp.profile.utils;
+package com.clothapp.upload;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.clothapp.profile.ProfileActivity;
 import com.clothapp.R;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
@@ -35,8 +35,9 @@ import java.util.List;
 /**
  * Created by giacomoceribelli on 29/12/15.
  */
-public class ProfilePictureCameraActivity extends AppCompatActivity {
+public class UploadProfilePictureActivity extends AppCompatActivity {
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
+    final static int RESULT_LOAD_IMG = 1540;
     /* --------------------------------------- */
     boolean first = true;
     final String directoryName = "ClothApp";
@@ -44,6 +45,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
     Uri takenPhotoUri;
     Bitmap imageBitmap = null;
     View vi;
+    int photoType;
     /* --------------------------------------- */
 
     @Override
@@ -58,25 +60,32 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
             first = savedInstanceState.getBoolean("first");
             photoFileName = savedInstanceState.getString("photoFileName");
 
-            Log.d("ProfilePictureCameraActivity", "First è false, quindi non avvia la fotocamera");
+            Log.d("ProfilePicture", "First è false, quindi non avvia la fotocamera");
             // Inizializzo parse perchè l'activity è stata chiusa
         }
         if (first) {
-            // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
-            // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-            Log.d("ProfilePictureCameraActivity", "E' il first");
+            //controllo da dove andare a prendere la foto galleria/camera
+            photoType = getIntent().getIntExtra("photoType",0);
+            Log.d("ProfilePicture", "E' il first");
+            if (photoType==CAPTURE_IMAGE_ACTIVITY) {
+                // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
+                // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
+                // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Set the image file name
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
 
-            // Set the image file name
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
-
-            // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
-            // quindi devo chiamare la fotocamera
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                // Starto l'attivity di cattura della foto passandogli l'intent
-                startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
+                // quindi devo chiamare la fotocamera
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    // Starto l'attivity di cattura della foto passandogli l'intent
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                }
+            }else if (photoType==RESULT_LOAD_IMG) {
+                //inizializzo immagine da prendere in galleria
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
             }
         }
     }
@@ -85,31 +94,43 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("UploadCameraActivity", "Siamo arrivati alla onActivityResult");
+        //decodifico com bitmapfactory a 3
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 5;
 
         // Controllo che l'immagine sia stata catturata correttamente
         if (requestCode == CAPTURE_IMAGE_ACTIVITY && resultCode == RESULT_OK) {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
             // A questo punto l'immagine è stata salvata sullo storage
-            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(),options);
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
             imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
-            upload();
-        } else {
+
+        }else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
+            takenPhotoUri = data.getData();
+
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(takenPhotoUri, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            imageBitmap = BitmapFactory.decodeFile(picturePath,options);
+
+            imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
+        }else {
             // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
 
             Log.d("UploadCameraActivity", "L'Immagine non è stata scattata");
 
-            // Reinderizzo l'utente alla profile activity
-            Intent i = ProfileUtils.goToProfile(getApplicationContext(),ParseUser.getCurrentUser().getUsername());
-            i.putExtra("user",ParseUser.getCurrentUser().getUsername());
-            startActivity(i);
-
             finish();
         }
+        upload();
     }
 
     // Questa funzione serve nel caso in cui dopo aver chiamato la fotocamera, l'attività upload si chiude
@@ -123,7 +144,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
         // Inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
         savedInstanceState.putString("photoFileName", photoFileName);
 
-        Log.d("ProfilePictureCameraActivity", "First è stato messo a false");
+        Log.d("ProfilePictureActivity", "First è stato messo a false");
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -137,8 +158,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
         if (f.exists() && !f.isDirectory()) {
             // Se esiste lo elimino
             f.delete();
-
-            Log.d("ProfilePictureCameraActivity", "File eliminato");
+            Log.d("ProfilePictureActivity", "File eliminato");
         }
     }
     // Ritorna l'Uri dell'immagine su disco
@@ -151,7 +171,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
 
             // Creo la directory di storage se non esiste
             if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-                Log.d("ProfilePictureCameraActivity", "Impossibile creare cartella");
+                Log.d("ProfilePictureActivity", "Impossibile creare cartella");
             }
 
             // Ritorna l'uri alla foto in base al fileName
@@ -168,7 +188,7 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
 
     public void upload()    {
         //inizializzo barra di caricamento
-        final ProgressDialog dialog = ProgressDialog.show(ProfilePictureCameraActivity.this, "",
+        final ProgressDialog dialog = ProgressDialog.show(UploadProfilePictureActivity.this, "",
                 getResources().getString(R.string.setting_pp), true);
 
         //controllo se c'è un'altra immagine del profilo online per lo stesso utente e la elimino
@@ -202,11 +222,11 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
         file.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("ProfilePictureCameraActivity", "File inviato correttamente");
+                    Log.d("ProfilePictureActivity", "File inviato correttamente");
                 } else {
                     // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
-                    Log.d("ProfilePictureCameraActivity", "Errore durante l'invio del file");
+                    Log.d("ProfilePictureActivity", "Errore durante l'invio del file");
                 }
             }
         });
@@ -221,26 +241,21 @@ public class ProfilePictureCameraActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     dialog.dismiss();
-                    Log.d("ProfilePictureCameraActivity", "Oggetto immagine inviato correttamente");
-                    deleteImage();
 
+                    Log.d("ProfilePictureActivity", "Oggetto immagine inviato correttamente");
+                    if (photoType!=RESULT_LOAD_IMG) deleteImage();
 
                     //chiamata get per salvare il thumbnail
                     String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+picture.getObjectId();
                     Get g = new Get();
                     g.execute(url);
 
-                    // Redirecting the user to the profile activity
-                    Intent i = ProfileUtils.goToProfile(getApplicationContext(),ParseUser.getCurrentUser().getUsername());
-                    i.putExtra("user",ParseUser.getCurrentUser().getUsername().toString());
-                    startActivity(i);
-
                     finish();
                 } else {
                     // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
                     check(e.getCode(), vi, e.getMessage());
 
-                    Log.d("ProfilePictureCameraActivity", "Errore durante l'invio dell'oggetto immagine");
+                    Log.d("ProfilePictureActivity", "Errore durante l'invio dell'oggetto immagine");
                 }
             }
         });

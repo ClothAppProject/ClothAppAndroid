@@ -2,18 +2,13 @@ package com.clothapp.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -35,14 +30,11 @@ import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.FollowUtil;
-import com.clothapp.profile.utils.ProfilePictureCameraActivity;
-import com.clothapp.profile.utils.ProfilePictureGalleryActivity;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.upload.UploadProfilePictureActivity;
 import com.clothapp.resources.CircleTransform;
-import com.clothapp.resources.ExceptionCheck;
 import com.clothapp.settings.SettingsActivity;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -55,7 +47,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class UserProfileActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-
+    private NavigationView navigationView;
     public static Context context;
 
     public static String username;
@@ -97,7 +89,7 @@ public class UserProfileActivity extends AppCompatActivity {
         // Get the drawer view
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
@@ -275,16 +267,17 @@ public class UserProfileActivity extends AppCompatActivity {
                             //.set
                             .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(getApplicationContext(), UploadProfilePictureActivity.class);
                                     switch (which) {
                                         case 0:
-                                            // Redirect the user to the ProfilePictureCameraActivity Activity
-                                            Intent intentCamera = new Intent(activity.getApplicationContext(), ProfilePictureCameraActivity.class);
-                                            activity.startActivity(intentCamera);
+                                            // Redirect the user to the ProfilePictureActivity with camera
+                                            i.putExtra("photoType",2187);
+                                            startActivity(i);
                                             break;
                                         case 1:
-                                            // Redirect the user to the ProfilePictureGalleryActivity Activity
-                                            Intent intentGallery = new Intent(activity.getApplicationContext(), ProfilePictureGalleryActivity.class);
-                                            activity.startActivity(intentGallery);
+                                            // Redirect the user to the ProfilePictureActivity with galery
+                                            i.putExtra("photoType",1540);
+                                            startActivity(i);
                                             break;
                                         case 2:
                                             //delete profile picture
@@ -313,12 +306,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
-
-}
+    }
 }
 

@@ -222,18 +222,16 @@ public class UploadActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("UploadActivity", "Siamo arrivati alla onActivityResult");
+        //decodifico com bitmapfactory a 3
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 3;
 
         // Controllo che l'immagine sia stata catturata correttamente
         if (requestCode == CAPTURE_IMAGE_ACTIVITY && resultCode == RESULT_OK) {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
-            //decodifico com bitmapfactory a 3
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 3;
-
             // A questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(),options);
-
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
@@ -243,17 +241,11 @@ public class UploadActivity extends AppCompatActivity {
             takenPhotoUri = data.getData();
 
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
             Cursor cursor = getContentResolver().query(takenPhotoUri, filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-
-            //decodifico com bitmapfactory a 3
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 3;
 
             imageBitmap = BitmapFactory.decodeFile(picturePath,options);
 
@@ -325,7 +317,6 @@ public class UploadActivity extends AppCompatActivity {
         if (f.exists() && !f.isDirectory()) {
             // Se esiste lo elimino
             f.delete();
-
             Log.d("UploadActivity", "File eliminato");
         }
     }
