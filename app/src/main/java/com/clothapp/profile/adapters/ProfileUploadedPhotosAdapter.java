@@ -65,7 +65,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             Glide.with(UserProfileActivity.context)
                     .load(imageFile)
                     .into(photoViewHolder.photo);
-        }else{
+        } else {
             Glide.with(ShopProfileActivity.context)
                     .load(imageFile)
                     .into(photoViewHolder.photo);

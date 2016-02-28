@@ -62,7 +62,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Image image = itemList.get(position);
 
         holder.setUsername(image.getUser());
-        Log.d("TopRatedAdapter", "image.getVestitiToString() = " + image.getVestitiToString());
         holder.setItemName(image.getVestitiToString());
         holder.setHashtags(image.getHashtagToString());
         holder.setLikeCount(image.getNumLike());
@@ -202,7 +201,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Red = true
         // White = false
         public void setHeartImage(boolean red) {
-            if (red) imgHeart.setColorFilter(Color.rgb(181, 47, 41));
+            if (red) imgHeart.setColorFilter(Color.rgb(210, 36, 36));
             else imgHeart.setColorFilter(Color.rgb(205, 205, 205));
         }
 
@@ -230,7 +229,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
 
-                    Log.d("TopRatedAdapter", "Clicked on photo with position: " + TopRatedItemViewHolder.this.getAdapterPosition());
+                    // Log.d("TopRatedAdapter", "Clicked on photo with position: " + TopRatedItemViewHolder.this.getAdapterPosition());
 
                     Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
 
