@@ -60,7 +60,7 @@ public class MyCardListAdapter extends BaseAdapter {
         brand.setText((CharSequence)cloths.get(position).getBrand());
         cloth.setText((CharSequence) cloths.get(position).getCloth());
         if (cloths.get(position).getShopUsername()!=null) {
-            shop.setOnClickListener(new View.OnClickListener() {
+            row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, ShopProfileActivity.class);

@@ -24,7 +24,6 @@ public class ApplicationSupport extends Application {
     //inizializzo la variabile globale photos
     private ArrayList<Image> photos;
     private Date firstDate;
-    private Date lastDate;
     //private User lastUser;
     //private Date lastCloth;
     //private Date lastTag;
@@ -65,9 +64,7 @@ public class ApplicationSupport extends Application {
     public void addFirstPhoto(Image foto)    {photos.add(0,foto);}
     public void addLastPhoto(Image foto) {photos.add(foto);}
     public void setFirstDate(Date data) {firstDate= data;}
-    public void setLastDate(Date data)  {lastDate= data;}
     public Date getFirstDate()  {return firstDate;}
-    public Date getLastDate()  {return lastDate;}
     @Override
     public void onCreate() {
         super.onCreate();

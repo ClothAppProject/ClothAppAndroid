@@ -138,6 +138,11 @@ public class TopRatedFragment extends Fragment {
             }
         });
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(topRatedAdapter!=null)topRatedAdapter.notifyDataSetChanged();
+    }
 
     // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class TopRatedScrollListener extends RecyclerView.OnScrollListener {

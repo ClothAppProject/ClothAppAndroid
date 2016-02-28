@@ -139,6 +139,11 @@ public class MostRecentFragment extends Fragment {
             }
         });
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mostRecentAdapter!=null)mostRecentAdapter.notifyDataSetChanged();
+    }
 
     // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class MostRecentScrollListener extends RecyclerView.OnScrollListener {

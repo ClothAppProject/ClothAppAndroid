@@ -220,14 +220,14 @@ public class ImageDetailFragment extends Fragment {
                     });
                 }
 
-                //Gesture Detector for detecting double tap
-                //code is at the end of page
-                final GestureDetector gd = doubleTapGesture(object);
-
                 object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
                     @Override
                     public void done(final File file, ParseException e) {
                         if (e == null) {
+                            //Gesture Detector for detecting double tap
+                            //code is at the end of page
+                            final GestureDetector gd = doubleTapGesture(object);
+
                             Glide.with(context)
                                     .load(file)
                                     .into(imageView);

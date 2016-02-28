@@ -68,7 +68,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                             check(e.getCode(), vi, e.getMessage());
                         }
                     }
-                    photos.setLastDate(fotos.get(i-1).getCreatedAt());
                     Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                     //prendo la variabile globale photos e ci metto dentro le immagini
                     photos.setPhotos(photo);

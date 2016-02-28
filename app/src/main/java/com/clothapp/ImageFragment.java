@@ -35,13 +35,16 @@ import com.clothapp.search.FindClothFragment;
 import com.clothapp.search.FindTagFragment;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -63,24 +66,17 @@ public class ImageFragment extends AppCompatActivity {
      */
     private ScreenSlidePagerAdapter mPagerAdapter;
     static ArrayList<Image> lista;
+    private String classe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        classe = getIntent().getStringExtra("classe");
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        switch (getIntent().getStringExtra("classe"))   {
 
-            case "mostRecent":
-                lista = HomeMostRecentFragment.photos;
-                break;
-
+        switch (classe)   {
             case "MostRecentPhotos":
                 lista = (ArrayList<Image>) MostRecentAdapter.itemList;
-                break;
-
-            case "topRated":
-                lista = HomeTopRatedFragment.photos;
                 break;
 
             case "TopRatedPhotos":
@@ -105,7 +101,7 @@ public class ImageFragment extends AppCompatActivity {
 
 
         //creo adattatore da pasare al ViewPager
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), lista.size());
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         // Set the current item based on the extra passed in to this activity
         final int extraCurrentItem = getIntent().getIntExtra("position", -1);
@@ -118,21 +114,23 @@ public class ImageFragment extends AppCompatActivity {
      * sequence.
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private int npages;
 
-        public ScreenSlidePagerAdapter(FragmentManager fm, int npages) {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
-            this.npages = npages;
         }
 
         @Override
         public Fragment getItem(int position) {
+            //se ultima o penultima foto della lista, carico altra foto
+            if (position>=lista.size()-2)   {
+                addPhotoToEnd();
+            }
             return new ImageDetailFragment().newInstance(lista.get(position),getApplicationContext());
         }
 
         @Override
         public int getCount() {
-            return npages;
+            return lista.size();
         }
     }
 
@@ -147,42 +145,72 @@ public class ImageFragment extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-        /*
-        //TODO cosi' non va bene non aggiorni immagini e prendi immagini sbagliate
-        //se arrivo in fondo carico nuove foto
-        n=mPager.getCurrentItem();
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            @Override
-            public void onPageSelected(int position) {
-                //controllo di essere arrivata in fondo
-                n = mPager.getCurrentItem();
-                if (load && n == mPagerAdapter.getCount() - 1) {
-                    load = false;
-                    //aggiungo le nuove immagini
-                    findMostRecent(mPagerAdapter.getCount(), 1);
-                    mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), lista.size());
-                    mPager.setAdapter(mPagerAdapter);
-                    mPager.setCurrentItem(n);
-                    load=true;
-                }
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-    public void findMostRecent(int start,int n){
+    public void addPhotoToEnd() {
+        //TODO bisogna impostare il controllo sulle liste quando si scarica
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        ParseObject o= null;
-        try {
-            o = query.getFirst();
-            System.out.println("nuova foto "+o);
-            lista.add(new Image(o.getParseFile("thumbnail").getFile(), o.getObjectId(), o.getString("user"), o.getList("like")));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        switch (classe) {
+            case "MostRecentPhotos":
+                query.setSkip(lista.size());
+                query.orderByDescending("createdAt");
+                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject object, ParseException e) {
+                        if (object!=null) {
+                            object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
+                                @Override
+                                public void done(File file, ParseException e) {
+                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
+                                            object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                    lista.add(toAdd);
+                                    mPagerAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+                });
+                break;
+            case "TopRatedPhotos":
+                query.setSkip(lista.size());
+                query.orderByDescending("nLike");
+                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject object, ParseException e) {
+                        if (object!=null) {
+                            if (!lista.contains(new Image(null,object.getObjectId(),null,null,0,null,null))) {
+                                object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
+                                    @Override
+                                    public void done(File file, ParseException e) {
+                                        Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
+                                                object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                        lista.add(toAdd);
+                                        mPagerAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+                break;
+            case "profilo":
+                query.setSkip(lista.size());
+                query.whereEqualTo("user",lista.get(0).getUser());
+                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject object, ParseException e) {
+                        if (object!=null) {
+                            object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
+                                @Override
+                                public void done(File file, ParseException e) {
+                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
+                                            object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                    lista.add(toAdd);
+                                    mPagerAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+                });
+                break;
         }
     }
-*/
 }
