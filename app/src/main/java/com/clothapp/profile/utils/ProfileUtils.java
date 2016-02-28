@@ -187,7 +187,7 @@ public class ProfileUtils {
         });
     }
 
-    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView, final ImageView drawerImageView) {
+    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
         query.whereEqualTo("username", username);
@@ -213,7 +213,6 @@ public class ProfileUtils {
                                 rounded.setCornerRadius(imageBitmap.getWidth());
 
                                 mainImageView.setImageDrawable(rounded);
-                                drawerImageView.setImageDrawable(rounded);
 
                             } else {
                                 Log.d("ProfileUtils", "Error: " + e.getMessage());

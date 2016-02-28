@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // This file will always be the same. Make it static so it can be accessed by multiple instances
     // of the HomeActivity.
-    private static File drawerProfilePhotoFile;
+    public static File drawerProfilePhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,8 +322,6 @@ public class HomeActivity extends AppCompatActivity {
                     break;
 
             }
-
-            // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
 
             // Close the navigation drawer after item selection.
             HomeActivity.this.mDrawerLayout.closeDrawer(GravityCompat.START);
