@@ -21,17 +21,22 @@ public class SearchAdapter extends FragmentPagerAdapter {
     FindClothFragment findClothFragment;
     FindTagFragment findTagFragment;
     private boolean primo=true;
+    String sex;
+    Float priceFrom;
+    Float priceTo;
 
     String[]titles;
     String query;
     Context context;
 
-    public SearchAdapter(FragmentManager fm,String[] titles,String query,Context context) {
+    public SearchAdapter(FragmentManager fm,String[] titles,String query,Context context,String sex,float pricefrom,float priceto,String order) {
         //passo il fragment manager e i titoli delle tab
         super(fm);
         this.titles=titles;
         this.query=query;
         this.context=context;
+        this.priceFrom=pricefrom;
+        this.priceTo=priceto;
     }
 
 
@@ -54,10 +59,10 @@ public class SearchAdapter extends FragmentPagerAdapter {
                 return findUserFragment= (FindUserFragment) new FindUserFragment().newIstance(query,context);
             case 1:
 
-                return findClothFragment= (FindClothFragment) new FindClothFragment().newIstance(query,context);
+                return findClothFragment= (FindClothFragment) new FindClothFragment().newIstance(query,sex,priceFrom,priceTo,context);
             case 2:
 
-                return findTagFragment= (FindTagFragment) new FindTagFragment().newIstance(query,context);
+                return findTagFragment= (FindTagFragment) new FindTagFragment().newIstance(query,sex,priceFrom,priceTo,context);
         }
 
         return null;

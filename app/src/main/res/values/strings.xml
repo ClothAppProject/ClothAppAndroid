@@ -141,7 +141,21 @@
     <string name="Users">Users</string>
     <string name="tag">Tag</string>
     <string name="action_search">Search</string>
-    <string name="send_to">Send To...</string>>
+    <string name="send_to">Send To...</string>
+    <string name="price">Prezzo</string>
+    <string name="a">A</string>
+    <string name="da">Da</string>
+    <string name="euro">€</string>
+    <string name="Filter">Filtro</string>
+    <string name="order">Ordina per</string>>
+
+
+    <string-array name="order">
+        <item>Popolarità</item>
+        <item>Prezzo Crescente</item>
+        <item>Prezzo Decrescente</item>
+    </string-array>
+
 
 
 </resources>

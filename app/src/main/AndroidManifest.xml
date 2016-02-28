@@ -157,7 +157,9 @@
                 android:name="android.app.default_searchable"
                 android:value=".search.SearchResultsActivity" />
         </activity>
+        <activity android:name=".search.FilterActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
-

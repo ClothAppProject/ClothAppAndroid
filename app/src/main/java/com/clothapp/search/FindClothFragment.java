@@ -44,6 +44,9 @@ public class FindClothFragment extends Fragment {
     private ApplicationSupport global;
     private SearchAdapterImage adapter;
     private int skip=0;
+    private String sex;
+    private Float prezzoDa;
+    private Float prezzoA;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,11 +146,14 @@ public class FindClothFragment extends Fragment {
 
     }
 
-    public Fragment newIstance(String query, Context context) {
+    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context) {
         this.context = context;
         final FindClothFragment f = new FindClothFragment();
         final Bundle args = new Bundle();
         args.putString("query", query);
+        args.putString("sex",sex);
+        args.putFloat("prezzoDa",priceFrom);
+        args.putFloat("prezzoA",priceTo);
         f.setArguments(args);
         return f;
     }
@@ -156,6 +162,7 @@ public class FindClothFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+
     }
 
     public void refresh(String query) {

@@ -7,6 +7,11 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
+    <item android:id="@+id/filter"
+        android:title="filter"
+        android:icon="@mipmap/ic_filter_list_white_48dp"
+        app:showAsAction="ifRoom"/>
+
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"

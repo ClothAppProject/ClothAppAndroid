@@ -156,7 +156,7 @@ public class FindTagFragment extends Fragment {
         //setListViewHeightBasedOnItems(listView);
     }
 
-    public Fragment newIstance(String query, Context context) {
+    public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context) {
         this.context = context;
         final FindTagFragment f = new FindTagFragment();
         final Bundle args = new Bundle();

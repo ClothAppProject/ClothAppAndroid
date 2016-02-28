@@ -22,9 +22,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
@@ -44,9 +46,13 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ListView listTag;
     private ViewPager viewPager;
     private String query;
+    private String sex=null;
+    private Float pricefrom= Float.valueOf(0);
+    private Float priceto=Float.MAX_VALUE;
 
     private String[] titles;
     private SearchAdapter searchAdapter;
+    private String order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +78,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         if(query==null)query="";
 
         //set adapter to  ViewPager
-        searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext());
+        searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext(),sex,pricefrom,priceto,order);
         viewPager.setAdapter(searchAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         //Log.d("SearchA","oncreate");
+
 
     }
 
@@ -167,6 +174,13 @@ public class SearchResultsActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Intent i=new Intent(getBaseContext(),SettingsActivity.class);
                 startActivity(i);
+                break;
+            case R.id.filter:
+                Intent j=new Intent(getBaseContext(),FilterActivity.class);
+                j.putExtra("query",query);
+                startActivity(j);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -177,9 +191,17 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
+
     private String handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             return intent.getStringExtra(SearchManager.QUERY);
+        }
+        if(intent.getStringExtra("query")!=null){
+            sex=intent.getStringExtra("sex");
+            pricefrom=intent.getFloatExtra("prezzoDa", 0);
+            priceto=intent.getFloatExtra("prezzoA",Float.MAX_VALUE);
+            order=intent.getStringExtra("order");
+            return intent.getStringExtra("query");
         }
         return null;
     }
