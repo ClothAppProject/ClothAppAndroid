@@ -47,9 +47,12 @@ public class Image implements Parcelable{
         this.objectId=o.getObjectId();
         this.user=o.getString("user");
         this.nLike=o.getInt("nLike");
-        this.like=(ArrayList)o.get("like");
-        this.vestiti=(ArrayList)o.get("tipo");
-        this.hashtag=(ArrayList)o.get("hashtag");
+        if (o.getList("like")==null) like = new ArrayList<>();
+        else this.like=o.getList("like");
+        if (o.getList("vestiti")==null) vestiti = new ArrayList<>();
+        else this.vestiti=o.getList("vestiti");
+        if (o.getList("hashtag")==null) hashtag = new ArrayList<>();
+        else this.hashtag=o.getList("hashtag");
 
     }
 
