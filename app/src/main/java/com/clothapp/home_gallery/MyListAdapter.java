@@ -115,7 +115,7 @@ public class MyListAdapter extends BaseAdapter {
 
 
         ImageView share=(ImageView)row.findViewById(R.id.share);
-        //TODO: problemi di permesso di lettura
+
         //setto il listener sull'icona share
         share.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -55,6 +55,7 @@ public class FindUserFragment extends Fragment {
         listUser = (ListView) rootView.findViewById(R.id.userlist);
         //String query=getArguments().getString("name");
         global = (ApplicationSupport) getActivity().getApplicationContext();
+        //System.out.println("create");
 
         user=global.getUsers();
         //chiama l'adattatore che inserisce gli item nella listview
@@ -183,11 +184,13 @@ public class FindUserFragment extends Fragment {
     }
 
     public void refresh(String query) {
+        //System.out.println("refresh");
         this.query=query.trim().toLowerCase();
         skip=0;
         user=new ArrayList<>();
         adapter = new SearchAdapterUser(getActivity().getBaseContext(), user);
         listUser.setAdapter(adapter);
+        global.setUsers(user);
         search();
     }
     @Override

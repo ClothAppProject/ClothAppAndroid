@@ -94,6 +94,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         searchView =
                 (SearchView) MenuItemCompat.getActionView(searchItem);
 
+
+/*
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
@@ -107,13 +109,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+*/
         //quando faccio una nuova ricerca aggiorno questa activity invece di crearne una nuova
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                System.out.println("nuova query");
                 searchAdapter.setQuery(query);
+                searchAdapter.notifyDataSetChanged();
                 return false;
             }
 

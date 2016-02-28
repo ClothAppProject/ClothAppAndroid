@@ -177,11 +177,17 @@ public class FindTagFragment extends Fragment {
         tag=new ArrayList<>();
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), tag);
         listTag.setAdapter(adapter);
+        global.setTag(tag);
         search();
     }
 
 
-
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        //System.out.println("onresume"+user);
+        adapter.notifyDataSetChanged();
+    }
 
     public static ArrayList<Image> getCloth() {
         return tag;

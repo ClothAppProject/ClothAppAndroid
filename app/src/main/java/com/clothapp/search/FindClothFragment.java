@@ -51,6 +51,8 @@ public class FindClothFragment extends Fragment {
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
 
+        System.out.println("create");
+
         cloth=global.getCloth();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
@@ -96,7 +98,7 @@ public class FindClothFragment extends Fragment {
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null) {
+                if (e == null) {
                     ListIterator<ParseObject> i = objects.listIterator();
                     while (i.hasNext()) {
                         List<String> tag = new ArrayList<String>();
@@ -105,8 +107,8 @@ public class FindClothFragment extends Fragment {
                         if (tag == null) tag = new ArrayList<String>(0);
                         for (int j = 0; j < tag.size(); j++) {
                             if (tag.get(j).contains(query)) {
-                                Image image=new Image(o);
-                                if(!cloth.contains(image)){
+                                Image image = new Image(o);
+                                if (!cloth.contains(image)) {
                                     cloth.add(image);
                                     global.setCloth(cloth);
                                     adapter.notifyDataSetChanged();
@@ -120,8 +122,7 @@ public class FindClothFragment extends Fragment {
                     }
                     canLoad = true;
 
-                }
-                else check(e.getCode(), rootView, e.getMessage());
+                } else check(e.getCode(), rootView, e.getMessage());
             }
         });
 
@@ -158,14 +159,33 @@ public class FindClothFragment extends Fragment {
     }
 
     public void refresh(String query) {
-        this.query=query;
+        System.out.println("resfresh");
+        this.query=query.trim().toLowerCase();
         skip=0;
         cloth=new ArrayList<>();
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listCloth.setAdapter(adapter);
+        global.setTag(cloth);
         search();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        System.out.println("onresume");
+        adapter.notifyDataSetChanged();
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            System.out.println("visibile");
+            onResume();
+        }
+        else {
+            System.out.println("nonvisibile");
+        }
+    }
 
     public static ArrayList<Image> getCloth() {
         return cloth;
