@@ -24,8 +24,7 @@ import android.view.View;
 import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.upload.UploadCameraActivity;
-import com.clothapp.upload.UploadGalleryActivity;
+import com.clothapp.upload.UploadActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.ParseUser;
 
@@ -99,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadCameraActivity.class);
+                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
             }
         });
@@ -112,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
-                Intent i = new Intent(getApplicationContext(), UploadGalleryActivity.class);
+                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
             }
         });
