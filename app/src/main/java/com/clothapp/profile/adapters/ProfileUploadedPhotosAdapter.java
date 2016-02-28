@@ -61,9 +61,15 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
         File imageFile = photos.get(position).getFile();
 
-        Glide.with(UserProfileActivity.context)
-                .load(imageFile)
-                .into(photoViewHolder.photo);
+        if (profilo.equals("persona")) {
+            Glide.with(UserProfileActivity.context)
+                    .load(imageFile)
+                    .into(photoViewHolder.photo);
+        }else{
+            Glide.with(ShopProfileActivity.context)
+                    .load(imageFile)
+                    .into(photoViewHolder.photo);
+        }
 
         // Display hashtags, if any
         List<String> hashtagList = photos.get(position).hashtag;
