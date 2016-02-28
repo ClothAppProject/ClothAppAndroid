@@ -32,24 +32,27 @@ import java.util.List;
 
 public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    // This list is used by the ImageFragment to display the photos.
     public static List<Image> itemList;
-
-    private static int imgCount;
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
 
     public MostRecentAdapter(List<Image> itemList) {
         MostRecentAdapter.itemList = itemList;
-        imgCount = 0;
     }
 
+    // This is called when a ViewHolder has been created.
+    // Note that a ViewHolder can be recycled to hold different items. This means
+    // that there may be more photos than ViewHolders.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_home_most_recent_item, parent, false);
-        return new MostRecentItemViewHolder(view, imgCount++);
+        return new MostRecentItemViewHolder(view);
     }
 
+    // This is called when a ViewHolder has been "associated" with a view.
+    // It is used to set the data of the view according to an element of the itemList.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
@@ -70,29 +73,63 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
+    // Returns the number of items in the RecyclerView
     @Override
     public int getItemCount() {
         return itemList == null ? 0 : itemList.size();
     }
 
+    // This class is used to "hold a view".
+    // An object of this class contains references to the relevant subviews that
+    // may be needed later. For example setting the username after a Parse query.
     class MostRecentItemViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView txtTitle;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
-        private final int position;
 
-        public MostRecentItemViewHolder(final View parent, int count) {
+        public MostRecentItemViewHolder(final View parent) {
             super(parent);
 
             txtTitle = (TextView) parent.findViewById(R.id.fragment_home_most_recent_item_title);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
 
-            this.position = count;
-
 //            Log.d("MostRecentAdapter", "Count: " + count);
 
+            // Setting some OnClickListeners
+            setPhotoOnClickListener();
+            setHeartImageOnClickListener();
+        }
+
+        // Use this method to set the ItemTitle
+        public void setItemText(CharSequence text) {
+            if (txtTitle != null) {
+                txtTitle.setText(text);
+            }
+        }
+
+        // Use this method to set the photo to the given File
+        public void setItemImage(File file) {
+//            Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//            imgPhoto.setImageBitmap(imageBitmap);
+
+            Glide.with(HomeActivity.context)
+                    .load(file)
+                    .centerCrop()
+                    .into(imgPhoto);
+        }
+
+        // Use this method to set the heart image color.
+        // Red = true
+        // White = false
+        public void setItemHeartImage(boolean red) {
+            if (red) imgHeart.setImageResource(R.mipmap.cuore_pressed);
+            else imgHeart.setImageResource(R.mipmap.cuore);
+        }
+
+        // Redirect user to ImageFragment (gallery) if he/she clicks on the photo
+        private void setPhotoOnClickListener() {
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -102,7 +139,10 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     HomeActivity.activity.startActivity(intent);
                 }
             });
+        }
 
+        // Add/Remove a like to the current photo both locally and on Parse database.
+        private void setHeartImageOnClickListener() {
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,6 +162,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     notifyDataSetChanged();
 
+                    // Update like list on Parse database.
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
 
                     query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
@@ -143,27 +184,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     });
                 }
             });
-        }
-
-        public void setItemText(CharSequence text) {
-            if (txtTitle != null) {
-                txtTitle.setText(text);
-            }
-        }
-
-        public void setItemImage(File file) {
-//            Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//            imgPhoto.setImageBitmap(imageBitmap);
-
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .into(imgPhoto);
-        }
-
-        public void setItemHeartImage(boolean red) {
-            if (red) imgHeart.setImageResource(R.mipmap.cuore_pressed);
-            else imgHeart.setImageResource(R.mipmap.cuore);
         }
 
     }
