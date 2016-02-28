@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,11 +37,15 @@ import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.File;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -74,33 +79,25 @@ public class ShopProfileActivity extends AppCompatActivity {
         // Set activity to current activity.
         activity = this;
 
+        // Get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Loading follow Button
-        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
 
         // Set toolbar title to empty string so that it won't overlap with the tabs.
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        // Set up drawer button
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
-        ab.setDisplayHomeAsUpEnabled(true);
-
-        // Get the drawer view
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
+        // Set up navigation drawer
+        initDrawer(toolbar);
 
         viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
         }
 
-        loadProfilePicture(navigationView);
+        loadProfilePicture();
+
+        // Loading follow Button
+        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
 
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
@@ -140,100 +137,91 @@ public class ShopProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        /*
-        // Get default bitmap for user profile photo
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.com_facebook_profile_picture_blank_square);
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        if (ProfileShopUploadedPhotosFragment.adapter!=null) ProfileShopUploadedPhotosFragment.adapter.notifyDataSetChanged();
+    }
 
-        // Create a rounded bitmap from the user profile photo
-        RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        rounded.setCornerRadius(bitmap.getWidth());
-        */
+    private void initDrawer(Toolbar toolbar) {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        // Setup OnClickListener for the navigation drawer.
+        navigationView.setNavigationItemSelectedListener(new ProfileNavigationItemSelectedListener());
+
         // Get drawer header
         View headerLayout = navigationView.getHeaderView(0);
 
         // Get the image view containing the user profile photo
-        ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
+        final ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.navigation_drawer_profile_photo);
+        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.navigation_drawer_profile_username);
+        TextView drawerRealName = (TextView) headerLayout.findViewById(R.id.navigation_drawer_profile_real_name);
 
         // Set the user profile photo to the just created rounded image
         Glide.with(context)
                 .load(R.drawable.com_facebook_profile_picture_blank_square)
-                .centerCrop()
-                .transform(new CircleTransform(ShopProfileActivity.this))
+                .transform(new CircleTransform(context))
                 .into(drawerProfile);
-        //drawerProfile.setImageDrawable(rounded);
 
-        // Set the drawer username
-        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.menu_profile_side_drawer_username);
-        drawerUsername.setText(username);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        drawerUsername.setText(capitalize(currentUser.getUsername()));
+        drawerRealName.setText(capitalize(currentUser.getString("name")));
 
-        // Set up onClickListener for each drawer item
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        if (HomeActivity.drawerProfilePhotoFile == null) {
+            ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
+            query.whereEqualTo("username", currentUser.getUsername());
 
-                        Intent intent;
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject photo, ParseException e) {
 
-                        switch (menuItem.getItemId()) {
+                    if (e == null) {
+                        Log.d("HomeActivity", "ParseObject for profile image found!");
 
-                            case R.id.nav_home:
-                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_home");
+                        ParseFile parseFile = photo.getParseFile("thumbnail");
+                        parseFile.getFileInBackground(new GetFileCallback() {
+                            @Override
+                            public void done(File file, ParseException e) {
 
-                                intent = new Intent(ShopProfileActivity.activity, HomeActivity.class);
-                                startActivity(intent);
+                                if (e == null) {
+                                    Log.d("HomeActivity", "File for profile image found!");
 
-                                finish();
-                                break;
+                                    HomeActivity.drawerProfilePhotoFile = file;
 
-                            case R.id.nav_profile:
-                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_profile");
+                                    // Set the user profile photo to the just created rounded image
+                                    Glide.with(context)
+                                            .load(file)
+                                            .transform(new CircleTransform(context))
+                                            .into(drawerProfile);
 
-                                String currentUser = ParseUser.getCurrentUser().getUsername();
-
-                                if (!currentUser.equals(username)) {
-                                    Log.d("ShopProfileActivity", currentUser + "!=" + username);
-                                    intent = ProfileUtils.goToProfile(ShopProfileActivity.context,currentUser);
-                                    intent.putExtra("user", currentUser);
-                                    startActivity(intent);
+                                } else {
+                                    Log.d("HomeActivity", "Error: " + e.getMessage());
                                 }
+                            }
+                        });
 
-                                break;
-
-
-                            case R.id.nav_settings:
-                                Log.d("HomeActivity", "Clicked on R.id.nav_settings");
-
-                                intent = new Intent(ShopProfileActivity.this, SettingsActivity.class);
-                                startActivity(intent);
-                                break;
-
-                            case R.id.nav_logout:
-                                Log.d("ShopProfileActivity", "Clicked on R.id.nav_logout");
-
-                                final ProgressDialog dialog = ProgressDialog.show(ShopProfileActivity.this, "", "Logging out. Please wait...", true);
-                                Thread logout = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ParseUser.logOut();
-                                        System.out.println("debug: logout eseguito");
-                                    }
-                                });
-                                logout.start();
-
-                                intent = new Intent(ShopProfileActivity.activity, MainActivity.class);
-                                dialog.dismiss();
-                                startActivity(intent);
-
-                                finish();
-                                break;
-                        }
-
-                        // menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
+                    } else {
+                        Log.d("HomeActivity", "Error: " + e.getMessage());
                     }
-                });
+                }
+            });
+        } else {
+            // Set the user profile photo to the just created rounded image
+            Glide.with(context)
+                    .load(HomeActivity.drawerProfilePhotoFile)
+                    .transform(new CircleTransform(context))
+                    .into(drawerProfile);
+        }
+    }
+
+    private String capitalize(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
     private void setupViewPagerContent(ViewPager viewPager) {
@@ -251,18 +239,15 @@ public class ShopProfileActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void loadProfilePicture(NavigationView navigationView) {
-
-        View headerLayout = navigationView.getHeaderView(0);
-        ImageView drawerImageView = (ImageView) headerLayout.findViewById(R.id.menu_profile_side_drawer_image);
+    private void loadProfilePicture() {
 
         ImageView background = (ImageView) findViewById(R.id.profile_cover_image);
+        ProfileUtils.getParseUserProfileImage(this, username, background, ShopProfileActivity.context, true);
 
-        ProfileUtils.getParseUserCopertina(this, username, background, drawerImageView, getApplicationContext());
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (username.equals(ParseUser.getCurrentUser().getUsername().toString())) {
+                if (username.equals(ParseUser.getCurrentUser().getUsername())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ShopProfileActivity.this);
                     builder.setTitle(R.string.choose_profile_picture)
                             //.set
@@ -310,9 +295,80 @@ public class ShopProfileActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-        if (ProfileShopUploadedPhotosFragment.adapter!=null) ProfileShopUploadedPhotosFragment.adapter.notifyDataSetChanged();
+    // This class handles click to each item of the navigation drawer
+    class ProfileNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
+
+        @SuppressWarnings("StatementWithEmptyBody")
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+
+            Intent intent;
+
+            switch (item.getItemId()) {
+
+                // Clicked on "Home" page button.
+                case R.id.nav_home:
+
+                    Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
+
+                    intent = new Intent(ShopProfileActivity.activity, HomeActivity.class);
+                    startActivity(intent);
+
+                    finish();
+                    break;
+
+                // Clicked on "My Profile" item.
+                case R.id.nav_profile:
+
+                    Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
+
+                    String currentUser = ParseUser.getCurrentUser().getUsername();
+
+                    if (!currentUser.equals(username)) {
+                        Log.d("UserProfileActivity", currentUser + "!=" + username);
+                        intent = ProfileUtils.goToProfile(ShopProfileActivity.context, currentUser);
+                        intent.putExtra("user", currentUser);
+                        startActivity(intent);
+                    }
+
+                    break;
+
+                // Clicked on "Settings" item.
+                case R.id.nav_settings:
+                    Log.d("HomeActivity", "Clicked on R.id.nav_settings");
+
+                    intent = new Intent(ShopProfileActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                    break;
+
+                // Clicked on "Logout" item.
+                case R.id.nav_logout:
+
+                    Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
+
+                    final ProgressDialog dialog = ProgressDialog.show(ShopProfileActivity.this, "", "Logging out. Please wait...", true);
+                    Thread logout = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ParseUser.logOut();
+                            Log.d("UserProfileActivity", "Successfully logged out");
+                        }
+                    });
+                    logout.start();
+
+                    intent = new Intent(ShopProfileActivity.activity, MainActivity.class);
+                    dialog.dismiss();
+                    startActivity(intent);
+
+                    finish();
+                    break;
+
+            }
+
+            // Close the navigation drawer after item selection.
+            ShopProfileActivity.this.mDrawerLayout.closeDrawer(GravityCompat.START);
+
+            return true;
+        }
     }
 }

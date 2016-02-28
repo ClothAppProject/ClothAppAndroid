@@ -241,7 +241,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void loadProfilePicture() {
 
         ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
-        ProfileUtils.getParseUserProfileImage(this, username, mainImageView);
+        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, UserProfileActivity.context, false);
 
         mainImageView.setOnClickListener(new View.OnClickListener() {
             @Override

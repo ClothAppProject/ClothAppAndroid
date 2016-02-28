@@ -187,7 +187,7 @@ public class ProfileUtils {
         });
     }
 
-    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView) {
+    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView, final Context context, final boolean shop) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
         query.whereEqualTo("username", username);
@@ -207,51 +207,23 @@ public class ProfileUtils {
                             if (e == null) {
                                 Log.d("ProfileUtils", "File for profile image found!");
 
-                                Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                                Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//
+//                                RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(activity.getResources(), imageBitmap);
+//                                rounded.setCornerRadius(imageBitmap.getWidth());
+//
+//                                mainImageView.setImageDrawable(rounded);
 
-                                RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(activity.getResources(), imageBitmap);
-                                rounded.setCornerRadius(imageBitmap.getWidth());
-
-                                mainImageView.setImageDrawable(rounded);
-
-                            } else {
-                                Log.d("ProfileUtils", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
-
-                } else {
-                    Log.d("ProfileUtils", "Error: " + e.getMessage());
-                }
-            }
-        });
-    }
-    public static void getParseUserCopertina(final Activity activity, String username, final ImageView mainImageView, final ImageView drawerImageView, final Context c) {
-
-        ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-        query.whereEqualTo("username", username);
-
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject photo, ParseException e) {
-
-                if (e == null) {
-
-                    ParseFile parseFile = photo.getParseFile("profilePhoto");
-                    parseFile.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-
-                            if (e == null) {
-                                Log.d("ProfileUtils", "File for profile image found!");
-
-                                Glide.with(c)
-                                        .load(file)
-                                        .into(mainImageView);
-                                Glide.with(c)
-                                        .load(file)
-                                        .transform(new CircleTransform(c))
-                                        .into(drawerImageView);
+                                if (!shop) {
+                                    Glide.with(context)
+                                            .load(file)
+                                            .transform(new CircleTransform(context))
+                                            .into(mainImageView);
+                                } else {
+                                    Glide.with(context)
+                                            .load(file)
+                                            .into(mainImageView);
+                                }
 
                             } else {
                                 Log.d("ProfileUtils", "Error: " + e.getMessage());
