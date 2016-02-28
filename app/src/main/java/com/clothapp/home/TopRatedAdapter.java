@@ -3,12 +3,14 @@ package com.clothapp.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -114,6 +116,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView imgShare;
         private ImageView imgProfileIcon;
 
+        private LinearLayout linearLayoutProfile;
+
         public TopRatedItemViewHolder(final View parent) {
             super(parent);
 
@@ -129,10 +133,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfilePhoto = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile_image);
             imgProfileIcon = (ImageView) parent.findViewById(R.id.fragment_home_top_rated_item_profile);
 
+            // Initialize some LinearLayouts
+            linearLayoutProfile = (LinearLayout) parent.findViewById(R.id.fragment_home_top_rated_item_profile_linear_layout);
+
             // Setup some OnClickListeners
             setupPhotoOnClickListener();
             setupHeartImageOnClickListener();
             setupProfileIconOnClickListener();
+            setupProfileLinearLayoutOnClickListener();
         }
 
         // Set the username for the current view. Example: Simone
@@ -240,6 +248,19 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Redirect user to the profile page of the user/shop of the current photo.
         private void setupProfileIconOnClickListener() {
             imgProfileIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                    Intent intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
+                    intent.putExtra("user", image.getUser());
+                    HomeActivity.activity.startActivity(intent);
+                }
+            });
+        }
+
+        // Redirect user to the profile page of the user/shop of the current photo.
+        private void setupProfileLinearLayoutOnClickListener() {
+            linearLayoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
