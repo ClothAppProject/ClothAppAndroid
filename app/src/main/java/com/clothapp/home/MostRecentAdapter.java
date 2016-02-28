@@ -123,6 +123,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // Use this method to set the heart image color.
         // Red = true
         // White = false
+        // TODO: setImageResource needs to be replaced. A quick RAM usage inspection showed this method uses a lot of memory if called multiple times.
         public void setItemHeartImage(boolean red) {
             if (red) imgHeart.setImageResource(R.mipmap.cuore_pressed);
             else imgHeart.setImageResource(R.mipmap.cuore);
