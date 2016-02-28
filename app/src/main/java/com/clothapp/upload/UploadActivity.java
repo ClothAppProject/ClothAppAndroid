@@ -200,10 +200,6 @@ public class UploadActivity extends AppCompatActivity {
                             Get g = new Get();
                             g.execute(url);
 
-                            // Redirecting the user to the homepage activity
-                            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(i);
-
                             finish();
                         } else {
                             // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server

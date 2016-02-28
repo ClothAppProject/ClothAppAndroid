@@ -53,7 +53,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
             //aggiunto la data della prima foto
             ApplicationSupport appSupport = ((ApplicationSupport) getApplicationContext());
-            appSupport.setFirstDate(fotos.get(0).getCreatedAt());
             for (ParseObject obj : fotos) {
                 ParseFile file = obj.getParseFile("thumbnail");
                 //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport

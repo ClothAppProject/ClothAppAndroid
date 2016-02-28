@@ -77,8 +77,7 @@ public class MostRecentFragment extends Fragment {
                 recyclerView.addOnScrollListener(mostRecentScrollListener);
 
                 // Update the itemList with the result of a query to Parse.
-                ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
-                MostRecentAdapter.itemList = appSupport.getPhotos();
+                getParseMostRecentPhotos(0, 12);
             }
         });
     }
@@ -88,9 +87,11 @@ public class MostRecentFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        mostRecentAdapter = new MostRecentAdapter(new ArrayList<Image>());
-        recyclerView.setAdapter(mostRecentAdapter);
 
+        //prendo foto scaricate nella splash
+        ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
+        mostRecentAdapter = new MostRecentAdapter(appSupport.getPhotos());
+        recyclerView.setAdapter(mostRecentAdapter);
         mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
         recyclerView.addOnScrollListener(mostRecentScrollListener);
 
