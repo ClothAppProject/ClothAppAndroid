@@ -76,10 +76,8 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set activity to current activity.
         activity = this;
 
+        // Get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Loading follow Button
-        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
-
 
         // Set toolbar title to empty string so that it won't overlap with the tabs.
         toolbar.setTitle("");
@@ -88,12 +86,17 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set up navigation drawer
         initDrawer(toolbar);
 
+        // Get the view pager and setup its content
         viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
         }
 
+        // Load profile picture
         loadProfilePicture();
+
+        // Loading follow Button
+        final Button follow_edit = (Button) findViewById(R.id.follow_edit);
 
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
