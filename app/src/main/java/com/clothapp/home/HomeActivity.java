@@ -32,6 +32,7 @@ import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadActivity;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.parse.GetCallback;
@@ -278,6 +279,13 @@ public class HomeActivity extends AppCompatActivity {
                 // Clicked on "Home" page button.
                 // Do nothing since we already are in the home page.
                 case R.id.nav_home:
+                    break;
+
+                case R.id.nav_settings:
+                    Log.d("HomeActivity", "Clicked on R.id.nav_settings");
+
+                    intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                    startActivity(intent);
                     break;
 
                 // Clicked on "My Profile" item.
