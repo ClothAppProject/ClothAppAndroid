@@ -51,43 +51,43 @@ public class HomeMostRecentFragment extends Fragment {
         // find the layout
         swipeRefreshLayout = (SwipeRefreshLayout) vi.findViewById(R.id.swipe_container);
         // the refresh listner. this would be called when the layout is pulled down
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //query che prende tutte le foto più nuove rispetto a quelle già in memoria
-                ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
-                //updatePhotos.whereGreaterThan("createdAt", global.getFirstDate());
-                updatePhotos.orderByDescending("createdAt");
-                updatePhotos.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        if (e == null) {
-                            if (!objects.isEmpty()) {
-                                //modifico la data della prima foto
-                                //global.setFirstDate(objects.get(0).getCreatedAt());
-                                for (int i = objects.size() - 1; i >= 0; i--) {
-                                    ParseObject object = objects.get(i);
-                                    ParseFile f = objects.get(i).getParseFile("thumbnail");
-                                    try {
-                                        //ottengo la foto e la aggiungo per prima
-                                        global.addFirstPhoto(new Image(f.getFile(), object.getObjectId(),object.getString("user"),
-                                                object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti")));
-                                    } catch (ParseException e1) {
-                                        check(e1.getCode(), vi, e1.getMessage());
-                                    }
-
-                                }//aggiorno la galleria
-                                imageGridViewAdapter.notifyDataSetChanged();
-                            }
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            swipeRefreshLayout.setRefreshing(false);
-                            check(e.getCode(), vi, e.getMessage());
-                        }
-                    }
-                });
-            }
-        });
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                //query che prende tutte le foto più nuove rispetto a quelle già in memoria
+//                ParseQuery<ParseObject> updatePhotos = new ParseQuery<ParseObject>("Photo");
+//                updatePhotos.whereGreaterThan("createdAt", global.getFirstDate());
+//                updatePhotos.orderByDescending("createdAt");
+//                updatePhotos.findInBackground(new FindCallback<ParseObject>() {
+//                    @Override
+//                    public void done(List<ParseObject> objects, ParseException e) {
+//                        if (e == null) {
+//                            if (!objects.isEmpty()) {
+//                                //modifico la data della prima foto
+//                                global.setFirstDate(objects.get(0).getCreatedAt());
+//                                for (int i = objects.size() - 1; i >= 0; i--) {
+//                                    ParseObject object = objects.get(i);
+//                                    ParseFile f = objects.get(i).getParseFile("thumbnail");
+//                                    try {
+//                                        //ottengo la foto e la aggiungo per prima
+//                                        global.addFirstPhoto(new Image(f.getFile(), object.getObjectId(),object.getString("user"),
+//                                                object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti")));
+//                                    } catch (ParseException e1) {
+//                                        check(e1.getCode(), vi, e1.getMessage());
+//                                    }
+//
+//                                }//aggiorno la galleria
+//                                imageGridViewAdapter.notifyDataSetChanged();
+//                            }
+//                            swipeRefreshLayout.setRefreshing(false);
+//                        } else {
+//                            swipeRefreshLayout.setRefreshing(false);
+//                            check(e.getCode(), vi, e.getMessage());
+//                        }
+//                    }
+//                });
+//            }
+//        });
         // sets the colors used in the refresh animation
         swipeRefreshLayout.setColorSchemeResources(R.color.background, R.color.orange);
 

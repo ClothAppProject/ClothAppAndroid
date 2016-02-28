@@ -62,6 +62,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Image image = itemList.get(position);
 
         holder.setUsername(image.getUser());
+        Log.d("TopRatedAdapter", "image.getVestitiToString() = " + image.getVestitiToString());
         holder.setItemName(image.getVestitiToString());
         holder.setHashtags(image.getHashtagToString());
         holder.setLikeCount(image.getNumLike());

@@ -60,7 +60,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         Image image = itemList.get(position);
 
-        holder.setItemText(image.getUser());
         holder.setItemImage(image.getFile());
 
         List likeUsers = image.getLike();
@@ -84,14 +83,12 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // may be needed later. For example setting the username after a Parse query.
     class MostRecentItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView txtTitle;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
 
         public MostRecentItemViewHolder(final View parent) {
             super(parent);
 
-            txtTitle = (TextView) parent.findViewById(R.id.fragment_home_most_recent_item_title);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
 
@@ -100,13 +97,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             // Setting some OnClickListeners
             setPhotoOnClickListener();
             setHeartImageOnClickListener();
-        }
-
-        // Use this method to set the ItemTitle
-        public void setItemText(CharSequence text) {
-            if (txtTitle != null) {
-                txtTitle.setText(text);
-            }
         }
 
         // Use this method to set the photo to the given File
