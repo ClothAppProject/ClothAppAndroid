@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadActivity.class);
+                i.putExtra("photoType", 2187);
                 startActivity(i);
             }
         });
@@ -112,6 +113,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Redirect the user to the upload activity and upload a photo
                 Intent i = new Intent(getApplicationContext(), UploadActivity.class);
+                i.putExtra("photoType", 1540);
                 startActivity(i);
             }
         });
