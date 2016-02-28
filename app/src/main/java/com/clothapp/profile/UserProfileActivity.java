@@ -89,7 +89,7 @@ public class UserProfileActivity extends AppCompatActivity {
         // Get the drawer view
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
