@@ -139,7 +139,8 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if (ProfileUploadedPhotosFragment.adapter!=null) ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
+        if (ProfileUploadedPhotosFragment.adapter != null)
+            ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
 
     private void initDrawer(Toolbar toolbar) {

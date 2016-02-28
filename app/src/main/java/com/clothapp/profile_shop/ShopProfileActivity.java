@@ -102,8 +102,8 @@ public class ShopProfileActivity extends AppCompatActivity {
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
-        }else {
-            FollowUtil.setFollowButton(follow_edit,username);
+        } else {
+            FollowUtil.setFollowButton(follow_edit, username);
         }
     }
 
@@ -140,7 +140,8 @@ public class ShopProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if (ProfileShopUploadedPhotosFragment.adapter!=null) ProfileShopUploadedPhotosFragment.adapter.notifyDataSetChanged();
+        if (ProfileShopUploadedPhotosFragment.adapter != null)
+            ProfileShopUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
 
     private void initDrawer(Toolbar toolbar) {
@@ -257,12 +258,12 @@ public class ShopProfileActivity extends AppCompatActivity {
                                     switch (which) {
                                         case 0:
                                             // Redirect the user to the ProfilePictureActivity with camera
-                                            i.putExtra("photoType",2187);
+                                            i.putExtra("photoType", 2187);
                                             startActivity(i);
                                             break;
                                         case 1:
                                             // Redirect the user to the ProfilePictureActivity with galery
-                                            i.putExtra("photoType",1540);
+                                            i.putExtra("photoType", 1540);
                                             startActivity(i);
                                             break;
                                         case 2:
