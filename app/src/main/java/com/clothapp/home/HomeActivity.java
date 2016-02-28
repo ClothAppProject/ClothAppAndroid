@@ -45,8 +45,13 @@ public class HomeActivity extends AppCompatActivity {
         context = HomeActivity.this;
         activity = this;
 
+        // Initialize Toolbar.
         initToolbar();
+
+        // Initialize ViewPager and TabLayout. This also initializes the navigation drawer.
         initViewPagerAndTabs();
+
+        // Initialize FloatingActionButton.
         setupFloatingButton();
     }
 
@@ -54,15 +59,14 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.home_toolbar);
         setSupportActionBar(mToolbar);
         setTitle(getString(R.string.app_name));
-        // mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+
+        // Initialize the navigation drawer.
         initDrawer(mToolbar);
     }
 
     private void initViewPagerAndTabs() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
         HomePagerAdapter pagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
-//        pagerAdapter.addFragment(MostRecentFragment.newInstance(20), "Most Recent");
-//        pagerAdapter.addFragment(MostRecentFragment.newInstance(4), "Tab 2");
         pagerAdapter.addFragment(MostRecentFragment.newInstance(), "Most Recent");
         pagerAdapter.addFragment(TopRatedFragment.newInstance(), "Top Rated");
         viewPager.setAdapter(pagerAdapter);
@@ -78,6 +82,8 @@ public class HomeActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.home_nav_view);
+
+        // Setup OnClickListener for the navigation drawer.
         navigationView.setNavigationItemSelectedListener(new HomeNavigationItemSelectedListener());
     }
 
@@ -135,11 +141,13 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
+            // Clicked on the home (three horizontal lines icon).
             case android.R.id.home:
                 // Log.d("HomeActivity", "android.R.id.home");
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
+            // Clicked on the settings button.
             case R.id.action_settings:
                 // Log.d("HomeActivity", "R.id.action_settings");
                 return true;
@@ -163,9 +171,11 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
 
+        // Otherwise use default behavior.
         super.onBackPressed();
     }
 
+    // This class handles click to each item of the navigation drawer
     class HomeNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @SuppressWarnings("StatementWithEmptyBody")
@@ -176,9 +186,12 @@ public class HomeActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
 
+                // Clicked on "Home" page button.
+                // Do nothing since we already are in the home page.
                 case R.id.nav_home:
                     break;
 
+                // Clicked on "My Profile" item.
                 case R.id.nav_profile:
 
                     Log.d("HomeActivity", "Clicked on R.id.nav_profile");
@@ -189,6 +202,7 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
 
+                // Clicked on "Logout" item.
                 case R.id.nav_logout:
 
                     Log.d("HomeActivity", "Clicked on R.id.nav_logout");
@@ -212,8 +226,11 @@ public class HomeActivity extends AppCompatActivity {
 
             }
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
+            // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.home_drawer_layout);
+
+            // Close the navigation drawer after item selection.
+            HomeActivity.this.mDrawerLayout.closeDrawer(GravityCompat.START);
+
             return true;
         }
     }

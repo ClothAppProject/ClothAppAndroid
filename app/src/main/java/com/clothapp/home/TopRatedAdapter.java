@@ -15,9 +15,12 @@ import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.parse.GetCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -47,7 +50,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
-        TopRatedItemViewHolder holder = (TopRatedItemViewHolder) viewHolder;
+        final TopRatedItemViewHolder holder = (TopRatedItemViewHolder) viewHolder;
 
         Image image = itemList.get(position);
 
@@ -65,6 +68,25 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.setHeartImage(false);
         }
 
+        // Doesn't work since a holder may be bound to multiple images...
+        /*ParseQuery<ParseObject> query = ParseQuery.getQuery("UserPhoto");
+        query.whereEqualTo("username", image.getUser());
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject photo, ParseException e) {
+                if (e == null) {
+                    ParseFile thumbnail = photo.getParseFile("thumbnail");
+                    thumbnail.getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(File file, ParseException e) {
+                            holder.setProfilePhoto(file);
+                        }
+                    });
+                } else {
+                    Log.d("TopRatedAdapter", "Error: " + e.getMessage());
+                }
+            }
+        });*/
     }
 
     @Override
@@ -126,6 +148,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Glide.with(HomeActivity.context)
                     .load(file)
                     .centerCrop()
+                    .transform(new CircleTransform(HomeActivity.context))
                     .into(imgProfilePhoto);
         }
 
