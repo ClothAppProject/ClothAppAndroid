@@ -20,7 +20,9 @@ import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.parse.GetCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -73,9 +75,21 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.setHeartImage(false);
         }
 
-        // Doesn't work since a holder may be bound to multiple images...
-        /*ParseQuery<ParseObject> query = ParseQuery.getQuery("UserPhoto");
-        query.whereEqualTo("username", image.getUser());
+        setupUserProfilePhoto(holder, image.getUser());
+    }
+
+    // Returns the number of items in the RecyclerView
+    @Override
+    public int getItemCount() {
+        return itemList == null ? 0 : itemList.size();
+    }
+
+    // Download and display the user profile photo. If the user has no profile photo, display
+    // a placeholder.
+    private void setupUserProfilePhoto(final TopRatedItemViewHolder holder, String username) {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("UserPhoto");
+        query.whereEqualTo("username", username);
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject photo, ParseException e) {
@@ -84,20 +98,19 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     thumbnail.getFileInBackground(new GetFileCallback() {
                         @Override
                         public void done(File file, ParseException e) {
-                            holder.setProfilePhoto(file);
+                            if (e == null) {
+                                holder.setProfilePhoto(file);
+                            } else {
+                                Log.d("TopRatedAdapter", "Error while downloading thumbnail: " + e.getMessage());
+                            }
                         }
                     });
                 } else {
-                    Log.d("TopRatedAdapter", "Error: " + e.getMessage());
+                    // Log.d("TopRatedAdapter", "Error: " + e.getMessage());
+                    holder.setProfilePhoto(null);
                 }
             }
-        });*/
-    }
-
-    // Returns the number of items in the RecyclerView
-    @Override
-    public int getItemCount() {
-        return itemList == null ? 0 : itemList.size();
+        });
     }
 
     // This class is used to "hold a view".
@@ -168,11 +181,20 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         // Set the profile photo for the ProfilePhoto ImageView of the current view with the given File
         public void setProfilePhoto(File file) {
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .transform(new CircleTransform(HomeActivity.context))
-                    .into(imgProfilePhoto);
+
+            if (file != null) {
+                Glide.with(HomeActivity.context)
+                        .load(file)
+                        .centerCrop()
+                        .transform(new CircleTransform(HomeActivity.context))
+                        .into(imgProfilePhoto);
+            } else {
+                Glide.with(HomeActivity.context)
+                        .load(R.drawable.com_facebook_profile_picture_blank_square)
+                        .centerCrop()
+                        .transform(new CircleTransform(HomeActivity.context))
+                        .into(imgProfilePhoto);
+            }
         }
 
         // Use this method to set the heart image color.
