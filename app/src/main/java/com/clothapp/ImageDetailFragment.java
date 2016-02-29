@@ -131,31 +131,6 @@ public class ImageDetailFragment extends Fragment {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
         queryFoto.whereEqualTo("username", immagine.getUser());
-//        queryFoto.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> objects, ParseException e) {
-//                if (e == null) {
-//                    //  if the user has a profile pic it will be shown in the side menu
-//                    //  else the app logo will be shown
-//                    if (objects.size() != 0) {
-//                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-//                        try {
-//                            File file = f.getFile();
-//                            Glide.with(context)
-//                                    .load(file)
-//                                    .centerCrop()
-//                                    .transform(new CircleTransform(context))
-//                                    .into(profilePic);
-//                        } catch (ParseException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    }
-//                } else {
-//                    check(e.getCode(), vi, e.getMessage());
-//                }
-//            }
-//        });
-
         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
