@@ -75,6 +75,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //gestisco gli intent
         query= handleIntent(getIntent());
+        System.out.println("la query è "+query);
         if(query==null)query="";
 
         //set adapter to  ViewPager
@@ -121,9 +122,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query1) {
                 System.out.println("nuova query");
-                searchAdapter.setQuery(query);
+                query=query1;
+                searchAdapter.setQuery(query1);
                 searchAdapter.notifyDataSetChanged();
                 return false;
             }

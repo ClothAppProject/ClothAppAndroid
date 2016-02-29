@@ -49,6 +49,8 @@ public class FindClothFragment extends Fragment {
     private Float prezzoA;
     private String order;
 
+    String POPOLARITA="Popolarità";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_cloth, container, false);
@@ -95,8 +97,9 @@ public class FindClothFragment extends Fragment {
         //final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        if(order.equals(getResources().getStringArray(R.array.array_order)[0]))queryFoto.addDescendingOrder("nLike");
-        if(order.equals(getResources().getStringArray(R.array.array_order)[1])) queryFoto.addAscendingOrder("nLike");
+        if(order==null) order=POPOLARITA;
+        if(order.equals(POPOLARITA))queryFoto.addDescendingOrder("nLike");
+        //if(order.equals() queryFoto.addAscendingOrder("nLike");
         queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
         skip=skip+5;
