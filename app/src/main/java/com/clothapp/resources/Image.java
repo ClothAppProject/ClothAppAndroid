@@ -29,7 +29,7 @@ public class Image implements Parcelable {
     private List<String> idClothes;
     private List<String> typeClothes;
 
-    public Image(File f, String Id, String user, List<String> likes, int nLike, List<String> hashtags, List<String> idClothes, List<String> typeClothes) {
+    public Image(File f, String Id, String user, List likes, int nLike, List hashtags, List idClothes, List typeClothes) {
 
         this.user = user;
         this.objectId = Id;
