@@ -152,6 +152,10 @@ public class ImageDetailFragment extends Fragment {
                     });
                 } else {
                     // Log.d("ImageDetailFragment", "Error: " + e.getMessage());
+                    Glide.with(context)
+                            .load(R.drawable.com_facebook_profile_picture_blank_square)
+                            .transform(new CircleTransform(context))
+                            .into(profilePic);
                 }
             }
         });
