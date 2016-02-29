@@ -3,6 +3,6 @@
 
     <corners android:radius="16dp" />
 
-    <solid android:color="@color/button_material_light" />
+    <solid android:color="@color/red" />
 
 </shape>
