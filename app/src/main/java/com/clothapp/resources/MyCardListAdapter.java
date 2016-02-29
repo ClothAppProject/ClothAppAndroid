@@ -29,41 +29,41 @@ import java.util.List;
  */
 public class MyCardListAdapter extends BaseAdapter {
     private final Context context;
-    private List<CardView> listCard=new ArrayList<CardView>();
-    private List<Cloth> cloths=new ArrayList<Cloth>();
+    private List<CardView> listCard = new ArrayList<>();
+    private List<Cloth> cloths = new ArrayList<>();
 
-    public MyCardListAdapter(Context context,List<Cloth> cloth) {
+    public MyCardListAdapter(Context context, List<Cloth> cloth) {
         this.context = context;
-        this.cloths=cloth;
+        this.cloths = cloth;
     }
 
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
+
         View row = convertView;
-        if (row==null) {
+        if (row == null) {
             //se la convertView di quest'immagine è nulla la inizializzo
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.info_cloth_card, parent, false);
         }
 
-
         //prendo i vari oggetti del card_layout
         TextView address = (TextView) row.findViewById(R.id.address);
-        TextView shop=(TextView)row.findViewById(R.id.shop);
-        TextView price=(TextView)row.findViewById(R.id.price);
+        TextView shop = (TextView) row.findViewById(R.id.shop);
+        TextView price = (TextView) row.findViewById(R.id.price);
         TextView brand = (TextView) row.findViewById(R.id.brand);
-        TextView cloth=(TextView)row.findViewById(R.id.cloth);
-        address.setText((CharSequence)cloths.get(position).getAddress());
-        shop.setText((CharSequence)cloths.get(position).getShop());
-        String p="";
-        if(cloths.get(position).getPrice()!=null)p=cloths.get(position).getPrice().toString();
-        if(p.split("\\.").length>1 && p.split("\\.")[1].length()==1) p=p+"0";
+        TextView cloth = (TextView) row.findViewById(R.id.cloth);
+        address.setText(cloths.get(position).getAddress());
+        shop.setText(capitalize(cloths.get(position).getShop()));
+        String p = "";
+        if (cloths.get(position).getPrice() != null) p = cloths.get(position).getPrice().toString();
+        if (p.split("\\.").length > 1 && p.split("\\.")[1].length() == 1) p = p + "0";
         //System.out.println(p.s());
         price.setText(p);
-        brand.setText((CharSequence)cloths.get(position).getBrand());
-        cloth.setText((CharSequence) cloths.get(position).getCloth());
-        if (cloths.get(position).getShopUsername()!=null) {
+        brand.setText(capitalize(cloths.get(position).getBrand()));
+        cloth.setText(capitalize(cloths.get(position).getCloth()));
+        if (cloths.get(position).getShopUsername() != null) {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,14 +73,15 @@ public class MyCardListAdapter extends BaseAdapter {
                     context.startActivity(i);
                 }
             });
-        }else{
-            //TODO se il negozio non ha username e quindi non è registrato, lo rimando all'activity della search
+        } else {
+            // TODO: se il negozio non ha username e quindi non è registrato, lo rimando all'activity della search
         }
 
         return row;
     }
 
-    @Override public int getCount() {
+    @Override
+    public int getCount() {
         return cloths.size();
     }
 
@@ -90,7 +91,15 @@ public class MyCardListAdapter extends BaseAdapter {
     }
 
 
-    @Override public long getItemId(int position) {
+    @Override
+    public long getItemId(int position) {
         return position;
+    }
+
+    private String capitalize(String toCapitalize) {
+        // if argument is null or is empty return an empty string
+        if (toCapitalize == null || toCapitalize.isEmpty()) return "";
+        // otherwise return capitalized string
+        return toCapitalize.substring(0, 1).toUpperCase() + toCapitalize.substring(1);
     }
 }
