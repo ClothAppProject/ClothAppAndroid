@@ -79,7 +79,7 @@ public class ImageDetailFragment extends Fragment {
     private ParseObject parseObject;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
-        this.context = c;
+        context = c;
         final ImageDetailFragment f = new ImageDetailFragment();
         final Bundle args = new Bundle();
         args.putParcelable("ID", image);
@@ -129,7 +129,7 @@ public class ImageDetailFragment extends Fragment {
             }
         });
 
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<>("UserPhoto");
         queryFoto.whereEqualTo("username", immagine.getUser());
         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -159,7 +159,7 @@ public class ImageDetailFragment extends Fragment {
 
 
         //faccio query al database per scaricare la foto
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+        ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("objectId", immagine.getObjectId());
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -194,14 +194,14 @@ public class ImageDetailFragment extends Fragment {
                     }
                 }
 
-                hashtag.setText((CharSequence) s);
+                hashtag.setText(s);
 
                 //per ogni vestito cerco le informazioni
                 ArrayList arrayList = (ArrayList) object.get("vestiti");
-                if (arrayList == null) arrayList = new ArrayList<Cloth>();
-                vestiti = new ArrayList<Cloth>(arrayList.size());
+                if (arrayList == null) arrayList = new ArrayList<>();
+                vestiti = new ArrayList<>(arrayList.size());
                 for (int i = 0; i < arrayList.size(); i++) {
-                    ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Vestito");
+                    ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
                     query1.whereEqualTo("objectId", arrayList.get(i));
                     query1.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
