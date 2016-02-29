@@ -22,16 +22,23 @@ import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private String profilo;
     public static List<Image> photos;
+
+    private final static String username = ParseUser.getCurrentUser().getUsername();
 
     public ProfileUploadedPhotosAdapter(List<Image> items, String profilo) {
         this.profilo = profilo;
@@ -86,7 +93,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         return photos.size();
     }
 
-    public static class PhotoViewHolder extends RecyclerView.ViewHolder {
+    class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtItemNames;
         TextView txtHashtags;
@@ -103,7 +110,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             txtLikeCount = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_count);
             likeImage = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_image);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (profilo.equals("persona")) {
@@ -117,6 +124,45 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                         intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
                         ShopProfileActivity.activity.startActivity(intent);
                     }
+                }
+            });
+
+            likeImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Image image = ProfileUploadedPhotosAdapter.photos.get(PhotoViewHolder.this.getAdapterPosition());
+
+                    final boolean add = !image.getLike().contains(username);
+                    if (add) {
+                        // Log.d("ProfileUploadedPhotos", "Adding...");
+                        image.addLike(username);
+                    } else {
+                        // Log.d("ProfileUploadedPhotos", "Removing...");
+                        image.remLike(username);
+                    }
+
+                    notifyDataSetChanged();
+
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+
+                    query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
+                        public void done(ParseObject photo, ParseException e) {
+                            if (e == null) {
+                                if (add) {
+                                    photo.addUnique("like", username);
+                                    photo.put("nLike", photo.getInt("nLike") + 1);
+                                    photo.saveInBackground();
+                                } else {
+                                    photo.removeAll("like", Collections.singletonList(username));
+                                    photo.put("nLike", photo.getInt("nLike") - 1);
+                                    photo.saveInBackground();
+                                }
+                            } else {
+                                Log.d("ProfileUploadedPhotos", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
                 }
             });
         }
