@@ -62,8 +62,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Image image = itemList.get(position);
 
         holder.setUsername(image.getUser());
-        holder.setItemName(image.getVestitiToString());
-        holder.setHashtags(image.getHashtagToString());
+        holder.setItemName(image.getVestiti());
+        holder.setHashtags(image.getHashtag());
         holder.setLikeCount(image.getNumLike());
         holder.setPhoto(image.getFile());
 
@@ -162,13 +162,39 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         // Set the item name(s) for the current view. Example: Suit & Tie
-        public void setItemName(String itemName) {
-            txtItemName.setText(itemName);
+        public void setItemName(List<String> clothesList) {
+
+            if (clothesList == null) return;
+
+            StringBuilder sb = new StringBuilder();
+
+            for (String clothing : clothesList) {
+                sb.append(clothing.substring(0, 1).toUpperCase())
+                        .append(clothing.substring(1))
+                        .append(" & ");
+            }
+
+            String result = sb.toString();
+            if (result.length() > 0) result = result.substring(0, result.length() - 2);
+
+            txtItemName.setText(result);
         }
 
         // Set the hashtags for the current view. Example: #Hashtag1, #Hashtag2
-        public void setHashtags(String hashtags) {
-            txtHashtags.setText(hashtags);
+        public void setHashtags(List<String> hashtagList) {
+
+            if (hashtagList == null) return;
+
+            StringBuilder sb = new StringBuilder();
+
+            for (String hashtag : hashtagList) {
+                sb.append(hashtag.substring(0, 1))
+                        .append(hashtag.substring(1, 2).toUpperCase())
+                        .append(hashtag.substring(2))
+                        .append(" ");
+            }
+
+            txtHashtags.setText(sb.toString());
         }
 
         // Set the photo for the Photo ImageView of the current view with the given File
