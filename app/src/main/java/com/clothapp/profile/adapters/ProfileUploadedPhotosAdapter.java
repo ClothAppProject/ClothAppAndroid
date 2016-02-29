@@ -73,7 +73,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         List likeUsers = photos.get(position).getLike();
 
         if (likeUsers != null && likeUsers.contains(username)) {
-            photoViewHolder.likeImage.setColorFilter(Color.rgb(181, 47, 41));
+            photoViewHolder.likeImage.setColorFilter(Color.rgb(210, 36, 36));
         } else {
             photoViewHolder.likeImage.setColorFilter(Color.rgb(205, 205, 205));
         }
