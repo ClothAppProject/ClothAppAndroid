@@ -71,34 +71,40 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         }
 
         // Display hashtags, if any
-        List<String> hashtagList = photos.get(position).getHashtag();
-
-        if (hashtagList != null) {
-
-            StringBuilder sb = new StringBuilder();
-
-            for (String hashtag : hashtagList) {
-                sb.append(hashtag).append(" ");
-            }
-
-            photoViewHolder.txtHashtags.setText(sb.toString());
-
-        } else {
-            photoViewHolder.txtHashtags.setText("");
-        }
+//        List<String> hashtagList = photos.get(position).getHashtag();
+//
+//        if (hashtagList != null) {
+//
+//            StringBuilder sb = new StringBuilder();
+//
+//            for (String hashtag : hashtagList) {
+//                sb.append(hashtag).append(" ");
+//            }
+//
+//            photoViewHolder.txtHashtags.setText(sb.toString());
+//
+//        } else {
+//            photoViewHolder.txtHashtags.setText("");
+//        }
         // Display item (clothing) name, if any
-        List<String> clothesList = photos.get(position).getTypeVestiti();
-        Log.d("ProfileUploadedPhotos", "clothesList: " + clothesList.toString());
-        if (clothesList != null) {
-            StringBuilder sb = new StringBuilder();
-            for (String clothing : clothesList) {
-                sb.append(clothing).append(" & ");
-            }
+//        List<String> clothesList = photos.get(position).getTypeVestiti();
+//        Log.d("ProfileUploadedPhotos", "clothesList: " + clothesList.toString());
+//        if (clothesList != null) {
+//            StringBuilder sb = new StringBuilder();
+//            for (String clothing : clothesList) {
+//                sb.append(clothing).append(" & ");
+//            }
+//
+//            String result = sb.toString();
+//            if (result.length() > 0) result = result.substring(0, result.length() - 2);
+//            photoViewHolder.txtItemNames.setText(result);
+//        }
 
-            String result = sb.toString();
-            if (result.length() > 0) result = result.substring(0, result.length() - 2);
-            photoViewHolder.txtItemNames.setText(result);
-        }
+        // Set item names
+        photoViewHolder.txtItemNames.setText(photos.get(position).getTypeVestitiToString());
+
+        // Set hashtags
+        photoViewHolder.txtHashtags.setText(photos.get(position).getHashtagToString());
 
         String username = ParseUser.getCurrentUser().getUsername();
 
