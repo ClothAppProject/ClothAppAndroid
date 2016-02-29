@@ -189,15 +189,7 @@ public class ImageDetailFragment extends Fragment {
                 });
 
                 //setto gli hashtag
-                ArrayList tag = (ArrayList) object.get("hashtag");
-                String s = " ";
-                if (tag != null) {
-                    for (int i = 0; i < tag.size(); i++) {
-                        s += tag.get(i).toString() + " ";
-                    }
-                }
-
-                hashtag.setText(s);
+                hashtag.setText(immagine.getHashtagToString());
 
                 //per ogni vestito cerco le informazioni
                 ArrayList arrayList = (ArrayList) object.get("vestiti");
