@@ -239,6 +239,8 @@ public class HomeActivity extends AppCompatActivity {
 
             // Clicked on the settings button.
             case R.id.action_settings:
+                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 // Log.d("HomeActivity", "R.id.action_settings");
                 return true;
         }
