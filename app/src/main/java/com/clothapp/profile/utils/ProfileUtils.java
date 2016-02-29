@@ -52,6 +52,9 @@ public class ProfileUtils {
     // Object to store info about the "LocalShop" associated with the user above.
     private static ParseObject shop;
 
+    private final static int SHOP_INFO_COUNT = 5;
+    private final static int USER_INFO_COUNT = 4;
+
 
     // Get info about the user from Parse.
     // Call getParseUser() and getParsePerson() and getParseShop.
@@ -59,6 +62,7 @@ public class ProfileUtils {
         getParseUser(context, username);
         getParsePerson(context, username);
     }
+
     // Call getParseUser() and getParseShop().
     public static void getParseShopInfo(final Context context, String username) {
         getParseUserShop(context, username);
@@ -77,7 +81,7 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    if (photos.isEmpty())   {
+                    if (photos.isEmpty()) {
                         UserProfileActivity.viewPager.setCurrentItem(0, false);
                     }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -119,6 +123,7 @@ public class ProfileUtils {
             }
         });
     }
+
     public static void getShopParseUploadedPhotos(String username, int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -130,7 +135,7 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    if (photos.isEmpty())   {
+                    if (photos.isEmpty()) {
                         ShopProfileActivity.viewPager.setCurrentItem(0, false);
                     }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -249,6 +254,7 @@ public class ProfileUtils {
             }
         });
     }
+
     private static void getParseUserShop(final Context context, final String username) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -302,7 +308,7 @@ public class ProfileUtils {
         });
     }
 
-    private static void getParseShop(final Context context, final String username)    {
+    private static void getParseShop(final Context context, final String username) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
         query.whereEqualTo("username", username);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -328,17 +334,26 @@ public class ProfileUtils {
 
         ProfileInfoAdapter adapter = (ProfileInfoAdapter) UserProfileActivity.viewProfileInfo.getAdapter();
 
-        ProfileInfoListItem item = adapter.items.get(position + 1);
-        item.setContent(text);
+        if (text != null && !text.isEmpty()) {
+            ProfileInfoListItem item = adapter.items.get(position + 1 - (USER_INFO_COUNT - adapter.items.size() + 1));
+            item.setContent(text);
+        } else {
+            adapter.items.remove(position + 1 - (USER_INFO_COUNT - adapter.items.size() + 1));
+        }
 
         adapter.notifyDataSetChanged();
     }
+
     private static void updateShopListItem(int position, String text) {
 
         ProfileShopInfoAdapter adapter = (ProfileShopInfoAdapter) ShopProfileActivity.viewProfileInfo.getAdapter();
 
-        ProfileInfoListItem item = adapter.items.get(position + 1);
-        item.setContent(text);
+        if (text != null && !text.isEmpty()) {
+            ProfileInfoListItem item = adapter.items.get(position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1));
+            item.setContent(text);
+        } else {
+            adapter.items.remove(position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1));
+        }
 
         adapter.notifyDataSetChanged();
     }
@@ -388,6 +403,7 @@ public class ProfileUtils {
         // display dialog
         dialog.show();
     }
+
     public static Intent goToProfile(Context contesto, String utente) {
         Intent i = null;
         //controllo se username è un negozio o una persona
@@ -397,7 +413,7 @@ public class ProfileUtils {
             ParseUser user = query.getFirst();
             if (user.getString("flagISA").equals("Persona")) {
                 i = new Intent(contesto, UserProfileActivity.class);
-            }else{
+            } else {
                 i = new Intent(contesto, ShopProfileActivity.class);
             }
         } catch (ParseException e) {

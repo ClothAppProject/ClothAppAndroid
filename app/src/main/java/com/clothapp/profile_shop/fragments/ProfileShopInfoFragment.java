@@ -48,7 +48,7 @@ public class ProfileShopInfoFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(ShopProfileActivity.context);
         ShopProfileActivity.viewProfileInfo.setLayoutManager(llm);
 
-        // itemDummy will be replace by a header
+        // itemDummy will be replaced by a header
         ProfileInfoListItem itemDummy = new ProfileInfoListItem("DUMMY", "Loading...");
 
         // Create a new item for each list (recycler view) entry

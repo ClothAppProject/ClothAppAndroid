@@ -95,7 +95,11 @@ public class MostRecentFragment extends Fragment {
         mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
         recyclerView.addOnScrollListener(mostRecentScrollListener);
 
-        int size = MostRecentAdapter.itemList.size();
+        int size = 0;
+        if (MostRecentAdapter.itemList != null) {
+            size = MostRecentAdapter.itemList.size();
+        }
+
         getParseMostRecentPhotos(size, 12);
     }
 
