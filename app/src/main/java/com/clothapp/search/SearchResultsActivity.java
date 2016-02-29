@@ -46,7 +46,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ListView listTag;
     private ViewPager viewPager;
     private String query;
-    private String sex=null;
+    private String sex="all";
     private Float pricefrom= Float.valueOf(0);
     private Float priceto=Float.MAX_VALUE;
 
@@ -77,10 +77,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         query= handleIntent(getIntent());
         System.out.println("la query è "+query);
         if(query==null)query="";
+        System.out.println("invio sex:"+sex);
 
         //set adapter to  ViewPager
         searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext(),sex,pricefrom,priceto,order);
         viewPager.setAdapter(searchAdapter);
+        //viewPager.setCurrentItem(1);
         //viewPager.setCurrentItem(1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -202,7 +204,8 @@ public class SearchResultsActivity extends AppCompatActivity {
             return intent.getStringExtra(SearchManager.QUERY);
         }
         if(intent.getStringExtra("query")!=null){
-            sex=intent.getStringExtra("sex");
+            System.out.println("intent:"+intent.getStringExtra("sex"));
+            sex = intent.getStringExtra("sex");
             pricefrom=intent.getFloatExtra("prezzoDa", 0);
             priceto=intent.getFloatExtra("prezzoA",Float.MAX_VALUE);
             order=intent.getStringExtra("order");

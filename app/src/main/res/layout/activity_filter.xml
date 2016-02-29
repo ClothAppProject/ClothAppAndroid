@@ -152,5 +152,16 @@
             android:layout_weight="0.30" />
     </LinearLayout>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="76dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="reset"
+        android:textColor="@color/accentred"
+        android:id="@+id/reset"
+        android:layout_gravity="center|bottom"
+        android:background="@color/sfondo" />
+
 
 </LinearLayout>

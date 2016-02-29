@@ -26,6 +26,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
     Float priceTo;
     String order;
 
+
     String[]titles;
     String query;
     Context context;
@@ -39,6 +40,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
         this.priceFrom=pricefrom;
         this.priceTo=priceto;
         this.order=order;
+        this.sex=sex;
     }
 
 

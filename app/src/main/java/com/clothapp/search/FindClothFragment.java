@@ -21,6 +21,7 @@ import com.clothapp.resources.Image;
 
 import com.clothapp.resources.User;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -35,6 +36,8 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by jack1 on 18/02/2016.
  */
 public class FindClothFragment extends Fragment {
+    private static final String WOMAN = "woman";
+    private static final String ALL = "all";
     private View rootView;
     private ListView listCloth;
     private Context context;
@@ -115,12 +118,35 @@ public class FindClothFragment extends Fragment {
                         if (tag == null) tag = new ArrayList<String>(0);
                         for (int j = 0; j < tag.size(); j++) {
                             if (tag.get(j).contains(query)) {
-                                Image image = new Image(o);
+                                final Image image = new Image(o);
                                 if (!cloth.contains(image)) {
-                                    cloth.add(image);
-                                    global.setCloth(cloth);
-                                    adapter.notifyDataSetChanged();
-                                    //global.setLastCloth(o.getCreatedAt());
+                                    System.out.println("sex: "+sex);
+                                    if(sex!=ALL){
+                                        ParseQuery<ParseObject> persona=new ParseQuery<ParseObject>("Persona");
+                                        persona.whereEqualTo("username", o.getString("user"));
+                                        persona.getFirstInBackground(new GetCallback<ParseObject>() {
+                                            @Override
+                                            public void done(ParseObject object, ParseException e) {
+                                                if (e==null) {
+                                                    if(object!=null) {
+                                                        String s = object.getString("sex");
+                                                        if (s == sex) {
+                                                            cloth.add(image);
+                                                            global.setCloth(cloth);
+                                                            adapter.notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                }else check(e.getCode(),rootView,e.getMessage());
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        System.out.println("aggiungo all");
+                                        cloth.add(image);
+                                        global.setCloth(cloth);
+                                        adapter.notifyDataSetChanged();
+                                        //global.setLastCloth(o.getCreatedAt());
+                                    }
                                 }
 
                                 break;

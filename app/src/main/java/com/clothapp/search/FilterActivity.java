@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,6 +37,8 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     private float priceto;
     private ImageView done;
     private String order=null;
+    private Button reset;
+    private ArrayAdapter<CharSequence> adapter;
 
 
     @Override
@@ -52,6 +55,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
         ab.setDisplayHomeAsUpEnabled(true);
 
         final String query=getIntent().getStringExtra("query");
+
 
         radioGroup=(RadioGroup)findViewById(R.id.radios);
         man=(RadioButton)findViewById(R.id.man);
@@ -79,6 +83,7 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 }
                 Intent i=new Intent(getBaseContext(),SearchResultsActivity.class);
                 i.putExtra("query",query);
+                System.out.println("selezionato:"+sex);
                 i.putExtra("sex",sex[0]);
                 i.putExtra("prezzoDa",pricefrom);
                 i.putExtra("prezzoA",priceto);
@@ -88,10 +93,10 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
 // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        adapter = ArrayAdapter.createFromResource(this,
                 R.array.array_order, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -101,7 +106,16 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-
+        reset=(Button)findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioGroup.clearCheck();
+                prezzoDa.getText().clear();
+                prezzoA.getText().clear();
+                spinner.setSelection(0);
+            }
+        });
 
 
 
@@ -130,4 +144,6 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> parent) {
         order=getResources().getStringArray(R.array.array_order)[0];
     }
+
+
 }
