@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -90,23 +91,23 @@ public class ImageDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        this.immagine = getArguments()!=null ? (Image) getArguments().getParcelable("ID") : null;
+        this.immagine = getArguments() != null ? (Image) getArguments().getParcelable("ID") : null;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
-        t=(TextView)rootView.findViewById(R.id.user);
-        imageView=(ImageView) rootView.findViewById(R.id.photo);
-        heartAnim=(ImageView) rootView.findViewById(R.id.heart_anim);
-        listView=(ListView)rootView.findViewById(R.id.listInfo);
-        hashtag=(TextView)rootView.findViewById(R.id.hashtag);
-        person=(ImageView)rootView.findViewById(R.id.person);
-        share=(ImageView)rootView.findViewById(R.id.share);
-        cuore=(ImageView)rootView.findViewById(R.id.heart);
-        like=(TextView)rootView.findViewById(R.id.like);
-        profilePic = (ImageView)rootView.findViewById(R.id.pic);
-        percentuale = (TextView)rootView.findViewById(R.id.percentuale);
+        t = (TextView) rootView.findViewById(R.id.user);
+        imageView = (ImageView) rootView.findViewById(R.id.photo);
+        heartAnim = (ImageView) rootView.findViewById(R.id.heart_anim);
+        listView = (ListView) rootView.findViewById(R.id.listInfo);
+        hashtag = (TextView) rootView.findViewById(R.id.hashtag);
+        person = (ImageView) rootView.findViewById(R.id.person);
+        share = (ImageView) rootView.findViewById(R.id.share);
+        cuore = (ImageView) rootView.findViewById(R.id.heart);
+        like = (TextView) rootView.findViewById(R.id.like);
+        profilePic = (ImageView) rootView.findViewById(R.id.pic);
+        percentuale = (TextView) rootView.findViewById(R.id.percentuale);
 
         vi = new View(context);
         //trovo le info delle foto e le inserisco nella view
@@ -122,7 +123,7 @@ public class ImageDetailFragment extends Fragment {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
+                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
                 startActivity(i);
 
             }
@@ -130,30 +131,56 @@ public class ImageDetailFragment extends Fragment {
 
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
         queryFoto.whereEqualTo("username", immagine.getUser());
-        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+//        queryFoto.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null) {
+//                    //  if the user has a profile pic it will be shown in the side menu
+//                    //  else the app logo will be shown
+//                    if (objects.size() != 0) {
+//                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
+//                        try {
+//                            File file = f.getFile();
+//                            Glide.with(context)
+//                                    .load(file)
+//                                    .centerCrop()
+//                                    .transform(new CircleTransform(context))
+//                                    .into(profilePic);
+//                        } catch (ParseException e1) {
+//                            e1.printStackTrace();
+//                        }
+//                    }
+//                } else {
+//                    check(e.getCode(), vi, e.getMessage());
+//                }
+//            }
+//        });
+
+        queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    //  if the user has a profile pic it will be shown in the side menu
-                    //  else the app logo will be shown
-                    if (objects.size() != 0) {
-                        ParseFile f = objects.get(0).getParseFile("profilePhoto");
-                        try {
-                            File file = f.getFile();
-                            Glide.with(context)
-                                    .load(file)
-                                    .centerCrop()
-                                    .transform(new CircleTransform(context))
-                                    .into(profilePic);
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
+                    ParseFile parseFile = object.getParseFile("thumbnail");
+
+                    parseFile.getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(File file, ParseException e) {
+                            if (e == null) {
+                                Glide.with(context)
+                                        .load(file)
+                                        .centerCrop()
+                                        .transform(new CircleTransform(context))
+                                        .into(profilePic);
+                            } else {
+                                Log.d("ImageDetailFragment", "Couldn't download profile image thumbnail");
+                            }
                         }
-                    }
+                    });
                 } else {
-                    check(e.getCode(), vi, e.getMessage());
+                    // Log.d("ImageDetailFragment", "Error: " + e.getMessage());
                 }
             }
-            });
+        });
 
 
         //faccio query al database per scaricare la foto
@@ -168,7 +195,7 @@ public class ImageDetailFragment extends Fragment {
                 t.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
+                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
                         startActivity(i);
                     }
                 });
@@ -177,7 +204,7 @@ public class ImageDetailFragment extends Fragment {
                 profilePic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(),immagine.getUser());
+                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
                         startActivity(i);
                         getActivity().finish();
                     }
@@ -205,18 +232,18 @@ public class ImageDetailFragment extends Fragment {
                         @Override
                         public void done(ParseObject info, ParseException e) {
                             if (e == null) {
-                                Float fl=0.0f;
-                                if(info.get("prezzo")!=null){
-                                    if(info.get("prezzo").getClass()!=Float.class)
-                                        fl=Float.parseFloat(info.get("prezzo").toString());
-                                    else fl=(float)info.get("prezzo");
+                                Float fl = 0.0f;
+                                if (info.get("prezzo") != null) {
+                                    if (info.get("prezzo").getClass() != Float.class)
+                                        fl = Float.parseFloat(info.get("prezzo").toString());
+                                    else fl = (float) info.get("prezzo");
                                 }
                                 Cloth c = new Cloth(info.getString("tipo"),
-                                    info.getString("luogoAcquisto"),
+                                        info.getString("luogoAcquisto"),
                                         fl,
-                                    info.getString("shop"),
-                                    info.getString("shopUsername"),
-                                    info.getString("brand"));
+                                        info.getString("shop"),
+                                        info.getString("shopUsername"),
+                                        info.getString("brand"));
                                 vestiti.add(c);
                                 MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
                                 listView.setAdapter(adapter);
@@ -283,17 +310,17 @@ public class ImageDetailFragment extends Fragment {
                     @Override
                     public void done(Integer percentDone) {
                         //passo percentuale
-                        if (percentDone==100)   {
+                        if (percentDone == 100) {
                             percentuale.setVisibility(View.INVISIBLE);
                         }
-                        percentuale.setText(percentDone+"%");
+                        percentuale.setText(percentDone + "%");
                     }
                 });
 
                 //mostro il numero di like
                 int numLikes = object.getInt("nLike");
                 //  se ho zero likes scrivo like sennò likes
-                String singPlur = numLikes == 0 || numLikes == 1? "like" : "likes";
+                String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
 
                 like.setText(Integer.toString(numLikes) + " " + singPlur);
 
@@ -311,7 +338,7 @@ public class ImageDetailFragment extends Fragment {
                         if (immagine.getLike().contains(username)) {
                             //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                             //rimuovo il like e cambio la lista
-                            LikeRes.deleteLike(object,immagine,username);
+                            LikeRes.deleteLike(object, immagine, username);
 
                             cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
 
@@ -321,7 +348,7 @@ public class ImageDetailFragment extends Fragment {
                             like.setText(Integer.toString(numLikes) + " " + singPlur);
                         } else {
                             //aggiungo like e aggiorno anche in parse
-                            LikeRes.addLike(object,immagine,username);
+                            LikeRes.addLike(object, immagine, username);
                             cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                         }
                         //aggiorno il numero di like
@@ -365,28 +392,28 @@ public class ImageDetailFragment extends Fragment {
                 spinner.setAdapter(adapter);
                 // Add action buttons
                 report.setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        ParseObject segnalazione = new ParseObject("Report");
+                        segnalazione.put("comment", comment.getText().toString());
+                        segnalazione.put("from_username", ParseUser.getCurrentUser().getUsername());
+                        segnalazione.put("reason", spinner.getSelectedItem());
+                        segnalazione.saveInBackground(new SaveCallback() {
                             @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                ParseObject segnalazione = new ParseObject("Report");
-                                segnalazione.put("comment",comment.getText().toString());
-                                segnalazione.put("from_username",ParseUser.getCurrentUser().getUsername());
-                                segnalazione.put("reason",spinner.getSelectedItem());
-                                segnalazione.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if (e!=null)    {
-                                            check(e.getCode(),getView(),e.getMessage());
-                                        }
-                                    }
-                                });
-                                dialog.dismiss();
+                            public void done(ParseException e) {
+                                if (e != null) {
+                                    check(e.getCode(), getView(), e.getMessage());
+                                }
                             }
                         });
+                        dialog.dismiss();
+                    }
+                });
                 report.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //segnalazione annullata
-                            }
-                        });
+                    public void onClick(DialogInterface dialog, int id) {
+                        //segnalazione annullata
+                    }
+                });
                 AlertDialog dialogReport = report.create();
                 // display dialog
                 dialogReport.show();
@@ -400,7 +427,7 @@ public class ImageDetailFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //prendo i vestiti della foto e li elimino
-                                if (parseObject.getList("vestiti")!=null) {
+                                if (parseObject.getList("vestiti") != null) {
                                     for (Object id : parseObject.getList("vestiti")) {
                                         ParseObject vestito = ParseObject.createWithoutData("Vestito", (String) id);
                                         vestito.deleteInBackground();
@@ -461,19 +488,20 @@ public class ImageDetailFragment extends Fragment {
     }
 
     //funzione che ritorna il gestureDetector per il doubletap
-    public GestureDetector doubleTapGesture(final ParseObject object)   {
+    public GestureDetector doubleTapGesture(final ParseObject object) {
         return new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDown(MotionEvent e) {
                 return true;
             }
+
             @Override
             public boolean onDoubleTap(MotionEvent e) {
                 final String username = ParseUser.getCurrentUser().getUsername();
                 if (immagine.getLike().contains(username)) {
                     //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
                     //rimuovo il like e cambio la lista
-                    LikeRes.deleteLike(object,immagine,username);
+                    LikeRes.deleteLike(object, immagine, username);
 
                     cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
 
@@ -483,7 +511,7 @@ public class ImageDetailFragment extends Fragment {
                     like.setText(Integer.toString(numLikes) + " " + singPlur);
                 } else {
                     //aggiungo like e aggiorno anche in parse
-                    LikeRes.addLike(object,immagine,username);
+                    LikeRes.addLike(object, immagine, username);
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
                 //aggiorno il numero di like
@@ -513,6 +541,7 @@ public class ImageDetailFragment extends Fragment {
                 //likeImg.setImageDrawable(context.getResources().getDrawable(R.drawable.like_active));
                 return true;
             }
+
             @Override
             public boolean onDoubleTapEvent(MotionEvent e) {
                 return true;
