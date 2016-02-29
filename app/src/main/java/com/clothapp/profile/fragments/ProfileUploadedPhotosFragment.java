@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.clothapp.resources.Image;
 import java.util.ArrayList;
 
 public class ProfileUploadedPhotosFragment extends Fragment {
-
     public static ProfileUploadedPhotosAdapter adapter;
     public static ArrayList<Image> photos = new ArrayList<>();
 
@@ -56,7 +54,7 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-        adapter = new ProfileUploadedPhotosAdapter(items, "persona");
+         adapter = new ProfileUploadedPhotosAdapter(items,"persona");
         UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
@@ -65,11 +63,10 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         // Return the fragment
         return rootView;
     }
-
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if (adapter != null) adapter.notifyDataSetChanged();
+        if (adapter!=null) adapter.notifyDataSetChanged();
     }
 
 }

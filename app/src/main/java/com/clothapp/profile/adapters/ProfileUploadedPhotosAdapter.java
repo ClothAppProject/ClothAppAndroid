@@ -35,7 +35,6 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
     public ProfileUploadedPhotosAdapter(List<Image> items, String profilo) {
         this.profilo = profilo;
-        PhotoViewHolder.count = 0;
         ProfileUploadedPhotosAdapter.photos = items;
     }
 
@@ -88,8 +87,18 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photoViewHolder.txtHashtags.setText("");
         }
         // Display item (clothing) name, if any
-        photoViewHolder.txtItemNames.setText(photos.get(position).getTypeVestitiToString());
+        List<String> clothesList = photos.get(position).getTypeVestiti();
+        Log.d("ProfileUploadedPhotos", "clothesList: " + clothesList.toString());
+        if (clothesList != null) {
+            StringBuilder sb = new StringBuilder();
+            for (String clothing : clothesList) {
+                sb.append(clothing).append(" & ");
+            }
 
+            String result = sb.toString();
+            if (result.length() > 0) result = result.substring(0, result.length() - 2);
+            photoViewHolder.txtItemNames.setText(result);
+        }
 
         String username = ParseUser.getCurrentUser().getUsername();
 
@@ -111,10 +120,6 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        public static int count = 0;
-
-        private int position = 0;
-
         TextView txtItemNames;
         TextView txtHashtags;
         ImageView photo;
@@ -130,19 +135,9 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             txtLikeCount = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_count);
             likeImage = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_image);
 
-            if (count == 0) {
-                ProfileUploadedPhotosFragment.photos = new ArrayList<>();
-            }
-
-            Image item = photos.get(count);
-
-            position = count;
-
-            count++;
-
-            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.getLike(),
-                    item.getNumLike(), item.getHashtag(), item.getIdVestiti(), item.getTypeVestiti());
-            ProfileUploadedPhotosFragment.photos.add(image);
+//            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.users,
+//                    item.getNumLike(), item.getHashtag(), item.getVestiti());
+//            ProfileUploadedPhotosFragment.photos.add(image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -150,12 +145,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     if (profilo.equals("persona")) {
                         Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
                         intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", position);
+                        intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
                         UserProfileActivity.activity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(ShopProfileActivity.context, ImageFragment.class);
                         intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", position);
+                        intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
                         ShopProfileActivity.activity.startActivity(intent);
                     }
                 }
