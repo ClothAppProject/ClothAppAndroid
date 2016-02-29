@@ -185,7 +185,7 @@ public class ProfileUtils {
                 if (e == null) {
                     Log.d("ProfileUtils", "ParseObject for profile image found!");
 
-                    ParseFile parseFile = photo.getParseFile("thumbnail");
+                    ParseFile parseFile = photo.getParseFile("profilePhoto");
                     parseFile.getFileInBackground(new GetFileCallback() {
                         @Override
                         public void done(File file, ParseException e) {

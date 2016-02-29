@@ -31,8 +31,8 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public PeopleListAdapter(List<User> utenti,String profilo) {
         this.profilo=profilo;
         this.users=utenti;
-        if (profilo.equals("persona")) context = UserProfileActivity.context;
-        else context = ShopProfileActivity.context;
+        if (profilo.equals("persona")) context = UserProfileActivity.activity.getApplicationContext();
+        else context = ShopProfileActivity.activity.getApplicationContext();
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,6 +61,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onClick(View v) {
                 Intent i = ProfileUtils.goToProfile(context,users.get(position).getUsername());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });
