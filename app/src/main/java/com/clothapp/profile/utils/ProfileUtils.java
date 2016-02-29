@@ -97,14 +97,9 @@ public class ProfileUtils {
                                     RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
                                     ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
-                                    String objectId = photo.getObjectId();
-                                    String username = photo.get("user").toString();
-                                    int nLikes = photo.getInt("nLike");
-                                    List <String> likes = photo.getList("like");
-                                    List <String> hashtag = photo.getList("hashtag");
-                                    List <String> vestiti = photo.getList("vestiti");
-
-                                    Image item = new Image(file, objectId, username, likes, nLikes, hashtag, vestiti);
+                                    Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
+                                            photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
+                                            photo.getList("vestiti"), photo.getList("tipo"));
 
                                     adapter.photos.add(item);
 
@@ -155,18 +150,9 @@ public class ProfileUtils {
                                     RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
                                     ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
-                                    String objectId = photo.getObjectId();
-                                    String username = photo.get("user").toString();
-                                    int nLikes = photo.getInt("nLike");
-                                    List <String> like = photo.getList("like");
-                                    List <String> hashtag = photo.getList("hashtag");
-                                    List <String> vestiti = photo.getList("vestiti");
-
-                                    Image item = new Image(file, objectId, username, like, nLikes, hashtag, vestiti);
-
-                                    item.hashtag = photo.getList("hashtag");
-                                    item.clothes = photo.getList("tipo");
-                                    item.users = photo.getList("like");
+                                    Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
+                                            photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
+                                            photo.getList("vestiti"), photo.getList("tipo"));
 
                                     adapter.photos.add(item);
 

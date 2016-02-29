@@ -57,7 +57,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                 ParseFile file = obj.getParseFile("thumbnail");
                 //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
                 photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
-                        obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),obj.getList("vestiti")));
+                        obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),
+                        obj.getList("vestiti"), obj.getList("tipo")));
             }
             Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             //prendo la variabile globale photos e ci metto dentro le immagini

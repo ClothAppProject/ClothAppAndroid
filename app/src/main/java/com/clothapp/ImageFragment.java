@@ -160,8 +160,9 @@ public class ImageFragment extends AppCompatActivity {
                             object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
-                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
-                                            object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
+                                            object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
+                                            object.getList("vestiti"), object.getList("tipo"));
                                     lista.add(toAdd);
                                     mPagerAdapter.notifyDataSetChanged();
                                 }
@@ -177,12 +178,13 @@ public class ImageFragment extends AppCompatActivity {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
                         if (object!=null) {
-                            if (!lista.contains(new Image(null,object.getObjectId(),null,null,0,null,null))) {
+                            if (!lista.contains(new Image(null,object.getObjectId(),null,null,0,null,null,null))) {
                                 object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                     @Override
                                     public void done(File file, ParseException e) {
-                                        Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
-                                                object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                        Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
+                                                object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
+                                                object.getList("vestiti"), object.getList("tipo"));
                                         lista.add(toAdd);
                                         mPagerAdapter.notifyDataSetChanged();
                                     }
@@ -202,8 +204,9 @@ public class ImageFragment extends AppCompatActivity {
                             object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
-                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"), object.getList("like"),
-                                            object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"));
+                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
+                                            object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
+                                            object.getList("vestiti"), object.getList("tipo"));
                                     lista.add(toAdd);
                                     mPagerAdapter.notifyDataSetChanged();
                                 }

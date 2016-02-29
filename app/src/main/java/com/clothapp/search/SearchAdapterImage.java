@@ -57,7 +57,7 @@ public class SearchAdapterImage extends BaseAdapter {
         }
 
         TextView tipi=(TextView)row.findViewById(R.id.tipo);
-        tipi.setText((CharSequence) image.get(position).getVestitiToString());
+        tipi.setText((CharSequence) image.get(position).getTypeVestitiToString());
 
 
         TextView hashtag=(TextView)row.findViewById(R.id.hashtag);

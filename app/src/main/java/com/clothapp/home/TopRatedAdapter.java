@@ -62,7 +62,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Image image = itemList.get(position);
 
         holder.setUsername(image.getUser());
-        holder.setItemName(image.getVestiti());
+        holder.setItemName(image.getTypeVestiti());
         holder.setHashtags(image.getHashtag());
         holder.setLikeCount(image.getNumLike());
         holder.setPhoto(image.getFile());
@@ -254,8 +254,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    // Log.d("TopRatedAdapter", "Clicked on photo with position: " + TopRatedItemViewHolder.this.getAdapterPosition());
 
                     Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
 

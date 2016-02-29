@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,14 +21,13 @@ public class Image implements Parcelable{
     private File file;
     private String objectId;
     private String user;
-    private List<String> like;
     private int nLike;
-    private List<String> vestiti;
-    public List<String> hashtag;
-    public List<String> clothes;
-    public List<String> users;
+    private List<String> like;
+    private List<String> hashtag;
+    private List<String> idClothes;
+    private List<String> typeClothes;
 
-    public Image(File f, String Id, String user,List likes, int nLike, List hashtags, List vestitis)   {
+    public Image(File f, String Id, String user,List likes, int nLike, List hashtags, List idClothes, List typeClothes)   {
         this.user=user;
         this.objectId = Id;
         this.file=f;
@@ -35,8 +35,10 @@ public class Image implements Parcelable{
         else this.like = likes;
         if (hashtags==null) hashtag= new ArrayList();
         else this.hashtag = hashtags;
-        if (vestitis==null) vestiti= new ArrayList();
-        else this.vestiti = vestitis;
+        if (idClothes==null) this.idClothes= new ArrayList();
+        else this.idClothes = idClothes;
+        if (typeClothes==null) this.typeClothes= new ArrayList();
+        else this.typeClothes = idClothes;
         this.nLike = nLike;
     }
 
@@ -49,8 +51,10 @@ public class Image implements Parcelable{
         this.nLike=o.getInt("nLike");
         if (o.getList("like")==null) like = new ArrayList<>();
         else this.like=o.getList("like");
-        if (o.getList("tipo")==null) vestiti = new ArrayList<>();
-        else this.vestiti=o.getList("tipo");
+        if (o.getList("vestiti")==null) idClothes = new ArrayList<>();
+        else this.idClothes=o.getList("vestiti");
+        if (o.getList("tipo")==null) typeClothes = new ArrayList<>();
+        else this.typeClothes=o.getList("tipo");
         if (o.getList("hashtag")==null) hashtag = new ArrayList<>();
         else this.hashtag=o.getList("hashtag");
 
@@ -60,8 +64,23 @@ public class Image implements Parcelable{
         return hashtag;
     }
 
-    public List<String> getVestiti() {
-        return vestiti;
+    public List<String> getIdVestiti() {
+        return idClothes;
+    }
+    public List<String> getTypeVestiti() {
+        return typeClothes;
+    }
+    public String getTypeVestitiToString() {
+        String result="";
+        if (!typeClothes.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String clothing : typeClothes) {
+                sb.append(clothing).append(" & ");
+            }
+            result = sb.toString();
+            result = result.substring(0, result.length() - 2);
+        }
+        return result;
     }
 
     public String getHashtagToString() {
@@ -69,16 +88,6 @@ public class Image implements Parcelable{
         if(hashtag!=(null)) {
             for (int i = 0; i < hashtag.size(); i++) {
                 res += (" " + hashtag.get(i));
-            }
-        }
-        return res;
-    }
-
-    public String getVestitiToString() {
-        String res="";
-        if(vestiti!=(null)){
-            for(int i=0;i<vestiti.size();i++){
-                res+=(" "+vestiti.get(i));
             }
         }
         return res;

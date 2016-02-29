@@ -118,13 +118,14 @@ public class HomeMostRecentFragment extends Fragment {
                                             int i;
                                             for (i = 0; i < objects.size(); i++) {
                                                 ParseObject object = objects.get(i);
-                                                Image check = new Image(null,object.getObjectId(),null,null,0,null,null);
+                                                Image check = new Image(null,object.getObjectId(),null,null,0,null,null,null);
                                                 if (photos.contains(check)) continue;
                                                 ParseFile f = objects.get(i).getParseFile("thumbnail");
                                                 try {
                                                     //ottengo la foto e la aggiungo per ultima
                                                     Image toAdd = new Image(f.getFile(), object.getObjectId(), object.getString("user"),
-                                                            object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),object.getList("vestiti"));
+                                                            object.getList("like"),object.getInt("nLike"),object.getList("hashtag"),
+                                                            object.getList("vestiti"),object.getList("tipo"));
                                                     photos.add(toAdd);
                                                     //notifico l'image adapter di aggiornarsi
                                                     imageGridViewAdapter.notifyDataSetChanged();
