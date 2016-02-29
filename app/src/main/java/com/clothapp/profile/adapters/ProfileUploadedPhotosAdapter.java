@@ -50,14 +50,6 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
 
-        // Create a bitmap from a file
-//        File imageFile = photos.get(position).getFile();
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inSampleSize = 3;
-//        Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-//
-//        photoViewHolder.photo.setImageBitmap(imageBitmap);
-
         File imageFile = photos.get(position).getFile();
 
         if (profilo.equals("persona")) {
@@ -69,36 +61,6 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     .load(imageFile)
                     .into(photoViewHolder.photo);
         }
-
-        // Display hashtags, if any
-//        List<String> hashtagList = photos.get(position).getHashtag();
-//
-//        if (hashtagList != null) {
-//
-//            StringBuilder sb = new StringBuilder();
-//
-//            for (String hashtag : hashtagList) {
-//                sb.append(hashtag).append(" ");
-//            }
-//
-//            photoViewHolder.txtHashtags.setText(sb.toString());
-//
-//        } else {
-//            photoViewHolder.txtHashtags.setText("");
-//        }
-        // Display item (clothing) name, if any
-//        List<String> clothesList = photos.get(position).getTypeVestiti();
-//        Log.d("ProfileUploadedPhotos", "clothesList: " + clothesList.toString());
-//        if (clothesList != null) {
-//            StringBuilder sb = new StringBuilder();
-//            for (String clothing : clothesList) {
-//                sb.append(clothing).append(" & ");
-//            }
-//
-//            String result = sb.toString();
-//            if (result.length() > 0) result = result.substring(0, result.length() - 2);
-//            photoViewHolder.txtItemNames.setText(result);
-//        }
 
         // Set item names
         photoViewHolder.txtItemNames.setText(photos.get(position).getTypeVestitiToString());
@@ -140,10 +102,6 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photo = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_image);
             txtLikeCount = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_count);
             likeImage = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_image);
-
-//            Image image = new Image(item.getFile(), item.getObjectId(), item.getUser(), item.users,
-//                    item.getNumLike(), item.getHashtag(), item.getVestiti());
-//            ProfileUploadedPhotosFragment.photos.add(image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -71,15 +71,6 @@ public class Image implements Parcelable{
         return typeClothes;
     }
     public String getTypeVestitiToString() {
-//        String result="";
-//        if (!typeClothes.isEmpty()) {
-//            StringBuilder sb = new StringBuilder();
-//            for (String clothing : typeClothes) {
-//                sb.append(clothing).append(" & ");
-//            }
-//            result = sb.toString();
-//            result = result.substring(0, result.length() - 2);
-//        }
 
         if (typeClothes == null || typeClothes.isEmpty()) return "";
 
@@ -98,14 +89,6 @@ public class Image implements Parcelable{
     }
 
     public String getHashtagToString() {
-
-//        String res="";
-//        if(hashtag!=(null)) {
-//            for (int i = 0; i < hashtag.size(); i++) {
-//                res += (" " + hashtag.get(i));
-//            }
-//        }
-//        return res;
 
         if (hashtag == null || hashtag.isEmpty()) return "";
 
