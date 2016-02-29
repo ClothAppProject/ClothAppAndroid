@@ -98,6 +98,8 @@ public class MostRecentFragment extends Fragment {
         int size = 0;
         if (MostRecentAdapter.itemList != null) {
             size = MostRecentAdapter.itemList.size();
+        } else {
+            MostRecentAdapter.itemList = new ArrayList<>();
         }
 
         getParseMostRecentPhotos(size, 12);
