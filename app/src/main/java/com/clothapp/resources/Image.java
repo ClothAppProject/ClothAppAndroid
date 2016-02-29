@@ -38,7 +38,7 @@ public class Image implements Parcelable{
         if (idClothes==null) this.idClothes= new ArrayList();
         else this.idClothes = idClothes;
         if (typeClothes==null) this.typeClothes= new ArrayList();
-        else this.typeClothes = idClothes;
+        else this.typeClothes = typeClothes;
         this.nLike = nLike;
     }
 
