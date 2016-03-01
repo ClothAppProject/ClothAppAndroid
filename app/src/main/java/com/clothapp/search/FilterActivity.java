@@ -21,7 +21,11 @@ import android.widget.Spinner;
 
 import com.clothapp.BaseActivity;
 import com.clothapp.R;
+import com.clothapp.resources.ApplicationSupport;
+import com.clothapp.resources.Image;
 import com.clothapp.settings.SettingsActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by jack1 on 28/02/2016.
@@ -74,20 +78,23 @@ public class FilterActivity extends AppCompatActivity implements AdapterView.OnI
                 try {
                     pricefrom = Float.parseFloat(String.valueOf(prezzoDa.getText()));
                 }catch (NumberFormatException e){
-                    pricefrom=0;
+                    pricefrom=-1;
                 }
                 try{
                     priceto=Float.parseFloat(String.valueOf(prezzoA.getText()));
                 }catch (NumberFormatException e){
-                    priceto=Float.MAX_VALUE;
+                    priceto=-1;
                 }
                 Intent i=new Intent(getBaseContext(),SearchResultsActivity.class);
-                i.putExtra("query",query);
-                System.out.println("selezionato:"+sex);
-                i.putExtra("sex",sex[0]);
+                i.putExtra("query", query);
+                System.out.println("selezionato:" + sex);
+                i.putExtra("sex", sex[0]);
                 i.putExtra("prezzoDa",pricefrom);
                 i.putExtra("prezzoA",priceto);
-                i.putExtra("order",order);
+                i.putExtra("order", order);
+                ApplicationSupport global = (ApplicationSupport) getApplicationContext();
+                global.setCloth(new ArrayList<Image>());
+                global.setTag(new ArrayList<Image>());
                 startActivity(i);
                 finish();
             }
