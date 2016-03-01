@@ -1,6 +1,8 @@
 package com.clothapp.upload;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +54,9 @@ import java.util.List;
  * Created by giacomoceribelli on 29/12/15.
  */
 public class UploadActivity extends AppCompatActivity {
+
+    private final int REQUEST_CAMERA = 101;
+
     final static int RESULT_LOAD_IMG = 1540;
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
     // ATTENZIONE Roberto! Possibili spoiler su Star Wars VII
@@ -91,8 +98,8 @@ public class UploadActivity extends AppCompatActivity {
         }
         if (first) {
             //controllo da dove andare a prendere la foto galleria/camera
-            photoType = getIntent().getIntExtra("photoType",0);
-            if (photoType==CAPTURE_IMAGE_ACTIVITY) {
+            photoType = getIntent().getIntExtra("photoType", 0);
+            if (photoType == CAPTURE_IMAGE_ACTIVITY) {
                 // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
                 // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
                 Log.d("UploadCamera", "E' il first");
@@ -105,15 +112,28 @@ public class UploadActivity extends AppCompatActivity {
                 // Set the image file name
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
 
-                // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
-                // quindi devo chiamare la fotocamera
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Starto l'attivity di cattura della foto passandogli l'intent
-                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            REQUEST_CAMERA);
                 }
-            }else if (photoType==RESULT_LOAD_IMG)   {
+
+                try {
+                    // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
+                    // quindi devo chiamare la fotocamera
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Starto l'attivity di cattura della foto passandogli l'intent
+                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                    }
+                } catch (Exception e) {
+                    Log.d("UploadActivity", "Exception: " + e.getMessage());
+                }
+            } else if (photoType == RESULT_LOAD_IMG) {
                 //inizializzo immagine da prendere in galleria
-                Log.d("UploadGallery","E' il first");
+                Log.d("UploadGallery", "E' il first");
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
             }
@@ -123,12 +143,12 @@ public class UploadActivity extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.barraProgresso);
         final Button btnSend = (Button) findViewById(R.id.send);
         imageView = (ImageView) findViewById(R.id.view_immagine);
-        ImageView add=(ImageView)findViewById(R.id.add);
+        ImageView add = (ImageView) findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.lista);
-                EditText vestito=new EditText(UploadActivity.this);
+                EditText vestito = new EditText(UploadActivity.this);
                 vestito.setHint(R.string.cloth);
                 EditText tipo = (EditText) findViewById(R.id.tipo);
                 vestito.setWidth(tipo.getWidth());
@@ -186,8 +206,8 @@ public class UploadActivity extends AppCompatActivity {
                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                 picture.put("photo", file);
                 String[] hashtags = hash.getText().toString().split(" ");
-                picture.put("hashtag",Arrays.asList(hashtags));
-                picture.put("nLike",0);
+                picture.put("hashtag", Arrays.asList(hashtags));
+                picture.put("nLike", 0);
 
                 // Invio ParseObject (immagine) al server
                 picture.saveInBackground(new SaveCallback() {
@@ -196,7 +216,7 @@ public class UploadActivity extends AppCompatActivity {
                             Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
 
                             //chiamata get per salvare il thumbnail
-                            String url = "http://clothapp.parseapp.com/createthumbnail/"+picture.getObjectId();
+                            String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
                             Get g = new Get();
                             g.execute(url);
 
@@ -214,6 +234,47 @@ public class UploadActivity extends AppCompatActivity {
         });
     }
 
+    private void startCamera() {
+        // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // TODO: Check if getPhotoFileUri returns null
+
+        // Set the image file name
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
+
+        // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
+        // quindi devo chiamare la fotocamera
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Starto l'attivity di cattura della foto passandogli l'intent
+            startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+
+                    startCamera();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                return;
+            }
+        }
+    }
+
     // Questa funzione serve a prendere la foto dopo che è stata scattata dalla fotocamera, e mette l'immagine nella ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -227,26 +288,26 @@ public class UploadActivity extends AppCompatActivity {
             takenPhotoUri = getPhotoFileUri(photoFileName);
 
             // A questo punto l'immagine è stata salvata sullo storage
-            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(),options);
+            imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
-            imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap,takenPhotoUri);
+            imageBitmap = BitmapUtil.rotateImageIfRequired(imageBitmap, takenPhotoUri);
 
-        }else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
+        } else if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
             takenPhotoUri = data.getData();
 
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(takenPhotoUri, filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            imageBitmap = BitmapFactory.decodeFile(picturePath,options);
+            imageBitmap = BitmapFactory.decodeFile(picturePath, options);
 
-            imageBitmap = BitmapUtil.rotateGalleryImage(picturePath,imageBitmap);
-        }else{
+            imageBitmap = BitmapUtil.rotateGalleryImage(picturePath, imageBitmap);
+        } else {
             // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
 
@@ -285,7 +346,7 @@ public class UploadActivity extends AppCompatActivity {
     // In caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
     @Override
     public void onBackPressed() {
-        if (photoType!=RESULT_LOAD_IMG) deleteImage();
+        if (photoType != RESULT_LOAD_IMG) deleteImage();
         // Reinderizzo l'utente alla homePage activity
         Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
@@ -306,7 +367,7 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     //funzione che cancella l'imamgine scattata
-    public void deleteImage()   {
+    public void deleteImage() {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + directoryName;
         File f = new File(path, photoFileName);
         // Controllo se esiste
@@ -316,6 +377,7 @@ public class UploadActivity extends AppCompatActivity {
             Log.d("UploadActivity", "File eliminato");
         }
     }
+
     // Ritorna l'Uri dell'immagine su disco
     public Uri getPhotoFileUri(String fileName) {
         // Continua solamente se la memoria SD è montata
