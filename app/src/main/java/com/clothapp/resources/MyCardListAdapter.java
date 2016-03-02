@@ -2,12 +2,14 @@ package com.clothapp.resources;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -53,7 +55,20 @@ public class MyCardListAdapter extends BaseAdapter {
         TextView shop = (TextView) row.findViewById(R.id.shop);
         TextView price = (TextView) row.findViewById(R.id.price);
         TextView brand = (TextView) row.findViewById(R.id.brand);
-        TextView cloth = (TextView) row.findViewById(R.id.cloth);
+        final TextView cloth = (TextView) row.findViewById(R.id.cloth);
+        LinearLayout map=(LinearLayout) row.findViewById(R.id.map);
+        //latidune e longitudine sono quelle di roma
+        //TODO: gestire i negozi virtuali
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q="+cloths.get(position).getAddress());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(mapIntent);
+            }
+        });
         address.setText(cloths.get(position).getAddress());
         shop.setText(capitalize(cloths.get(position).getShop()));
         String p = "";
