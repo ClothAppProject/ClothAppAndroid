@@ -47,8 +47,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private String query;
     private String sex="all";
-    private Float pricefrom= Float.valueOf(0);
-    private Float priceto=Float.MAX_VALUE;
+    private Float pricefrom= -1f;
+    private Float priceto=-1f;
 
     private String[] titles;
     private SearchAdapter searchAdapter;

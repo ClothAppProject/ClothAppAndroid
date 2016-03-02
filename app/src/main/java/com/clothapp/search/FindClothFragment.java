@@ -29,6 +29,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
@@ -38,6 +39,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class FindClothFragment extends Fragment {
     private static final String WOMAN = "woman";
     private static final String ALL = "all";
+
     private View rootView;
     private ListView listCloth;
     private Context context;
@@ -51,8 +53,11 @@ public class FindClothFragment extends Fragment {
     private Float prezzoDa;
     private Float prezzoA;
     private String order;
+    private boolean first=true;
 
-    String POPOLARITA="Popolarità";
+    String POPOLARITA="Most Popolar";
+    private static final String OLD = "Old" ;
+    private static final String RECENT = "Most Recent" ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +65,13 @@ public class FindClothFragment extends Fragment {
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
 
-        System.out.println("create");
+        //System.out.println("create");
+
+        //prendo la lista da global.
+        /*L'utilizzo di global è necessario (questo vale per tutti e 3 i fragment)
+         poichè la lista dei vestiti viene cancellata se il fragment non è più in cache. In particolare un PagerView tiene in cache solo 2 fragment.
+         Questo causava un BUG: cioè quando si tornava su quel fragment la lista era vuota.
+        */
 
         cloth=global.getCloth();
         //chiama l'adattatore che inserisce gli item nella listview
@@ -74,7 +85,7 @@ public class FindClothFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                    if (canLoad && cloth.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                    if (canLoad &&  (cloth.size() > 0) || (!first &&cloth.size()==0)) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
                             search();
@@ -95,70 +106,236 @@ public class FindClothFragment extends Fragment {
     public void search(){
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query=query.trim().toLowerCase();
+        //System.out.println("search");
 
-        //faccio la query a Parse
-        //final ArrayList<Image> cloth=  SearchUtility.searchCloth(query, rootView);
-
+        //faccio la query a Parse delle foto
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         if(order==null) order=POPOLARITA;
+        //queste sono verifiche dovute al filtro di ricerca (in base all'ordine)
         if(order.equals(POPOLARITA))queryFoto.addDescendingOrder("nLike");
-        //if(order.equals() queryFoto.addAscendingOrder("nLike");
+        if(order.equals(OLD)) queryFoto.addAscendingOrder("createdAt");
+        if(order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
+        //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
         skip=skip+5;
+        //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
+                    //System.out.println("done" + objects);
                     ListIterator<ParseObject> i = objects.listIterator();
+
                     while (i.hasNext()) {
+
+
                         List<String> tag = new ArrayList<String>();
-                        ParseObject o = i.next();
+                        final ParseObject o = i.next();
+                        //prendo i tipi di vestito e li metto nella lista tag
                         tag = (ArrayList) o.get("tipo");
                         if (tag == null) tag = new ArrayList<String>(0);
+                        //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
+                            //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
                             if (tag.get(j).contains(query)) {
                                 final Image image = new Image(o);
+                                //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
+                                //System.out.println(image+" "+cloth.contains(image));
                                 if (!cloth.contains(image)) {
-                                    System.out.println("sex: "+sex);
-                                    if(sex!=ALL){
-                                        ParseQuery<ParseObject> persona=new ParseQuery<ParseObject>("Persona");
+                                    //System.out.println("sex:" + sex + ":");
+                                    //------------------inizio filtro sesso-----------------
+                                    /*SPIEGAZIONE:ci sono 3 tipi di sesso man, woman e all. Con all si prendono tutte le foto
+                                      quindi se sex==ALL posso evitare di fare controlli inutili sul sesso
+                                                                    */
+                                    if (!sex.equals(ALL)) {
+                                        //System.out.println("1");
+                                        //faccio una query a parse nella tabella Persona per sapere il sesso dell'user
+                                        /*
+                                        LE FOTO DEI NEGOZI vengono scartate!!!!!
+                                         */
+                                        ParseQuery<ParseObject> persona = new ParseQuery<ParseObject>("Persona");
                                         persona.whereEqualTo("username", o.getString("user"));
+                                        final List<String> finalTag = tag;
+
+
                                         persona.getFirstInBackground(new GetCallback<ParseObject>() {
                                             @Override
                                             public void done(ParseObject object, ParseException e) {
-                                                if (e==null) {
-                                                    if(object!=null) {
+                                                if (e == null) {
+                                                    if (object != null) {
                                                         String s = object.getString("sex");
-                                                        if (s == sex) {
-                                                            cloth.add(image);
-                                                            global.setCloth(cloth);
-                                                            adapter.notifyDataSetChanged();
+
+                                                        if (s.equals("m")) s = "man";
+                                                        if (s.equals("f")) s = "woman";
+                                                        //System.out.println(s+"="+sex);
+                                                        //se il sesso dell'user corrisponde allora la foto è una candidata per entrare in lista
+                                                        if (s.equals(sex)) {
+                                                            //----------filtro prezzo---------------
+                                                            //System.out.println("sesso uguale");
+                                                            /*
+                                                            Per ogni vestito nella foto devo controllare il prezzo facendo un'altra query a parse nella tabella Vestito
+                                                             */
+
+                                                            //System.out.println(prezzoDa + " A " + prezzoA);
+                                                                /*
+                                                                prima di procedere e fare controlli inutili, controllo se il filtro del prezzo è stato impostato
+                                                                Il valore -1 indica che non è stato impostato
+                                                                 */
+                                                            ArrayList<String> v = (ArrayList) o.get("vestiti");
+                                                            for (String st : v) {
+                                                                if (prezzoDa != -1 || prezzoA != -1) {
+
+                                                                    ParseQuery<ParseObject> vestito = new ParseQuery<ParseObject>("Vestito");
+                                                                    vestito.whereEqualTo("objectId", st);
+                                                                    vestito.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                                        @Override
+                                                                        public void done(ParseObject object, ParseException e) {
+                                                                        if (e == null) {
+                                                                            if (object != null) {
+                                                                                //trovo il prezzo
+                                                                                Object obj = object.get("prezzo");
+                                                                                String p;
+                                                                                if (obj != null)
+                                                                                    p = object.get("prezzo").toString();
+                                                                                else
+                                                                                    p = "-1";
+                                                                                Float prezzo = Float.parseFloat(p);
+                                                                                //se prezzoA non è stato impostato(=-1) allora non ho un limite quindi lo setto a maxValue
+                                                                                if (prezzoA == -1f)
+                                                                                    prezzoA = Float.MAX_VALUE;
+                                                                                //confronto il prezzo con i paramentri del filtro
+                                                                                //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
+                                                                                if (prezzo >= prezzoDa && prezzo <= prezzoA) {
+                                                                                    //System.out.println("prezzo giusto");
+                                                                                    if (!cloth.contains(image)) {
+                                                                                        cloth.add(image);
+                                                                                        global.setCloth(cloth);
+                                                                                        adapter.notifyDataSetChanged();
+                                                                                    }
+                                                                                }
+
+                                                                            }//else{
+                                                                            // cloth.add(image);
+                                                                            //global.setCloth(cloth);
+                                                                            //adapter.notifyDataSetChanged();
+                                                                            // }
+                                                                        } else
+                                                                            check(e.getCode(), rootView, e.getMessage());
+                                                                        }
+                                                                    });
+
+                                                                    //nel caso in cui non c'è un filtro del prezzo
+                                                                } else {
+                                                                    if (!cloth.contains(image)) {
+                                                                        cloth.add(image);
+                                                                        global.setCloth(cloth);
+                                                                        adapter.notifyDataSetChanged();
+                                                                    }
+
+                                                                }
+                                                            }
                                                         }
+                                                        //fine filtro prezzo
                                                     }
-                                                }else check(e.getCode(),rootView,e.getMessage());
+
                                             }
-                                        });
-                                    }
-                                    else {
-                                        System.out.println("aggiungo all");
-                                        cloth.add(image);
-                                        global.setCloth(cloth);
-                                        adapter.notifyDataSetChanged();
-                                        //global.setLastCloth(o.getCreatedAt());
-                                    }
+
+                                            else
+
+                                            {
+                                                //System.out.println("4");
+                                                check(e.getCode(), rootView, e.getMessage());
+                                            }
+                                        }
+                                    });
                                 }
+                                //-------------fine filtro sesso----------
 
-                                break;
+                                    /*
+                                    Caso in cui non c'è il filtro del sesso, Salto tutti i controlli a riguardo
+                                     */
+                                else {
+                                    //.out.println("aggiungo all");
+                                    //------------------------filtro prezzo-------------------------
+                                        //qui valgono le stesse considerazione fatte prima (ho fatto copia e incolla)
+                                    ArrayList<String> v = (ArrayList) o.get("vestiti");
+                                    for (String st : v) {
+                                        //System.out.println(prezzoDa + " A " + prezzoA);
+                                        if (prezzoDa != -1 || prezzoA != -1) {
+                                            ParseQuery<ParseObject> vestito = new ParseQuery<ParseObject>("Vestito");
+                                            vestito.whereEqualTo("objectId", st);
+                                            vestito.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                @Override
+                                                public void done(ParseObject object, ParseException e) {
+                                                    if (e == null) {
+                                                        if (object != null) {
+                                                            //trovo il prezzo
+                                                            Object obj = object.get("prezzo");
+                                                            String p;
+                                                            if (obj != null)
+                                                                p = object.get("prezzo").toString();
+                                                            else p = "-2";
+                                                            Float prezzo = Float.parseFloat(p);
 
+                                                            if (prezzoA == -1f)
+                                                                prezzoA = Float.MAX_VALUE;
+                                                            //confronto il prezzo con i paramentri del filtro
+                                                            //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
+                                                            if (prezzo >= prezzoDa && prezzo <= prezzoA) {
+                                                                //System.out.println("prezzo giusto");
+                                                                if(!cloth.contains(image)) {
+                                                                    cloth.add(image);
+                                                                    global.setCloth(cloth);
+                                                                    adapter.notifyDataSetChanged();
+                                                                }
+                                                            }
+
+                                                        }//else{
+                                                        // cloth.add(image);
+                                                        //global.setCloth(cloth);
+                                                        //adapter.notifyDataSetChanged();
+                                                        // }
+                                                    } else {
+                                                        //System.out.println("3");
+                                                        check(e.getCode(), rootView, e.getMessage());
+                                                    }
+
+                                                }
+                                            });
+                                            /*
+                                            caso in cui non devo fare nessun controllo
+                                             */
+                                        } else {
+                                            if(!cloth.contains(image)) {
+                                                cloth.add(image);
+                                                global.setCloth(cloth);
+                                                adapter.notifyDataSetChanged();
+                                            }
+
+                                        }
+                                    }
+                                    //fine filtro prezzo
+                                }
                             }
+
+                            break;
+
                         }
                     }
-                    canLoad = true;
-
-                } else check(e.getCode(), rootView, e.getMessage());
+                }
+                    first=false;
+                    canLoad=true;
             }
-        });
+
+            else
+
+            {
+                //System.out.println("errore");
+                check(e.getCode(), rootView, e.getMessage());
+            }
+        }
+    });
 
 
 
@@ -176,6 +353,7 @@ public class FindClothFragment extends Fragment {
 
 
     }
+
 
     public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context, String order) {
         this.context = context;
@@ -202,7 +380,7 @@ public class FindClothFragment extends Fragment {
     }
 
     public void refresh(String query) {
-        System.out.println("resfresh");
+        //System.out.println("resfresh");
         this.query=query.trim().toLowerCase();
         skip=0;
         cloth=new ArrayList<>();
@@ -215,18 +393,17 @@ public class FindClothFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        System.out.println("onresume");
-        adapter.notifyDataSetChanged();
+        //System.out.println("onresume");
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            System.out.println("visibile");
-            onResume();
+            //System.out.println("visibile");
+            adapter.notifyDataSetChanged();
         }
         else {
-            System.out.println("nonvisibile");
+            //System.out.println("nonvisibile");
         }
     }
 

@@ -97,7 +97,7 @@ public class FindUserFragment extends Fragment {
         final int[] i = {0};
 
         //faccio la query a Parse. Questa in background è più veloce ma non consente di metterli ordinati alfabeticamente
-        //BUG: foto profilo
+
 
         final ParseQuery<ParseUser>username=ParseUser.getQuery();
         username.addAscendingOrder("lowercase");
