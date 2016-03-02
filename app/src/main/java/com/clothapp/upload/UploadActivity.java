@@ -49,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by giacomoceribelli on 29/12/15.
@@ -59,6 +60,7 @@ public class UploadActivity extends AppCompatActivity {
 
     final static int RESULT_LOAD_IMG = 1540;
     final static int CAPTURE_IMAGE_ACTIVITY = 2187;
+
     // ATTENZIONE Roberto! Possibili spoiler su Star Wars VII
 
     // Qui si apre un piccolo excursus: perchè CAPRUTE_IMAGE_ACTIVITY è settato a 2187 ? FN2187 è il numero di serie dell'assolatore
@@ -69,7 +71,7 @@ public class UploadActivity extends AppCompatActivity {
     /* --------------------------------------- */
     boolean first = true;
     final String directoryName = "ClothApp";
-    String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'").format(new Date());
+    String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
     Uri takenPhotoUri;
     ImageView imageView = null;
     Bitmap imageBitmap = null;
