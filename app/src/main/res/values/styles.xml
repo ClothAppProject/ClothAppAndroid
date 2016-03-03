@@ -17,6 +17,10 @@
         <item name="android:textColorPrimary">@color/primary_text_default_material_light</item>
     </style>
 
+    <style name="AppTheme.Upload" parent="AppTheme.NoActionBar">
+        <!--<item name="android:windowLightStatusBar">true</item>-->
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -42,8 +46,7 @@
 
     </style>
 
-    <style name="ActionBar"
-        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/red</item>
         <item name="background">@color/red</item>
     </style>

@@ -48,12 +48,10 @@
             android:name=".home_gallery.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".search.SearchResultsActivity" />
         </activity>
-
         <activity
             android:name=".search.SearchResultsActivity"
             android:label="@string/app_name"
@@ -62,6 +60,7 @@
             <!-- to identify this activity as "searchable" -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -70,9 +69,9 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <provider android:name=".resources.CustomContentProvider"
-            android:authorities=".resources.Categorie">
-        </provider>
+        <provider
+            android:name=".resources.CustomContentProvider"
+            android:authorities=".resources.Categorie"></provider>
 
         <activity
             android:name=".login_signup.MainActivity"
@@ -80,17 +79,17 @@
             android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".ImageFragment"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".upload.UploadProfilePictureActivity"
             android:label="@string/app_name"
-            android:largeHeap="true"/>
+            android:largeHeap="true" />
         <activity
             android:name=".upload.UploadActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:parentActivityName=".home_gallery.HomeActivity"
-            android:largeHeap="true">
+            android:largeHeap="true"
+            android:parentActivityName=".home_gallery.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".home_gallery.HomeActivity" />
@@ -144,22 +143,25 @@
         <activity
             android:name=".profile.UserProfileActivity"
             android:label="@string/title_activity_new_profile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".profile_shop.ShopProfileActivity"
             android:label="@string/title_activity_new_profile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".search.SearchResultsActivity" />
         </activity>
-        <activity android:name=".search.FilterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name=".search.FilterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".upload.UploadPhotoActivity"
+            android:label="@string/title_activity_upload_photo"
+            android:theme="@style/AppTheme.Upload" />
     </application>
 
 </manifest>

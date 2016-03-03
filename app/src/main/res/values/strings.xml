@@ -155,7 +155,7 @@
         <item>Most Recent</item>
         <item>Old</item>
     </string-array>
-
+    <string name="title_activity_upload_photo">UploadPhotoActivity</string>
 
 
 </resources>
