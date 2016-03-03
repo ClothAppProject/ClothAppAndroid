@@ -14,7 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.clothapp.R;
@@ -108,9 +114,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
-
+            //fragment 1
             if (sectionNumber == 1) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_1, container, false);
+                //listener sul bottone next
                 Button next=(Button)rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -118,10 +125,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
                         viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
                     }
-                });
-
+                });//fragment 2
             } else if (sectionNumber == 2){
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_2, container, false);
+                //listener bottone next
                 Button next=(Button)rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -130,6 +137,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
                     }
                 });
+                //listener bottone previous
                 Button previous=(Button)rootView.findViewById(R.id.previous);
                 previous.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -138,24 +146,44 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
                     }
                 });
+                //fragment 3
             } else {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_3, container, false);
+                final ScrollView scrollView=(ScrollView)rootView.findViewById(R.id.fragment_upload_photo_page_3_scrollview);
+
+                //listener bottone previous
+                Button previous=(Button)rootView.findViewById(R.id.previous);
+                previous.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager = (ViewPager) container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+                    }
+                });
+                //listview delle card per aggiungere le info dei vestiti
+                final ListView listView=(ListView)rootView.findViewById(R.id.listView);
+                final InfoListAdapter infoListAdapter=new InfoListAdapter(getContext());
+                listView.setAdapter(infoListAdapter);
+                //listener bottone add clothing
+                Button add=(Button)rootView.findViewById(R.id.add);
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        infoListAdapter.addCard();
+                        infoListAdapter.notifyDataSetChanged();
+                        setListViewHeightBasedOnItems(listView);
+                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
+                //listener bottone upload
                 Button upload=(Button)rootView.findViewById(R.id.upload);
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO
+                        //TODO: aggiungere le operazioni di upload
                     }
                 });
-                Button previous=(Button)rootView.findViewById(R.id.previous);
-                previous.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
-                    }
-                });
-
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
 
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -202,4 +230,38 @@ public class UploadPhotoActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            int itemPos;
+            for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                item.measure(0, 0);
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() *
+                    (numberOfItems - 1);
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
