@@ -118,6 +118,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:text="Previous"
+            android:id="@+id/previous"
             style="@style/Widget.AppCompat.Button.Borderless"/>
 
         <TextView
@@ -130,6 +131,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/next"
             android:text="Next"
             android:layout_centerVertical="true"
             style="@style/Widget.AppCompat.Button.Borderless"

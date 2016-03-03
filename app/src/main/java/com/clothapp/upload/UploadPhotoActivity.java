@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.clothapp.R;
@@ -101,18 +102,60 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView;
 
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
+
             if (sectionNumber == 1) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_1, container, false);
+                Button next=(Button)rootView.findViewById(R.id.next);
+                next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    }
+                });
+
             } else if (sectionNumber == 2){
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_2, container, false);
+                Button next=(Button)rootView.findViewById(R.id.next);
+                next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    }
+                });
+                Button previous=(Button)rootView.findViewById(R.id.previous);
+                previous.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
+                    }
+                });
             } else {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_3, container, false);
+                Button upload=(Button)rootView.findViewById(R.id.upload);
+                upload.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO
+                    }
+                });
+                Button previous=(Button)rootView.findViewById(R.id.previous);
+                previous.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
+                    }
+                });
+
             }
 
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -127,6 +170,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -135,6 +179,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+
             return PlaceholderFragment.newInstance(position + 1);
         }
 

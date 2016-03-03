@@ -173,6 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:id="@+id/previous"
             android:text="Previous" />
 
         <TextView
@@ -188,6 +189,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:id="@+id/upload"
             android:text="Upload" />
 
     </RelativeLayout>
