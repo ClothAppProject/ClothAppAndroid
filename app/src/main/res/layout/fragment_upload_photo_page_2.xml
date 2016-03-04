@@ -53,6 +53,7 @@
             android:inputType="textCapSentences">
 
             <EditText
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tell us something about this photo."
@@ -99,6 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Write some hashtags here"
+                android:id="@+id/hashtag"
                 android:lines="3" />
 
         </android.support.design.widget.TextInputLayout>
