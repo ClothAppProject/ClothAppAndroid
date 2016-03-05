@@ -70,6 +70,9 @@ public class SearchAdapterUser extends BaseAdapter {
                 .into(i);
         TextView t=(TextView)row.findViewById(R.id.user);
         t.setText(getItem(position).getUsername());
+
+        TextView name=(TextView)row.findViewById(R.id.name);
+        name.setText(getItem(position).getName());
         return row;
     }
 }

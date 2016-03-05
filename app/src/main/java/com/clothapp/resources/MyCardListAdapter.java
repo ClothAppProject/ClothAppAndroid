@@ -58,17 +58,30 @@ public class MyCardListAdapter extends BaseAdapter {
         final TextView cloth = (TextView) row.findViewById(R.id.cloth);
         LinearLayout map=(LinearLayout) row.findViewById(R.id.map);
         //latidune e longitudine sono quelle di roma
-        //TODO: gestire i negozi virtuali
+
         map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q="+cloths.get(position).getAddress());
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(mapIntent);
-            }
-        });
+                                   @Override
+                                   public void onClick(View v) {
+                                       if (cloths.get(position).getAddress().length() > 0) {
+                                           if (!cloths.get(position).getAddress().contains("www")) {
+                                               Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
+                                               Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                               mapIntent.setPackage("com.google.android.apps.maps");
+                                               mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                               context.startActivity(mapIntent);
+                                           } else {
+                                               String url = "http://" + cloths.get(position).getAddress();
+                                               Intent i = new Intent(Intent.ACTION_VIEW);
+                                               i.setData(Uri.parse(url));
+                                               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                               context.startActivity(i);
+                                           }
+                                       }
+                                   }
+                               });
+
+
+
         address.setText(cloths.get(position).getAddress());
         shop.setText(capitalize(cloths.get(position).getShop()));
         String p = "";
