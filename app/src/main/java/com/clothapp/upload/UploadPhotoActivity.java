@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -42,6 +43,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.resources.BitmapUtil;
+import com.clothapp.resources.Cloth;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -226,7 +228,14 @@ public class UploadPhotoActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        private String descriptionText;
+        private EditText hashtag;
+        private EditText description;
+
+        public void setSectionsPagerAdapter(SectionsPagerAdapter sectionsPagerAdapter) {
+            this.sectionsPagerAdapter = sectionsPagerAdapter;
+        }
+
+        SectionsPagerAdapter sectionsPagerAdapter;
 
 
         public PlaceholderFragment() {
@@ -236,13 +245,27 @@ public class UploadPhotoActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber,Uri uri) {
+        public static PlaceholderFragment newInstance(int sectionNumber,Uri uri,SectionsPagerAdapter sectionsPagerAdapter) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putParcelable("uri", uri);
+            fragment.setSectionsPagerAdapter(sectionsPagerAdapter);
             fragment.setArguments(args);
             return fragment;
+        }
+
+        @Override
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser) {
+                //System.out.println("visibile");
+            } else {
+                //System.out.println("nonvisibile");
+                if (hashtag != null) sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
+                if (description != null)
+                    sectionsPagerAdapter.setDescription(description.getText().toString());
+            }
         }
 
         @Override
@@ -293,18 +316,23 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     }
                 });
 
-                EditText description=(EditText)rootView.findViewById(R.id.description);
-                final EditText hashtag=(EditText)rootView.findViewById(R.id.hashtag);
+                description=(EditText)rootView.findViewById(R.id.description);
+                hashtag=(EditText)rootView.findViewById(R.id.hashtag);
+
+
 
                 //listener bottone next
                 Button next=(Button)rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
                         ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
                         viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
                     }
                 });
+
+
 
 
 
@@ -334,6 +362,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 final InfoListAdapter infoListAdapter=new InfoListAdapter(getContext());
                 listView.setAdapter(infoListAdapter);
                 //listener bottone add clothing
+                //TODO: BUG aggiunta card. Vedere sotto
                 Button add=(Button)rootView.findViewById(R.id.add);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -341,7 +370,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         infoListAdapter.addCard();
                         infoListAdapter.notifyDataSetChanged();
                         setListViewHeightBasedOnItems(listView);
-                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+
                     }
                 });
                 //listener bottone upload
@@ -350,16 +379,39 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //TODO: aggiungere le operazioni di upload
+                        System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
+                        //************************************************************************
+                        //BUG!!!!!! il for dovrebbe iterare su tutte le infocard dei vestiti e creare i vari vestiti, ma stranamente tutti i vestiti creti sono uguali al primo!!!!
+                        //************************************************************************
+                        for(int i=0;i<infoListAdapter.getCount();i++){
+                            View view=infoListAdapter.getItem(i);
+                            AutoCompleteTextView tipo=(AutoCompleteTextView)view.findViewById(R.id.cloth);
+                            EditText shop=(EditText)view.findViewById(R.id.shop);
+                            EditText brand=(EditText)view.findViewById(R.id.brand);
+                            EditText address=(EditText)view.findViewById(R.id.address);
+                            EditText price=(EditText)view.findViewById(R.id.price);
+                            Cloth c=new Cloth();
+                            c.setCloth(tipo.getText().toString());
+                            c.setShop(shop.getText().toString());
+                            c.setBrand(brand.getText().toString());
+                            c.setAddress(address.getText().toString());
+                            if(!price.getText().toString().equals("")) c.setPrize(Float.parseFloat(price.getText().toString()));
+                            System.out.println(c);
+                        }
+
+
 
                     }
                 });
 
-                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+
             }
             // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
+
+
     }
 
     /**
@@ -367,6 +419,12 @@ public class UploadPhotoActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        PlaceholderFragment page1;
+        PlaceholderFragment page2;
+        PlaceholderFragment page3;
+
+        String hashtag;
+        private String description;
 
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -377,8 +435,19 @@ public class UploadPhotoActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
-            return PlaceholderFragment.newInstance(position + 1,takenPhotoUri);
+            if(position==0) {
+                if(page1==null) page1=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+                return page1;
+            }
+            if(position==1) {
+                if(page2==null) page2=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+                return page2;
+            }
+            if(position==2) {
+                if(page3==null) page3=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+                return page3;
+            }
+            return null;
         }
 
         @Override
@@ -398,6 +467,22 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     return "SECTION 3";
             }
             return null;
+        }
+
+        public String getHashtag() {
+            return hashtag;
+        }
+
+        public void setHashtag(String hashtag) {
+            this.hashtag = hashtag;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 

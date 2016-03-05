@@ -23,6 +23,10 @@ public class Cloth implements Parcelable {
         this.brand=brand;
     }
 
+    public Cloth() {
+
+    }
+
     public String getCloth() {
         return cloth;
     }
@@ -103,5 +107,17 @@ public class Cloth implements Parcelable {
         dest.writeString(shop);
         dest.writeString(shopUsername);
         dest.writeFloat(price);
+    }
+
+    @Override
+    public String toString() {
+        return "Cloth{" +
+                "cloth='" + cloth + '\'' +
+                ", address='" + address + '\'' +
+                ", shop='" + shop + '\'' +
+                ", shopUsername='" + shopUsername + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

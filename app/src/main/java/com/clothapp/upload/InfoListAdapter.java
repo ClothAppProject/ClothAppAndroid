@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 
 import com.clothapp.R;
 import com.clothapp.resources.Cloth;
@@ -20,8 +21,9 @@ import java.util.List;
  */
 public class InfoListAdapter extends BaseAdapter {
     private final Context context;
-    private List<CardView> listCard = new ArrayList<>();
-    //private List<Cloth> cloths = new ArrayList<>();
+    private List<View> listCard = new ArrayList<>();
+    private AutoCompleteTextView tipo;
+
     private int size=1;
 
     public InfoListAdapter(Context context) {
@@ -39,8 +41,8 @@ public class InfoListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public View getItem(int position) {
+        return listCard.get(position);
     }
 
     @Override
@@ -60,16 +62,18 @@ public class InfoListAdapter extends BaseAdapter {
         //adattatore per i suggerimenti
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(row.getContext(),
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-        AutoCompleteTextView textView = (AutoCompleteTextView)
-                row.findViewById(R.id.cloth);
-        textView.setAdapter(adapter);
+        tipo = (AutoCompleteTextView) row.findViewById(R.id.cloth);
+        tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
-        textView.setThreshold(1);
-
-
+        tipo.setThreshold(1);
+        listCard.add(row);
 
         return row;
     }
+
+
+
+
 
     public void addCard() {
         size++;
@@ -79,4 +83,6 @@ public class InfoListAdapter extends BaseAdapter {
     private static final String[] COUNTRIES = new String[] {
             "Belgium", "France", "Italy", "Germany", "Spain"
     };
+
+
 }
