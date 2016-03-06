@@ -73,12 +73,13 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords">
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/shop"
                         android:hint="Shop"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"/>
+
 
                 </android.support.design.widget.TextInputLayout>
 

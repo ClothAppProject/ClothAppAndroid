@@ -107,7 +107,7 @@ public class Image implements Parcelable {
 
     public String getHashtagToString() {
 
-        if (hashtag == null || hashtag.isEmpty()) return "";
+        if (hashtag == null || hashtag.isEmpty() || hashtag.get(0).isEmpty()) return "";
 
         StringBuilder sb = new StringBuilder();
 

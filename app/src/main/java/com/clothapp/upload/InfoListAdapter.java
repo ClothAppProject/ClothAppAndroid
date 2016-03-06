@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
@@ -21,6 +22,10 @@ import android.widget.Toast;
 
 import com.clothapp.R;
 import com.clothapp.resources.Cloth;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +39,6 @@ import java.util.List;
 public class InfoListAdapter extends BaseAdapter {
     private final Context context;
 
-    private ArrayList<View> listCard = new ArrayList<>();
     private AutoCompleteTextView tipo;
 
     private int size=0;
@@ -54,9 +58,6 @@ public class InfoListAdapter extends BaseAdapter {
 */
 
 
-    public int getListCard() {
-        return listCard.size();
-    }
 
     public int getListCloth() {
         return listCloth.size();
@@ -123,9 +124,9 @@ public class InfoListAdapter extends BaseAdapter {
         tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
-        EditText shop=(EditText)row.findViewById(R.id.shop);
+        final AutoCompleteTextView shop=(AutoCompleteTextView)row.findViewById(R.id.shop);
         EditText brand=(EditText)row.findViewById(R.id.brand);
-        EditText address=(EditText)row.findViewById(R.id.address);
+        final EditText address=(EditText)row.findViewById(R.id.address);
         EditText price=(EditText)row.findViewById(R.id.price);
 
       /*
@@ -145,7 +146,7 @@ public class InfoListAdapter extends BaseAdapter {
             //System.out.println("add:"+c.getID());
             listCloth.add(c);
         }
-        if(!listCard.contains(row))listCard.add(row);
+
 
 
         if(position==size-1){
@@ -168,6 +169,7 @@ public class InfoListAdapter extends BaseAdapter {
                 }
             });
 
+            final View finalRow = row;
             shop.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -176,6 +178,25 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    final ParseQuery<ParseObject> shopUser=new ParseQuery<ParseObject>("LocalShop");
+                    shopUser.whereContains("username",s.toString());
+                    shopUser.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(final List<ParseObject> objects, ParseException e) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(),android.R.layout.simple_dropdown_item_1line, shopToString(objects));
+                            //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
+                            shop.setAdapter(adapter);
+                            shop.setThreshold(1);
+                            shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    shop.setText(objects.get(position).getString("username"));
+                                    address.setText(objects.get(position).getString("address"));
+                                }
+                            });
+
+                        }
+                    });
 
                 }
 
@@ -243,13 +264,23 @@ public class InfoListAdapter extends BaseAdapter {
         return row;
     }
 
-
-
+    private String[] shopToString(List<ParseObject> objects) {
+        String [] s=new String[objects.size()];
+        for(int i=0;i<s.length;i++){
+            s[i]=objects.get(i).getString("username")+", "+objects.get(i).getString("address");
+        }
+        return s;
+    }
 
 
     public void addCard() {
         size++;
 
+    }
+
+    public void deleteCard(){
+        listCloth.remove(size-1);
+        size--;
     }
 
 
@@ -258,8 +289,7 @@ public class InfoListAdapter extends BaseAdapter {
 
 
     //load file from apps res/raw folder or Assets folder
-    public String LoadFile(String fileName, boolean loadFromRawFolder) throws IOException
-    {
+    public String LoadFile(String fileName, boolean loadFromRawFolder) throws IOException {
         //Create a InputStream to read the file into
         InputStream iS;
 
