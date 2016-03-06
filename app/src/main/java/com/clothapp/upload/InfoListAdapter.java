@@ -113,24 +113,96 @@ public class InfoListAdapter extends BaseAdapter {
         if(!listCard.contains(row))listCard.add(row);
 
 
-        if(position==size-1)tipo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if(position==size-1){
+            tipo.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // System.out.println("ontext"+c.getID());
-                //c.setCloth(s.toString());
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // System.out.println("ontext"+c.getID());
+                    //c.setCloth(s.toString());
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                listCloth.get(c.getID()-1).setCloth(s.toString());
+                @Override
+                public void afterTextChanged(Editable s) {
+                    listCloth.get(c.getID()-1).setCloth(s.toString());
 
-            }
-        });
+                }
+            });
+
+            shop.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    listCloth.get(c.getID()-1).setShop(s.toString());
+                }
+            });
+
+            brand.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    listCloth.get(c.getID()-1).setBrand(s.toString());
+                }
+            });
+
+            address.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    listCloth.get(c.getID()-1).setAddress(s.toString());
+                }
+            });
+
+            price.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    listCloth.get(c.getID()-1).setPrize(Float.parseFloat(s.toString()));
+                }
+            });
+        }
+
+
 
 
         return row;

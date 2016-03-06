@@ -42,13 +42,26 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
+import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.ProgressCallback;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
+import static com.clothapp.resources.ExceptionCheck.check;
 
 public class UploadPhotoActivity extends AppCompatActivity {
     private final int REQUEST_CAMERA = 101;
@@ -66,10 +79,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
     /* --------------------------------------- */
     boolean first = true;
     final String directoryName = "ClothApp";
-    String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
+    static String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
     Uri takenPhotoUri;
     ImageView imageView = null;
-    Bitmap imageBitmap = null;
+    static Bitmap imageBitmap = null;
     int photoType;
     /* --------------------------------------- */
 
@@ -92,6 +105,16 @@ public class UploadPhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
+
+        // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
+        // dell'apertura della fotocamera
+        if (savedInstanceState != null) {
+            first = savedInstanceState.getBoolean("first");
+            photoFileName = savedInstanceState.getString("photoFileName");
+
+            Log.d("UploadActivity", "First è false, quindi non avvia la fotocamera");
+            // Inizializzo parse perchè l'activity è stata chiusa
+        }
 
         if (first) {
             //controllo da dove andare a prendere la foto galleria/camera
@@ -230,6 +253,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private EditText hashtag;
         private EditText description;
+
 
         public void setSectionsPagerAdapter(SectionsPagerAdapter sectionsPagerAdapter) {
             this.sectionsPagerAdapter = sectionsPagerAdapter;
@@ -381,31 +405,115 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                         infoListAdapter.notifyDataSetChanged();
                         System.out.println(infoListAdapter.getListCloth());
-                        for(int i=0;i<infoListAdapter.getCount();i++){
-                            Cloth c=infoListAdapter.getItem(i);
-                            if(!c.isEmpty()){
-                                System.out.println("invio a parse!");
+                        ArrayList<String>id=new ArrayList<>();
+                        for(int i=0;i<infoListAdapter.getCount();i++) {
+                            Cloth c = infoListAdapter.getItem(i);
+                            if (!c.isEmpty()) {
+                                ParseObject vestito=new ParseObject("Vestito");
+                                if(c.getCloth()!=null)vestito.put("tipo",c.getCloth());
+                                if(c.getShop()!=null)vestito.put("shop",c.getShop());
+                                if(c.getBrand()!=null)vestito.put("brand",c.getBrand());
+                                if(c.getPrice()!=null)vestito.put("prezzo",c.getPrice());
+                                try {
+                                    vestito.save();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                id.add(vestito.getObjectId());
                             }
-                            /*View view=infoListAdapter.getItem(i);
-                            System.out.println(view);
-                            AutoCompleteTextView tipo=(AutoCompleteTextView)view.findViewById(R.id.cloth);
-                            EditText shop=(EditText)view.findViewById(R.id.shop);
-                            EditText brand=(EditText)view.findViewById(R.id.brand);
-                            EditText address=(EditText)view.findViewById(R.id.address);
-                            EditText price=(EditText)view.findViewById(R.id.price);
-                            Cloth c=new Cloth();
-                            c.setCloth(tipo.getText().toString());
-                            c.setShop(shop.getText().toString());
-                            c.setBrand(brand.getText().toString());
-                            c.setAddress(address.getText().toString());
-                            if(!price.getText().toString().equals("")) c.setPrize(Float.parseFloat(price.getText().toString()));
-                            System.out.println(c);
-*/
                         }
 
+                        final View vi = v;
 
+                        //btnSend.setVisibility(View.INVISIBLE);
+                        //progressBar.setVisibility(View.VISIBLE);
+                        //percentuale.setVisibility(View.VISIBLE);
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        // e la funzione a fine file checkToCompress()
+
+                        int toCompress = BitmapUtil.checkToCompress(imageBitmap);
+                        Log.d("UploadActivity", "toCompress = " + toCompress);
+
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
+                        byte[] byteImg = stream.toByteArray();
+                        Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
+
+
+
+                        // Creazione di un ParseFile
+                        ParseFile file = new ParseFile(photoFileName, byteImg);
+
+                        // Save the file to Parse
+                        file.saveInBackground(new SaveCallback() {
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("UploadActivity", "File inviato correttamente");
+                                } else {
+                                    // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
+                                    check(e.getCode(), vi, e.getMessage());
+                                    Log.d("UploadActivity", "Errore durante l'invio del file");
+                                }
+                            }
+                        }, new ProgressCallback() {
+                            public void done(Integer percentDone) {
+                                // Update your progress spinner here. percentDone will be between 0 and 100.
+                                //percentuale.setText("Caricamento: " + percentDone + "%");
+                                //progressBar.setProgress(percentDone);
+                            }
+                        });
+
+                        // Creazione di un ParseObject da inviare
+                        final ParseObject picture = new ParseObject("Photo");
+                        picture.put("user", ParseUser.getCurrentUser().getUsername());
+                        picture.put("photo", file);
+                        String[] hashtags =sectionsPagerAdapter.getHashtag().split(" ");
+                        picture.put("hashtag", Arrays.asList(hashtags));
+                        picture.put("nLike", 0);
+                        picture.put("vestiti",id);
+
+                        // Invio ParseObject (immagine) al server
+                        picture.saveInBackground(new SaveCallback() {
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
+
+                                    //chiamata get per salvare il thumbnail
+                                    String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
+                                    Get g = new Get();
+                                    g.execute(url);
+
+                                    getActivity().finish();
+                                } else {
+                                    // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                    check(e.getCode(), vi, e.getMessage());
+
+                                    Log.d("UploadActivity", "Errore durante l'invio dell'oggetto immagine");
+                                }
+                            }
+                        });
 
                     }
+                    /*View view=infoListAdapter.getItem(i);
+                    System.out.println(view);
+                    AutoCompleteTextView tipo=(AutoCompleteTextView)view.findViewById(R.id.cloth);
+                    EditText shop=(EditText)view.findViewById(R.id.shop);
+                    EditText brand=(EditText)view.findViewById(R.id.brand);
+                    EditText address=(EditText)view.findViewById(R.id.address);
+                    EditText price=(EditText)view.findViewById(R.id.price);
+                    Cloth c=new Cloth();
+                    c.setCloth(tipo.getText().toString());
+                    c.setShop(shop.getText().toString());
+                    c.setBrand(brand.getText().toString());
+                    c.setAddress(address.getText().toString());
+                    if(!price.getText().toString().equals("")) c.setPrize(Float.parseFloat(price.getText().toString()));
+                    System.out.println(c);
+*/
+
+
+
+
+
                 });
 
 
