@@ -2,6 +2,11 @@ package com.clothapp.upload;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
+import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.resources.Cloth;
@@ -21,10 +27,16 @@ import java.util.List;
  */
 public class InfoListAdapter extends BaseAdapter {
     private final Context context;
-    private List<View> listCard = new ArrayList<>();
+
+    private ArrayList<View> listCard = new ArrayList<>();
     private AutoCompleteTextView tipo;
 
-    private int size=1;
+    private int size=0;
+    private ArrayList<Cloth> listCloth=new ArrayList<>();
+
+
+
+
 
     public InfoListAdapter(Context context) {
         this.context = context;
@@ -35,14 +47,24 @@ public class InfoListAdapter extends BaseAdapter {
         //this.cloths = cloth;
     }
 */
+
+
+    public int getListCard() {
+        return listCard.size();
+    }
+
+    public int getListCloth() {
+        return listCloth.size();
+    }
+
     @Override
     public int getCount() {
         return size;
     }
 
     @Override
-    public View getItem(int position) {
-        return listCard.get(position);
+    public Cloth getItem(int position) {
+        return listCloth.get(position);
     }
 
     @Override
@@ -66,7 +88,50 @@ public class InfoListAdapter extends BaseAdapter {
         tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
-        listCard.add(row);
+        EditText shop=(EditText)row.findViewById(R.id.shop);
+        EditText brand=(EditText)row.findViewById(R.id.brand);
+        EditText address=(EditText)row.findViewById(R.id.address);
+        EditText price=(EditText)row.findViewById(R.id.price);
+
+      /*
+        tipo.setText("");
+        shop.setText("");
+        brand.setText("");
+        address.setText("");
+        price.setText("");
+        */
+        final Cloth c=new Cloth();
+        c.setId(size);
+        //c.setCloth(tipo.getText().toString());
+        //c.setShop(shop.getText().toString());
+        //c.setBrand(brand.getText().toString());
+        //c.setAddress(address.getText().toString());
+        if (!listCloth.contains(c)){
+            //System.out.println("add:"+c.getID());
+            listCloth.add(c);
+        }
+        if(!listCard.contains(row))listCard.add(row);
+
+
+        if(position==size-1)tipo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // System.out.println("ontext"+c.getID());
+                //c.setCloth(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                listCloth.get(c.getID()-1).setCloth(s.toString());
+
+            }
+        });
+
 
         return row;
     }
@@ -77,6 +142,7 @@ public class InfoListAdapter extends BaseAdapter {
 
     public void addCard() {
         size++;
+
     }
 
     //prova provvisoria dei suggerimenti

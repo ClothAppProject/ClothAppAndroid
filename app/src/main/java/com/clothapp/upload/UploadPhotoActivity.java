@@ -362,7 +362,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 final InfoListAdapter infoListAdapter=new InfoListAdapter(getContext());
                 listView.setAdapter(infoListAdapter);
                 //listener bottone add clothing
-                //TODO: BUG aggiunta card. Vedere sotto
                 Button add=(Button)rootView.findViewById(R.id.add);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -380,11 +379,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         //TODO: aggiungere le operazioni di upload
                         System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
-                        //************************************************************************
-                        //BUG!!!!!! il for dovrebbe iterare su tutte le infocard dei vestiti e creare i vari vestiti, ma stranamente tutti i vestiti creti sono uguali al primo!!!!
-                        //************************************************************************
+                        infoListAdapter.notifyDataSetChanged();
+                        System.out.println(infoListAdapter.getListCloth());
                         for(int i=0;i<infoListAdapter.getCount();i++){
-                            View view=infoListAdapter.getItem(i);
+                            Cloth c=infoListAdapter.getItem(i);
+                            if(!c.isEmpty()){
+                                System.out.println("invio a parse!");
+                            }
+                            /*View view=infoListAdapter.getItem(i);
+                            System.out.println(view);
                             AutoCompleteTextView tipo=(AutoCompleteTextView)view.findViewById(R.id.cloth);
                             EditText shop=(EditText)view.findViewById(R.id.shop);
                             EditText brand=(EditText)view.findViewById(R.id.brand);
@@ -397,6 +400,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                             c.setAddress(address.getText().toString());
                             if(!price.getText().toString().equals("")) c.setPrize(Float.parseFloat(price.getText().toString()));
                             System.out.println(c);
+*/
                         }
 
 

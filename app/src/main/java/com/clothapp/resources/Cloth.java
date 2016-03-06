@@ -13,6 +13,7 @@ public class Cloth implements Parcelable {
     private String shopUsername;
     private String brand;
     private Float price;
+    private int id;
 
     public Cloth(String cloth, String address, Float price, String shop, String shopUsername, String brand) {
         this.cloth = cloth;
@@ -119,5 +120,34 @@ public class Cloth implements Parcelable {
                 ", brand='" + brand + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cloth cloth = (Cloth) o;
+
+        return id == cloth.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public boolean isEmpty(){
+        return cloth==null && shop==null && address==null && brand==null && price==null;
+
     }
 }
