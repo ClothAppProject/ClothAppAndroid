@@ -85,8 +85,7 @@
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:layout_anchor="@id/tabs"
-            app:layout_anchorGravity="center|left|start"
-            app:layout_behavior="com.clothapp.profile.utils.ScrollAwareFABBehavior" />
+            app:layout_anchorGravity="center|left|start" />
 
 
     </android.support.design.widget.CoordinatorLayout>
