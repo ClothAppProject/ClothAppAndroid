@@ -420,6 +420,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                                 if (c.getShop() != null) vestito.put("shop", c.getShop());
                                 if (c.getBrand() != null) vestito.put("brand", c.getBrand());
                                 if (c.getPrice() != null) vestito.put("prezzo", c.getPrice());
+                                if (c.getAddress()!=null) vestito.put("luogoAcquisto",c.getAddress());
                                 try {
                                     vestito.save();
                                     //se lo shop è registrato inserisco il nome nel campo shopusername
