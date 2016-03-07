@@ -69,8 +69,8 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class UploadPhotoActivity extends AppCompatActivity {
     private final int REQUEST_CAMERA = 101;
 
-    final static int RESULT_LOAD_IMG = 1540;
-    final static int CAPTURE_IMAGE_ACTIVITY = 2187;
+    final int RESULT_LOAD_IMG = 1540;
+    final int CAPTURE_IMAGE_ACTIVITY = 2187;
 
     // ATTENZIONE Roberto! Possibili spoiler su Star Wars VII
 
@@ -82,10 +82,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
     /* --------------------------------------- */
     boolean first = true;
     final String directoryName = "ClothApp";
-    static String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
+    private static String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
     Uri takenPhotoUri;
     ImageView imageView = null;
-    static Bitmap imageBitmap = null;
+    private static Bitmap imageBitmap = null;
     static int photoType;
     /* --------------------------------------- */
 
@@ -210,12 +210,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
             // Errore della fotocamera
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
 
-            Log.d("UploadActivity", "L'Immagine non è stata scattata");
+            Log.d("UploadActivity", "L'Immagine non è stata presa");
 
-            // Reinderizzo l'utente alla homePage activity
-            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(i);
-
+            // termino
             finish();
         }
 
@@ -318,10 +315,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 retake.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getContext(), UploadPhotoActivity.class);
-                        i.putExtra("photoType", photoType);
-                        startActivity(i);
+                        if (photoType != RESULT_LOAD_IMG) deleteImage();
+                        Intent intent = getActivity().getIntent();
                         getActivity().finish();
+                        startActivity(intent);
                     }
                 });
                 ImageView foto=(ImageView)rootView.findViewById(R.id.imageView);
@@ -651,7 +648,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     }
 
     //funzione che cancella l'imamgine scattata
-    public void deleteImage() {
+    public static void deleteImage() {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + directoryName;
         File f = new File(path, photoFileName);
         // Controllo se esiste
