@@ -60,10 +60,22 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Add More"
+                android:textColor="@color/red"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="Add Clothing"
-                android:textColor="@color/red" />
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <Button
+                android:id="@+id/remove"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove Last"
+                android:textColor="@color/red"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/add"
+                android:layout_toStartOf="@+id/add" />
 
         </RelativeLayout>
 
