@@ -56,6 +56,7 @@
     <string name="edit_profile">Modifica Profilo</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="ask_back_from_upload">Vuoi annullare la procedura di upload?</string>
     <string name="ok">Ok</string>
     <string name="cancel">Annulla</string>
     <string name="ask_photo_delete">Vuoi eliminare questa foto?</string>

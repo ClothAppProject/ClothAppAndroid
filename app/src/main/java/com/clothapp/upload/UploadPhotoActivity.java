@@ -1,6 +1,7 @@
 package com.clothapp.upload;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -40,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
@@ -293,14 +296,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
             View rootView;
 
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             Uri uri=(Uri)getArguments().getParcelable("uri");
-
-
 
             //fragment 1
             if (sectionNumber == 1) {
@@ -650,6 +650,35 @@ public class UploadPhotoActivity extends AppCompatActivity {
             f.delete();
             Log.d("UploadActivity", "File eliminato");
         }
+    }
+
+    // In caso sia premuto il pulsante indietro, eliminiamo l'immagine creata e torniamo alla home activity
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder back = new AlertDialog.Builder(this);
+        back.setTitle(R.string.ask_back_from_upload);
+        back.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //annullo l'upload
+                        if (photoType != RESULT_LOAD_IMG) deleteImage();
+                        // Reinderizzo l'utente alla homePage activity
+                        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+        back.setNegativeButton(R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //annullata
+                    }
+                });
+        AlertDialog dialogDelete = back.create();
+        // display dialog
+        dialogDelete.show();
     }
 
     // Ritorna l'Uri dell'immagine su disco
