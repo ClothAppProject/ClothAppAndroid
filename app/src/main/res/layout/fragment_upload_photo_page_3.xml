@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="@color/background">
 
     <ScrollView
         android:id="@+id/fragment_upload_photo_page_3_scrollview"
@@ -19,9 +20,8 @@
             <ImageView
                 android:id="@+id/fragment_upload_photo_page_3_thumbnail"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
+                android:layout_height="160dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
                 android:src="@drawable/com_facebook_profile_picture_blank_portrait" />
 
             <ListView
@@ -42,9 +42,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/add"
         android:text="Add Clothing"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/fragment_upload_photo_page_3_scrollview"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/relativeLayout"
+        android:layout_marginBottom="40dp" />"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,7 +52,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:id="@+id/relativeLayout">
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless"
