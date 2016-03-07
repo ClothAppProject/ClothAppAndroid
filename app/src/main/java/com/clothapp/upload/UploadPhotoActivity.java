@@ -86,7 +86,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     Uri takenPhotoUri;
     ImageView imageView = null;
     static Bitmap imageBitmap = null;
-    int photoType;
+    static int photoType;
     /* --------------------------------------- */
 
     /**
@@ -115,7 +115,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
             first = savedInstanceState.getBoolean("first");
             photoFileName = savedInstanceState.getString("photoFileName");
 
-            Log.d("UploadActivity", "First è false, quindi non avvia la fotocamera");
+            //Log.d("UploadActivity", "First è false, quindi non avvia la fotocamera");
             // Inizializzo parse perchè l'activity è stata chiusa
         }
 
@@ -125,7 +125,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
             if (photoType == CAPTURE_IMAGE_ACTIVITY) {
                 // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
                 // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-                Log.d("UploadCamera", "E' il first");
+                //Log.d("UploadCamera", "E' il first");
 
                 // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -152,11 +152,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
                     }
                 } catch (Exception e) {
-                    Log.d("UploadActivity", "Exception: " + e.getMessage());
+                    //Log.d("UploadActivity", "Exception: " + e.getMessage());
                 }
             } else if (photoType == RESULT_LOAD_IMG) {
                 //inizializzo immagine da prendere in galleria
-                Log.d("UploadGallery", "E' il first");
+                //Log.d("UploadGallery", "E' il first");
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
             }
@@ -312,6 +312,16 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
                         viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                    }
+                });
+                Button retake=(Button)rootView.findViewById(R.id.retake);
+                retake.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getContext(), UploadPhotoActivity.class);
+                        i.putExtra("photoType", photoType);
+                        startActivity(i);
+                        getActivity().finish();
                     }
                 });
                 ImageView foto=(ImageView)rootView.findViewById(R.id.imageView);
