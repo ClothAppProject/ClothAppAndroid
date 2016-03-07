@@ -48,9 +48,11 @@ import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
@@ -413,13 +415,32 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         for (int i = 0; i < infoListAdapter.getCount(); i++) {
                             Cloth c = infoListAdapter.getItem(i);
                             if (!c.isEmpty()) {
-                                ParseObject vestito = new ParseObject("Vestito");
+                                final ParseObject vestito = new ParseObject("Vestito");
                                 if (c.getCloth() != null) vestito.put("tipo", c.getCloth());
                                 if (c.getShop() != null) vestito.put("shop", c.getShop());
                                 if (c.getBrand() != null) vestito.put("brand", c.getBrand());
                                 if (c.getPrice() != null) vestito.put("prezzo", c.getPrice());
                                 try {
                                     vestito.save();
+                                    //se lo shop è registrato inserisco il nome nel campo shopusername
+                                    ParseQuery<ParseObject> shop=new ParseQuery<ParseObject>("LocalShop");
+                                    shop.whereEqualTo("name", c.getShop());
+                                    shop.whereEqualTo("address",c.getAddress());
+                                    System.out.println(c.getShop()+":"+c.getAddress()+":");
+                                    shop.getFirstInBackground(new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(ParseObject object, ParseException e) {
+                                            if (e == null && object != null) {
+                                                System.out.println("trovato"+object);
+                                                vestito.put("shopUsername", object.getString("username"));
+                                                try {
+                                                    vestito.save();
+                                                } catch (ParseException e1) {
+                                                    e1.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    });
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
