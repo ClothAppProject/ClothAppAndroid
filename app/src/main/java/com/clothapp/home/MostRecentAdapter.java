@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -114,8 +115,8 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // White = false
         // TODO: setImageResource needs to be replaced. A quick RAM usage inspection showed this method uses a lot of memory if called multiple times.
         public void setItemHeartImage(boolean red) {
-            if (red) imgHeart.setImageResource(R.mipmap.cuore_pressed);
-            else imgHeart.setImageResource(R.mipmap.cuore);
+            if (red) imgHeart.setColorFilter(Color.rgb(210, 36, 36));
+            else imgHeart.setColorFilter(Color.rgb(255, 255, 255));
         }
 
         // Redirect user to ImageFragment (gallery) if he/she clicks on the photo
