@@ -48,7 +48,7 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="10dp"
-                            android:background="@drawable/profile_uploaded_photos_user_rectangle"
+                            android:background="@drawable/shape_rectangle_chip"
                             android:orientation="horizontal">
 
                             <ImageView

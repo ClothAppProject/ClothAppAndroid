@@ -69,8 +69,8 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class UploadPhotoActivity extends AppCompatActivity {
     private final int REQUEST_CAMERA = 101;
 
-    final static int RESULT_LOAD_IMG = 1540;
-    final static int CAPTURE_IMAGE_ACTIVITY = 2187;
+    static final int RESULT_LOAD_IMG = 1540;
+    static final int CAPTURE_IMAGE_ACTIVITY = 2187;
 
     // ATTENZIONE Roberto! Possibili spoiler su Star Wars VII
 
@@ -81,7 +81,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
     /* --------------------------------------- */
     boolean first = true;
-    final static String directoryName = "ClothApp";
+    static final String directoryName = "ClothApp";
     private static String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
     Uri takenPhotoUri;
     ImageView imageView = null;
