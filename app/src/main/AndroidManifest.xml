@@ -162,6 +162,9 @@
             android:name=".upload.UploadPhotoActivity"
             android:label="@string/title_activity_upload_photo"
             android:theme="@style/AppTheme.Upload" />
+        <activity
+            android:name=".settings.ChangePassword"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
