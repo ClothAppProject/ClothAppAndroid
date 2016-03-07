@@ -41,7 +41,7 @@ public class InfoListAdapter extends BaseAdapter {
 
     private AutoCompleteTextView tipo;
 
-    private int size=0;
+    private int size=1;
     private ArrayList<Cloth> listCloth=new ArrayList<>();
     private Resources resources;
     private String output=null;

@@ -286,8 +286,8 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 //System.out.println("visibile");
             } else {
                 //System.out.println("nonvisibile");
-                if (hashtag != null) sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
-                if (description != null)
+                if (hashtag != null && sectionsPagerAdapter!=null) sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
+                if (description != null && sectionsPagerAdapter!=null)
                     sectionsPagerAdapter.setDescription(description.getText().toString());
             }
         }
