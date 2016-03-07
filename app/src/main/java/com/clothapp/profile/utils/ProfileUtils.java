@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -288,7 +289,7 @@ public class ProfileUtils {
                     persona = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
-                    long age = getAge(persona.get("date").toString());
+                    long age = getAge(persona.getDate("date"));
 
                     if (age < 0) updateListItem(1, "Not found");
                     else updateListItem(1, age + " years old");
@@ -353,20 +354,25 @@ public class ProfileUtils {
         adapter.notifyDataSetChanged();
     }
 
-    private static long getAge(String text) {
+    private static long getAge(Date birthday) {
 
-        try {
-            DateFormat format = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
-            Date birthday = format.parse(text);
-            Date now = new Date();
+        Date now = new Date();
 
-            long diffInMillies = now.getTime() - birthday.getTime();
-            return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+        long diffInMillies = now.getTime() - birthday.getTime();
+        return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
 
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return -1;
-        }
+//        try {
+//            DateFormat format = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy", Locale.US);
+//            Date birthday = format.format(date);
+//            Date now = new Date();
+//
+//            long diffInMillies = now.getTime() - birthday.getTime();
+//            return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+//
+//        } catch (java.text.ParseException e) {
+//            e.printStackTrace();
+//            return -1;
+//        }
     }
 
     // Shows a simple dialog with a title, a message and two buttons.
