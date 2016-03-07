@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.CardView
@@ -13,11 +12,11 @@
         android:focusable="true">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
-            android:background="@color/background">
+            android:background="@color/background"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,16 +39,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:inputType="textCapWords"
+                    android:background="@drawable/background"
                     android:baselineAligned="false"
-                    android:background="@drawable/background">
+                    android:inputType="textCapWords">
 
                     <android.support.v7.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/cloth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Clothing Name"
-                        android:textSize="24dp"/>
+                        android:textSize="24dp" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -60,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -75,15 +74,15 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:background="@drawable/background">
+                    android:background="@drawable/background"
+                    android:inputType="textCapWords">
 
                     <android.support.v7.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/shop"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/shop"
                         android:hint="Shop"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp" />
 
 
                 </android.support.design.widget.TextInputLayout>
@@ -95,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -110,13 +109,13 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:background="@drawable/background">
+                    android:background="@drawable/background"
+                    android:inputType="textCapWords">
 
                     <EditText
+                        android:id="@+id/address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/address"
                         android:hint="Address"
                         android:textSize="16dp" />
 
@@ -129,8 +128,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -144,13 +143,13 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:background="@drawable/background">
+                    android:background="@drawable/background"
+                    android:inputType="textCapWords">
 
                     <EditText
+                        android:id="@+id/brand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/brand"
                         android:hint="Brand"
                         android:textSize="16dp" />
 
@@ -161,11 +160,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -179,13 +178,13 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:background="@drawable/background">
+                    android:background="@drawable/background"
+                    android:inputType="textCapWords">
 
                     <EditText
+                        android:id="@+id/price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/price"
                         android:hint="Price"
                         android:inputType="numberDecimal"
                         android:textSize="16dp" />

@@ -41,10 +41,10 @@ public class InfoListAdapter extends BaseAdapter {
 
     private AutoCompleteTextView tipo;
 
-    private int size=1;
-    private ArrayList<Cloth> listCloth=new ArrayList<>();
+    private int size = 1;
+    private ArrayList<Cloth> listCloth = new ArrayList<>();
     private Resources resources;
-    private String output=null;
+    private String output = null;
 
 
     public InfoListAdapter(Context context) {
@@ -56,7 +56,6 @@ public class InfoListAdapter extends BaseAdapter {
         //this.cloths = cloth;
     }
 */
-
 
 
     public int getListCloth() {
@@ -89,15 +88,12 @@ public class InfoListAdapter extends BaseAdapter {
 
         resources = context.getResources();
 
-        try
-        {
+        try {
             //Load the file from the raw folder - don't forget to OMIT the extension
             output = LoadFile("categorie", true);
             //output to LogCat
             Log.i("test", output);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             //display an error toast message
             Toast toast = Toast.makeText(context, "File: not found!", Toast.LENGTH_LONG);
             toast.show();
@@ -124,10 +120,10 @@ public class InfoListAdapter extends BaseAdapter {
         tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
-        final AutoCompleteTextView shop=(AutoCompleteTextView)row.findViewById(R.id.shop);
-        EditText brand=(EditText)row.findViewById(R.id.brand);
-        final EditText address=(EditText)row.findViewById(R.id.address);
-        EditText price=(EditText)row.findViewById(R.id.price);
+        final AutoCompleteTextView shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
+        EditText brand = (EditText) row.findViewById(R.id.brand);
+        final EditText address = (EditText) row.findViewById(R.id.address);
+        EditText price = (EditText) row.findViewById(R.id.price);
 
       /*
         tipo.setText("");
@@ -136,20 +132,19 @@ public class InfoListAdapter extends BaseAdapter {
         address.setText("");
         price.setText("");
         */
-        final Cloth c=new Cloth();
+        final Cloth c = new Cloth();
         c.setId(size);
         //c.setCloth(tipo.getText().toString());
         //c.setShop(shop.getText().toString());
         //c.setBrand(brand.getText().toString());
         //c.setAddress(address.getText().toString());
-        if (!listCloth.contains(c)){
+        if (!listCloth.contains(c)) {
             //System.out.println("add:"+c.getID());
             listCloth.add(c);
         }
 
 
-
-        if(position==size-1){
+        if (position == size - 1) {
             tipo.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,7 +159,7 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID()-1).setCloth(s.toString());
+                    listCloth.get(c.getID() - 1).setCloth(s.toString());
 
                 }
             });
@@ -178,12 +173,12 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    final ParseQuery<ParseObject> shopUser=new ParseQuery<ParseObject>("LocalShop");
-                    shopUser.whereContains("username",s.toString());
+                    final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
+                    shopUser.whereContains("username", s.toString());
                     shopUser.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(final List<ParseObject> objects, ParseException e) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(),android.R.layout.simple_dropdown_item_1line, shopToString(objects));
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(), android.R.layout.simple_dropdown_item_1line, shopToString(objects));
                             //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
                             shop.setAdapter(adapter);
                             shop.setThreshold(1);
@@ -202,7 +197,7 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID()-1).setShop(s.toString());
+                    listCloth.get(c.getID() - 1).setShop(s.toString());
                 }
             });
 
@@ -219,7 +214,7 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID()-1).setBrand(s.toString());
+                    listCloth.get(c.getID() - 1).setBrand(s.toString());
                 }
             });
 
@@ -236,7 +231,7 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID()-1).setAddress(s.toString());
+                    listCloth.get(c.getID() - 1).setAddress(s.toString());
                 }
             });
 
@@ -253,21 +248,19 @@ public class InfoListAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID()-1).setPrize(Float.parseFloat(s.toString()));
+                    listCloth.get(c.getID() - 1).setPrize(Float.parseFloat(s.toString()));
                 }
             });
         }
-
-
 
 
         return row;
     }
 
     private String[] shopToString(List<ParseObject> objects) {
-        String [] s=new String[objects.size()];
-        for(int i=0;i<s.length;i++){
-            s[i]=objects.get(i).getString("username")+", "+objects.get(i).getString("address");
+        String[] s = new String[objects.size()];
+        for (int i = 0; i < s.length; i++) {
+            s[i] = objects.get(i).getString("username") + ", " + objects.get(i).getString("address");
         }
         return s;
     }
@@ -278,14 +271,10 @@ public class InfoListAdapter extends BaseAdapter {
 
     }
 
-    public void deleteCard(){
-        listCloth.remove(size-1);
+    public void deleteCard() {
+        listCloth.remove(size - 1);
         size--;
     }
-
-
-
-
 
 
     //load file from apps res/raw folder or Assets folder
@@ -293,15 +282,12 @@ public class InfoListAdapter extends BaseAdapter {
         //Create a InputStream to read the file into
         InputStream iS;
 
-        if (loadFromRawFolder)
-        {
+        if (loadFromRawFolder) {
             //get the resource id from the file name
-            int rID = resources.getIdentifier("com.clothapp:raw/"+fileName, null, null);
+            int rID = resources.getIdentifier("com.clothapp:raw/" + fileName, null, null);
             //get the file as a stream
             iS = resources.openRawResource(rID);
-        }
-        else
-        {
+        } else {
             //get the file as a stream
             iS = resources.getAssets().open(fileName);
         }

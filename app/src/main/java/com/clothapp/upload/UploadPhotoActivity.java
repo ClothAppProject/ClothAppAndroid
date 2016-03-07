@@ -269,7 +269,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber,Uri uri,SectionsPagerAdapter sectionsPagerAdapter) {
+        public static PlaceholderFragment newInstance(int sectionNumber, Uri uri, SectionsPagerAdapter sectionsPagerAdapter) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -286,8 +286,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 //System.out.println("visibile");
             } else {
                 //System.out.println("nonvisibile");
-                if (hashtag != null && sectionsPagerAdapter!=null) sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
-                if (description != null && sectionsPagerAdapter!=null)
+                if (hashtag != null && sectionsPagerAdapter != null)
+                    sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
+                if (description != null && sectionsPagerAdapter != null)
                     sectionsPagerAdapter.setDescription(description.getText().toString());
             }
         }
@@ -297,21 +298,21 @@ public class UploadPhotoActivity extends AppCompatActivity {
             View rootView;
 
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            Uri uri=(Uri)getArguments().getParcelable("uri");
+            Uri uri = (Uri) getArguments().getParcelable("uri");
 
             //fragment 1
             if (sectionNumber == 1) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_1, container, false);
                 //listener sul bottone next
-                Button next=(Button)rootView.findViewById(R.id.next);
+                Button next = (Button) rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                        ViewPager viewPager = (ViewPager) container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                     }
                 });
-                Button retake=(Button)rootView.findViewById(R.id.retake);
+                Button retake = (Button) rootView.findViewById(R.id.retake);
                 retake.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -321,15 +322,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-                ImageView foto=(ImageView)rootView.findViewById(R.id.imageView);
+                ImageView foto = (ImageView) rootView.findViewById(R.id.imageView);
                 Glide.with(getActivity().getApplicationContext())
                         .load(uri)
                         .placeholder(R.mipmap.gallery_icon)
                         .into(foto);
                 //fragment 2
-            } else if (sectionNumber == 2){
+            } else if (sectionNumber == 2) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_2, container, false);
-                ImageView foto=(ImageView)rootView.findViewById(R.id.fragment_upload_photo_page_2_thumbnail);
+                ImageView foto = (ImageView) rootView.findViewById(R.id.fragment_upload_photo_page_2_thumbnail);
                 Glide.with(getActivity().getApplicationContext())
                         .load(uri)
                         .centerCrop()
@@ -338,49 +339,45 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         .into(foto);
 
                 //listener bottone previous
-                Button previous=(Button)rootView.findViewById(R.id.previous);
+                Button previous = (Button) rootView.findViewById(R.id.previous);
                 previous.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()-1);
+                        ViewPager viewPager = (ViewPager) container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
                     }
                 });
 
-                description=(EditText)rootView.findViewById(R.id.description);
-                hashtag=(EditText)rootView.findViewById(R.id.hashtag);
-
+                description = (EditText) rootView.findViewById(R.id.description);
+                hashtag = (EditText) rootView.findViewById(R.id.hashtag);
 
 
                 //listener bottone next
-                Button next=(Button)rootView.findViewById(R.id.next);
+                Button next = (Button) rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         sectionsPagerAdapter.setHashtag(hashtag.getText().toString());
-                        ViewPager viewPager=(ViewPager)container.findViewById(R.id.container);
-                        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+                        ViewPager viewPager = (ViewPager) container.findViewById(R.id.container);
+                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                     }
                 });
-
-
-
 
 
                 //fragment 3
             } else {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_3, container, false);
-                ImageView foto=(ImageView)rootView.findViewById(R.id.fragment_upload_photo_page_3_thumbnail);
+                ImageView foto = (ImageView) rootView.findViewById(R.id.fragment_upload_photo_page_3_thumbnail);
                 Glide.with(getActivity().getApplicationContext())
                         .load(uri)
                         .centerCrop()
                         .thumbnail(0.2f)
                         .placeholder(R.mipmap.gallery_icon)
                         .into(foto);
-                final ScrollView scrollView=(ScrollView)rootView.findViewById(R.id.fragment_upload_photo_page_3_scrollview);
+                final ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.fragment_upload_photo_page_3_scrollview);
 
                 //listener bottone previous
-                Button previous=(Button)rootView.findViewById(R.id.previous);
+                Button previous = (Button) rootView.findViewById(R.id.previous);
                 previous.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -389,11 +386,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     }
                 });
                 //listview delle card per aggiungere le info dei vestiti
-                final ListView listView=(ListView)rootView.findViewById(R.id.listView);
-                final InfoListAdapter infoListAdapter=new InfoListAdapter(getContext());
+                final ListView listView = (ListView) rootView.findViewById(R.id.listView);
+                final InfoListAdapter infoListAdapter = new InfoListAdapter(getContext());
                 listView.setAdapter(infoListAdapter);
                 //listener bottone add clothing
-                Button add=(Button)rootView.findViewById(R.id.add);
+                Button add = (Button) rootView.findViewById(R.id.add);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -404,7 +401,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     }
                 });
                 //listener bottone upload
-                Button upload=(Button)rootView.findViewById(R.id.upload);
+                Button upload = (Button) rootView.findViewById(R.id.upload);
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -412,15 +409,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                         infoListAdapter.notifyDataSetChanged();
                         System.out.println(infoListAdapter.getListCloth());
-                        ArrayList<String>id=new ArrayList<>();
-                        for(int i=0;i<infoListAdapter.getCount();i++) {
+                        ArrayList<String> id = new ArrayList<>();
+                        for (int i = 0; i < infoListAdapter.getCount(); i++) {
                             Cloth c = infoListAdapter.getItem(i);
                             if (!c.isEmpty()) {
-                                ParseObject vestito=new ParseObject("Vestito");
-                                if(c.getCloth()!=null)vestito.put("tipo",c.getCloth());
-                                if(c.getShop()!=null)vestito.put("shop",c.getShop());
-                                if(c.getBrand()!=null)vestito.put("brand",c.getBrand());
-                                if(c.getPrice()!=null)vestito.put("prezzo",c.getPrice());
+                                ParseObject vestito = new ParseObject("Vestito");
+                                if (c.getCloth() != null) vestito.put("tipo", c.getCloth());
+                                if (c.getShop() != null) vestito.put("shop", c.getShop());
+                                if (c.getBrand() != null) vestito.put("brand", c.getBrand());
+                                if (c.getPrice() != null) vestito.put("prezzo", c.getPrice());
                                 try {
                                     vestito.save();
                                 } catch (ParseException e) {
@@ -445,7 +442,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
                         byte[] byteImg = stream.toByteArray();
                         Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
-
 
 
                         // Creazione di un ParseFile
@@ -474,10 +470,10 @@ public class UploadPhotoActivity extends AppCompatActivity {
                         final ParseObject picture = new ParseObject("Photo");
                         picture.put("user", ParseUser.getCurrentUser().getUsername());
                         picture.put("photo", file);
-                        String[] hashtags =sectionsPagerAdapter.getHashtag().split(" ");
+                        String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                         picture.put("hashtag", Arrays.asList(hashtags));
                         picture.put("nLike", 0);
-                        picture.put("vestiti",id);
+                        picture.put("vestiti", id);
 
                         // Invio ParseObject (immagine) al server
                         picture.saveInBackground(new SaveCallback() {
@@ -518,9 +514,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
 */
 
 
-
-
-
                 });
 
 
@@ -554,16 +547,19 @@ public class UploadPhotoActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position==0) {
-                if(page1==null) page1=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+            if (position == 0) {
+                if (page1 == null)
+                    page1 = PlaceholderFragment.newInstance(position + 1, takenPhotoUri, this);
                 return page1;
             }
-            if(position==1) {
-                if(page2==null) page2=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+            if (position == 1) {
+                if (page2 == null)
+                    page2 = PlaceholderFragment.newInstance(position + 1, takenPhotoUri, this);
                 return page2;
             }
-            if(position==2) {
-                if(page3==null) page3=PlaceholderFragment.newInstance(position + 1,takenPhotoUri,this);
+            if (position == 2) {
+                if (page3 == null)
+                    page3 = PlaceholderFragment.newInstance(position + 1, takenPhotoUri, this);
                 return page3;
             }
             return null;
