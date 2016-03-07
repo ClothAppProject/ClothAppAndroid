@@ -402,6 +402,17 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
                     }
                 });
+                //listener bottone remove clothing
+                Button remove = (Button) rootView.findViewById(R.id.remove);
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        infoListAdapter.deleteCard();
+                        infoListAdapter.notifyDataSetChanged();
+                        setListViewHeightBasedOnItems(listView);
+
+                    }
+                });
                 //listener bottone upload
                 Button upload = (Button) rootView.findViewById(R.id.upload);
                 upload.setOnClickListener(new View.OnClickListener() {
