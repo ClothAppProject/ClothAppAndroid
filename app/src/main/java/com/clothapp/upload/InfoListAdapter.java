@@ -258,6 +258,7 @@ public class InfoListAdapter extends BaseAdapter {
     }
 
     private String[] shopToString(List<ParseObject> objects) {
+        if (objects == null) return null;
         String[] s = new String[objects.size()];
         for (int i = 0; i < s.length; i++) {
             s[i] = objects.get(i).getString("username") + ", " + objects.get(i).getString("address");
