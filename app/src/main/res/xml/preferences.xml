@@ -5,7 +5,6 @@
     <!-- Account settings -->
     <PreferenceCategory
         android:title="@string/account_settings"
-        android:key="pref_key_account_settings"
         android:layout="@layout/preferences_category">
         <Preference
             android:title="@string/profile_settings"
@@ -22,7 +21,8 @@
 
     <!-- APP settings -->
     <PreferenceCategory
-        android:title="@string/app_settings">
+        android:title="@string/app_settings"
+        android:layout="@layout/preferences_category">
         <Preference
             android:title="@string/account_collegati">
         </Preference>
@@ -36,7 +36,8 @@
 
     <!-- Assistenza settings -->
     <PreferenceCategory
-        android:title="@string/assitance_settings">
+        android:title="@string/assitance_settings"
+        android:layout="@layout/preferences_category">
         <Preference
             android:title="@string/segnala_foto">
         </Preference>
@@ -44,7 +45,8 @@
 
     <!-- INFO settings -->
     <PreferenceCategory
-        android:title="@string/info_set">
+        android:title="@string/info_set"
+        android:layout="@layout/preferences_category">
         <Preference
             android:title="@string/info_settings">
             <intent

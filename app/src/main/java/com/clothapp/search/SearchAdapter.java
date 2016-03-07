@@ -1,17 +1,9 @@
 package com.clothapp.search;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-
-import com.clothapp.R;
-import com.clothapp.home_gallery.HomeMostRecentFragment;
-import com.clothapp.home_gallery.HomePopularShopsFragment;
-import com.clothapp.home_gallery.HomeTopRatedFragment;
 
 /**
  * Created by jack1 on 18/02/2016.

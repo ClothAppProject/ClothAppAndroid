@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 

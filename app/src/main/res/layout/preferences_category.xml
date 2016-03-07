@@ -6,12 +6,19 @@
 
     <TextView
         android:id="@+android:id/title"
-        style="?android:attr/listSeparatorTextViewStyle"
-
+        android:textColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
+        android:textStyle="bold"
+        android:textSize="20dp" />
 
-    <View style="@style/Divider" />
+    <View
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@color/darkred" />
 
 </LinearLayout>

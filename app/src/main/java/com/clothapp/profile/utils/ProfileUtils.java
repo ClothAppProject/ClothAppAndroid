@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.home_gallery.HomeActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.UserProfileActivity;

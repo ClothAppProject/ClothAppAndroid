@@ -1,54 +1,26 @@
 package com.clothapp;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.clothapp.home.MostRecentAdapter;
-import com.clothapp.home.MostRecentFragment;
 import com.clothapp.home.TopRatedAdapter;
-import com.clothapp.home_gallery.HomeMostRecentFragment;
-import com.clothapp.home_gallery.HomeTopRatedFragment;
-import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
-import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
-import com.clothapp.resources.ApplicationSupport;
-import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
-import com.clothapp.resources.MyCardListAdapter;
 import com.clothapp.search.FindClothFragment;
 import com.clothapp.search.FindTagFragment;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ImageFragment extends AppCompatActivity {
     /**

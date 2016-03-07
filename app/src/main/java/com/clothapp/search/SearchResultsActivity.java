@@ -4,8 +4,6 @@ package com.clothapp.search;
  * Created by nc94 on 2/15/16.
  */
 import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,21 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-
-import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.home_gallery.HomeAdapter;
-import com.clothapp.profile.utils.ProfileUtils;
-import com.clothapp.resources.Image;
-import com.clothapp.resources.User;
 import com.clothapp.settings.SettingsActivity;
 
 import java.util.ArrayList;
