@@ -107,13 +107,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile_user, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -121,10 +114,6 @@ public class UserProfileActivity extends AppCompatActivity {
             case android.R.id.home:
                 // Log.d("UserProfileActivity", "android.R.id.home");
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-
-            case R.id.action_settings:
-                // Log.d("UserProfileActivity", "R.id.action_settings");
                 return true;
         }
 
