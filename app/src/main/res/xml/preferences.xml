@@ -6,16 +6,16 @@
     <PreferenceCategory
         android:title="@string/account_settings"
         android:layout="@layout/preferences_category">
-        <Preference
+        <PreferenceScreen
             android:title="@string/profile_settings"
             android:key="pref_key_profile_settings"
             android:summary="@string/profile_summary">
-        </Preference>
+        </PreferenceScreen>
 
-        <Preference
+        <PreferenceScreen
             android:title="@string/password_settings"
             android:dependency="pref_key_profile_settings">
-        </Preference>
+        </PreferenceScreen>
 
     </PreferenceCategory>
 
@@ -23,9 +23,20 @@
     <PreferenceCategory
         android:title="@string/app_settings"
         android:layout="@layout/preferences_category">
-        <Preference
+        <PreferenceScreen
             android:title="@string/account_collegati">
-        </Preference>
+            <PreferenceScreen
+                android:key="facebook"
+                android:title="Facebook"
+                android:persistent="false">
+            </PreferenceScreen>
+            <PreferenceScreen
+                android:key="twitter"
+                android:title="Twitter"
+                android:persistent="false"
+                android:shouldDisableView="true">
+            </PreferenceScreen>
+        </PreferenceScreen>
     </PreferenceCategory>
 
     <CheckBoxPreference
@@ -38,21 +49,23 @@
     <PreferenceCategory
         android:title="@string/assitance_settings"
         android:layout="@layout/preferences_category">
-        <Preference
-            android:title="@string/segnala_foto">
-        </Preference>
+        <PreferenceScreen
+            android:key="signal"
+            android:title="@string/segnala"
+            android:persistent="false">
+        </PreferenceScreen>
     </PreferenceCategory>
 
     <!-- INFO settings -->
     <PreferenceCategory
         android:title="@string/info_set"
         android:layout="@layout/preferences_category">
-        <Preference
+        <PreferenceScreen
             android:title="@string/info_settings">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://www.clothapp.it" />
-        </Preference>
+        </PreferenceScreen>
     </PreferenceCategory>
 
 

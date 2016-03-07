@@ -63,13 +63,20 @@
     <string name="report">Segnala</string>
     <string name="delete_photo">Elimina Foto</string>
     <string name="report_photo">Segnala Foto</string>
-    <string name="reason">Motivo</string>
+    <string name="reason">Motivo:   </string>
     <string name="select">Seleziona</string>
     <string name="optional">(Opzionale)</string>
     <string-array name="select_reason">
         <item>Spam o truffa</item>
         <item>Contenuti Pornografici</item>
         <item>Incitamento alla violenza</item>
+        <item>Altro</item>
+    </string-array>
+    <string-array name="select_suggestion">
+        <item>Bug</item>
+        <item>Suggerimento</item>
+        <item>Problema</item>
+        <item>Altro</item>
     </string-array>
     <string name="separator">-</string>
     <string name="info">Log-Info</string>
@@ -113,7 +120,7 @@
     <string name="salva_foto">Salva Foto Sul Telefono</string>
 
     <string name="assitance_settings">Assistenza</string>
-    <string name="segnala_foto">Segnala</string>
+    <string name="segnala">Segnala</string>
     <string name="info_set">Credits</string>
     <string name="info_settings">Info su di noi</string>
     <!-- SETTINGS STRING -->
