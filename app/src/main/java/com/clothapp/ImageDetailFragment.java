@@ -368,6 +368,7 @@ public class ImageDetailFragment extends Fragment {
                         segnalazione.put("comment", comment.getText().toString());
                         segnalazione.put("from_username", ParseUser.getCurrentUser().getUsername());
                         segnalazione.put("reason", spinner.getSelectedItem());
+                        segnalazione.put("photo",immagine.getObjectId());
                         segnalazione.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
