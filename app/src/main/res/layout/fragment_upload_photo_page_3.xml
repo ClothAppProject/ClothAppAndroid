@@ -62,14 +62,16 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:id="@+id/previous"
-            android:text="Previous" />
+            android:text="Previous"
+            android:textColor="@color/white"/>
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_height="10dp"
+            android:id="@+id/palline"
+            android:src="@drawable/palline_3"
             android:layout_centerVertical="true"
-            android:text="3 / 3" />
+            android:layout_centerHorizontal="true"/>
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -78,7 +80,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:id="@+id/upload"
-            android:text="Upload" />
+            android:text="Upload"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
