@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <!-- Account settings -->
     <PreferenceCategory
-        android:title="@string/account_settings">
-        <PreferenceScreen
+        android:title="@string/account_settings"
+        android:key="pref_key_account_settings"
+        android:layout="@layout/preferences_category">
+        <Preference
             android:title="@string/profile_settings"
+            android:key="pref_key_profile_settings"
             android:summary="@string/profile_summary">
-        </PreferenceScreen>
+        </Preference>
 
-        <PreferenceScreen
-            android:title="@string/password_settings">
-        </PreferenceScreen>
+        <Preference
+            android:title="@string/password_settings"
+            android:dependency="pref_key_profile_settings">
+        </Preference>
 
     </PreferenceCategory>
 
     <!-- APP settings -->
     <PreferenceCategory
         android:title="@string/app_settings">
-        <PreferenceScreen
+        <Preference
             android:title="@string/account_collegati">
-        </PreferenceScreen>
+        </Preference>
     </PreferenceCategory>
 
     <CheckBoxPreference
@@ -31,9 +37,9 @@
     <!-- Assistenza settings -->
     <PreferenceCategory
         android:title="@string/assitance_settings">
-        <PreferenceScreen
+        <Preference
             android:title="@string/segnala_foto">
-        </PreferenceScreen>
+        </Preference>
     </PreferenceCategory>
 
     <!-- INFO settings -->
