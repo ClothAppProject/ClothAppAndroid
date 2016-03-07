@@ -92,7 +92,7 @@ public class InfoListAdapter extends BaseAdapter {
             //Load the file from the raw folder - don't forget to OMIT the extension
             output = LoadFile("categorie", true);
             //output to LogCat
-            Log.i("test", output);
+            // Log.d("test", output);
         } catch (IOException e) {
             //display an error toast message
             Toast toast = Toast.makeText(context, "File: not found!", Toast.LENGTH_LONG);
