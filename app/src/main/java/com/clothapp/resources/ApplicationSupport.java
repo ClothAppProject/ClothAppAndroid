@@ -64,21 +64,22 @@ public class ApplicationSupport extends Application {
         return photos.get(i).getObjectId();
     }
 
-    //getter e setter variabili globali
+    // Getter e setter variabili globali
+
     public ArrayList<Image> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<Image> foto) {
-        photos = foto;
+    public void setPhotos(ArrayList<Image> photos) {
+        this.photos = photos;
     }
 
-    public void addFirstPhoto(Image foto) {
-        photos.add(0, foto);
+    public void addFirstPhoto(Image photo) {
+        photos.add(0, photo);
     }
 
-    public void addLastPhoto(Image foto) {
-        photos.add(foto);
+    public void addLastPhoto(Image photo) {
+        photos.add(photo);
     }
 
     @Override
@@ -95,10 +96,10 @@ public class ApplicationSupport extends Application {
                 ParseUser.getCurrentUser().fetch();
             }
         } catch (ParseException e) {
+            // Errore nell'aggiornare il profilo locale
             ExceptionCheck.check(e.getCode(), new View(this), e.getMessage());
             Log.d("ApplicationSupport", "ParseUser.getCurrentUser().fetch() failed...");
             Log.d("ApplicationSupport", "Error: " + e.getMessage());
-            //errore nell'aggiornare il profilo locale
         }
 
     }
