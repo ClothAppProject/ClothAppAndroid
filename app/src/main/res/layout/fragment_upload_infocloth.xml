@@ -101,12 +101,13 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords">
 
-                    <EditText
+
+                    <AutoCompleteTextView
                         android:id="@+id/address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Address or Website"
-                        android:textSize="16dp" />
+                        android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
 

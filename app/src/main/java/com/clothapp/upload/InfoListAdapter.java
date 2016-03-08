@@ -1,9 +1,11 @@
 package com.clothapp.upload;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.AttributeSet;
@@ -22,6 +24,16 @@ import android.widget.Toast;
 
 import com.clothapp.R;
 import com.clothapp.resources.Cloth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -33,10 +45,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by jack1 on 03/03/2016.
  */
-public class InfoListAdapter extends BaseAdapter {
+public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnConnectionFailedListener{
     private final Context context;
 
     private AutoCompleteTextView tipo;
@@ -45,10 +58,18 @@ public class InfoListAdapter extends BaseAdapter {
     private ArrayList<Cloth> listCloth = new ArrayList<>();
     private Resources resources;
     private String output = null;
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
+            new LatLng(41.9027835,12.4963655), new LatLng(42.9027835,13.4963655));
+
+    protected GoogleApiClient mGoogleApiClient;
+
+    private PlaceAutocompleteAdapter mAdapter;
 
 
-    public InfoListAdapter(Context context) {
+    public InfoListAdapter(Context context,GoogleApiClient googleApiClient) {
         this.context = context;
+        this.mGoogleApiClient=googleApiClient;
     }
 /*
     public InfoListAdapter(Context context, List<Cloth> cloth) {
@@ -77,6 +98,8 @@ public class InfoListAdapter extends BaseAdapter {
         return position;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
@@ -87,6 +110,8 @@ public class InfoListAdapter extends BaseAdapter {
         }
 
         resources = context.getResources();
+
+
 
         try {
             //Load the file from the raw folder - don't forget to OMIT the extension
@@ -122,7 +147,7 @@ public class InfoListAdapter extends BaseAdapter {
         tipo.setThreshold(1);
         final AutoCompleteTextView shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
         EditText brand = (EditText) row.findViewById(R.id.brand);
-        final EditText address = (EditText) row.findViewById(R.id.address);
+        final AutoCompleteTextView address = (AutoCompleteTextView) row.findViewById(R.id.address);
         EditText price = (EditText) row.findViewById(R.id.price);
 
       /*
@@ -218,7 +243,7 @@ public class InfoListAdapter extends BaseAdapter {
                 }
             });
 
-            address.addTextChangedListener(new TextWatcher() {
+          /*  address.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -227,6 +252,7 @@ public class InfoListAdapter extends BaseAdapter {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+
                 }
 
                 @Override
@@ -234,6 +260,15 @@ public class InfoListAdapter extends BaseAdapter {
                     listCloth.get(c.getID() - 1).setAddress(s.toString());
                 }
             });
+            */
+
+            // Register a listener that receives callbacks when a suggestion has been selected
+            address.setOnItemClickListener(mAutocompleteClickListener);
+
+            // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+            // the entire world.
+            mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+            address.setAdapter(mAdapter);
 
             price.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -310,4 +345,86 @@ public class InfoListAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * Listener that handles selections from suggestions from the AutoCompleteTextView that
+     * displays Place suggestions.
+     * Gets the place id of the selected item and issues a request to the Places Geo Data API
+     * to retrieve more details about the place.
+     *
+     * @see com.google.android.gms.location.places.GeoDataApi#getPlaceById(com.google.android.gms.common.api.GoogleApiClient,
+     * String...)
+     */
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            /*
+             Retrieve the place ID of the selected item from the Adapter.
+             The adapter stores each Place suggestion in a AutocompletePrediction from which we
+             read the place ID and title.
+              */
+            System.out.println("mAdapter="+mAdapter+":");
+            final AutocompletePrediction item = mAdapter.getItem(position);
+            final String placeId = item.getPlaceId();
+            final CharSequence primaryText = item.getPrimaryText(null);
+
+
+
+            /*
+             Issue a request to the Places Geo Data API to retrieve a Place object with additional
+             details about the place.
+              */
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+
+            Toast.makeText(context, "Clicked: " + primaryText,
+                    Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
+    /**
+     * Callback for results from a Places Geo Data API query that shows the first place result in
+     * the details view on screen.
+     */
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                // Request did not complete successfully
+
+                places.release();
+                return;
+            }
+            // Get the Place object from the buffer.
+            final Place place = places.get(0);
+
+            // Format details of the place for display and show it in a TextView.
+            System.out.println( place.getName()+
+                    place.getId()+ place.getAddress()+ place.getPhoneNumber()+
+                    place.getWebsiteUri());
+
+            // Display the third party attributions if set.
+  /*
+            final CharSequence thirdPartyAttribution = places.getAttributions();
+            if (thirdPartyAttribution == null) {
+                mPlaceDetailsAttribution.setVisibility(View.GONE);
+            } else {
+                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+            }
+*/
+
+
+            places.release();
+        }
+    };
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+        System.out.println("error connection");
+    }
 }

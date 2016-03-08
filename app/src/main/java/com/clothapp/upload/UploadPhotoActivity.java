@@ -48,6 +48,7 @@ import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
+import com.google.android.gms.common.ConnectionResult;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -67,8 +68,13 @@ import java.util.Locale;
 
 import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
 import static com.clothapp.resources.ExceptionCheck.check;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.support.v4.app.FragmentActivity;
+import com.google.android.gms.location.places.Places;
 
-public class UploadPhotoActivity extends AppCompatActivity {
+public class UploadPhotoActivity extends AppCompatActivity implements OnConnectionFailedListener {
+
     private final int REQUEST_CAMERA = 101;
 
     static final int RESULT_LOAD_IMG = 1540;
@@ -105,11 +111,24 @@ public class UploadPhotoActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static GoogleApiClient mGoogleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
+
+        // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
+        // functionality, which automatically sets up the API client to handle Activity lifecycle
+        // events. If your activity does not extend FragmentActivity, make sure to call connect()
+        // and disconnect() explicitly.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, 0 /* clientId */, this)
+                .addApi(Places.GEO_DATA_API)
+                .build();
+
+
 
         // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
         // dell'apertura della fotocamera
@@ -242,6 +261,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        
     }
 
     /**
@@ -417,7 +441,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 });
                 //listview delle card per aggiungere le info dei vestiti
                 final ListView listView = (ListView) rootView.findViewById(R.id.listView);
-                final InfoListAdapter infoListAdapter = new InfoListAdapter(getContext());
+                final InfoListAdapter infoListAdapter = new InfoListAdapter(getContext(),mGoogleApiClient);
                 listView.setAdapter(infoListAdapter);
                 //listener bottone add clothing
                 Button add = (Button) rootView.findViewById(R.id.add);
