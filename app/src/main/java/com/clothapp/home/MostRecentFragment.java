@@ -96,7 +96,7 @@ public class MostRecentFragment extends Fragment {
         mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
         recyclerView.addOnScrollListener(mostRecentScrollListener);
 
-        Log.d("MostRecentFragment", "MostRecentAdapter.itemList == null : " + (MostRecentAdapter.itemList == null));
+        // Log.d("MostRecentFragment", "MostRecentAdapter.itemList == null : " + (MostRecentAdapter.itemList == null));
 
         int size = 0;
         if (MostRecentAdapter.itemList != null) {
