@@ -1,7 +1,8 @@
 <resources>
     <string name="facebook_app_id">1088170274561501</string>
-    <string name="connect_facebook">Connetti con Facebook</string>
-    <string name="disconnect_facebook">Disconnetti da Facebook</string>
+    <string name="facebook">Facebook</string>
+    <string name="facebook_connected">Connesso con Facebook!</string>
+    <string name="facebook_disconnected">Disconnesso da Facebook!</string>
 
     <string name="app_name">ClothApp</string>
     <string name="action_settings">Settings</string>
@@ -63,6 +64,7 @@
     <string name="report">Segnala</string>
     <string name="delete_photo">Elimina Foto</string>
     <string name="report_photo">Segnala Foto</string>
+    <string name="report_sent">Segnalazione Inviata!</string>
     <string name="reason">Motivo:   </string>
     <string name="select">Seleziona</string>
     <string name="optional">(Opzionale)</string>
@@ -120,7 +122,6 @@
     <string name="salva_foto">Salva Foto Sul Telefono</string>
 
     <string name="assitance_settings">Assistenza</string>
-    <string name="segnala">Segnala</string>
     <string name="info_set">Credits</string>
     <string name="info_settings">Info su di noi</string>
     <!-- SETTINGS STRING -->

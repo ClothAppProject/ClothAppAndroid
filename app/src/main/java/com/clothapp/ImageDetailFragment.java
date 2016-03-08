@@ -47,6 +47,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -374,6 +375,9 @@ public class ImageDetailFragment extends Fragment {
                             public void done(ParseException e) {
                                 if (e != null) {
                                     check(e.getCode(), getView(), e.getMessage());
+                                }else{
+
+                                    Toast.makeText(getActivity().getApplicationContext(),R.string.report_sent,Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

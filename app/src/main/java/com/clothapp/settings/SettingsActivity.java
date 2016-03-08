@@ -17,8 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.clothapp.R;
+import com.clothapp.login_signup.ResetPasswordActivity;
 import com.clothapp.resources.ExceptionCheck;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -73,15 +75,15 @@ public class SettingsActivity extends AppCompatActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
-            /*final Preference change = (Preference) findPreference("change_password");
+            final Preference change = (Preference) findPreference("change_password");
             change.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(getActivity().getApplicationContext(), ChangePassword.class);
+                    Intent i = new Intent(getActivity().getApplicationContext(), ResetPasswordActivity.class);
                     startActivity(i);
                     return false;
                 }
-            });*/
+            });
 
             final Preference signal = (Preference) findPreference("signal");
             signal.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -96,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
                     report.setView(dialogView);
 
                     final TextView title = (TextView) dialogView.findViewById(R.id.report_photo);
-                    title.setText(R.string.segnala);
+                    title.setText(R.string.report);
                     final EditText comment = (EditText) dialogView.findViewById(R.id.comment);
                     final Spinner spinner = (Spinner) dialogView.findViewById(R.id.select_reason);
                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -117,6 +119,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 public void done(ParseException e) {
                                     if (e != null) {
                                         check(e.getCode(), getView(), e.getMessage());
+                                    }else{
+                                        Toast.makeText(getActivity().getApplicationContext(),R.string.report_sent,Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -155,6 +159,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 if (ex == null) {
                                     Log.d("SettingsActivity", "Disconesso da Facebook");
                                     facebookPref.setChecked(false);
+                                    Toast.makeText(getActivity().getApplicationContext(),R.string.facebook_disconnected,Toast.LENGTH_SHORT).show();
                                 } else {
                                     // Controllo che non ci siano eccezioni Parse
                                     ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
@@ -173,6 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 }else if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                                     Log.d("SettingsActivity", "Connesso a Facebook");
                                     facebookPref.setChecked(true);
+                                    Toast.makeText(getActivity().getApplicationContext(),R.string.facebook_connected,Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

@@ -29,14 +29,8 @@
             <SwitchPreference
                 android:defaultValue="true"
                 android:key="facebook"
-                android:title="Facebook"
+                android:title="@string/facebook"
                 android:persistent="false">
-            </SwitchPreference>
-            <SwitchPreference
-                android:key="twitter"
-                android:title="Twitter"
-                android:persistent="false"
-                android:shouldDisableView="true">
             </SwitchPreference>
         </PreferenceScreen>
     </PreferenceCategory>
@@ -53,7 +47,7 @@
         android:layout="@layout/preferences_category">
         <PreferenceScreen
             android:key="signal"
-            android:title="@string/segnala"
+            android:title="@string/report"
             android:persistent="false">
         </PreferenceScreen>
     </PreferenceCategory>
