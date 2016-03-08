@@ -1,6 +1,7 @@
 package com.clothapp.resources;
 
 import android.app.Application;
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.FacebookSdk;
@@ -13,6 +14,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 /**
  * Created by giacomoceribelli on 02/01/16.
  */
@@ -26,16 +28,18 @@ public class ApplicationSupport extends Application {
     //private User lastUser;
     //private Date lastCloth;
     //private Date lastTag;
-    private ArrayList<User> users=new ArrayList<>();
-    private ArrayList<Image> cloth=new ArrayList<>();
-    private ArrayList<Image> tag=new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Image> cloth = new ArrayList<>();
+    private ArrayList<Image> tag = new ArrayList<>();
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
-    public void addUser(User u){
+
+    public void addUser(User u) {
         users.add(u);
     }
+
     public ArrayList<User> getUsers() {
         return users;
     }
@@ -56,12 +60,27 @@ public class ApplicationSupport extends Application {
         this.tag = tag;
     }
 
-    public String getId(int i)  {return photos.get(i).getObjectId();}
+    public String getId(int i) {
+        return photos.get(i).getObjectId();
+    }
+
     //getter e setter variabili globali
-    public ArrayList<Image>getPhotos()   {return photos;}
-    public void setPhotos(ArrayList<Image> foto)  {photos=foto;}
-    public void addFirstPhoto(Image foto)    {photos.add(0,foto);}
-    public void addLastPhoto(Image foto) {photos.add(foto);}
+    public ArrayList<Image> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<Image> foto) {
+        photos = foto;
+    }
+
+    public void addFirstPhoto(Image foto) {
+        photos.add(0, foto);
+    }
+
+    public void addLastPhoto(Image foto) {
+        photos.add(foto);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,11 +91,13 @@ public class ApplicationSupport extends Application {
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
         try {
-            if (ParseUser.getCurrentUser()!=null) {
+            if (ParseUser.getCurrentUser() != null) {
                 ParseUser.getCurrentUser().fetch();
             }
         } catch (ParseException e) {
-            ExceptionCheck.check(e.getCode(),new View(this), e.getMessage());
+            ExceptionCheck.check(e.getCode(), new View(this), e.getMessage());
+            Log.d("ApplicationSupport", "ParseUser.getCurrentUser().fetch() failed...");
+            Log.d("ApplicationSupport", "Error: " + e.getMessage());
             //errore nell'aggiornare il profilo locale
         }
 
