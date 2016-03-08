@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,7 +73,15 @@ public class SettingsActivity extends AppCompatActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
-
+            /*final Preference change = (Preference) findPreference("change_password");
+            change.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getActivity().getApplicationContext(), ChangePassword.class);
+                    startActivity(i);
+                    return false;
+                }
+            });*/
 
             final Preference signal = (Preference) findPreference("signal");
             signal.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -127,26 +136,25 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
 
-            final Preference facebookPref = (Preference) findPreference("facebook");
+            final SwitchPreference facebookPref = (SwitchPreference) findPreference("facebook");
             if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                 //utente è già connesso
-                facebookPref.setTitle(R.string.disconnect_facebook);
+                facebookPref.setChecked(true);
             }else{
                 // L'utente non è connesso a facebook
-                facebookPref.setTitle(R.string.connect_facebook);
+                facebookPref.setChecked(false);
             }
-            facebookPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            facebookPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                         //utente è già connesso: gli do solo l'opzione per disconnettersi da facebook
-                        facebookPref.setTitle(R.string.disconnect_facebook);
                         ParseFacebookUtils.unlinkInBackground(ParseUser.getCurrentUser(), new SaveCallback() {
                             @Override
                             public void done(ParseException ex) {
                                 if (ex == null) {
                                     Log.d("SettingsActivity", "Disconesso da Facebook");
-                                    facebookPref.setTitle(R.string.connect_facebook);
+                                    facebookPref.setChecked(false);
                                 } else {
                                     // Controllo che non ci siano eccezioni Parse
                                     ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
@@ -154,9 +162,6 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         });
                     }else{
-                        // L'utente non è connesso a facebook: gli do solo l'opzione per connettersi
-                        facebookPref.setTitle(R.string.connect_facebook);
-
                         // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
                         List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");
                         ParseFacebookUtils.linkWithReadPermissionsInBackground(ParseUser.getCurrentUser(), getActivity(), permissions, new SaveCallback() {
@@ -167,7 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
                                     ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
                                 }else if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                                     Log.d("SettingsActivity", "Connesso a Facebook");
-                                    facebookPref.setTitle(R.string.disconnect_facebook);
+                                    facebookPref.setChecked(true);
                                 }
                             }
                         });
@@ -183,13 +188,5 @@ public class SettingsActivity extends AppCompatActivity {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
-    //ti lascio qua sotto il codice per connettere l'account a facebook, considera mi dava troppo fastidio sul profilo quindi l'ho spostato qua
-    /*
-    // Create connect to Facebook button
-    final Button connect = (Button) findViewById(R.id.facebook_connect_button);
-    // Create disconnect from Facebook button
-    final Button disconnect = (Button) findViewById(R.id.facebook_disconnect_button);
-
-    */
 
 }

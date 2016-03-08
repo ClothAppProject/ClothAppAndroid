@@ -14,7 +14,8 @@
 
         <PreferenceScreen
             android:title="@string/password_settings"
-            android:dependency="pref_key_profile_settings">
+            android:dependency="pref_key_profile_settings"
+            android:key="change_password">
         </PreferenceScreen>
 
     </PreferenceCategory>
@@ -25,17 +26,18 @@
         android:layout="@layout/preferences_category">
         <PreferenceScreen
             android:title="@string/account_collegati">
-            <PreferenceScreen
+            <SwitchPreference
+                android:defaultValue="true"
                 android:key="facebook"
                 android:title="Facebook"
                 android:persistent="false">
-            </PreferenceScreen>
-            <PreferenceScreen
+            </SwitchPreference>
+            <SwitchPreference
                 android:key="twitter"
                 android:title="Twitter"
                 android:persistent="false"
                 android:shouldDisableView="true">
-            </PreferenceScreen>
+            </SwitchPreference>
         </PreferenceScreen>
     </PreferenceCategory>
 
