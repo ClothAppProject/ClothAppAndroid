@@ -88,12 +88,15 @@ public class MostRecentFragment extends Fragment {
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        //prendo foto scaricate nella splash
+        // Load the first photos from ApplicationSupport
         ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
+        // Log.d("MostRecentFragment", "appSupport.getPhotos() == null : " + (appSupport.getPhotos() == null));
         mostRecentAdapter = new MostRecentAdapter(appSupport.getPhotos());
         recyclerView.setAdapter(mostRecentAdapter);
         mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
         recyclerView.addOnScrollListener(mostRecentScrollListener);
+
+        Log.d("MostRecentFragment", "MostRecentAdapter.itemList == null : " + (MostRecentAdapter.itemList == null));
 
         int size = 0;
         if (MostRecentAdapter.itemList != null) {

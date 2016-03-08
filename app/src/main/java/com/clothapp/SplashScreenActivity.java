@@ -29,7 +29,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // nascondo la status bar
+
+        // Hide status bar.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -42,34 +43,60 @@ public class SplashScreenActivity extends AppCompatActivity {
          * data before launching the app Will use AsyncTask to make http call
          */
 
-        //qui scarico le foto
-        final ArrayList<Image> photo = new ArrayList<>();
+        // This array will be used to store data of the photos.
+        final ArrayList<Image> images = new ArrayList<>();
 
-        final ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-        query.setLimit(12);
+        // Initialize a query to find the 12 most recent photos from Parse.
+        final ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.orderByDescending("createdAt");
-        try {
-            List<ParseObject> fotos = query.find();
-            Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
-            //aggiunto la data della prima foto
-            ApplicationSupport appSupport = ((ApplicationSupport) getApplicationContext());
-            for (ParseObject obj : fotos) {
-                ParseFile file = obj.getParseFile("thumbnail");
-                //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
-                photo.add(new Image(file.getFile(), obj.getObjectId(),obj.getString("user"),
-                        obj.getList("like"),obj.getInt("nLike"),obj.getList("hashtag"),
-                        obj.getList("vestiti"), obj.getList("tipo")));
+        query.setLimit(12);
+
+        // Start the query in background.
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> photos, ParseException e) {
+                if (e == null) {
+                    Log.d("SplashScreenActivity", "Retrieved " + photos.size() + " photos from Parse.");
+
+                    for (ParseObject photo : photos) {
+                        images.add(new Image(photo));
+                    }
+
+                    ApplicationSupport applicationSupport = ((ApplicationSupport) getApplicationContext());
+                    applicationSupport.setPhotos(images);
+
+                    Log.d("SplashScreenActivity", "Photo prefetch successfully completed");
+
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Log.d("SplashScreenActivity", "Error: " + e.getMessage());
+                }
             }
-            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-            //prendo la variabile globale photos e ci metto dentro le immagini
-            appSupport.setPhotos(photo);
-            startActivity(intent);
-            finish();
-        } catch (ParseException e) {
-            //errore nel reperire gli oggetti Photo dal database
-            check(e.getCode(), new View(getApplicationContext()), e.getMessage());
-        }
-        Log.d("SplashScreenActivity", "Finito il prefetch dei dati.");
+        });
+
+//        try {
+//            List<ParseObject> fotos = query.find();
+//            Log.d("SplashScreenActivity", "Retrieved " + fotos.size() + " photos");
+//            ApplicationSupport appSupport = ((ApplicationSupport) getApplicationContext());
+//            for (ParseObject obj : fotos) {
+//                ParseFile file = obj.getParseFile("thumbnail");
+//                //inserisco le foto in una lista che poi setto come variabile globale nella ApplicationSupport
+//                photo.add(new Image(file.getFile(), obj.getObjectId(), obj.getString("user"),
+//                        obj.getList("like"), obj.getInt("nLike"), obj.getList("hashtag"),
+//                        obj.getList("vestiti"), obj.getList("tipo")));
+//            }
+//            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+//            //prendo la variabile globale photos e ci metto dentro le immagini
+//            appSupport.setPhotos(photo);
+//            startActivity(intent);
+//            finish();
+//        } catch (ParseException e) {
+//            //errore nel reperire gli oggetti Photo dal database
+//            check(e.getCode(), new View(getApplicationContext()), e.getMessage());
+//        }
     }
 
 }
