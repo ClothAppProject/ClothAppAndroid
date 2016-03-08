@@ -56,8 +56,8 @@ public class LauncherActivity extends AppCompatActivity {
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //Straight from android documentation:
-        //Then, from the onCreate() method in your application's main activity—and in any other activity
+        // Straight from android documentation:
+        // Then, from the onCreate() method in your application's main activity—and in any other activity
         // through which the user may enter your application for the first time—call setDefaultValues():
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -107,25 +107,6 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
     }
-
-    //funzioni per controllare se è presente connessione
-    /*public boolean hasActiveInternetConnection(Context context) {
-        if (isNetworkAvailable(context)) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
-                urlc.setRequestProperty("User-Agent", "Test");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(500);
-                urlc.connect();
-                Log.d("debug", "debug: risposta è " + urlc.getResponseCode());
-                return (urlc.getResponseCode() == 200);
-            } catch (IOException e) {
-                Log.d("LauncherActivity", "Error message: " + e.getMessage());
-                return false;
-            }
-        }
-        return false;
-    }*/
 
     public boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
