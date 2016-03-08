@@ -305,6 +305,34 @@ public class UploadPhotoActivity extends AppCompatActivity {
             //fragment 1
             if (sectionNumber == 1) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_1, container, false);
+                //listener sul pulsante annulla
+                Button cancel = (Button) rootView.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder back = new AlertDialog.Builder(getActivity());
+                        back.setTitle(R.string.ask_back_from_upload);
+                        back.setPositiveButton(R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //annullo l'upload
+                                        if (photoType != RESULT_LOAD_IMG) deleteImage();
+                                        getActivity().finish();
+                                    }
+                                });
+                        back.setNegativeButton(R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //annullata
+                                    }
+                                });
+                        AlertDialog dialogDelete = back.create();
+                        // display dialog
+                        dialogDelete.show();
+                    }
+                });
                 //listener sul bottone next
                 Button next = (Button) rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
@@ -699,9 +727,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //annullo l'upload
                         if (photoType != RESULT_LOAD_IMG) deleteImage();
-                        // Reinderizzo l'utente alla homePage activity
-                        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(i);
                         finish();
                     }
                 });

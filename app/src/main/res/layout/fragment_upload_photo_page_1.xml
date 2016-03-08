@@ -61,6 +61,16 @@
         android:layout_marginRight="16dp"
         android:fitsSystemWindows="true">
 
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel"
+            android:textColor="@color/darkred" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
