@@ -15,14 +15,14 @@
         tools:context=".login_signup.MainActivity">
 
         <!--<ImageView-->
-            <!--android:id="@+id/mainLogo"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:contentDescription="@string/logo_description"-->
-            <!--android:src="@mipmap/logo" />-->
+        <!--android:id="@+id/mainLogo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:contentDescription="@string/logo_description"-->
+        <!--android:src="@mipmap/logo" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,14 +35,14 @@
             android:paddingTop="10dp">
 
             <!--<ImageView-->
-                <!--android:id="@+id/mainLogo"-->
-                <!--android:layout_width="140dp"-->
-                <!--android:layout_height="140dp"-->
-                <!--android:layout_marginBottom="20dp"-->
-                <!--android:layout_marginTop="20dp"-->
-                <!--android:contentDescription="@string/logo_description"-->
-                <!--android:src="@mipmap/logo"-->
-                <!--android:layout_gravity="center_horizontal"/>-->
+            <!--android:id="@+id/mainLogo"-->
+            <!--android:layout_width="140dp"-->
+            <!--android:layout_height="140dp"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:contentDescription="@string/logo_description"-->
+            <!--android:src="@mipmap/logo"-->
+            <!--android:layout_gravity="center_horizontal"/>-->
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
@@ -63,11 +63,11 @@
                         android:id="@+id/mainLogo"
                         android:layout_width="140dp"
                         android:layout_height="140dp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="20dp"
                         android:layout_marginTop="20dp"
                         android:contentDescription="@string/logo_description"
-                        android:src="@mipmap/logo"
-                        android:layout_gravity="center_horizontal"/>
+                        android:src="@mipmap/logo" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -113,11 +113,11 @@
 
                     <Button
                         android:id="@+id/mainLogin"
+                        style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/main_login"
-                        style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/red" />
 
                 </LinearLayout>
@@ -158,12 +158,12 @@
 
 
             <!--<Button-->
-                <!--android:id="@+id/mainLogin"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:text="@string/main_login"-->
-                <!--android:theme="@android:style/Theme.Material.Light" />-->
+            <!--android:id="@+id/mainLogin"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="@string/main_login"-->
+            <!--android:theme="@android:style/Theme.Material.Light" />-->
 
             <Button
                 android:id="@+id/mainLoginFacebook"
