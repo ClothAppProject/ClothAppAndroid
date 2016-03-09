@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadActivity;
@@ -297,7 +298,11 @@ public class HomeActivity extends AppCompatActivity {
                     Log.d("HomeActivity", "Clicked on R.id.nav_profile");
 
                     String currentUser = ParseUser.getCurrentUser().getUsername();
-                    intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
+                    if (ParseUser.getCurrentUser().get("flagISA").equals("Persona")) {
+                        intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
+                    }else{
+                        intent = new Intent(HomeActivity.activity, ShopProfileActivity.class);
+                    }
                     intent.putExtra("user", currentUser);
                     startActivity(intent);
                     break;
