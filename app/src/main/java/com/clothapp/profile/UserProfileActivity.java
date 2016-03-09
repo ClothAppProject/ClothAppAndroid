@@ -28,7 +28,9 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
+import com.clothapp.profile.fragments.ProfileInfoFragment;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
@@ -106,18 +108,19 @@ public class UserProfileActivity extends AppCompatActivity {
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
-            follow_edit.setText(R.string.edit_profile);
             follow_edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(UserProfileActivity.this, EditProfileActivity.class);
                     startActivity(i);
+
                 }
             });
         } else {
             FollowUtil.setFollowButton(follow_edit, username);
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -141,6 +144,9 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+        if(ProfileInfoFragment.adapter!=null){
+            ProfileInfoFragment.adapter.notifyDataSetChanged();
+        }
         if (ProfileUploadedPhotosFragment.adapter != null)
             ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }

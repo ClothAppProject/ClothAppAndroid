@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 // This fragment contains info about the user.
 public class ProfileInfoFragment extends Fragment {
-
+    public static ProfileInfoAdapter adapter;
     private static final String PARSE_USERNAME = "username";
 
     public ProfileInfoFragment() {
@@ -67,7 +67,7 @@ public class ProfileInfoFragment extends Fragment {
         items.add(itemEmail);
 
         // Create a new adapter for the recycler view
-        ProfileInfoAdapter adapter = new ProfileInfoAdapter(items);
+        adapter = new ProfileInfoAdapter(items);
         UserProfileActivity.viewProfileInfo.setAdapter(adapter);
 
         // Get user info from Parse
