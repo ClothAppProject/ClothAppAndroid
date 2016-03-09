@@ -34,6 +34,7 @@ import com.clothapp.profile.fragments.ProfileInfoFragment;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
+import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.EditProfileActivity;
 import com.clothapp.settings.EditShopProfileActivity;
@@ -144,9 +145,6 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if(ProfileInfoFragment.adapter!=null){
-            ProfileInfoFragment.adapter.notifyDataSetChanged();
-        }
         if (ProfileUploadedPhotosFragment.adapter != null)
             ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
@@ -333,7 +331,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     if (!currentUser.equals(username)) {
                         Log.d("UserProfileActivity", currentUser + "!=" + username);
-                        intent = ProfileUtils.goToProfile(UserProfileActivity.context, currentUser);
+                        if (ParseUser.getCurrentUser().getString("flagISA").equals("Persona")) {
+                            intent = new Intent(UserProfileActivity.activity,UserProfileActivity.class);
+                        }else {
+                            intent = new Intent(UserProfileActivity.activity, ShopProfileActivity.class);
+                        }
                         intent.putExtra("user", currentUser);
                         startActivity(intent);
                     }

@@ -36,7 +36,7 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Number of pages.
-        return 7;
+        return 4;//7;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
                 return "FOLLOWERS";
             case 3:
                 return "FOLLOWING";
-            case 4:
+            /*case 4:
                 return "FAVORITE PHOTOS";
             case 5:
                 return "FAVORITE BRANDS";
             case 6:
-                return "FAVORITE SHOPS";
+                return "FAVORITE SHOPS";*/
         }
         return null;
     }
