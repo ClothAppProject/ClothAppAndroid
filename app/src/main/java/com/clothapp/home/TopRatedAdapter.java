@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.parse.GetCallback;
@@ -241,10 +242,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
-                    intent.putExtra("classe", "TopRatedPhotos");
-                    intent.putExtra("position", TopRatedItemViewHolder.this.getAdapterPosition());
-                    HomeActivity.activity.startActivity(intent);
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else{
+                        Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
+                        intent.putExtra("classe", "TopRatedPhotos");
+                        intent.putExtra("position", TopRatedItemViewHolder.this.getAdapterPosition());
+                        HomeActivity.activity.startActivity(intent);
+                    }
                 }
             });
         }
@@ -254,39 +259,42 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else {
+                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
 
-                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
-
-                    final boolean add = !image.getLike().contains(username);
-                    if (add) {
-                        // Log.d("TopRatedAdapter", "Adding...");
-                        image.addLike(username);
-                    } else {
-                        // Log.d("TopRatedAdapter", "Removing...");
-                        image.remLike(username);
-                    }
-
-                    notifyDataSetChanged();
-
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-
-                    query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
-                        public void done(ParseObject photo, ParseException e) {
-                            if (e == null) {
-                                if (add) {
-                                    photo.addUnique("like", username);
-                                    photo.put("nLike", photo.getInt("nLike") + 1);
-                                    photo.saveInBackground();
-                                } else {
-                                    photo.removeAll("like", Collections.singletonList(username));
-                                    photo.put("nLike", photo.getInt("nLike") - 1);
-                                    photo.saveInBackground();
-                                }
-                            } else {
-                                Log.d("TopRatedAdapter", "Error: " + e.getMessage());
-                            }
+                        final boolean add = !image.getLike().contains(username);
+                        if (add) {
+                            // Log.d("TopRatedAdapter", "Adding...");
+                            image.addLike(username);
+                        } else {
+                            // Log.d("TopRatedAdapter", "Removing...");
+                            image.remLike(username);
                         }
-                    });
+
+                        notifyDataSetChanged();
+
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+
+                        query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
+                            public void done(ParseObject photo, ParseException e) {
+                                if (e == null) {
+                                    if (add) {
+                                        photo.addUnique("like", username);
+                                        photo.put("nLike", photo.getInt("nLike") + 1);
+                                        photo.saveInBackground();
+                                    } else {
+                                        photo.removeAll("like", Collections.singletonList(username));
+                                        photo.put("nLike", photo.getInt("nLike") - 1);
+                                        photo.saveInBackground();
+                                    }
+                                } else {
+                                    Log.d("TopRatedAdapter", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -296,10 +304,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgProfileIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
-                    Intent intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
-                    intent.putExtra("user", image.getUser());
-                    HomeActivity.activity.startActivity(intent);
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else {
+                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
+                        intent.putExtra("user", image.getUser());
+                        HomeActivity.activity.startActivity(intent);
+                    }
                 }
             });
         }
@@ -309,10 +321,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             linearLayoutProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
-                    Intent intent = new Intent(HomeActivity.activity, UserProfileActivity.class);
-                    intent.putExtra("user", image.getUser());
-                    HomeActivity.activity.startActivity(intent);
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else {
+                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
+                        intent.putExtra("user", image.getUser());
+                        HomeActivity.activity.startActivity(intent);
+                    }
                 }
             });
         }

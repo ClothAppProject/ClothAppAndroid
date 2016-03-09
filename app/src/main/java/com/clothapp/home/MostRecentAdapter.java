@@ -123,10 +123,15 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
-                    intent.putExtra("classe", "MostRecentPhotos");
-                    intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
-                    HomeActivity.activity.startActivity(intent);
+
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else {
+                        Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
+                        intent.putExtra("classe", "MostRecentPhotos");
+                        intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
+                        HomeActivity.activity.startActivity(intent);
+                    }
                 }
             });
         }
@@ -139,39 +144,43 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     // Log.d("MostRecentAdapter", "Clicked on photo with position: " + MostRecentItemViewHolder.this.getAdapterPosition());
 
-                    Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    }else {
+                        Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
 
-                    final boolean add = !image.getLike().contains(username);
-                    if (add) {
-                        // Log.d("MostRecentAdapter", "Adding...");
-                        image.addLike(username);
-                    } else {
-                        // Log.d("MostRecentAdapter", "Removing...");
-                        image.remLike(username);
-                    }
-
-                    notifyDataSetChanged();
-
-                    // Update like list on Parse database.
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-
-                    query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
-                        public void done(ParseObject photo, ParseException e) {
-                            if (e == null) {
-                                if (add) {
-                                    photo.addUnique("like", username);
-                                    photo.put("nLike", photo.getInt("nLike") + 1);
-                                    photo.saveInBackground();
-                                } else {
-                                    photo.removeAll("like", Collections.singletonList(username));
-                                    photo.put("nLike", photo.getInt("nLike") - 1);
-                                    photo.saveInBackground();
-                                }
-                            } else {
-                                Log.d("MostRecentAdapter", "Error: " + e.getMessage());
-                            }
+                        final boolean add = !image.getLike().contains(username);
+                        if (add) {
+                            // Log.d("MostRecentAdapter", "Adding...");
+                            image.addLike(username);
+                        } else {
+                            // Log.d("MostRecentAdapter", "Removing...");
+                            image.remLike(username);
                         }
-                    });
+
+                        notifyDataSetChanged();
+
+                        // Update like list on Parse database.
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+
+                        query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
+                            public void done(ParseObject photo, ParseException e) {
+                                if (e == null) {
+                                    if (add) {
+                                        photo.addUnique("like", username);
+                                        photo.put("nLike", photo.getInt("nLike") + 1);
+                                        photo.saveInBackground();
+                                    } else {
+                                        photo.removeAll("like", Collections.singletonList(username));
+                                        photo.put("nLike", photo.getInt("nLike") - 1);
+                                        photo.saveInBackground();
+                                    }
+                                } else {
+                                    Log.d("MostRecentAdapter", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                    }
                 }
             });
         }
