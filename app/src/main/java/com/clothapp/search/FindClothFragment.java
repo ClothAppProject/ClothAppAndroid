@@ -44,20 +44,20 @@ public class FindClothFragment extends Fragment {
     private ListView listCloth;
     private Context context;
     private String query;
-    private boolean canLoad=true;
+    private boolean canLoad = true;
     private static ArrayList<Image> cloth;
     private ApplicationSupport global;
     private SearchAdapterImage adapter;
-    private int skip=0;
+    private int skip = 0;
     private String sex;
     private Float prezzoDa;
     private Float prezzoA;
     private String order;
-    private boolean first=true;
+    private boolean first = true;
 
-    String POPOLARITA="Most Popolar";
-    private static final String OLD = "Old" ;
-    private static final String RECENT = "Most Recent" ;
+    String POPOLARITA = "Most Popolar";
+    private static final String OLD = "Old";
+    private static final String RECENT = "Most Recent";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class FindClothFragment extends Fragment {
          Questo causava un BUG: cioè quando si tornava su quel fragment la lista era vuota.
         */
 
-        cloth=global.getCloth();
+        cloth = global.getCloth();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listCloth.setAdapter(adapter);
@@ -85,7 +85,7 @@ public class FindClothFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                    if (canLoad &&  (cloth.size() > 0) || (!first &&cloth.size()==0)) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                    if (canLoad && (cloth.size() > 0) || (!first && cloth.size() == 0)) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
                             search();
@@ -103,22 +103,22 @@ public class FindClothFragment extends Fragment {
         return rootView;
     }
 
-    public void search(){
+    public void search() {
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
-        query=query.trim().toLowerCase();
+        query = query.trim().toLowerCase();
         //System.out.println("search");
 
         //faccio la query a Parse delle foto
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        if(order==null) order=POPOLARITA;
+        if (order == null) order = POPOLARITA;
         //queste sono verifiche dovute al filtro di ricerca (in base all'ordine)
-        if(order.equals(POPOLARITA))queryFoto.addDescendingOrder("nLike");
-        if(order.equals(OLD)) queryFoto.addAscendingOrder("createdAt");
-        if(order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
+        if (order.equals(POPOLARITA)) queryFoto.addDescendingOrder("nLike");
+        if (order.equals(OLD)) queryFoto.addAscendingOrder("createdAt");
+        if (order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
-        skip=skip+5;
+        skip = skip + 5;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -191,37 +191,37 @@ public class FindClothFragment extends Fragment {
                                                                     vestito.getFirstInBackground(new GetCallback<ParseObject>() {
                                                                         @Override
                                                                         public void done(ParseObject object, ParseException e) {
-                                                                        if (e == null) {
-                                                                            if (object != null) {
-                                                                                //trovo il prezzo
-                                                                                Object obj = object.get("prezzo");
-                                                                                String p;
-                                                                                if (obj != null)
-                                                                                    p = object.get("prezzo").toString();
-                                                                                else
-                                                                                    p = "-1";
-                                                                                Float prezzo = Float.parseFloat(p);
-                                                                                //se prezzoA non è stato impostato(=-1) allora non ho un limite quindi lo setto a maxValue
-                                                                                if (prezzoA == -1f)
-                                                                                    prezzoA = Float.MAX_VALUE;
-                                                                                //confronto il prezzo con i paramentri del filtro
-                                                                                //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
-                                                                                if (prezzo >= prezzoDa && prezzo <= prezzoA) {
-                                                                                    //System.out.println("prezzo giusto");
-                                                                                    if (!cloth.contains(image)) {
-                                                                                        cloth.add(image);
-                                                                                        global.setCloth(cloth);
-                                                                                        adapter.notifyDataSetChanged();
+                                                                            if (e == null) {
+                                                                                if (object != null) {
+                                                                                    //trovo il prezzo
+                                                                                    Object obj = object.get("prezzo");
+                                                                                    String p;
+                                                                                    if (obj != null)
+                                                                                        p = object.get("prezzo").toString();
+                                                                                    else
+                                                                                        p = "-1";
+                                                                                    Float prezzo = Float.parseFloat(p);
+                                                                                    //se prezzoA non è stato impostato(=-1) allora non ho un limite quindi lo setto a maxValue
+                                                                                    if (prezzoA == -1f)
+                                                                                        prezzoA = Float.MAX_VALUE;
+                                                                                    //confronto il prezzo con i paramentri del filtro
+                                                                                    //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
+                                                                                    if (prezzo >= prezzoDa && prezzo <= prezzoA) {
+                                                                                        //System.out.println("prezzo giusto");
+                                                                                        if (!cloth.contains(image)) {
+                                                                                            cloth.add(image);
+                                                                                            global.setCloth(cloth);
+                                                                                            adapter.notifyDataSetChanged();
+                                                                                            SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                                                        }
                                                                                     }
-                                                                                }
 
-                                                                            }//else{
-                                                                            // cloth.add(image);
-                                                                            //global.setCloth(cloth);
-                                                                            //adapter.notifyDataSetChanged();
-                                                                            // }
-                                                                        } else
-                                                                            check(e.getCode(), rootView, e.getMessage());
+                                                                                }//else{
+                                                                                // cloth.add(image);
+                                                                                //global.setCloth(cloth);
+                                                                                //adapter.notifyDataSetChanged();
+                                                                                // }
+                                                                            } else
+                                                                                check(e.getCode(), rootView, e.getMessage());
                                                                         }
                                                                     });
 
@@ -231,7 +231,7 @@ public class FindClothFragment extends Fragment {
                                                                         cloth.add(image);
                                                                         global.setCloth(cloth);
                                                                         adapter.notifyDataSetChanged();
-                                                                    }
+                                                                        SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                                    }
 
                                                                 }
                                                             }
@@ -239,105 +239,100 @@ public class FindClothFragment extends Fragment {
                                                         //fine filtro prezzo
                                                     }
 
-                                            }
+                                                } else
 
-                                            else
-
-                                            {
-                                                //System.out.println("4");
-                                                check(e.getCode(), rootView, e.getMessage());
+                                                {
+                                                    //System.out.println("4");
+                                                    check(e.getCode(), rootView, e.getMessage());
+                                                }
                                             }
-                                        }
-                                    });
-                                }
-                                //-------------fine filtro sesso----------
+                                        });
+                                    }
+                                    //-------------fine filtro sesso----------
 
                                     /*
                                     Caso in cui non c'è il filtro del sesso, Salto tutti i controlli a riguardo
                                      */
-                                else {
-                                    //.out.println("aggiungo all");
-                                    //------------------------filtro prezzo-------------------------
+                                    else {
+                                        //.out.println("aggiungo all");
+                                        //------------------------filtro prezzo-------------------------
                                         //qui valgono le stesse considerazione fatte prima (ho fatto copia e incolla)
-                                    ArrayList<String> v = (ArrayList) o.get("vestiti");
-                                    for (String st : v) {
-                                        //System.out.println(prezzoDa + " A " + prezzoA);
-                                        if (prezzoDa != -1 || prezzoA != -1) {
-                                            ParseQuery<ParseObject> vestito = new ParseQuery<ParseObject>("Vestito");
-                                            vestito.whereEqualTo("objectId", st);
-                                            vestito.getFirstInBackground(new GetCallback<ParseObject>() {
-                                                @Override
-                                                public void done(ParseObject object, ParseException e) {
-                                                    if (e == null) {
-                                                        if (object != null) {
-                                                            //trovo il prezzo
-                                                            Object obj = object.get("prezzo");
-                                                            String p;
-                                                            if (obj != null)
-                                                                p = object.get("prezzo").toString();
-                                                            else p = "-2";
-                                                            Float prezzo = Float.parseFloat(p);
+                                        ArrayList<String> v = (ArrayList) o.get("vestiti");
+                                        for (String st : v) {
+                                            //System.out.println(prezzoDa + " A " + prezzoA);
+                                            if (prezzoDa != -1 || prezzoA != -1) {
+                                                ParseQuery<ParseObject> vestito = new ParseQuery<ParseObject>("Vestito");
+                                                vestito.whereEqualTo("objectId", st);
+                                                vestito.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                    @Override
+                                                    public void done(ParseObject object, ParseException e) {
+                                                        if (e == null) {
+                                                            if (object != null) {
+                                                                //trovo il prezzo
+                                                                Object obj = object.get("prezzo");
+                                                                String p;
+                                                                if (obj != null)
+                                                                    p = object.get("prezzo").toString();
+                                                                else p = "-2";
+                                                                Float prezzo = Float.parseFloat(p);
 
-                                                            if (prezzoA == -1f)
-                                                                prezzoA = Float.MAX_VALUE;
-                                                            //confronto il prezzo con i paramentri del filtro
-                                                            //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
-                                                            if (prezzo >= prezzoDa && prezzo <= prezzoA) {
-                                                                //System.out.println("prezzo giusto");
-                                                                if(!cloth.contains(image)) {
-                                                                    cloth.add(image);
-                                                                    global.setCloth(cloth);
-                                                                    adapter.notifyDataSetChanged();
+                                                                if (prezzoA == -1f)
+                                                                    prezzoA = Float.MAX_VALUE;
+                                                                //confronto il prezzo con i paramentri del filtro
+                                                                //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
+                                                                if (prezzo >= prezzoDa && prezzo <= prezzoA) {
+                                                                    //System.out.println("prezzo giusto");
+                                                                    if (!cloth.contains(image)) {
+                                                                        cloth.add(image);
+                                                                        global.setCloth(cloth);
+                                                                        adapter.notifyDataSetChanged();
+                                                                        SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());
+                                                                    }
                                                                 }
-                                                            }
 
-                                                        }//else{
-                                                        // cloth.add(image);
-                                                        //global.setCloth(cloth);
-                                                        //adapter.notifyDataSetChanged();
-                                                        // }
-                                                    } else {
-                                                        //System.out.println("3");
-                                                        check(e.getCode(), rootView, e.getMessage());
+                                                            }//else{
+                                                            // cloth.add(image);
+                                                            //global.setCloth(cloth);
+                                                            //adapter.notifyDataSetChanged();
+                                                            // }
+                                                        } else {
+                                                            //System.out.println("3");
+                                                            check(e.getCode(), rootView, e.getMessage());
+                                                        }
+
                                                     }
-
-                                                }
-                                            });
+                                                });
                                             /*
                                             caso in cui non devo fare nessun controllo
                                              */
-                                        } else {
-                                            if(!cloth.contains(image)) {
-                                                cloth.add(image);
-                                                global.setCloth(cloth);
-                                                adapter.notifyDataSetChanged();
+                                            } else {
+                                                if (!cloth.contains(image)) {
+                                                    cloth.add(image);
+                                                    global.setCloth(cloth);
+                                                    adapter.notifyDataSetChanged();
+                                                    SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                }
+
                                             }
-
                                         }
+                                        //fine filtro prezzo
                                     }
-                                    //fine filtro prezzo
                                 }
+
+                                break;
+
                             }
-
-                            break;
-
                         }
                     }
+                    first = false;
+                    canLoad = true;
+                } else
+
+                {
+                    //System.out.println("errore");
+                    check(e.getCode(), rootView, e.getMessage());
                 }
-                    first=false;
-                    canLoad=true;
             }
-
-            else
-
-            {
-                //System.out.println("errore");
-                check(e.getCode(), rootView, e.getMessage());
-            }
-        }
-    });
-
-
+        });
 
 
         listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -351,7 +346,6 @@ public class FindClothFragment extends Fragment {
         });
 
 
-
     }
 
 
@@ -360,10 +354,10 @@ public class FindClothFragment extends Fragment {
         final FindClothFragment f = new FindClothFragment();
         final Bundle args = new Bundle();
         args.putString("query", query);
-        args.putString("sex",sex);
+        args.putString("sex", sex);
         args.putFloat("prezzoDa", priceFrom);
-        args.putFloat("prezzoA",priceTo);
-        args.putString("order",order);
+        args.putFloat("prezzoA", priceTo);
+        args.putString("order", order);
         f.setArguments(args);
         return f;
     }
@@ -371,19 +365,19 @@ public class FindClothFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
-        this.sex=getArguments()!=null ?(String) getArguments().getString("sex") :null;
-        this.prezzoDa = getArguments()!=null ? (Float) getArguments().getFloat("prezzoDa") : null;
-        this.prezzoA=getArguments()!=null ?(Float) getArguments().getFloat("prezzoA") :null;
-        this.order=getArguments()!=null ? (String)getArguments().getString("order") :null;
+        this.query = getArguments() != null ? (String) getArguments().getString("query") : null;
+        this.sex = getArguments() != null ? (String) getArguments().getString("sex") : null;
+        this.prezzoDa = getArguments() != null ? (Float) getArguments().getFloat("prezzoDa") : null;
+        this.prezzoA = getArguments() != null ? (Float) getArguments().getFloat("prezzoA") : null;
+        this.order = getArguments() != null ? (String) getArguments().getString("order") : null;
 
     }
 
     public void refresh(String query) {
         //System.out.println("resfresh");
-        this.query=query.trim().toLowerCase();
-        skip=0;
-        cloth=new ArrayList<>();
+        this.query = query.trim().toLowerCase();
+        skip = 0;
+        cloth = new ArrayList<>();
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listCloth.setAdapter(adapter);
         global.setTag(cloth);
@@ -395,14 +389,14 @@ public class FindClothFragment extends Fragment {
         super.onResume();  // Always call the superclass method first
         //System.out.println("onresume");
     }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             //System.out.println("visibile");
             adapter.notifyDataSetChanged();
-        }
-        else {
+        } else {
             //System.out.println("nonvisibile");
         }
     }

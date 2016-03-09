@@ -38,18 +38,18 @@ import static com.clothapp.resources.ExceptionCheck.check;
  */
 public class FindTagFragment extends Fragment {
     private static final String ALL = "all";
-    String POPOLARITA="Most Popolar";
-    private static final String OLD = "Old" ;
-    private static final String RECENT = "Most Recent" ;
+    String POPOLARITA = "Most Popolar";
+    private static final String OLD = "Old";
+    private static final String RECENT = "Most Recent";
     private View rootView;
     private ListView listTag;
     private Context context;
     private String query;
-    private boolean canLoad=true;
+    private boolean canLoad = true;
     private static ArrayList<Image> cloth;
     private ApplicationSupport global;
     private SearchAdapterImage adapter;
-    private int skip=0;
+    private int skip = 0;
     private String sex;
     private Float prezzoDa;
     private Float prezzoA;
@@ -61,7 +61,7 @@ public class FindTagFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listTag = (ListView) rootView.findViewById(R.id.userlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
-        cloth=global.getTag();
+        cloth = global.getTag();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listTag.setAdapter(adapter);
@@ -92,22 +92,22 @@ public class FindTagFragment extends Fragment {
         return rootView;
     }
 
-    public void search(){
+    public void search() {
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
-        query=query.trim().toLowerCase();
+        query = query.trim().toLowerCase();
 
         //faccio la query a Parse delle foto
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
-        if(order==null) order=POPOLARITA;
+        if (order == null) order = POPOLARITA;
         //queste sono verifiche dovute al filtro di ricerca
-        if(order.equals(POPOLARITA))queryFoto.addDescendingOrder("nLike");
-        if(order.equals(OLD)) queryFoto.addAscendingOrder("createdAt");
-        if(order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
+        if (order.equals(POPOLARITA)) queryFoto.addDescendingOrder("nLike");
+        if (order.equals(OLD)) queryFoto.addAscendingOrder("createdAt");
+        if (order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
         //if(order.equals() queryFoto.addAscendingOrder("nLike");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
         queryFoto.setLimit(5);
-        skip=skip+5;
+        skip = skip + 5;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -194,11 +194,11 @@ public class FindTagFragment extends Fragment {
                                                                                     //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
                                                                                     if (prezzo >= prezzoDa && prezzo <= prezzoA) {
                                                                                         //System.out.println("prezzo giusto");
-                                                                                        if(!cloth.contains(image)) {
+                                                                                        if (!cloth.contains(image)) {
                                                                                             cloth.add(image);
                                                                                             global.setCloth(cloth);
                                                                                             adapter.notifyDataSetChanged();
-                                                                                        }
+                                                                                            SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                                        }
                                                                                     }
 
                                                                                 }//else{
@@ -213,20 +213,18 @@ public class FindTagFragment extends Fragment {
                                                                 }
                                                                 //nel caso in cui non c'è un filtro del prezzo
                                                             } else {
-                                                                if(!cloth.contains(image)) {
+                                                                if (!cloth.contains(image)) {
                                                                     cloth.add(image);
                                                                     global.setCloth(cloth);
                                                                     adapter.notifyDataSetChanged();
-                                                                }
+                                                                    SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                }
 
                                                             }
                                                         }
                                                         //fine filtro prezzo
                                                     }
 
-                                                }
-
-                                                else
+                                                } else
 
                                                 {
                                                     //System.out.println("4");
@@ -269,11 +267,11 @@ public class FindTagFragment extends Fragment {
                                                                 //System.out.println("prezzo=" + prezzo + " prezzoDa" + prezzoDa + " PrezzoA" + prezzoA);
                                                                 if (prezzo >= prezzoDa && prezzo <= prezzoA) {
                                                                     //System.out.println("prezzo giusto");
-                                                                    if(!cloth.contains(image)) {
+                                                                    if (!cloth.contains(image)) {
                                                                         cloth.add(image);
                                                                         global.setCloth(cloth);
                                                                         adapter.notifyDataSetChanged();
-                                                                    }
+                                                                        SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                    }
                                                                 }
 
                                                             }//else{
@@ -292,10 +290,11 @@ public class FindTagFragment extends Fragment {
                                             caso in cui non devo fare nessun controllo
                                              */
                                             } else {
-                                                if(!cloth.contains(image)) {
+                                                if (!cloth.contains(image)) {
                                                     cloth.add(image);
                                                     global.setCloth(cloth);
                                                     adapter.notifyDataSetChanged();
+                                                    SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
                                                 }
 
                                             }
@@ -309,9 +308,7 @@ public class FindTagFragment extends Fragment {
                             }
                         }
                     }
-                }
-
-                else
+                } else
 
                 {
                     //System.out.println("errore");
@@ -319,8 +316,6 @@ public class FindTagFragment extends Fragment {
                 }
             }
         });
-
-
 
 
         listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -334,11 +329,7 @@ public class FindTagFragment extends Fragment {
         });
 
 
-
     }
-
-
-
 
 
     public Fragment newIstance(String query, String sex, Float priceFrom, Float priceTo, Context context, String order) {
@@ -346,10 +337,10 @@ public class FindTagFragment extends Fragment {
         final FindTagFragment f = new FindTagFragment();
         final Bundle args = new Bundle();
         args.putString("query", query);
-        args.putString("sex",sex);
+        args.putString("sex", sex);
         args.putFloat("prezzoDa", priceFrom);
-        args.putFloat("prezzoA",priceTo);
-        args.putString("order",order);
+        args.putFloat("prezzoA", priceTo);
+        args.putString("order", order);
         f.setArguments(args);
         return f;
     }
@@ -357,18 +348,18 @@ public class FindTagFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
-        this.sex=getArguments()!=null ?(String) getArguments().getString("sex") :null;
-        this.prezzoDa = getArguments()!=null ? (Float) getArguments().getFloat("prezzoDa") : null;
-        this.prezzoA=getArguments()!=null ?(Float) getArguments().getFloat("prezzoA") :null;
-        this.order=getArguments()!=null ? (String)getArguments().getString("order") :null;
+        this.query = getArguments() != null ? (String) getArguments().getString("query") : null;
+        this.sex = getArguments() != null ? (String) getArguments().getString("sex") : null;
+        this.prezzoDa = getArguments() != null ? (Float) getArguments().getFloat("prezzoDa") : null;
+        this.prezzoA = getArguments() != null ? (Float) getArguments().getFloat("prezzoA") : null;
+        this.order = getArguments() != null ? (String) getArguments().getString("order") : null;
 
     }
 
     public void refresh(String query) {
-        this.query=query.trim().toLowerCase();
-        skip=0;
-        cloth=new ArrayList<>();
+        this.query = query.trim().toLowerCase();
+        skip = 0;
+        cloth = new ArrayList<>();
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listTag.setAdapter(adapter);
         global.setTag(cloth);

@@ -3,6 +3,7 @@ package com.clothapp.search;
 /**
  * Created by nc94 on 2/15/16.
  */
+
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.clothapp.R;
 import com.clothapp.settings.SettingsActivity;
 
@@ -25,19 +29,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResultsActivity extends AppCompatActivity {
+
     private SearchView searchView;
     private ListView listUser;
     private ListView listCloth;
     private ListView listTag;
     private ViewPager viewPager;
     private String query;
-    private String sex="all";
-    private Float pricefrom= -1f;
-    private Float priceto=-1f;
+    private String sex = "all";
+    private Float pricefrom = -1f;
+    private Float priceto = -1f;
 
     private String[] titles;
     private SearchAdapter searchAdapter;
     private String order;
+
+    public static View tabUsersView;
+    public static View tabClothesView;
+    public static View tabHashtagView;
+
+    public static TextView tabUserResultCount;
+    public static TextView tabClothesResultCount;
+    public static TextView tabHashtagResultCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,32 +66,56 @@ public class SearchResultsActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setElevation(0);
 
-
         titles = getResources().getStringArray(R.array.search_titles);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         //gestisco gli intent
-        query= handleIntent(getIntent());
-        System.out.println("la query è "+query);
-        if(query==null)query="";
-        System.out.println("invio sex:"+sex);
+        query = handleIntent(getIntent());
+        System.out.println("la query è " + query);
+        if (query == null) query = "";
+        System.out.println("invio sex:" + sex);
 
         //set adapter to  ViewPager
-        searchAdapter=new SearchAdapter(getSupportFragmentManager(), titles ,query, getApplicationContext(),sex,pricefrom,priceto,order);
+        searchAdapter = new SearchAdapter(getSupportFragmentManager(), titles, query, getApplicationContext(), sex, pricefrom, priceto, order);
         viewPager.setAdapter(searchAdapter);
         //viewPager.setCurrentItem(1);
         //viewPager.setCurrentItem(1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        TabLayout.Tab tabUsers = tabLayout.getTabAt(0);
+        tabUsers.setCustomView(R.layout.search_tab_custom_view);
+
+        TabLayout.Tab tabClothes = tabLayout.getTabAt(1);
+        tabClothes.setCustomView(R.layout.search_tab_custom_view);
+
+        TabLayout.Tab tabHashtag = tabLayout.getTabAt(2);
+        tabHashtag.setCustomView(R.layout.search_tab_custom_view);
+
+        tabUsersView = tabUsers.getCustomView();
+        TextView title1 = (TextView) tabUsersView.findViewById(R.id.title);
+        tabUserResultCount = (TextView) tabUsersView.findViewById(R.id.count);
+        title1.setText("USERS");
+
+        tabClothesView = tabClothes.getCustomView();
+        TextView title2 = (TextView) tabClothesView.findViewById(R.id.title);
+        tabClothesResultCount = (TextView) tabClothesView.findViewById(R.id.count);
+        title2.setText("CLOTHES");
+
+        tabHashtagView = tabHashtag.getCustomView();
+        TextView title3 = (TextView) tabHashtagView.findViewById(R.id.title);
+        tabHashtagResultCount = (TextView) tabHashtagView.findViewById(R.id.count);
+        title3.setText("HASHTAG");
+
         //Log.d("SearchA","oncreate");
 
 
     }
 
-//aggiungo le icone del menu all'appbar
+    //aggiungo le icone del menu all'appbar
     public boolean onCreateOptionsMenu(Menu menu) {
-       // MenuInflater inflater = getMenuInflater();
+        // MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.home_appbar, menu);
 
         getMenuInflater().inflate(R.menu.searchbar, menu);
@@ -111,7 +148,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query1) {
                 System.out.println("nuova query");
-                query=query1;
+                query = query1;
                 searchAdapter.setQuery(query1);
                 searchAdapter.notifyDataSetChanged();
                 return false;
@@ -124,7 +161,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
 
         // Define the listener il listener sulla searchview
@@ -163,13 +199,13 @@ public class SearchResultsActivity extends AppCompatActivity {
                 break;
             //premuto settings
             case R.id.action_settings:
-                Intent i=new Intent(getBaseContext(),SettingsActivity.class);
+                Intent i = new Intent(getBaseContext(), SettingsActivity.class);
                 startActivity(i);
                 break;
             //premuto filter
             case R.id.filter:
-                Intent j=new Intent(getBaseContext(),FilterActivity.class);
-                j.putExtra("query",query);
+                Intent j = new Intent(getBaseContext(), FilterActivity.class);
+                j.putExtra("query", query);
                 startActivity(j);
                 finish();
                 break;
@@ -183,22 +219,21 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
-//gestisco gli intent
+    //gestisco gli intent
     private String handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             return intent.getStringExtra(SearchManager.QUERY);
         }
-        if(intent.getStringExtra("query")!=null){
-            System.out.println("intent:"+intent.getStringExtra("sex"));
+        if (intent.getStringExtra("query") != null) {
+            System.out.println("intent:" + intent.getStringExtra("sex"));
             sex = intent.getStringExtra("sex");
-            pricefrom=intent.getFloatExtra("prezzoDa", 0);
-            priceto=intent.getFloatExtra("prezzoA",Float.MAX_VALUE);
-            order=intent.getStringExtra("order");
+            pricefrom = intent.getFloatExtra("prezzoDa", 0);
+            priceto = intent.getFloatExtra("prezzoA", Float.MAX_VALUE);
+            order = intent.getStringExtra("order");
             return intent.getStringExtra("query");
         }
         return null;
     }
-
 
 
 }
