@@ -33,6 +33,8 @@ import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
+import com.clothapp.settings.EditProfileActivity;
+import com.clothapp.settings.EditShopProfileActivity;
 import com.clothapp.settings.SettingsActivity;
 import com.clothapp.upload.UploadProfilePictureActivity;
 import com.parse.FindCallback;
@@ -101,6 +103,14 @@ public class UserProfileActivity extends AppCompatActivity {
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
             follow_edit.setText(R.string.edit_profile);
+            follow_edit.setText(R.string.edit_profile);
+            follow_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(UserProfileActivity.this, EditProfileActivity.class);
+                    startActivity(i);
+                }
+            });
         } else {
             FollowUtil.setFollowButton(follow_edit, username);
         }

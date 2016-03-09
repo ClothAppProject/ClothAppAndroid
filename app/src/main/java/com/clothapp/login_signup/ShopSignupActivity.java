@@ -239,7 +239,8 @@ public class ShopSignupActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

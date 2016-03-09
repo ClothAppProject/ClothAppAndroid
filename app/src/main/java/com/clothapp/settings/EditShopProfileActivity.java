@@ -19,14 +19,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
-import com.clothapp.login_signup.MainActivity;
 import com.clothapp.resources.CircleTransform;
-import com.clothapp.resources.Image;
 import com.clothapp.upload.UploadProfilePictureActivity;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -36,15 +33,10 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.RequestPasswordResetCallback;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import static com.clothapp.resources.ExceptionCheck.check;
 import static com.clothapp.resources.RegisterUtil.isValidEmailAddress;
 
 
@@ -52,8 +44,8 @@ import static com.clothapp.resources.RegisterUtil.isValidEmailAddress;
 /**
  * Created by giacomoceribelli on 09/01/16.
  */
-public class EditProfileActivity extends AppCompatActivity {
-    private ParseObject persona;
+public class EditShopProfileActivity extends AppCompatActivity {
+    private ParseObject negozio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
         final ParseUser utente = ParseUser.getCurrentUser();
         getSupportActionBar().setTitle(utente.getUsername());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_edit_shop_profile);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //show user info
@@ -71,24 +63,17 @@ public class EditProfileActivity extends AppCompatActivity {
         final EditText editName = (EditText) findViewById(R.id.name);
         editName.setText(utente.getString("name"));
 
-        final EditText editLastname = (EditText) findViewById(R.id.lastname);
-        final EditText editDay = (EditText) findViewById(R.id.edit_day);
-        final EditText editMonth = (EditText) findViewById(R.id.edit_month);
-        final EditText editYear = (EditText) findViewById(R.id.edit_year);
-        ParseQuery<ParseObject> queryInfo = ParseQuery.getQuery("Persona");
+        final EditText editAddress = (EditText) findViewById(R.id.address);
+        final EditText editWebsite = (EditText) findViewById(R.id.website);
+        ParseQuery<ParseObject> queryInfo = ParseQuery.getQuery("LocalShop");
         queryInfo.whereEqualTo("username", utente.getUsername());
         queryInfo.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    persona = object;
-                    editLastname.setText(object.getString("lastname"));
-                    Date birthday = object.getDate("date");
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(birthday);
-                    editDay.setText(Integer.toString(cal.get(Calendar.DAY_OF_MONTH)));
-                    editMonth.setText(Integer.toString(cal.get(Calendar.MONTH)+1));
-                    editYear.setText(Integer.toString(cal.get(Calendar.YEAR)));
+                    negozio = object;
+                    editAddress.setText(object.getString("address"));
+                    editWebsite.setText(object.getString("webSite"));
                 }
             }
         });
@@ -119,7 +104,7 @@ public class EditProfileActivity extends AppCompatActivity {
         profile_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditShopProfileActivity.this);
                 builder.setTitle(R.string.choose_profile_picture)
                         .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -166,31 +151,20 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 if (!isValidEmailAddress(editEmail.getText().toString())) {
                     Snackbar.make(v, R.string.invalid_email, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                } else if (editName.getText().toString()==""||editLastname.getText().toString()==""||
-                        editDay.getText().toString()==""||editMonth.getText().toString()==""||editYear.getText().toString()==""){
+                } else if (editAddress.getText().toString()==""&&editWebsite.getText().toString()==""){
                     Snackbar.make(v, R.string.empty_field, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else {
                     //inizializzo progressbar di caricamento
-                    final ProgressDialog dialog = ProgressDialog.show(EditProfileActivity.this, "",
+                    final ProgressDialog dialog = ProgressDialog.show(EditShopProfileActivity.this, "",
                             getString(R.string.check_data), true);
 
                     utente.setEmail(editEmail.getText().toString());
                     utente.put("name",editName.getText().toString());
                     try {
                         utente.save();
-                        persona.put("lastname",editLastname.getText().toString());
-
-                        // Formatto data
-                        final String edit_date = editYear.getText().toString() + "-" + editMonth.getText().toString() + "-" + editDay.getText().toString();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date date = null;
-                        try {
-                             date = sdf.parse(edit_date);
-                        } catch (java.text.ParseException e) {
-                            e.printStackTrace();
-                        }
-                        persona.put("date",date);
-                        persona.save();
+                        negozio.put("address",editAddress.getText().toString());
+                        negozio.put("webSite",editWebsite.getText().toString());
+                        negozio.save();
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(),R.string.data_edited,Toast.LENGTH_SHORT).show();
                     } catch (ParseException e) {

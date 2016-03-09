@@ -79,7 +79,12 @@ public class SettingsActivity extends AppCompatActivity {
             edit_profile.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(getActivity().getApplicationContext(), EditProfileActivity.class);
+                    Intent i;
+                    if (ParseUser.getCurrentUser().get("flagISA").equals("Persona"))    {
+                        i = new Intent(getActivity().getApplicationContext(), EditProfileActivity.class);
+                    }else{
+                        i = new Intent(getActivity().getApplicationContext(), EditShopProfileActivity.class);
+                    }
                     startActivity(i);
                     return false;
                 }

@@ -290,7 +290,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         switch (item.getItemId()) {
             // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

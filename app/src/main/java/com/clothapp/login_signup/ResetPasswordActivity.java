@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -75,11 +76,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        // Reinderizzo l'utente alla main activity
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
-
         finish();
     }
 
@@ -89,7 +85,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/HomeActivity button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
