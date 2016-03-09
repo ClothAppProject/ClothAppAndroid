@@ -36,7 +36,8 @@ public class ShopSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_signup);
-
+        // Nascondo la tastiera all'avvio di quest'activity
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //REGISTRATION FIELDS
         final EditText edit_username = (EditText) findViewById(R.id.edit_username);
@@ -60,22 +61,6 @@ public class ShopSignupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Nascondo la tastiera all'avvio di quest'activity
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-        /*
-        //CHECKBOX BUTTON
-        checkOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    edit_webSite.setVisibility(View.VISIBLE);
-                }else{
-                    edit_webSite.setVisibility(View.GONE);
-                }
-            }
-        });
-        */
 
         // Signup button initialization
         Button btnSignup = (Button) findViewById(R.id.register_button_shop);
@@ -85,9 +70,13 @@ public class ShopSignupActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final View vi = v;
+            if (edit_address.getText().toString().equals("")&&edit_address.getText().toString().equals(""))   {
+                //Nel caso in cui sia sito web che indirizzo fisico siano vuoti
+                Snackbar.make(v, "L'ndirizzo fisico o l'indirizzo internet non può essere vuoto", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
 
                 // Checking if username is nulll
-                if (edit_username.getText().toString().trim().equalsIgnoreCase("")) {
+            }else if (edit_username.getText().toString().trim().equalsIgnoreCase("")) {
                     // Nel caso in cui l'username è lasciato in bianco
                     Snackbar.make(v, "L'username non può essere vuoto", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -170,7 +159,6 @@ public class ShopSignupActivity extends AppCompatActivity {
                             user.setEmail(edit_email.getText().toString());
                             user.put("name", edit_name.getText().toString().trim());
                             user.put("lowercase", user.getUsername().toLowerCase());
-                            //TODO check fisico o virtuale
                             user.put("flagISA", "Negozio");
 
                             user.signUpInBackground(new SignUpCallback() {
@@ -182,14 +170,13 @@ public class ShopSignupActivity extends AppCompatActivity {
                                         ParseObject negozio = new ParseObject("LocalShop");
 
                                         negozio.put("username", user.getUsername());
-
                                         negozio.put("name", edit_name.getText().toString().trim());
-
+                                        negozio.put("lowercase", user.getUsername().toLowerCase());
                                         //  checking if the shop has a physical address
-                                        if(edit_address.getText()!= null ) negozio.put("address", edit_address.getText().toString().trim());
+                                        negozio.put("address", edit_address.getText().toString().trim());
 
                                         //  checking if the shop has a webisite
-                                        if(edit_webSite.getText()!= null ) negozio.put("webSite", edit_webSite.getText().toString().trim());
+                                        negozio.put("webSite", edit_webSite.getText().toString().trim());
 
                                         negozio.saveInBackground(new SaveCallback() {
                                             @Override
