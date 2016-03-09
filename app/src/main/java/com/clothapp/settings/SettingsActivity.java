@@ -178,6 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 } else {
                                     // Controllo che non ci siano eccezioni Parse
                                     ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
+                                    Toast.makeText(getActivity().getApplicationContext(), ex.getMessage(),Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -187,13 +188,14 @@ public class SettingsActivity extends AppCompatActivity {
                         ParseFacebookUtils.linkWithReadPermissionsInBackground(ParseUser.getCurrentUser(), getActivity(), permissions, new SaveCallback() {
                             @Override
                             public void done(ParseException ex) {
-                                if (ex != null) {
-                                    // Controllo che non ci siano eccezioni parse
-                                    ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
-                                }else if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+                                if (ex == null) {
                                     Log.d("SettingsActivity", "Connesso a Facebook");
                                     facebookPref.setChecked(true);
                                     Toast.makeText(getActivity().getApplicationContext(),R.string.facebook_connected,Toast.LENGTH_SHORT).show();
+                                }else if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+                                    // Controllo che non ci siano eccezioni parse
+                                    ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
+                                    Toast.makeText(getActivity().getApplicationContext(), ex.getMessage(),Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
