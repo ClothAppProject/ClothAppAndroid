@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.upload.UploadProfilePictureActivity;
@@ -54,6 +55,7 @@ import static com.clothapp.resources.RegisterUtil.isValidEmailAddress;
  */
 public class EditProfileActivity extends AppCompatActivity {
     private ParseObject persona;
+    private ImageView profile_picture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,28 +96,8 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         //show profile picutre
-        final ImageView profile_picture = (ImageView) findViewById(R.id.profile_picture);
-        ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-        query.whereEqualTo("username", utente.getUsername());
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject photo, ParseException e) {
-                if (e == null) {
-                    ParseFile parseFile = photo.getParseFile("profilePhoto");
-                    parseFile.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-                            if (e == null) {
-                                Glide.with(getApplicationContext())
-                                        .load(file)
-                                        .transform(new CircleTransform(getApplicationContext()))
-                                        .into(profile_picture);
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        profile_picture = (ImageView) findViewById(R.id.profile_picture);
+        ProfileUtils.loadProfilePicture(profile_picture,getApplicationContext());
         profile_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,6 +184,11 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        ProfileUtils.loadProfilePicture(profile_picture,getApplicationContext());
+    }
     @Override
     public void onBackPressed() {
         finish();
