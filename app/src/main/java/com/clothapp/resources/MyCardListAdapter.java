@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,30 +57,32 @@ public class MyCardListAdapter extends BaseAdapter {
         TextView price = (TextView) row.findViewById(R.id.price);
         TextView brand = (TextView) row.findViewById(R.id.brand);
         final TextView cloth = (TextView) row.findViewById(R.id.cloth);
-        LinearLayout map=(LinearLayout) row.findViewById(R.id.map);
+        LinearLayout map = (LinearLayout) row.findViewById(R.id.map);
         //latidune e longitudine sono quelle di roma
 
         map.setOnClickListener(new View.OnClickListener() {
-                                   @Override
-                                   public void onClick(View v) {
-                                       if (cloths.get(position).getAddress().length() > 0) {
-                                           if (!cloths.get(position).getAddress().contains("www")) {
-                                               Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
-                                               Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                               mapIntent.setPackage("com.google.android.apps.maps");
-                                               mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                               context.startActivity(mapIntent);
-                                           } else {
-                                               String url = "http://" + cloths.get(position).getAddress();
-                                               Intent i = new Intent(Intent.ACTION_VIEW);
-                                               i.setData(Uri.parse(url));
-                                               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                               context.startActivity(i);
-                                           }
-                                       }
-                                   }
-                               });
+            @Override
+            public void onClick(View v) {
 
+                String strAddress = cloths.get(position).getAddress();
+
+                if (strAddress != null && !strAddress.isEmpty()) {
+                    if (!cloths.get(position).getAddress().contains("www")) {
+                        Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(mapIntent);
+                    } else {
+                        String url = "http://" + cloths.get(position).getAddress();
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(i);
+                    }
+                }
+            }
+        });
 
 
         address.setText(cloths.get(position).getAddress());
