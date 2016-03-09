@@ -213,8 +213,12 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     shop.setText(objects.get(position).getString("username"));
-                                    if(objects.get(position).getString("address")!=null) address.setText(objects.get(position).getString("address"));
-                                    else address.setText(objects.get(position).getString("webSite"));
+                                    //System.out.println(objects.get(position).getString("address").length() == 0);
+                                    //System.out.println(objects.get(position).getString("webSite"));
+                                    //System.out.println(objects.get(position).getString("address"));
+                                    if(objects.get(position).getString("address")==null || objects.get(position).getString("address").length()==0)  address.setText(objects.get(position).getString("webSite"));
+                                    else address.setText(objects.get(position).getString("address"));
+
                                 }
                             });
 
