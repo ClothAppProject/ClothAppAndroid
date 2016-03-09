@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
+import com.clothapp.resources.Image;
 import com.google.android.gms.common.ConnectionResult;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -321,7 +323,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-            View rootView;
+            final View rootView;
 
             int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             Uri uri = (Uri) getArguments().getParcelable("uri");
@@ -431,7 +433,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                 final ScrollView scrollView = (ScrollView) rootView.findViewById(R.id.fragment_upload_photo_page_3_scrollview);
 
                 //listener bottone previous
-                Button previous = (Button) rootView.findViewById(R.id.previous);
+                final Button previous = (Button) rootView.findViewById(R.id.previous);
                 previous.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -466,11 +468,22 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                     }
                 });
                 //listener bottone upload
-                Button upload = (Button) rootView.findViewById(R.id.upload);
+                final Button upload = (Button) rootView.findViewById(R.id.upload);
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO: aggiungere le operazioni di upload
+                        //nascondo pulsanti
+                        upload.setVisibility(View.INVISIBLE);
+                        previous.setVisibility(View.INVISIBLE);
+                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_center).setVisibility(View.INVISIBLE);
+                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_left).setVisibility(View.INVISIBLE);
+                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_right).setVisibility(View.INVISIBLE);
+                        final TextView percentuale = (TextView) rootView.findViewById(R.id.percentuale);
+                        percentuale.setVisibility(View.VISIBLE);
+                        percentuale.setText("Caricamento: 0%");
+                        final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.VISIBLE);
+
                         System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                         infoListAdapter.notifyDataSetChanged();
                         System.out.println(infoListAdapter.getListCloth());
@@ -546,8 +559,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         }, new ProgressCallback() {
                             public void done(Integer percentDone) {
                                 // Update your progress spinner here. percentDone will be between 0 and 100.
-                                //percentuale.setText("Caricamento: " + percentDone + "%");
-                                //progressBar.setProgress(percentDone);
+                                percentuale.setText("Caricamento: " + percentDone + "%");
+                                progressBar.setProgress(percentDone);
                             }
                         });
 
