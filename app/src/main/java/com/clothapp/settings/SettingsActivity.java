@@ -75,6 +75,16 @@ public class SettingsActivity extends AppCompatActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
+            final Preference edit_profile = (Preference) findPreference("edit_profile");
+            edit_profile.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(getActivity().getApplicationContext(), EditProfileActivity.class);
+                    startActivity(i);
+                    return false;
+                }
+            });
+
             final Preference change = (Preference) findPreference("change_password");
             change.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

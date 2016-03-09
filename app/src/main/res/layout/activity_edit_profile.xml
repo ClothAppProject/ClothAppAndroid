@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        tools:context=".login_signup.ResetPasswordActivity">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:id="@+id/profile_picture"
+                android:src="@drawable/com_facebook_profile_picture_blank_square"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/input_text"
+                android:textColorHint="@color/input_text_hint" />
+            <EditText
+                android:id="@+id/lastname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:hint="@string/lastname"
+                android:inputType="text"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/input_text"
+                android:textColorHint="@color/input_text_hint" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/input_text"
+                android:textColorHint="@color/input_text_hint" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"
+                android:text="@string/birthday"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+
+                <EditText
+                    android:id="@+id/edit_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="2"
+                    android:hint="dd"
+                    android:inputType="numberSigned"
+                    android:background="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:singleLine="true"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/separator"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:fontFamily="sans-serif"/>
+
+                <EditText
+                    android:id="@+id/edit_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="2"
+                    android:hint="mm"
+                    android:inputType="numberSigned"
+                    android:background="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:singleLine="true"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dip"
+                    android:text="@string/separator"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:fontFamily="sans-serif"/>
+
+                <EditText
+                    android:id="@+id/edit_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="3"
+                    android:hint="yyyy"
+                    android:inputType="numberSigned"
+                    android:background="@color/white"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/edit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:theme="@android:style/Theme.Material.Light"
+                android:text="@string/edit_profile" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -23,6 +23,10 @@
     <string name="main_forgot_password"><u>Forgot password?</u></string>
     <string name="main_signup"><u>New here? Sign up!</u></string>
     <string name="email">Email</string>
+    <string name="invalid_email">Email non valida</string>
+    <string name="empty_field">I campi non possono essere vuoti</string>
+    <string name="check_data">Controllo dati</string>
+    <string name="data_edited">Dati modificati</string>
     <string name="name">Nome</string>
     <string name="name_shop">Nome del Negozio</string>
     <string name="lastname">Cognome</string>
@@ -114,6 +118,7 @@
 
     <string name="profile_settings">Profilo</string>
     <string name="profile_summary">Impostazioni e modifiche del profilo utente</string>
+    <string name="password_summary">Modifica la tua password</string>
 
     <string name="password_settings">Password</string>
 

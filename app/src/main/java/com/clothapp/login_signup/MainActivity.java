@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Check if either the username or the password are not blank
                 if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
-                    Snackbar.make(v, "I campi non devono essere vuoti", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(v, R.string.empty_field, Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                     return;
                 }

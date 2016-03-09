@@ -39,7 +39,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             public void onClick(final View v) {
 
                 if (!isValidEmailAddress(editEmail.getText().toString())) {
-                    Snackbar.make(v, "Email non valida", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(v, R.string.invalid_email, Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                 } else {
                     //inizializzo progressbar di caricamento
