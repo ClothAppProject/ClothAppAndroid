@@ -250,7 +250,8 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                 }
             });
 
-           address.addTextChangedListener(new TextWatcher() {
+            address.setThreshold(3);
+            address.addTextChangedListener(new TextWatcher() {
                @Override
                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -259,29 +260,61 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                @Override
                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                   if (s.length()<=3) address.setAdapter(null);
+                   else {
+
+
+                       if (!s.toString().contains("www")) {
+                           // Register a listener that receives callbacks when a suggestion has been selected
+                           address.setOnItemClickListener(mAutocompleteClickListener);
+
+                           // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+                           // the entire world.
+                           address.setAdapter(mAdapter);
+                       }
+
+                       else {
+                           //if (true) {
+                           System.out.println("è un sito!!!!");
+                           //TODO: suggerimenti sito
+                           final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
+                           shopUser.whereContains("webSite", s.toString());
+                           shopUser.findInBackground(new FindCallback<ParseObject>() {
+                               @Override
+                               public void done(final List<ParseObject> objects, ParseException e) {
+                                   System.out.println("trovati!!!" + objects);
+                                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(), android.R.layout.simple_dropdown_item_1line, shopToString(objects));
+                                   //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
+                                   address.setAdapter(adapter);
+                                   address.setThreshold(3);
+                                   address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                       @Override
+                                       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                           shop.setText(objects.get(position).getString("username"));
+                                           //System.out.println(objects.get(position).getString("address").length() == 0);
+                                           //System.out.println(objects.get(position).getString("webSite"));
+                                           //System.out.println(objects.get(position).getString("address"));
+                                           if (objects.get(position).getString("address") == null || objects.get(position).getString("address").length() == 0)
+                                               address.setText(objects.get(position).getString("webSite"));
+                                           else
+                                               address.setText(objects.get(position).getString("address"));
+
+                                       }
+                                   });
+
+                               }
+                           });
+                       }
+                   }
+
                }
 
                @Override
                public void afterTextChanged(Editable s) {
                    listCloth.get(c.getID() - 1).setAddress(s.toString());
-                   if (s.length()<=3) address.setAdapter(null);
-
-                   if (s.length() > 3) {
-                       // Register a listener that receives callbacks when a suggestion has been selected
-                       address.setOnItemClickListener(mAutocompleteClickListener);
-
-                       // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-                       // the entire world.
-                       address.setAdapter(mAdapter);
-                   }
-
-                   if (s.toString().contains("www")) {
-                       address.setAdapter(null);
-                       //TODO: suggerimenti sito
-                   }
-
 
                }
+
            });
 
 
@@ -314,6 +347,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         for (int i = 0; i < s.length; i++) {
             s[i] = objects.get(i).getString("username");
             if( objects.get(i).getString("address")!=null &&  objects.get(i).getString("address").length()>0) s[i]+= ", " + objects.get(i).getString("address");
+            else s[i]+= ", " + objects.get(i).getString("webSite");
         }
         return s;
     }
@@ -325,8 +359,10 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     }
 
     public void deleteCard() {
-        listCloth.remove(size - 1);
-        size--;
+        if(size>0) {
+            listCloth.remove(size - 1);
+            size--;
+        }
     }
 
 
