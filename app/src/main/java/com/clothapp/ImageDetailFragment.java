@@ -234,6 +234,7 @@ public class ImageDetailFragment extends Fragment {
 
                             Glide.with(context)
                                     .load(file)
+                                    .fitCenter()
                                     .into(imageView);
                             imageView.setOnTouchListener(new View.OnTouchListener() {
                                 @Override
