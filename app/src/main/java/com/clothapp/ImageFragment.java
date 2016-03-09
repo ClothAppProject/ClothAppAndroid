@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.clothapp.home.MostRecentAdapter;
 import com.clothapp.home.TopRatedAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
@@ -32,7 +33,7 @@ public class ImageFragment extends AppCompatActivity {
      * and next wizard steps.
      */
     private ViewPager mPager;
-    private boolean load=true;
+    private boolean load = true;
     private int n;
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -40,6 +41,7 @@ public class ImageFragment extends AppCompatActivity {
     private ScreenSlidePagerAdapter mPagerAdapter;
     static ArrayList<Image> lista;
     private String classe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class ImageFragment extends AppCompatActivity {
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        switch (classe)   {
+        switch (classe) {
             case "MostRecentPhotos":
                 lista = (ArrayList<Image>) MostRecentAdapter.itemList;
                 break;
@@ -72,7 +74,6 @@ public class ImageFragment extends AppCompatActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
 
 
-
         //creo adattatore da pasare al ViewPager
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
@@ -82,6 +83,7 @@ public class ImageFragment extends AppCompatActivity {
             mPager.setCurrentItem(extraCurrentItem);
         }
     }
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -95,14 +97,15 @@ public class ImageFragment extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             //se ultima o penultima foto della lista, carico altra foto
-            if (position>=lista.size()-2)   {
+            if (position >= lista.size() - 2) {
                 addPhotoToEnd();
             }
-            return new ImageDetailFragment().newInstance(lista.get(position),getApplicationContext());
+            return new ImageDetailFragment().newInstance(lista.get(position), getApplicationContext());
         }
 
         @Override
         public int getCount() {
+            if (lista == null || lista.isEmpty()) return 0;
             return lista.size();
         }
     }
@@ -128,7 +131,7 @@ public class ImageFragment extends AppCompatActivity {
                 query.getFirstInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
-                        if (object!=null) {
+                        if (object != null) {
                             object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
@@ -149,8 +152,8 @@ public class ImageFragment extends AppCompatActivity {
                 query.getFirstInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
-                        if (object!=null) {
-                            if (!lista.contains(new Image(null,object.getObjectId(),null,null,0,null,null,null))) {
+                        if (object != null) {
+                            if (!lista.contains(new Image(null, object.getObjectId(), null, null, 0, null, null, null))) {
                                 object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                     @Override
                                     public void done(File file, ParseException e) {
@@ -168,11 +171,11 @@ public class ImageFragment extends AppCompatActivity {
                 break;
             case "profilo":
                 query.setSkip(lista.size());
-                query.whereEqualTo("user",lista.get(0).getUser());
+                query.whereEqualTo("user", lista.get(0).getUser());
                 query.getFirstInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
-                        if (object!=null) {
+                        if (object != null) {
                             object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
