@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,253 +8,471 @@
     tools:context=".login_signup.SignupActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/background"
-            android:orientation="vertical"
-            android:padding="10dp"
-            tools:context=".login_signup.MainActivity"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e1e1e1"
+            android:orientation="vertical">
 
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="8dp"
+                card_view:cardBackgroundColor="#f9f9f9"
+                card_view:cardElevation="4dp">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dip"
-                    android:text="@string/form_register"
-                    android:textColor="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:textAlignment="center"
-                    android:layout_marginBottom="10dp"/>
-
-
-                <EditText
-                    android:id="@+id/edit_username"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text=""
-                    android:hint="@string/main_username"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="10dp"/>
-
-
-                <EditText
-                    android:id="@+id/edit_email"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:inputType="textEmailAddress"
-                    android:text=""
-                    android:hint="@string/email"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="10dp"/>
-
-                <EditText
-                    android:id="@+id/edit_name"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:inputType="textPersonName"
-                    android:text=""
-                    android:hint="@string/name"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="10dp"/>
-
-                <EditText
-                    android:id="@+id/edit_lastname"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:inputType="textPersonName"
-                    android:text=""
-                    android:hint="@string/lastname"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="10dp" />
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="horizontal"
-                    android:background="@color/white"
-                    android:layout_marginRight="10dp"
-                    android:baselineAligned="false">
-                    <RadioGroup
-                        android:id="@+id/radioSex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="32dp">
+
+                    <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:text="@string/form_register"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="20sp" />-->
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center">
-                        <RadioButton
-                            android:id="@+id/radioMale"
-                            android:layout_width="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="30dp"
+                        android:textColor="@color/red"
+                        android:text="Account info"
+                        android:textSize="20sp" />
+
+                    <!--<EditText-->
+                    <!--android:id="@+id/edit_username"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:hint="@string/main_username"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:singleLine="true" />-->
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_username"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/man"
-                            android:checked="true" />
-                        <RadioButton
-                            android:id="@+id/radioFemale"
-                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/main_username"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!--<EditText-->
+                    <!--android:id="@+id/edit_email"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:hint="@string/email"-->
+                    <!--android:inputType="textEmailAddress"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="@color/input_text"-->
+                    <!--android:textColorHint="@color/input_text_hint" />-->
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_email"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/woman" />
-                    </RadioGroup>
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/email"
+                            android:inputType="textEmailAddress"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/main_password"
+                            android:inputType="textPassword"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_password_confirm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/password_confirm"
+                            android:inputType="textPassword"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
                 </LinearLayout>
 
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:layout_marginTop="15dip"
-                    android:text="@string/birthday"
-                    android:layout_marginBottom="5dp"/>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="16dp"
+                card_view:cardBackgroundColor="#f9f9f9"
+                card_view:cardElevation="4dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
-
-
-                    <EditText
-                        android:id="@+id/edit_day"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="1dp"
-                        android:ems="2"
-                        android:hint="dd"
-                        android:inputType="numberSigned"
-                        android:background="@color/white"
-                        android:fontFamily="sans-serif"
-                        android:padding="10dp"
-                        android:singleLine="true"/>
+                    android:orientation="vertical"
+                    android:paddingBottom="32dp">
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dip"
-                        android:text="@string/separator"
-                        android:textColor="@color/white"
-                        android:textSize="25sp"
-                        android:fontFamily="sans-serif"/>
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="30dp"
+                        android:textColor="@color/red"
+                        android:text="About you"
+                        android:textSize="20sp" />
 
-                    <EditText
-                        android:id="@+id/edit_month"
+                    <!--<EditText-->
+                    <!--android:id="@+id/edit_name"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:hint="@string/name"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="@color/input_text"-->
+                    <!--android:textColorHint="@color/input_text_hint" />-->
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="1dp"
-                        android:ems="2"
-                        android:hint="mm"
-                        android:inputType="numberSigned"
-                        android:background="@color/white"
-                        android:fontFamily="sans-serif"
-                        android:padding="10dp"
-                        android:singleLine="true"/>
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/name"
+                            android:inputType="textPersonName"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!--<EditText-->
+                    <!--android:id="@+id/edit_lastname"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:hint="@string/lastname"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:singleLine="true"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="@color/input_text"-->
+                    <!--android:textColorHint="@color/input_text_hint" />-->
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp">
+
+                        <EditText
+                            android:id="@+id/edit_lastname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:fontFamily="sans-serif"
+                            android:hint="@string/lastname"
+                            android:inputType="textPersonName"
+                            android:padding="10dp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <RadioGroup
+                            android:id="@+id/radioSex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radioMale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="@string/man"
+                                android:textColor="@color/primary_dark_material_light" />
+
+                            <RadioButton
+                                android:id="@+id/radioFemale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:layout_marginRight="30dp"
+                                android:text="@string/woman"
+                                android:textColor="@color/primary_dark_material_light" />
+
+                        </RadioGroup>
+
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="5dip"
-                        android:text="@string/separator"
-                        android:textColor="@color/white"
-                        android:textSize="25sp"
-                        android:fontFamily="sans-serif"/>
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/birthday"
+                        android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/edit_year"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="1dp"
-                        android:ems="3"
-                        android:hint="yyyy"
-                        android:inputType="numberSigned"
-                        android:background="@color/white"
-                        android:fontFamily="sans-serif"
-                        android:padding="10dp"
-                        android:singleLine="true"/>
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:hint="01 - 01 - 1900"
+                            android:textSize="21sp"
+                            android:id="@+id/text_birthday"/>
+
+                        <Button
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:id="@+id/button_set_birthday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Set"
+                            android:textColor="@color/red"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginBottom="10dp"-->
+                        <!--android:layout_marginLeft="10dp"-->
+                        <!--android:layout_marginTop="50dp"-->
+                        <!--android:orientation="horizontal">-->
+
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/edit_day"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginRight="1dp"-->
+                            <!--android:background="@color/white"-->
+                            <!--android:ems="2"-->
+                            <!--android:fontFamily="sans-serif"-->
+                            <!--android:hint="dd"-->
+                            <!--android:inputType="numberSigned"-->
+                            <!--android:padding="10dp"-->
+                            <!--android:singleLine="true" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="fill_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:layout_marginTop="5dip"-->
+                            <!--android:fontFamily="sans-serif"-->
+                            <!--android:text="@string/separator"-->
+                            <!--android:textColor="@color/white"-->
+                            <!--android:textSize="25sp" />-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/edit_month"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_marginRight="1dp"-->
+                            <!--android:background="@color/white"-->
+                            <!--android:ems="2"-->
+                            <!--android:fontFamily="sans-serif"-->
+                            <!--android:hint="mm"-->
+                            <!--android:inputType="numberSigned"-->
+                            <!--android:padding="10dp"-->
+                            <!--android:singleLine="true" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="fill_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="10dp"-->
+                            <!--android:layout_marginTop="5dip"-->
+                            <!--android:fontFamily="sans-serif"-->
+                            <!--android:text="@string/separator"-->
+                            <!--android:textColor="@color/white"-->
+                            <!--android:textSize="25sp" />-->
+
+                        <!--<EditText-->
+                            <!--android:id="@+id/edit_year"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_marginRight="1dp"-->
+                            <!--android:background="@color/white"-->
+                            <!--android:ems="3"-->
+                            <!--android:fontFamily="sans-serif"-->
+                            <!--android:hint="yyyy"-->
+                            <!--android:inputType="numberSigned"-->
+                            <!--android:padding="10dp"-->
+                            <!--android:singleLine="true" />-->
+
+                    <!--</LinearLayout>-->
 
                 </LinearLayout>
 
+            </android.support.v7.widget.CardView>
 
-                <EditText
-                    android:id="@+id/edit_password"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:inputType="textPassword"
-                    android:text=""
-                    android:hint="@string/main_password"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="10dp"/>
 
-                <EditText
-                    android:id="@+id/edit_password_confirm"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:imeOptions="actionSend"
-                    android:inputType="textPassword"
-                    android:text=""
-                    android:hint="@string/password_confirm"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif"
-                    android:padding="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/input_text"
-                    android:textColorHint="@color/input_text_hint"
-                    android:layout_marginBottom="20dp"/>
+            <!--<EditText-->
+            <!--android:id="@+id/edit_password"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:hint="@string/main_password"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:padding="10dp"-->
+            <!--android:singleLine="true"-->
+            <!--android:text=""-->
+            <!--android:textColor="@color/input_text"-->
+            <!--android:textColorHint="@color/input_text_hint" />-->
 
-                <Button
-                    android:id="@+id/form_register_button"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/send"
-                    android:theme="@android:style/Theme.Material.Light" />
+            <!--<EditText-->
+            <!--android:id="@+id/edit_password_confirm"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:fontFamily="sans-serif"-->
+            <!--android:hint="@string/password_confirm"-->
+            <!--android:imeOptions="actionSend"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:padding="10dp"-->
+            <!--android:singleLine="true"-->
+            <!--android:text=""-->
+            <!--android:textColor="@color/input_text"-->
+            <!--android:textColorHint="@color/input_text_hint" />-->
+
+            <Button
+                android:id="@+id/form_register_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Sign Up"
+                android:textColor="@color/darkred"
+                android:textSize="18sp" />
+
         </LinearLayout>
+
     </ScrollView>
+
 </android.support.design.widget.CoordinatorLayout>
 
