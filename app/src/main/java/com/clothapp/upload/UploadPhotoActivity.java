@@ -570,6 +570,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         picture.put("photo", file);
                         String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                         picture.put("hashtag", Arrays.asList(hashtags));
+                        String[] descriz_tipi = sectionsPagerAdapter.getDescription().split(" ");
+                        picture.put("tipo",Arrays.asList(descriz_tipi));
                         picture.put("nLike", 0);
                         picture.put("vestiti", id);
 
