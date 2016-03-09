@@ -344,8 +344,12 @@ public class ProfileUtils {
 
         ProfileShopInfoAdapter adapter = (ProfileShopInfoAdapter) ShopProfileActivity.viewProfileInfo.getAdapter();
 
+        int toGet = position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1);
+
+        if (toGet < 0) return;
+
         if (text != null && !text.isEmpty()) {
-            ProfileInfoListItem item = adapter.items.get(position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1));
+            ProfileInfoListItem item = adapter.items.get(toGet);
             item.setContent(text);
         } else {
             adapter.items.remove(position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1));
