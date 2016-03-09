@@ -50,6 +50,7 @@ import java.io.File;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
+import static com.clothapp.resources.RegisterUtil.setButtonTint;
 
 public class ShopProfileActivity extends AppCompatActivity {
 
@@ -99,6 +100,8 @@ public class ShopProfileActivity extends AppCompatActivity {
 
         // Loading follow Button
         final Button follow_edit = (Button) findViewById(R.id.follow_edit);
+        //coloro pulsanti twitter e facebook su API 21
+        setButtonTint(follow_edit,getResources().getColorStateList(R.color.white));
 
         //tasto "segui" se profilo non tuo, "modifica profilo" se profilo tuo
         if (username.equals(ParseUser.getCurrentUser().getUsername())) {
