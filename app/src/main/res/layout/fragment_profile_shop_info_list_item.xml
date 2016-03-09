@@ -3,10 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="3dp"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:paddingTop="3dp">
+    android:paddingLeft="20dp"
+    android:paddingRight="10dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -16,8 +14,8 @@
         android:adjustViewBounds="false"
         android:tint="@color/colorPrimaryDark"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="25dp" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -28,7 +26,7 @@
             android:id="@+id/profile_info_list_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="6dp"
             android:paddingTop="15dp"
             android:text="List Item" />
 
@@ -36,9 +34,11 @@
             android:id="@+id/profile_info_list_item_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="12dp"
+            android:paddingBottom="10dp"
             android:text="Loading..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
 </LinearLayout>
