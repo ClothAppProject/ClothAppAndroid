@@ -487,12 +487,16 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                         infoListAdapter.notifyDataSetChanged();
                         System.out.println(infoListAdapter.getListCloth());
+                        ArrayList<String> tipi = new ArrayList<String>();
                         ArrayList<String> id = new ArrayList<>();
                         for (int i = 0; i < infoListAdapter.getCount(); i++) {
                             Cloth c = infoListAdapter.getItem(i);
                             if (!c.isEmpty()) {
                                 final ParseObject vestito = new ParseObject("Vestito");
-                                if (c.getCloth() != null) vestito.put("tipo", c.getCloth());
+                                if (c.getCloth() != null) {
+                                    vestito.put("tipo", c.getCloth());
+                                    tipi.add(c.getCloth());
+                                }
                                 if (c.getShop() != null) vestito.put("shop", c.getShop());
                                 if (c.getBrand() != null) vestito.put("brand", c.getBrand());
                                 if (c.getPrice() != null) vestito.put("prezzo", c.getPrice());
@@ -570,8 +574,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         picture.put("photo", file);
                         String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                         picture.put("hashtag", Arrays.asList(hashtags));
-                        String[] descriz_tipi = sectionsPagerAdapter.getDescription().split(" ");
-                        picture.put("tipo",Arrays.asList(descriz_tipi));
+                        picture.put("tipo",tipi);
                         picture.put("nLike", 0);
                         picture.put("vestiti", id);
 
