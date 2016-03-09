@@ -9,30 +9,31 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by jack1 on 18/02/2016.
  */
 public class SearchAdapter extends FragmentPagerAdapter {
+
     FindUserFragment findUserFragment;
     FindClothFragment findClothFragment;
     FindTagFragment findTagFragment;
-    private boolean primo=true;
+    private boolean primo = true;
     String sex;
     Float priceFrom;
     Float priceTo;
     String order;
 
 
-    String[]titles;
+    String[] titles;
     String query;
     Context context;
 
-    public SearchAdapter(FragmentManager fm,String[] titles,String query,Context context,String sex,float pricefrom,float priceto,String order) {
+    public SearchAdapter(FragmentManager fm, String[] titles, String query, Context context, String sex, float pricefrom, float priceto, String order) {
         //passo il fragment manager e i titoli delle tab
         super(fm);
-        this.titles=titles;
-        this.query=query;
-        this.context=context;
-        this.priceFrom=pricefrom;
-        this.priceTo=priceto;
-        this.order=order;
-        this.sex=sex;
+        this.titles = titles;
+        this.query = query;
+        this.context = context;
+        this.priceFrom = pricefrom;
+        this.priceTo = priceto;
+        this.order = order;
+        this.sex = sex;
     }
 
 
@@ -52,25 +53,25 @@ public class SearchAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
 
-                return findUserFragment= (FindUserFragment) new FindUserFragment().newIstance(query,context);
+                return findUserFragment = (FindUserFragment) new FindUserFragment().newIstance(query, context);
             case 1:
 
-                return findClothFragment= (FindClothFragment) new FindClothFragment().newIstance(query,sex,priceFrom,priceTo,context,order);
+                return findClothFragment = (FindClothFragment) new FindClothFragment().newIstance(query, sex, priceFrom, priceTo, context, order);
             case 2:
 
-                return findTagFragment= (FindTagFragment) new FindTagFragment().newIstance(query,sex,priceFrom,priceTo,context,order);
+                return findTagFragment = (FindTagFragment) new FindTagFragment().newIstance(query, sex, priceFrom, priceTo, context, order);
         }
 
         return null;
     }
 
     //quando faccio una seconda query faccio un refresh dei fragment
-    public void setQuery(String query ) {
+    public void setQuery(String query) {
         this.query = query;
-        if(findUserFragment!=null) findUserFragment.refresh(query);
+        if (findUserFragment != null) findUserFragment.refresh(query);
         //System.out.println(findClothFragment);
-        if(findClothFragment!=null) findClothFragment.refresh(query);
-        if(findTagFragment!=null) findTagFragment.refresh(query);
+        if (findClothFragment != null) findClothFragment.refresh(query);
+        if (findTagFragment != null) findTagFragment.refresh(query);
 
     }
 

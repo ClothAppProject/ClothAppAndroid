@@ -38,14 +38,12 @@ public class FindUserFragment extends Fragment {
     private ListView listUser;
     private Context context;
     private String query;
-    private List<File> foto=new ArrayList<File>();
-    private boolean canLoad=false;
+    private List<File> foto = new ArrayList<File>();
+    private boolean canLoad = false;
     private ArrayList<User> user;
     ApplicationSupport global;
-    int skip=0;
+    int skip = 0;
     private SearchAdapterUser adapter;
-
-
 
 
     @Override
@@ -57,7 +55,7 @@ public class FindUserFragment extends Fragment {
         global = (ApplicationSupport) getActivity().getApplicationContext();
         //System.out.println("create");
 
-        user=global.getUsers();
+        user = global.getUsers();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterUser(getActivity().getBaseContext(), user);
         listUser.setAdapter(adapter);
@@ -87,11 +85,10 @@ public class FindUserFragment extends Fragment {
         return rootView;
     }
 
-    public void search(){
+    public void search() {
 
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
-        query=query.trim().toLowerCase();
-
+        query = query.trim().toLowerCase();
 
 
         final int[] i = {0};
@@ -99,13 +96,13 @@ public class FindUserFragment extends Fragment {
         //faccio la query a Parse. Questa in background è più veloce ma non consente di metterli ordinati alfabeticamente
 
 
-        final ParseQuery<ParseUser>username=ParseUser.getQuery();
+        final ParseQuery<ParseUser> username = ParseUser.getQuery();
         username.addAscendingOrder("lowercase");
         username.orderByAscending("lowercase");
         username.whereContains("lowercase", query);
         username.setSkip(skip);
         username.setLimit(10);
-        skip=skip+10;
+        skip = skip + 10;
         username.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
@@ -137,6 +134,7 @@ public class FindUserFragment extends Fragment {
                                     user.add(u);
                                     global.setUsers(user);
                                     adapter.notifyDataSetChanged();
+                                    SearchResultsActivity.tabUserResultCount.setText("" + adapter.getCount());
                                 }
 
 
@@ -161,9 +159,7 @@ public class FindUserFragment extends Fragment {
         });
 
 
-
     }
-
 
 
     public Fragment newIstance(String query, Context context) {
@@ -179,20 +175,21 @@ public class FindUserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.query = getArguments()!=null ? (String) getArguments().getString("query") : null;
+        this.query = getArguments() != null ? (String) getArguments().getString("query") : null;
         //System.out.println("onCreate");
     }
 
     public void refresh(String query) {
         //System.out.println("refresh");
-        this.query=query.trim().toLowerCase();
-        skip=0;
-        user=new ArrayList<>();
+        this.query = query.trim().toLowerCase();
+        skip = 0;
+        user = new ArrayList<>();
         adapter = new SearchAdapterUser(getActivity().getBaseContext(), user);
         listUser.setAdapter(adapter);
         global.setUsers(user);
         search();
     }
+
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
@@ -202,8 +199,8 @@ public class FindUserFragment extends Fragment {
 
 
     public void setQuery(String query) {
-        this.query=query;
-       //
+        this.query = query;
+        //
     }
 }
 
