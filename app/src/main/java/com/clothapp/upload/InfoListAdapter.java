@@ -244,7 +244,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                 }
             });
 
-          /*  address.addTextChangedListener(new TextWatcher() {
+           address.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -261,7 +261,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                     listCloth.get(c.getID() - 1).setAddress(s.toString());
                 }
             });
-            */
+
 
             // Register a listener that receives callbacks when a suggestion has been selected
             address.setOnItemClickListener(mAutocompleteClickListener);
