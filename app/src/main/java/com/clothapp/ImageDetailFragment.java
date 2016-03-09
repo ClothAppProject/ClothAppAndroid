@@ -404,8 +404,8 @@ public class ImageDetailFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 //prendo i vestiti della foto e li elimino
                                 if (parseObject.getList("vestiti") != null) {
-                                    for (Object id : parseObject.getList("vestiti")) {
-                                        ParseObject vestito = ParseObject.createWithoutData("Vestito", (String) id);
+                                    for (int i=0;i<parseObject.getList("vestiti").size();i++)   {
+                                        ParseObject vestito = ParseObject.createWithoutData("Vestito", parseObject.getList("vestiti").get(i).toString());
                                         vestito.deleteInBackground();
                                     }
                                 }
