@@ -79,6 +79,13 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
     private final int REQUEST_CAMERA = 101;
 
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 102;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     static final int RESULT_LOAD_IMG = 1540;
     static final int CAPTURE_IMAGE_ACTIVITY = 2187;
 
@@ -120,6 +127,21 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
+
+        Log.d("UploadPhotoActivity", "Roberto permission: " + (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED));
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
 
         // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
         // functionality, which automatically sets up the API client to handle Activity lifecycle
