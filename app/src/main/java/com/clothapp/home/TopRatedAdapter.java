@@ -189,10 +189,12 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             StringBuilder sb = new StringBuilder();
 
             for (String hashtag : hashtagList) {
-                sb.append(hashtag.substring(0, 1))
-                        .append(hashtag.substring(1, 2).toUpperCase())
-                        .append(hashtag.substring(2))
-                        .append(" ");
+                if (!hashtag.isEmpty()) {
+                    sb.append(hashtag.substring(0, 1))
+                            .append(hashtag.substring(1, 2).toUpperCase())
+                            .append(hashtag.substring(2))
+                            .append(" ");
+                }
             }
 
             txtHashtags.setText(sb.toString());
