@@ -49,7 +49,7 @@ import java.util.List;
 /**
  * Created by jack1 on 03/03/2016.
  */
-public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnConnectionFailedListener{
+public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnConnectionFailedListener {
     private final Context context;
 
     private AutoCompleteTextView tipo;
@@ -60,16 +60,19 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     private String output = null;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(41.9027835,12.4963655), new LatLng(42.9027835,13.4963655));
+            new LatLng(41.9027835, 12.4963655), new LatLng(42.9027835, 13.4963655));
 
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutocompleteAdapter mAdapter;
 
 
-    public InfoListAdapter(Context context,GoogleApiClient googleApiClient) {
+    public InfoListAdapter(Context context, GoogleApiClient googleApiClient) {
         this.context = context;
-        this.mGoogleApiClient=googleApiClient;
+        this.mGoogleApiClient = googleApiClient;
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
     }
 /*
     public InfoListAdapter(Context context, List<Cloth> cloth) {
@@ -99,7 +102,6 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     }
 
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
@@ -110,7 +112,6 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         }
 
         resources = context.getResources();
-
 
 
         try {
@@ -267,7 +268,6 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
             // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
             // the entire world.
-            mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
             address.setAdapter(mAdapter);
 
             price.addTextChangedListener(new TextWatcher() {
@@ -293,7 +293,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     }
 
     private String[] shopToString(List<ParseObject> objects) {
-        if (objects == null) return new String[] {"Nessun suggerimento"};
+        if (objects == null) return new String[]{"Nessun suggerimento"};
         String[] s = new String[objects.size()];
         for (int i = 0; i < s.length; i++) {
             s[i] = objects.get(i).getString("username") + ", " + objects.get(i).getString("address");
@@ -363,7 +363,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
              The adapter stores each Place suggestion in a AutocompletePrediction from which we
              read the place ID and title.
               */
-            System.out.println("mAdapter="+mAdapter+":");
+            System.out.println("mAdapter=" + mAdapter + ":");
             final AutocompletePrediction item = mAdapter.getItem(position);
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
@@ -402,8 +402,8 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             final Place place = places.get(0);
 
             // Format details of the place for display and show it in a TextView.
-            System.out.println( place.getName()+
-                    place.getId()+ place.getAddress()+ place.getPhoneNumber()+
+            System.out.println(place.getName() +
+                    place.getId() + place.getAddress() + place.getPhoneNumber() +
                     place.getWebsiteUri());
 
             // Display the third party attributions if set.
