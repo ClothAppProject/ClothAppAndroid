@@ -119,7 +119,7 @@ public class FindUserFragment extends Fragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    if(global.getUsers().size()==0) notfound.setVisibility(View.VISIBLE);
+                    if(objects.size()==0 && global.getUsers().size()==0) notfound.setVisibility(View.VISIBLE);
 
                     for (ParseUser parseUser : objects) {
                         final User u = new User();

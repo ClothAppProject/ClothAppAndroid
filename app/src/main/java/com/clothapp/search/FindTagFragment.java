@@ -124,7 +124,7 @@ public class FindTagFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    if(global.getTag().size()==0) notfound.setVisibility(View.VISIBLE);
+
                     //System.out.println("done" + objects);
                     ListIterator<ParseObject> i = objects.listIterator();
 
@@ -320,6 +320,8 @@ public class FindTagFragment extends Fragment {
                             }
                         }
                     }
+                    canLoad = true;
+                    if(global.getCloth().size()==0) notfound.setVisibility(View.VISIBLE);
                 } else
 
                 {
