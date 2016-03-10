@@ -64,7 +64,7 @@ public class BitmapUtil {
 
     public static int checkToCompress(Bitmap photo) {
         // TODO: getAllocationByteCount non riporta il peso della foto preciso, dice che pesa 64mb quando invece pesa 4,5mb
-        Log.d("UploadCameraActivity", "photo to compress is: " + getAllocationByteCount(photo));
+        //Log.d("UploadCameraActivity", "photo to compress is: " + getAllocationByteCount(photo));
 
         if (getAllocationByteCount(photo) > mb5) return 70;
         else if (getAllocationByteCount(photo) > mb3) return 80;
