@@ -63,6 +63,15 @@ public class ProfileFollowersFragment extends Fragment {
         //faccio la query
         FollowUtil.getFollower(users,rootView,UserProfileActivity.viewProfileFollowers, UserProfileActivity.username);
 
+        //scroll per aggiungere followers
+        UserProfileActivity.viewProfileFollowers.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                FollowUtil.getFollower(users,rootView,UserProfileActivity.viewProfileFollowers,UserProfileActivity.username);
+            }
+        });
+
         return rootView;
     }
 }

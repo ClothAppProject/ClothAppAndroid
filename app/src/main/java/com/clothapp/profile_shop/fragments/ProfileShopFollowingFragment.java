@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.clothapp.R;
+import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.PeopleListAdapter;
 import com.clothapp.profile.utils.FollowUtil;
 import com.clothapp.profile_shop.ShopProfileActivity;
@@ -50,6 +51,16 @@ public class ProfileShopFollowingFragment extends Fragment {
         ShopProfileActivity.viewProfileShopFollowing.setAdapter(adapter);
         //faccio la query
         FollowUtil.getFollowing(users,rootView,ShopProfileActivity.viewProfileShopFollowing,ShopProfileActivity.username);
+
+        //scroll per aggiungere nuovi follower
+        ShopProfileActivity.viewProfileShopFollowing.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //update following list
+                FollowUtil.getFollowing(users,rootView,ShopProfileActivity.viewProfileShopFollowing,ShopProfileActivity.username);
+            }
+        });
 
         return rootView;
     }
