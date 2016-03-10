@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.clothapp.ImageFragment;
@@ -58,12 +59,17 @@ public class FindClothFragment extends Fragment {
     String POPOLARITA = "Most Popolar";
     private static final String OLD = "Old";
     private static final String RECENT = "Most Recent";
+    private ProgressBar progressBar;
+    private TextView notfound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_search_cloth, container, false);
         listCloth = (ListView) rootView.findViewById(R.id.clothlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
+
+        progressBar=(ProgressBar)rootView.findViewById(R.id.progressbar);
+        notfound=(TextView)rootView.findViewById(R.id.notfound);
 
         //System.out.println("create");
 
@@ -77,6 +83,8 @@ public class FindClothFragment extends Fragment {
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listCloth.setAdapter(adapter);
+        notfound.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         search();
 
         //setto il listener sullo scroller quando arrivo in fondo
@@ -88,6 +96,8 @@ public class FindClothFragment extends Fragment {
                     if (canLoad && (cloth.size() > 0) || (!first && cloth.size() == 0)) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
+                            notfound.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.VISIBLE);
                             search();
 
                         }
@@ -125,6 +135,8 @@ public class FindClothFragment extends Fragment {
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     //System.out.println("done" + objects);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if(objects.size()==0) notfound.setVisibility(View.VISIBLE);
                     ListIterator<ParseObject> i = objects.listIterator();
 
                     while (i.hasNext()) {

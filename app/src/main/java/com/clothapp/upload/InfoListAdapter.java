@@ -264,7 +264,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                    else {
 
 
-                       if (!s.toString().contains("www")) {
+                       if (!s.toString().toLowerCase().contains("www")) {
                            // Register a listener that receives callbacks when a suggestion has been selected
                            address.setOnItemClickListener(mAutocompleteClickListener);
 
@@ -274,15 +274,12 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                        }
 
                        else {
-                           //if (true) {
-                           System.out.println("è un sito!!!!");
-                           //TODO: suggerimenti sito
                            final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
-                           shopUser.whereContains("webSite", s.toString());
+                           shopUser.whereContains("webSite", s.toString().toLowerCase());
                            shopUser.findInBackground(new FindCallback<ParseObject>() {
                                @Override
                                public void done(final List<ParseObject> objects, ParseException e) {
-                                   System.out.println("trovati!!!" + objects);
+                                  // System.out.println("trovati!!!" + objects);
                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(), android.R.layout.simple_dropdown_item_1line, shopToString(objects));
                                    //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
                                    address.setAdapter(adapter);

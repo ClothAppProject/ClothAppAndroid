@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.clothapp.ImageFragment;
@@ -54,6 +55,8 @@ public class FindTagFragment extends Fragment {
     private Float prezzoDa;
     private Float prezzoA;
     private String order;
+    private ProgressBar progressBar;
+    private TextView notfound;
 
 
     @Override
@@ -62,9 +65,14 @@ public class FindTagFragment extends Fragment {
         listTag = (ListView) rootView.findViewById(R.id.userlist);
         global = (ApplicationSupport) getActivity().getApplicationContext();
         cloth = global.getTag();
+
+        progressBar=(ProgressBar)rootView.findViewById(R.id.progressbar);
+        notfound=(TextView)rootView.findViewById(R.id.notfound);
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterImage(getActivity().getBaseContext(), cloth);
         listTag.setAdapter(adapter);
+        notfound.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         search();
 
         //setto il listener sullo scroller quando arrivo in fondo
@@ -77,6 +85,8 @@ public class FindTagFragment extends Fragment {
                     if (canLoad && cloth.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
                         if (cloth != null) {
                             canLoad = false;
+                            notfound.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.VISIBLE);
                             search();
 
                         }
@@ -113,6 +123,8 @@ public class FindTagFragment extends Fragment {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if(objects.size()==0) notfound.setVisibility(View.VISIBLE);
                     //System.out.println("done" + objects);
                     ListIterator<ParseObject> i = objects.listIterator();
 

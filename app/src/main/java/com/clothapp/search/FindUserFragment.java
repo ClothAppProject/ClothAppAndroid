@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
@@ -44,6 +46,8 @@ public class FindUserFragment extends Fragment {
     ApplicationSupport global;
     int skip = 0;
     private SearchAdapterUser adapter;
+    private ProgressBar progressBar;
+    private TextView notfound;
 
 
     @Override
@@ -54,11 +58,16 @@ public class FindUserFragment extends Fragment {
         //String query=getArguments().getString("name");
         global = (ApplicationSupport) getActivity().getApplicationContext();
         //System.out.println("create");
+        progressBar=(ProgressBar)rootView.findViewById(R.id.progressbar);
+        notfound=(TextView)rootView.findViewById(R.id.notfound);
+
 
         user = global.getUsers();
         //chiama l'adattatore che inserisce gli item nella listview
         adapter = new SearchAdapterUser(getActivity().getBaseContext(), user);
         listUser.setAdapter(adapter);
+        notfound.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         search();
 
 
@@ -71,6 +80,8 @@ public class FindUserFragment extends Fragment {
                         if (user != null) {
                             canLoad = false;
                             //faccio la query a Parse
+                            notfound.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.VISIBLE);
                             search();
                         }
                     }
@@ -107,6 +118,9 @@ public class FindUserFragment extends Fragment {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if(objects.size()==0) notfound.setVisibility(View.VISIBLE);
+
                     for (ParseUser parseUser : objects) {
                         final User u = new User();
                         //setto il profilo

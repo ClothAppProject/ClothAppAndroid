@@ -19,7 +19,7 @@
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_rectangle_chip_white"
+
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:paddingLeft="6dp"
@@ -27,6 +27,9 @@
         android:layout_gravity="center_horizontal"
         android:text="0"
         android:textStyle="bold"
-        android:textColor="@color/red" />
+        android:textColor="@color/white" />
+    <!--android:background="@drawable/shape_rectangle_chip_white"
+        android:textColor="@color/red"
+        -->
 
 </LinearLayout>
