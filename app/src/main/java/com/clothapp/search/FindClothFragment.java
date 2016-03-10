@@ -136,7 +136,8 @@ public class FindClothFragment extends Fragment {
                 if (e == null) {
                     //System.out.println("done" + objects);
                     progressBar.setVisibility(View.INVISIBLE);
-                    if(objects.size()==0) notfound.setVisibility(View.VISIBLE);
+                    System.out.println(global.getCloth().size());
+                    if(global.getCloth().size()==0) notfound.setVisibility(View.VISIBLE);
                     ListIterator<ParseObject> i = objects.listIterator();
 
                     while (i.hasNext()) {

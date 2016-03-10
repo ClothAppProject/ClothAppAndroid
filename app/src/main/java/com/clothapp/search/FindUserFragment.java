@@ -52,7 +52,7 @@ public class FindUserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //System.out.println("onCreateView"+query);
+        System.out.println("onCreateView"+query);
         rootView = inflater.inflate(R.layout.fragment_search_user, container, false);
         listUser = (ListView) rootView.findViewById(R.id.userlist);
         //String query=getArguments().getString("name");
@@ -119,7 +119,7 @@ public class FindUserFragment extends Fragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    if(objects.size()==0) notfound.setVisibility(View.VISIBLE);
+                    if(global.getUsers().size()==0) notfound.setVisibility(View.VISIBLE);
 
                     for (ParseUser parseUser : objects) {
                         final User u = new User();
