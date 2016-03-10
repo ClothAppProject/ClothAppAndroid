@@ -8,12 +8,12 @@
         android:id="@+id/report_photo"
         android:layout_width="fill_parent"
         android:layout_height="64dp"
-        android:background="@color/background"
+        android:background="@color/red"
         android:textColor="@color/white"
         android:text="@string/report_photo"
         android:gravity="center_vertical|center_horizontal"
         android:textStyle="bold"
-        android:textSize="30sp" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -24,15 +24,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="4dp"
             android:layout_marginBottom="4dp"
+            android:textColorHint="@color/primaryText"
             android:hint="@string/reason"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
         <Spinner
             android:id="@+id/select_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="16dp"
             android:prompt="@string/select"
             android:layout_gravity="center_vertical|right"
             android:spinnerMode="dropdown"

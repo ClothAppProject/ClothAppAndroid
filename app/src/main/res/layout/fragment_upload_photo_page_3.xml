@@ -24,8 +24,9 @@
             <ScrollView
                 android:id="@+id/fragment_upload_photo_page_3_scrollview"
                 android:layout_width="match_parent"
-                android:layout_height="455dp"
+                android:layout_height="450dp"
                 android:layout_marginTop="0dp"
+                android:layout_marginBottom="8dp"
                 android:paddingTop="0dp">
 
                 <LinearLayout
@@ -54,6 +55,16 @@
                 </LinearLayout>
 
             </ScrollView>
+
+
+            <View
+                android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:paddingBottom="14dp"
+                android:background="@color/darkred"
+                android:layout_above="@+id/add"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <Button
                 android:id="@+id/add"
