@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
@@ -328,6 +330,22 @@ public class HomeActivity extends AppCompatActivity {
 
                     finish();
                     break;
+
+                case R.id.nav_feedback:
+                    Log.d("HomeActivity", "Clicked on R.id.nav_logout");
+
+                    // prompts email clients only
+                    Intent email = new Intent(Intent.ACTION_SEND);
+                    email.setType("message/rfc822");
+                    email.putExtra(Intent.EXTRA_EMAIL, "clothapp.project@gmail.com");
+                    email.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
+                    //email.putExtra(Intent.EXTRA_TEXT, "");
+
+                    try {
+                        startActivity(Intent.createChooser(email, "Send e-mail..."));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(HomeActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    }
 
             }
 
