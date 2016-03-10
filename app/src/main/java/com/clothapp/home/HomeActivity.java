@@ -334,11 +334,12 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.nav_feedback:
                     Log.d("HomeActivity", "Clicked on R.id.nav_logout");
 
-                    // prompts email clients only
                     Intent email = new Intent(Intent.ACTION_SEND);
                     email.setType("message/rfc822");
                     email.putExtra(Intent.EXTRA_EMAIL, "clothapp.project@gmail.com");
                     email.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
+                    email.setType("message/rfc822");
+                    //email.setData(Uri.parse("mailto:"));
                     //email.putExtra(Intent.EXTRA_TEXT, "");
 
                     try {
