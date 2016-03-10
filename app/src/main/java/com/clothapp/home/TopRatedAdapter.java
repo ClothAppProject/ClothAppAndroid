@@ -3,12 +3,15 @@ package com.clothapp.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +41,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static List<Image> itemList;
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
+
+    public int lastPosition = -1;
 
     public TopRatedAdapter(List<Image> itemList) {
         TopRatedAdapter.itemList = itemList;
@@ -77,12 +82,28 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         setupUserProfilePhoto(holder, image.getUser());
+
+        setAnimation(holder.getAnimationView(), position);
     }
 
     // Returns the number of items in the RecyclerView
     @Override
     public int getItemCount() {
         return itemList == null ? 0 : itemList.size();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+        ((TopRatedItemViewHolder) holder).clearAnimation();
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition && position > 2) {
+            Animation animation = AnimationUtils.loadAnimation(HomeActivity.context, R.anim.slide_up);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     // Download and display the user profile photo. If the user has no profile photo, display
@@ -130,6 +151,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView imgShare;
         private ImageView imgProfileIcon;
 
+        private CardView cardView;
+
         private LinearLayout linearLayoutProfile;
 
         public TopRatedItemViewHolder(final View parent) {
@@ -150,11 +173,21 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             // Initialize some LinearLayouts
             linearLayoutProfile = (LinearLayout) parent.findViewById(R.id.fragment_home_top_rated_item_profile_linear_layout);
 
+            cardView = (CardView) parent.findViewById(R.id.top_rated_item);
+
             // Setup some OnClickListeners
             setupPhotoOnClickListener();
             setupHeartImageOnClickListener();
             setupProfileIconOnClickListener();
             setupProfileLinearLayoutOnClickListener();
+        }
+
+        public CardView getAnimationView() {
+            return cardView;
+        }
+
+        public void clearAnimation() {
+            cardView.clearAnimation();
         }
 
         // Set the username for the current view. Example: Simone

@@ -61,6 +61,7 @@ public class TopRatedFragment extends Fragment {
                 // Create a new empty list and pass it to the adapter while we wait for the Parse
                 // query to complete and update the list.
                 TopRatedAdapter.itemList = new ArrayList<>();
+                topRatedAdapter.lastPosition = -1;
                 topRatedAdapter.notifyDataSetChanged();
 
                 loading = true;
