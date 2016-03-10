@@ -331,6 +331,7 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                     break;
 
+                // Clicked on "Feedback" item.
                 case R.id.nav_feedback:
                     Log.d("HomeActivity", "Clicked on R.id.nav_logout");
 
@@ -342,6 +343,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (mail.resolveActivity(getPackageManager()) != null) {
                         startActivity(mail);
                     }
+                    break;
 
             }
 

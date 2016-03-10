@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyCFLwLj5rYQ-ucsZm5Oqe6SXRnztnh9KJM</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCFLwLj5rYQ-ucsZm5Oqe6SXRnztnh9KJM</string>
     <string name="facebook_app_id">1088170274561501</string>
     <string name="facebook">Facebook</string>
     <string name="facebook_connected">Connesso con Facebook!</string>

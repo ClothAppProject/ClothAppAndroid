@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -362,6 +363,20 @@ public class ShopProfileActivity extends AppCompatActivity {
                     startActivity(intent);
 
                     finish();
+                    break;
+
+                // Clicked on "Feedback" item.
+                case R.id.nav_feedback:
+                    Log.d("ShopProfileActivity", "Clicked on R.id.nav_logout");
+
+
+                    Intent mail = new Intent(Intent.ACTION_SENDTO);
+                    mail.setData(Uri.parse("mailto:")); // only email apps should handle this
+                    mail.putExtra(Intent.EXTRA_EMAIL, new String[]{"clothapp.project@gmail.com"});
+                    mail.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
+                    if (mail.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mail);
+                    }
                     break;
 
             }
