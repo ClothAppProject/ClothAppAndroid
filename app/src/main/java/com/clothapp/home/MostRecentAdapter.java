@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +40,8 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
 
+    public int lastPosition = -1;
+
     public MostRecentAdapter(List<Image> itemList) {
         MostRecentAdapter.itemList = itemList;
     }
@@ -46,7 +51,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // that there may be more photos than ViewHolders.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
         View view = LayoutInflater.from(HomeActivity.activity.getApplicationContext()).inflate(R.layout.fragment_home_most_recent_item, parent, false);
         return new MostRecentItemViewHolder(view);
     }
@@ -70,6 +74,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.setItemHeartImage(false);
         }
 
+        setAnimation(holder.getAnimationView(), position);
     }
 
     // Returns the number of items in the RecyclerView
@@ -78,17 +83,34 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return itemList == null ? 0 : itemList.size();
     }
 
+    @Override
+    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+        ((MostRecentItemViewHolder) holder).clearAnimation();
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(HomeActivity.context, R.anim.slide_up);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
     // This class is used to "hold a view".
     // An object of this class contains references to the relevant subviews that
     // may be needed later. For example setting the username after a Parse query.
     class MostRecentItemViewHolder extends RecyclerView.ViewHolder {
 
+        private CardView cardView;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
+        private Context context;
 
         public MostRecentItemViewHolder(final View parent) {
             super(parent);
 
+            cardView = (CardView) parent.findViewById(R.id.most_recent_item);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
 
@@ -97,6 +119,14 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             // Setting some OnClickListeners
             setPhotoOnClickListener();
             setHeartImageOnClickListener();
+        }
+
+        public CardView getAnimationView() {
+            return cardView;
+        }
+
+        public void clearAnimation() {
+            cardView.clearAnimation();
         }
 
         // Use this method to set the photo to the given File
@@ -126,7 +156,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else {
+                    } else {
                         Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
                         intent.putExtra("classe", "MostRecentPhotos");
                         intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
@@ -146,7 +176,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else {
+                    } else {
                         Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
 
                         final boolean add = !image.getLike().contains(username);

@@ -62,6 +62,7 @@ public class MostRecentFragment extends Fragment {
                 // Create a new empty list and pass it to the adapter while we wait for the Parse
                 // query to complete and update the list.
                 MostRecentAdapter.itemList = new ArrayList<>();
+                mostRecentAdapter.lastPosition = -1;
                 mostRecentAdapter.notifyDataSetChanged();
 
                 loading = true;
