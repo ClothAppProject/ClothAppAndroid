@@ -90,7 +90,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void setAnimation(View viewToAnimate, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition) {
+        if (position > lastPosition && position > 5) {
             Animation animation = AnimationUtils.loadAnimation(HomeActivity.context, R.anim.slide_up);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
