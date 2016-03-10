@@ -361,7 +361,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     public void deleteCard() {
         if(size>0) {
             listCloth.remove(size - 1);
-            size--;
+             size--;
         }
     }
 
