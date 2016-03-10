@@ -1,6 +1,7 @@
 package com.clothapp.profile.fragments;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,6 +60,15 @@ public class ProfileUploadedPhotosFragment extends Fragment {
 
         // Get user info from Parse
         ProfileUtils.getParseUploadedPhotos(UserProfileActivity.username, 0, 10);
+
+        UserProfileActivity.viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //update with more photos
+                ProfileUtils.getParseUploadedPhotos(UserProfileActivity.username,adapter.photos.size(),10);
+            }
+        });
 
         // Return the fragment
         return rootView;

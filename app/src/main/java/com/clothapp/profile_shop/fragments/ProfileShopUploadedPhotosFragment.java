@@ -60,6 +60,14 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
         // Get user info from Parse
         ProfileUtils.getShopParseUploadedPhotos(ShopProfileActivity.username, 0, 10);
 
+        ShopProfileActivity.viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //update with more photos
+                ProfileUtils.getShopParseUploadedPhotos(ShopProfileActivity.username,adapter.photos.size(),10);
+            }
+        });
         // Return the fragment
         return rootView;
     }
