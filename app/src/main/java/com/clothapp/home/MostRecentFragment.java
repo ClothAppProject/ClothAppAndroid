@@ -104,7 +104,6 @@ public class MostRecentFragment extends Fragment {
         } else {
             MostRecentAdapter.itemList = new ArrayList<>();
         }
-
         getParseMostRecentPhotos(size, 12);
     }
 
@@ -126,13 +125,14 @@ public class MostRecentFragment extends Fragment {
                 if (e == null) {
 
                     // Log.d("MostRecentFragment", "Successfully loaded " + photos.size() + " photos.");
-
                     for (final ParseObject photo : photos) {
                         // TODO: Improve download speed
                         // I don't like this: too slow...
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
-                        MostRecentAdapter.itemList.add(new Image(photo));
+                        Image i= new Image(photo.getObjectId());
+                        if(!MostRecentAdapter.itemList.contains(i))
+                            MostRecentAdapter.itemList.add( new Image(photo));
                     }
 
                     // Log.d("MostRecentFragment", "Now itemList.size() is " + MostRecentAdapter.itemList.size());
@@ -185,15 +185,19 @@ public class MostRecentFragment extends Fragment {
                     loading = false;
                     previousTotal = totalItemCount;
                 }
-            } else if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+            } else {
 
-                loading = true;
+                if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
-                int size = MostRecentAdapter.itemList.size();
-                // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+                    loading = true;
 
-                // Get more photos from Parse.
-                getParseMostRecentPhotos(size, 12);
+                    int size = MostRecentAdapter.itemList.size();
+
+                    // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
+
+                    // Get more photos from Parse.
+                    getParseMostRecentPhotos(size, 12);
+                }
             }
         }
     }

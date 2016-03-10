@@ -48,6 +48,9 @@ public class Image implements Parcelable {
         if (typeClothes == null) this.typeClothes = new ArrayList<>();
         else this.typeClothes = typeClothes;
     }
+    public Image(String objID){
+        this.objectId=objID;
+    }
 
     public Image(ParseObject o) {
 
