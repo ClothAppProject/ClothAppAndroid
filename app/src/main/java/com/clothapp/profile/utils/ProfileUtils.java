@@ -77,7 +77,11 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    if (photos.isEmpty()) {
+
+                    RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
+                    final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
+
+                    if (photos.isEmpty() && adapter.photos.isEmpty()) {
                         UserProfileActivity.viewPager.setCurrentItem(0, false);
                     }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -93,9 +97,6 @@ public class ProfileUtils {
                                 if (e == null) {
 
                                     // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
-
-                                    RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
-                                    ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
                                     Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
                                             photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
@@ -131,7 +132,10 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    if (photos.isEmpty()) {
+                    RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
+                    final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
+
+                    if (photos.isEmpty() && adapter.photos.isEmpty()) {
                         ShopProfileActivity.viewPager.setCurrentItem(0, false);
                     }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -147,9 +151,6 @@ public class ProfileUtils {
                                 if (e == null) {
 
                                     // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
-
-                                    RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
-                                    ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
                                     Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
                                             photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
