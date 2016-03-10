@@ -65,6 +65,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutocompleteAdapter mAdapter;
+    private String output2=null;
 
 
     public InfoListAdapter(Context context, GoogleApiClient googleApiClient) {
@@ -124,6 +125,17 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             Toast toast = Toast.makeText(context, "File: not found!", Toast.LENGTH_LONG);
             toast.show();
         }
+
+        try {
+            //Load the file from the raw folder - don't forget to OMIT the extension
+            output2 = LoadFile("brand", true);
+            //output to LogCat
+            // Log.d("test", output);
+        } catch (IOException e) {
+            //display an error toast message
+            Toast toast = Toast.makeText(context, "File: not found!", Toast.LENGTH_LONG);
+            toast.show();
+        }
 /*
         try
         {
@@ -147,10 +159,15 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
         final AutoCompleteTextView shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
-        EditText brand = (EditText) row.findViewById(R.id.brand);
+        AutoCompleteTextView brand = (AutoCompleteTextView) row.findViewById(R.id.brand);
         final AutoCompleteTextView address = (AutoCompleteTextView) row.findViewById(R.id.address);
         EditText price = (EditText) row.findViewById(R.id.price);
 
+        //adattatore per i suggerimenti
+        final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(row.getContext(),
+                android.R.layout.simple_dropdown_item_1line, output2.split("\n"));
+        brand.setAdapter(adapter2);
+        brand.setThreshold(1);
       /*
         tipo.setText("");
         shop.setText("");
@@ -192,6 +209,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             });
 
             final View finalRow = row;
+
             shop.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -200,6 +218,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    System.out.println("qui");
                     final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
                     shopUser.whereContains("lowercase", s.toString().toLowerCase());
                     shopUser.findInBackground(new FindCallback<ParseObject>() {
@@ -274,6 +293,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                        }
 
                        else {
+
                            final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
                            shopUser.whereContains("webSite", s.toString().toLowerCase());
                            shopUser.findInBackground(new FindCallback<ParseObject>() {
@@ -314,8 +334,6 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
            });
 
-
-
             price.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -339,7 +357,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     }
 
     private String[] shopToString(List<ParseObject> objects) {
-        if (objects == null) return new String[]{"Nessun suggerimento"};
+        if (objects == null) return new String[]{};
         String[] s = new String[objects.size()];
         for (int i = 0; i < s.length; i++) {
             s[i] = objects.get(i).getString("username");
