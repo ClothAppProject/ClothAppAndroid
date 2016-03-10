@@ -51,6 +51,7 @@ import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.google.android.gms.common.ConnectionResult;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -66,6 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
@@ -468,7 +470,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                 final InfoListAdapter infoListAdapter = new InfoListAdapter(getContext(),mGoogleApiClient);
                 listView.setAdapter(infoListAdapter);
                 //listener bottone add clothing
-                Button add = (Button) rootView.findViewById(R.id.add);
+                final Button add = (Button) rootView.findViewById(R.id.add);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -526,21 +528,40 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                 try {
                                     vestito.save();
                                     //se lo shop è registrato inserisco il nome nel campo shopusername
-                                    ParseQuery<ParseObject> shop=new ParseQuery<ParseObject>("LocalShop");
-                                    shop.whereEqualTo("name", c.getShop());
-                                    shop.whereEqualTo("address",c.getAddress());
-                                    System.out.println(c.getShop()+":"+c.getAddress()+":");
-                                    shop.getFirstInBackground(new GetCallback<ParseObject>() {
+                                    ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
+                                    address.whereEqualTo("address",c.getAddress());
+                                    address.whereEqualTo("username",c.getShop());
+
+                                    final ParseQuery<ParseObject> website = ParseQuery.getQuery("LocalShop");
+                                    website.whereEqualTo("webSite",c.getAddress());
+                                    website.whereEqualTo("username",c.getShop());
+
+                                    address.getFirstInBackground(new GetCallback<ParseObject>() {
                                         @Override
                                         public void done(ParseObject object, ParseException e) {
                                             if (e == null && object != null) {
-                                                System.out.println("trovato"+object);
+                                                //System.out.println("debug: trovato address " + object);
                                                 vestito.put("shopUsername", object.getString("username"));
                                                 try {
                                                     vestito.save();
                                                 } catch (ParseException e1) {
                                                     e1.printStackTrace();
                                                 }
+                                            } else if (e.getCode()==101) {
+                                                //System.out.println("debug codice 101 oggetto con address non trovato");
+                                                website.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                    @Override
+                                                    public void done(ParseObject object, ParseException e) {
+                                                        if (e == null && object != null) {
+                                                            vestito.put("shopUsername", object.getString("username"));
+                                                            try {
+                                                                vestito.save();
+                                                            } catch (ParseException e1) {
+                                                                e1.printStackTrace();
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
                                     });
