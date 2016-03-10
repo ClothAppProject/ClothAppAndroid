@@ -105,7 +105,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private CardView cardView;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
-        private Context context;
 
         public MostRecentItemViewHolder(final View parent) {
             super(parent);
