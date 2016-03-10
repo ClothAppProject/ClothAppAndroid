@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +27,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -95,6 +100,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         TextView txtItemNames;
         TextView txtHashtags;
         ImageView photo;
+        ImageView share;
         TextView txtLikeCount;
         ImageView likeImage;
 
@@ -106,6 +112,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photo = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_image);
             txtLikeCount = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_count);
             likeImage = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_image);
+            share=(ImageView)itemView.findViewById(R.id.profile_uploaded_photos_card_share);
 
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,6 +167,29 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                             }
                         }
                     });
+                }
+            });
+
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bitmap icon = BitmapFactory.decodeFile(photos.get(PhotoViewHolder.this.getAdapterPosition()).getFile().getPath());
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.setType("image/jpeg");
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                    try {
+                        f.createNewFile();
+                        FileOutputStream fo = new FileOutputStream(f);
+                        fo.write(bytes.toByteArray());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                    if (profilo.equals("persona")) UserProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
+                    else ShopProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
                 }
             });
         }
