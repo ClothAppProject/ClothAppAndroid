@@ -334,18 +334,13 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.nav_feedback:
                     Log.d("HomeActivity", "Clicked on R.id.nav_logout");
 
-                    Intent email = new Intent(Intent.ACTION_SEND);
-                    email.setType("message/rfc822");
-                    email.putExtra(Intent.EXTRA_EMAIL, "clothapp.project@gmail.com");
-                    email.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
-                    email.setType("message/rfc822");
-                    //email.setData(Uri.parse("mailto:"));
-                    //email.putExtra(Intent.EXTRA_TEXT, "");
 
-                    try {
-                        startActivity(Intent.createChooser(email, "Send e-mail..."));
-                    } catch (android.content.ActivityNotFoundException ex) {
-                        Toast.makeText(HomeActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Intent mail = new Intent(Intent.ACTION_SENDTO);
+                    mail.setData(Uri.parse("mailto:")); // only email apps should handle this
+                    mail.putExtra(Intent.EXTRA_EMAIL, new String[]{"clothapp.project@gmail.com"});
+                    mail.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
+                    if (mail.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mail);
                     }
 
             }
