@@ -279,7 +279,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else{
+                    } else {
                         Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
                         intent.putExtra("classe", "TopRatedPhotos");
                         intent.putExtra("position", TopRatedItemViewHolder.this.getAdapterPosition());
@@ -296,7 +296,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else {
+                    } else {
                         Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
 
                         final boolean add = !image.getLike().contains(username);
@@ -341,7 +341,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else {
+                    } else {
                         Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                         intent.putExtra("user", image.getUser());
@@ -358,7 +358,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
-                    }else {
+                    } else {
                         Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                         intent.putExtra("user", image.getUser());
