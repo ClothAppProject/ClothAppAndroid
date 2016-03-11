@@ -79,6 +79,7 @@ public class FacebookUtil {
                     // Inserisco le info nel ParseUser
                     user.setEmail(email);
                     user.put("name", name.trim());
+                    user.put("lowercase",user.getUsername().toLowerCase());
                     user.put("flagISA","Persona");
                     try {
                         //uso save e non savebackground perchè non deve essere asincrona
