@@ -40,7 +40,7 @@ public class FacebookUtil {
     private static String name;
     private static String email;
     private static String lastname;
-    private static Date birthday;
+    //private static Date birthday;
     private static ParseException ret = null;
 
     // Funzione per prelevare le informazioni da facebook e inserirle in Parse
@@ -53,7 +53,7 @@ public class FacebookUtil {
         Bundle parameters = new Bundle();
 
         // specifico i parametri che voglio ottenere da facebook
-        parameters.putString("fields", "email,first_name,last_name,gender,birthday,picture.type(large)");
+        parameters.putString("fields", "email,first_name,last_name,gender,picture.type(large)");
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(), "/me", parameters, HttpMethod.GET, new GraphRequest.Callback() {
@@ -64,11 +64,11 @@ public class FacebookUtil {
                     email = response.getJSONObject().getString("email");
                     lastname = response.getJSONObject().getString("last_name");
                     name = response.getJSONObject().getString("first_name");
-
-                    String dateStr = (String) response.getJSONObject().get("birthday");
+                    /*
+                    String dateStr = response.getJSONObject().getString("user_birthday");
                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                     birthday = sdf.parse(dateStr);
-
+                    */
                     JSONObject picture = response.getJSONObject().getJSONObject("picture");
                     JSONObject data = picture.getJSONObject("data");
                     //  Returns a 50x50 profile picture
@@ -92,7 +92,7 @@ public class FacebookUtil {
                         }else{
                             persona.put("sex","f");
                         }
-                        persona.put("date",birthday);
+                        persona.put("date", new Date());
                         //persona.put("city",citta.trim());
                         persona.save();
 
@@ -132,10 +132,10 @@ public class FacebookUtil {
                 } catch (JSONException e) {
                     System.out.println("debug: eccezione nell'ottenere info da facebook");
 
-                } catch (java.text.ParseException e) {
+                }/* catch (java.text.ParseException e) {
                     System.out.println("debug: eccezione nel formattare la data");
 
-                }
+                }*/
             }
         }
         ).executeAndWait();
