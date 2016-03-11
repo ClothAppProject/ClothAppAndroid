@@ -80,7 +80,7 @@ public class FacebookUsernameActivity extends AppCompatActivity {
                             final ParseUser user = ParseUser.getCurrentUser();
                             final String nomevecchio = ParseUser.getCurrentUser().getUsername();
                             user.setUsername(edit_username.getText().toString().trim());
-
+                            user.put("lowercase",edit_username.getText().toString().trim().toLowerCase());
 
                             user.saveInBackground(new SaveCallback() {
                                 public void done(ParseException e) {
