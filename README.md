@@ -37,7 +37,7 @@ Let everybody know about your fashion skills!
 
 <a href="https://www.clothapp.it/webapp">ClothApp Web Client</a>
 
-<a href="https://drive.google.com/open?id=0B9L9fgnPwZntTU9ZcUFsV0phenM">Android APK file</a>
+<a href="https://drive.google.com/file/d/0B9L9fgnPwZntOXotLXRLYm5GdE0/view?usp=sharing">Android APK file</a>
 
 <a href="https://docs.google.com/document/d/1Oz0-bGhi9H724wei3maeqoo8ga_PGFZu32Api91oAkU/edit?usp=drive_web">Instructions for APK installation</a>
 
