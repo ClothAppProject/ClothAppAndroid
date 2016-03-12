@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile.adapters.PeopleListAdapter;
@@ -51,6 +52,8 @@ public class ProfileShopFollowersFragment extends Fragment {
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
         ShopProfileActivity.viewProfileShopFollowers = (RecyclerView) rootView.findViewById(R.id.profile_follow_recycler_view);
 
+        //Set the no followers textview
+        final TextView noFollowers = (TextView) rootView.findViewById(R.id.no_follow);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(ShopProfileActivity.context);
@@ -61,7 +64,7 @@ public class ProfileShopFollowersFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"negozio");
         ShopProfileActivity.viewProfileShopFollowers.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollower(users,rootView,ShopProfileActivity.viewProfileShopFollowers,ShopProfileActivity.username);
+        FollowUtil.getFollower(users, rootView, ShopProfileActivity.viewProfileShopFollowers, ShopProfileActivity.username, noFollowers);
 
         //scroll per aggiungere nuovi follower
         ShopProfileActivity.viewProfileShopFollowers.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -69,7 +72,7 @@ public class ProfileShopFollowersFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update follower list
-                FollowUtil.getFollower(users,rootView,ShopProfileActivity.viewProfileShopFollowers,ShopProfileActivity.username);
+                FollowUtil.getFollower(users, rootView, ShopProfileActivity.viewProfileShopFollowers, ShopProfileActivity.username, noFollowers);
             }
         });
 

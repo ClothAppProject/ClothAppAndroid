@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
@@ -51,6 +52,8 @@ public class ProfileFollowingFragment extends Fragment {
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
         UserProfileActivity.viewProfileFollowing = (RecyclerView) rootView.findViewById(R.id.profile_follow_recycler_view);
 
+        //Set the no following textview
+        final TextView noFollowing = (TextView) rootView.findViewById(R.id.no_follow);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
@@ -62,14 +65,14 @@ public class ProfileFollowingFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"persona");
         UserProfileActivity.viewProfileFollowing.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollowing(users,rootView,UserProfileActivity.viewProfileFollowing,UserProfileActivity.username);
+        FollowUtil.getFollowing(users, rootView, UserProfileActivity.viewProfileFollowing, UserProfileActivity.username, noFollowing);
 
         //scroll per aggiungere followers
         UserProfileActivity.viewProfileFollowing.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                FollowUtil.getFollowing(users,rootView,UserProfileActivity.viewProfileFollowing,UserProfileActivity.username);
+                FollowUtil.getFollowing(users, rootView, UserProfileActivity.viewProfileFollowing, UserProfileActivity.username, noFollowing);
             }
         });
 

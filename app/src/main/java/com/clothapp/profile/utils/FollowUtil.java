@@ -3,10 +3,12 @@ package com.clothapp.profile.utils;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile.adapters.PeopleListAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
+import com.clothapp.profile.fragments.ProfileFollowersFragment;
 import com.clothapp.resources.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -80,7 +82,7 @@ public class FollowUtil {
         });
     }
 
-    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view, String username)   {
+    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view, String username, final TextView noFollowing)   {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
         ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
@@ -92,6 +94,11 @@ public class FollowUtil {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
                 if(e==null) {
+                    //check if user has no followers and set noFollowers text
+                    if (users.isEmpty() && objects.isEmpty())   {
+                        noFollowing.setText(R.string.no_following);
+                        noFollowing.setVisibility(View.VISIBLE);
+                    }
                     for (ParseObject o : objects) {
                         final User u=new User(o.getString("to"),null,null);
                         ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");
@@ -120,7 +127,7 @@ public class FollowUtil {
             }
         });
     }
-    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view, String username)   {
+    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view, final String username, final TextView noFollowers)   {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
         ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
@@ -132,6 +139,11 @@ public class FollowUtil {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
                 if(e==null) {
+                    //check if user has no followers and set noFollowers text
+                    if (users.isEmpty() && objects.isEmpty())   {
+                        noFollowers.setText(R.string.no_followers);
+                        noFollowers.setVisibility(View.VISIBLE);
+                    }
                     for (ParseObject o : objects) {
                         final User u=new User(o.getString("from"),null,null);
                         ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");

@@ -58,7 +58,9 @@
         <item>Logout</item>
     </string-array>
 
-    <string name="no_photos_uploaded">Non è stata caricata nessuna foto</string>
+    <string name="no_following">L\' utente non segue nessuno</string>
+    <string name="no_followers">L\' utente non ha nessuna followers</string>
+    <string name="no_photos_uploaded">L\' utente non ha caricato nessuna foto</string>
     <string name="edit_profile">Modifica Profilo</string>
     <string name="save">Salva</string>
     <string name="follow">Follow</string>
