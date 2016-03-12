@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +34,9 @@ import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
+import com.clothapp.resources.User;
+import com.clothapp.search.SearchAdapter;
+import com.clothapp.search.SearchAdapterUser;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -45,6 +50,7 @@ import com.parse.SaveCallback;
 
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +73,10 @@ public class ImageDetailFragment extends Fragment {
     private Image immagine;
     private static Context context;
     private List<Cloth> vestiti;
+    private List<User> likeList;
+    private SearchAdapterUser likeAdapter;
+    private boolean canLoad = false;
+    private ProgressBar progressBar;
     private ListView listView;
     private TextView hashtag;
     private ImageView person;
@@ -295,6 +305,68 @@ public class ImageDetailFragment extends Fragment {
                 String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
 
                 like.setText(Integer.toString(numLikes) + " " + singPlur);
+                //listener che apre dialog per persone che hanno messo like
+                like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder lista_like = new AlertDialog.Builder(getActivity());
+                        // Get the layout inflater
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
+                        // Inflate and set the layout for the dialog
+                        final View dialogView = inflater.inflate(R.layout.dialog_like_list, null);
+                        lista_like.setView(dialogView);
+
+                        ListView listLike = (ListView) dialogView.findViewById(R.id.lista_like);
+                        progressBar = (ProgressBar)dialogView.findViewById(R.id.progressbar);
+                        //chiama l'adattatore che inserisce gli item nella listview
+                        likeList = new ArrayList<User>();
+                        likeAdapter = new SearchAdapterUser(getActivity().getBaseContext(), likeList);
+                        listLike.setAdapter(likeAdapter);
+                        getLikeUserList();
+                        /*
+                        listLike.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                                    if (canLoad && likeList.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                                        if (likeList != null) {
+                                            canLoad = false;
+                                            //faccio la query a Parse
+                                            getLikeUserList();
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                            }
+                        });*/
+
+                        final AlertDialog dialog_like_list = lista_like.create();
+                        // display dialog
+                        dialog_like_list.show();
+
+                        //listener su ogni persona
+                        listLike.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), likeAdapter.getItem(position).getUsername());
+                                startActivity(i);
+                                dialog_like_list.dismiss();
+                            }
+                        });
+
+                        //listener on the close button of dialog
+                        ImageView close_dialog = (ImageView) dialogView.findViewById(R.id.close_dialog);
+                        close_dialog.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog_like_list.dismiss();
+                            }
+                        });
+                    }
+                });
 
                 //controllo se ho messo like sull'attuale foto
                 final String username = ParseUser.getCurrentUser().getUsername();
@@ -461,6 +533,42 @@ public class ImageDetailFragment extends Fragment {
         } else {
             return false;
         }
+    }
+
+    //funzione per ottenere la lista di user dai like nell'immagine
+    private void getLikeUserList()    {
+        int size = likeList.size();
+        int max;
+        //controllo se posso caricarne altre 15 oppure solo fino alla fine
+        if (size + 15>immagine.getLike().size()) max = immagine.getLike().size();
+        else max = size+15;
+        for (int i=size;i<max;i++) {
+            final User u = new User(immagine.getLike().get(i).toString(),null,null);
+            if (likeList.contains(u)) continue;
+            //aggiungiamo l'utente
+            likeList.add(u);
+            likeAdapter.notifyDataSetChanged();
+
+            ParseQuery<ParseObject> queryLike = new ParseQuery<>("UserPhoto");
+            queryLike.whereEqualTo("username", immagine.getLike().get(i));
+            queryLike.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e==null)    {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        ParseFile f = object.getParseFile("thumbnail");
+                        f.getFileInBackground(new GetFileCallback() {
+                            @Override
+                            public void done(File file, ParseException e) {
+                                u.setProfilo(file);
+                                likeAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        //canLoad = true;
     }
 
     //funzione che ritorna il gestureDetector per il doubletap
