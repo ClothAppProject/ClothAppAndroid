@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -496,152 +497,180 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        System.out.println("onClick");
                         //nascondo pulsanti
-                        upload.setVisibility(View.INVISIBLE);
-                        previous.setVisibility(View.INVISIBLE);
-                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_center).setVisibility(View.INVISIBLE);
-                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_left).setVisibility(View.INVISIBLE);
-                        rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_right).setVisibility(View.INVISIBLE);
-                        final TextView percentuale = (TextView) rootView.findViewById(R.id.percentuale);
-                        percentuale.setVisibility(View.VISIBLE);
-                        percentuale.setText("Caricamento: 0%");
-                        final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-                        progressBar.setVisibility(View.VISIBLE);
-
-                        System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
-                        infoListAdapter.notifyDataSetChanged();
-                        System.out.println(infoListAdapter.getListCloth());
-                        ArrayList<String> tipi = new ArrayList<String>();
-                        ArrayList<String> id = new ArrayList<>();
+                        boolean cloth_isPresent = true;
+                        boolean cloth_isInserted=false;
+                        System.out.println("getCount "+infoListAdapter.getCount());
                         for (int i = 0; i < infoListAdapter.getCount(); i++) {
                             Cloth c = infoListAdapter.getItem(i);
-                            if (!c.isEmpty()) {
-                                final ParseObject vestito = new ParseObject("Vestito");
-                                if (c.getCloth() != null) {
-                                    vestito.put("tipo", c.getCloth());
-                                    tipi.add(c.getCloth());
-                                }
-                                if (c.getShop() != null) vestito.put("shop", c.getShop());
-                                if (c.getBrand() != null) vestito.put("brand", c.getBrand());
-                                if (c.getPrice() != null) vestito.put("prezzo", c.getPrice());
-                                if (c.getAddress()!=null) vestito.put("luogoAcquisto",c.getAddress());
-                                try {
-                                    vestito.save();
-                                    //se lo shop è registrato inserisco il nome nel campo shopusername
-                                    ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
-                                    address.whereEqualTo("address",c.getAddress());
-                                    address.whereEqualTo("username",c.getShop());
+                            System.out.println("address "+c.getAddress());
+                            System.out.println("insert "+cloth_isInserted);
+                            if (c.getCloth() == null &&
+                                    (c.getAddress() != null || c.getShop() != null) || c.getAddress() != null || c.getPrice() != null || c.getBrand() != null)
+                                cloth_isPresent = false;
+                            if(!c.isEmpty()) cloth_isInserted=true;
+                        }
+                        System.out.println("cloth_isInsert "+cloth_isInserted);
+                        if(!cloth_isInserted){
+                            Snackbar.make(getView(),"Aggiungi almeno un vestito ", Snackbar.LENGTH_LONG).show();
+                            infoListAdapter.notifyDataSetChanged();
+                        }
+                        else {
+                            if (!cloth_isPresent) {
+                                Snackbar.make(getView(), "Il nome del vestito non può essere vuoto", Snackbar.LENGTH_LONG).show();
+                            }
+                            else {
+                                upload.setVisibility(View.INVISIBLE);
+                                previous.setVisibility(View.INVISIBLE);
+                                rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_center).setVisibility(View.INVISIBLE);
+                                rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_left).setVisibility(View.INVISIBLE);
+                                rootView.findViewById(R.id.fragment_upload_photo_page_1_indicator_right).setVisibility(View.INVISIBLE);
+                                final TextView percentuale = (TextView) rootView.findViewById(R.id.percentuale);
+                                percentuale.setVisibility(View.VISIBLE);
+                                percentuale.setText("Caricamento: 0%");
+                                final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+                                progressBar.setVisibility(View.VISIBLE);
 
-                                    final ParseQuery<ParseObject> website = ParseQuery.getQuery("LocalShop");
-                                    website.whereEqualTo("webSite",c.getAddress());
-                                    website.whereEqualTo("username",c.getShop());
-
-                                    address.getFirstInBackground(new GetCallback<ParseObject>() {
-                                        @Override
-                                        public void done(ParseObject object, ParseException e) {
-                                            if (e == null && object != null) {
-                                                //System.out.println("debug: trovato address " + object);
-                                                vestito.put("shopUsername", object.getString("username"));
-                                                try {
-                                                    vestito.save();
-                                                } catch (ParseException e1) {
-                                                    e1.printStackTrace();
-                                                }
-                                            } else if (e.getCode()==101) {
-                                                //System.out.println("debug codice 101 oggetto con address non trovato");
-                                                website.getFirstInBackground(new GetCallback<ParseObject>() {
-                                                    @Override
-                                                    public void done(ParseObject object, ParseException e) {
-                                                        if (e == null && object != null) {
-                                                            vestito.put("shopUsername", object.getString("username"));
-                                                            try {
-                                                                vestito.save();
-                                                            } catch (ParseException e1) {
-                                                                e1.printStackTrace();
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                            }
+                                System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
+                                infoListAdapter.notifyDataSetChanged();
+                                System.out.println(infoListAdapter.getListCloth());
+                                ArrayList<String> tipi = new ArrayList<String>();
+                                ArrayList<String> id = new ArrayList<>();
+                                for (int i = 0; i < infoListAdapter.getCount(); i++) {
+                                    Cloth c = infoListAdapter.getItem(i);
+                                    if (!c.isEmpty()) {
+                                        final ParseObject vestito = new ParseObject("Vestito");
+                                        if (c.getCloth() != null) {
+                                            vestito.put("tipo", c.getCloth());
+                                            tipi.add(c.getCloth());
                                         }
-                                    });
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
+                                        if (c.getShop() != null) vestito.put("shop", c.getShop());
+                                        if (c.getBrand() != null)
+                                            vestito.put("brand", c.getBrand());
+                                        if (c.getPrice() != null)
+                                            vestito.put("prezzo", c.getPrice());
+                                        if (c.getAddress() != null)
+                                            vestito.put("luogoAcquisto", c.getAddress());
+                                        try {
+                                            vestito.save();
+                                            //se lo shop è registrato inserisco il nome nel campo shopusername
+                                            ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
+                                            address.whereEqualTo("address", c.getAddress());
+                                            address.whereEqualTo("username", c.getShop());
+
+                                            final ParseQuery<ParseObject> website = ParseQuery.getQuery("LocalShop");
+                                            website.whereEqualTo("webSite", c.getAddress());
+                                            website.whereEqualTo("username", c.getShop());
+
+                                            address.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                @Override
+                                                public void done(ParseObject object, ParseException e) {
+                                                    if (e == null && object != null) {
+                                                        //System.out.println("debug: trovato address " + object);
+                                                        vestito.put("shopUsername", object.getString("username"));
+                                                        try {
+                                                            vestito.save();
+                                                        } catch (ParseException e1) {
+                                                            e1.printStackTrace();
+                                                        }
+                                                    } else if (e.getCode() == 101) {
+                                                        //System.out.println("debug codice 101 oggetto con address non trovato");
+                                                        website.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                            @Override
+                                                            public void done(ParseObject object, ParseException e) {
+                                                                if (e == null && object != null) {
+                                                                    vestito.put("shopUsername", object.getString("username"));
+                                                                    try {
+                                                                        vestito.save();
+                                                                    } catch (ParseException e1) {
+                                                                        e1.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        id.add(vestito.getObjectId());
+                                    }
                                 }
-                                id.add(vestito.getObjectId());
+
+                                final View vi = v;
+
+                                //btnSend.setVisibility(View.INVISIBLE);
+                                //progressBar.setVisibility(View.VISIBLE);
+                                //percentuale.setVisibility(View.VISIBLE);
+
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                // e la funzione a fine file checkToCompress()
+
+                                int toCompress = BitmapUtil.checkToCompress(imageBitmap);
+                                Log.d("UploadActivity", "toCompress = " + toCompress);
+
+                                imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
+                                byte[] byteImg = stream.toByteArray();
+                                Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
+
+
+                                // Creazione di un ParseFile
+                                ParseFile file = new ParseFile(photoFileName, byteImg);
+
+                                // Save the file to Parse
+                                file.saveInBackground(new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            Log.d("UploadActivity", "File inviato correttamente");
+                                        } else {
+                                            // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
+                                            check(e.getCode(), vi, e.getMessage());
+                                            Log.d("UploadActivity", "Errore durante l'invio del file");
+                                        }
+                                    }
+                                }, new ProgressCallback() {
+                                    public void done(Integer percentDone) {
+                                        // Update your progress spinner here. percentDone will be between 0 and 100.
+                                        percentuale.setText("Caricamento: " + percentDone + "%");
+                                        progressBar.setProgress(percentDone);
+                                    }
+                                });
+
+                                // Creazione di un ParseObject da inviare
+                                final ParseObject picture = new ParseObject("Photo");
+                                picture.put("user", ParseUser.getCurrentUser().getUsername());
+                                picture.put("photo", file);
+                                String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
+                                picture.put("hashtag", Arrays.asList(hashtags));
+                                picture.put("tipo", tipi);
+                                picture.put("nLike", 0);
+                                picture.put("vestiti", id);
+
+                                // Invio ParseObject (immagine) al server
+                                picture.saveInBackground(new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
+
+                                            //chiamata get per salvare il thumbnail
+                                            String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
+                                            Get g = new Get();
+                                            g.execute(url);
+
+                                            getActivity().finish();
+                                        } else {
+                                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                            check(e.getCode(), vi, e.getMessage());
+
+                                            Log.d("UploadActivity", "Errore durante l'invio dell'oggetto immagine");
+                                        }
+                                    }
+                                });
+
                             }
                         }
-
-                        final View vi = v;
-
-                        //btnSend.setVisibility(View.INVISIBLE);
-                        //progressBar.setVisibility(View.VISIBLE);
-                        //percentuale.setVisibility(View.VISIBLE);
-
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        // e la funzione a fine file checkToCompress()
-
-                        int toCompress = BitmapUtil.checkToCompress(imageBitmap);
-                        Log.d("UploadActivity", "toCompress = " + toCompress);
-
-                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
-                        byte[] byteImg = stream.toByteArray();
-                        Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
-
-
-                        // Creazione di un ParseFile
-                        ParseFile file = new ParseFile(photoFileName, byteImg);
-
-                        // Save the file to Parse
-                        file.saveInBackground(new SaveCallback() {
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("UploadActivity", "File inviato correttamente");
-                                } else {
-                                    // Chiamata ad altra classe per verificare qualsiasi tipo di errore dal server
-                                    check(e.getCode(), vi, e.getMessage());
-                                    Log.d("UploadActivity", "Errore durante l'invio del file");
-                                }
-                            }
-                        }, new ProgressCallback() {
-                            public void done(Integer percentDone) {
-                                // Update your progress spinner here. percentDone will be between 0 and 100.
-                                percentuale.setText("Caricamento: " + percentDone + "%");
-                                progressBar.setProgress(percentDone);
-                            }
-                        });
-
-                        // Creazione di un ParseObject da inviare
-                        final ParseObject picture = new ParseObject("Photo");
-                        picture.put("user", ParseUser.getCurrentUser().getUsername());
-                        picture.put("photo", file);
-                        String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
-                        picture.put("hashtag", Arrays.asList(hashtags));
-                        picture.put("tipo",tipi);
-                        picture.put("nLike", 0);
-                        picture.put("vestiti", id);
-
-                        // Invio ParseObject (immagine) al server
-                        picture.saveInBackground(new SaveCallback() {
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
-
-                                    //chiamata get per salvare il thumbnail
-                                    String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
-                                    Get g = new Get();
-                                    g.execute(url);
-
-                                    getActivity().finish();
-                                } else {
-                                    // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                    check(e.getCode(), vi, e.getMessage());
-
-                                    Log.d("UploadActivity", "Errore durante l'invio dell'oggetto immagine");
-                                }
-                            }
-                        });
-
                     }
                     /*View view=infoListAdapter.getItem(i);
                     System.out.println(view);
