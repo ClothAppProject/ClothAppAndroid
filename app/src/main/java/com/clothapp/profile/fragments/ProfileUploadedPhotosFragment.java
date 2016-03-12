@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
@@ -22,7 +23,7 @@ public class ProfileUploadedPhotosFragment extends Fragment {
     public static ArrayList<Image> photos = new ArrayList<>();
 
     private static final String PARSE_USERNAME = "username";
-
+    public static TextView noPhotosText;
     public ProfileUploadedPhotosFragment() {
 
     }
@@ -46,6 +47,8 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
         UserProfileActivity.viewProfileUploadedPhotos = (RecyclerView) rootView.findViewById(R.id.profile_uploaded_photos_recycler_view);
 
+        //set the no text for no photos uploaded
+        noPhotosText = (TextView) rootView.findViewById(R.id.no_photos);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);

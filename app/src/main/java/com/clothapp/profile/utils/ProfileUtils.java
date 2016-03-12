@@ -9,13 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.R;
+import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
+import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;
@@ -66,7 +70,7 @@ public class ProfileUtils {
     }
 
 
-    public static void getParseUploadedPhotos(String username, int start, int limit) {
+    public static void getParseUploadedPhotos(String username, final int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("user", username);
@@ -77,6 +81,10 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
+                    //check if user has no photo uploaded
+                    if (start==0 && photos.isEmpty())   {
+                        ProfileUploadedPhotosFragment.noPhotosText.setVisibility(View.VISIBLE);
+                    }
 
                     RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
@@ -121,7 +129,7 @@ public class ProfileUtils {
         });
     }
 
-    public static void getShopParseUploadedPhotos(String username, int start, int limit) {
+    public static void getShopParseUploadedPhotos(String username,final int start, int limit) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("user", username);
@@ -132,6 +140,11 @@ public class ProfileUtils {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
+                    //check if user has no photo uploaded
+                    if (start==0 && photos.isEmpty())   {
+                        ProfileShopUploadedPhotosFragment.noPhotosText.setVisibility(View.VISIBLE);
+                    }
+
                     RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
