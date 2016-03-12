@@ -175,5 +175,10 @@
     </string-array>
     <string name="title_activity_upload_photo">UploadPhotoActivity</string>
 
+    <string name="info_profilo">INFO</string>
+    <string name="photo">MY OUTFITS</string>
+    <string name="followers">FOLLOWERS</string>
+    <string name="following">FOLLOWING</string>
+
 
 </resources>
