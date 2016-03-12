@@ -298,7 +298,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        String date = dayOfMonth + " - " + monthOfYear + " - " + year;
+        String date = dayOfMonth + " - " + (monthOfYear+1) + " - " + year;
         txt_birthday.setText(date);
     }
 }
