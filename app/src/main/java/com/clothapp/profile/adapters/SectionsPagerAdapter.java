@@ -4,12 +4,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.fragments.PlaceholderFragment;
 import com.clothapp.profile.fragments.ProfileFollowersFragment;
 import com.clothapp.profile.fragments.ProfileFollowingFragment;
 import com.clothapp.profile.fragments.ProfileInfoFragment;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
+
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -46,13 +48,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "INFO";
+                return getString(R.string.info_profilo);
             case 1:
-                return "UPLOADED PHOTOS";
+                return getString(R.string.photo);
             case 2:
-                return "FOLLOWERS";
+                return getString(R.string.followers);
             case 3:
-                return "FOLLOWING";
+                return getString(R.string.following);
             /*case 4:
                 return "FAVORITE PHOTOS";
             case 5:
