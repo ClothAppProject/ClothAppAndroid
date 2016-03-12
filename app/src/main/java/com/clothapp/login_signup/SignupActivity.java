@@ -1,7 +1,10 @@
 package com.clothapp.login_signup;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -41,6 +44,8 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
     private TextView txt_birthday;
 
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,12 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             Log.d("SignupActivity", "Error: " + e.getMessage());
             e.printStackTrace();
         }
+
+        //  getting the context
+        mContext = this;
+
+        //  Punto interrogativo
+        TextView txtSuggestions = (TextView) findViewById(R.id.suggestions);
 
         // Nascondo la tastiera all'avvio di quest'activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -280,6 +291,18 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
                         break;
                 }
+            }
+        });
+
+        // Add an OnClick listener to the question mark button
+        txtSuggestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle(R.string.passSignup)
+                .setMessage(SignupActivity.this.getString((R.string.pswdStruct)));
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
