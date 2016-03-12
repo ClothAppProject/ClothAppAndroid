@@ -1,18 +1,21 @@
 package com.clothapp.profile_shop.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.clothapp.R;
 import com.clothapp.profile.fragments.PlaceholderFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile_shop.fragments.*;
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
-
-    public SectionsPagerAdapterShop(FragmentManager fm) {
+    private Context context;
+    public SectionsPagerAdapterShop(FragmentManager fm, Context context) {
         super(fm);
+        this.context = context;
     }
 
     @Override
@@ -43,13 +46,13 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "INFO";
+                return context.getString(R.string.info_profilo);
             case 1:
-                return "UPLOADED PHOTOS";
+                return context.getString(R.string.photo);
             case 2:
-                return "FOLLOWERS";
+                return context.getString(R.string.followers);
             case 3:
-                return "FOLLOWING";
+                return context.getString(R.string.following);
             /*case 4:
                 return "FAVORITE PHOTOS";
             case 5:
