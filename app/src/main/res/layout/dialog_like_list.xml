@@ -71,6 +71,7 @@
             android:layout_gravity="left"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="45dp"
-            android:textColor="@color/red" />
+            android:textColor="@color/red"
+            android:textSize="16sp" />
     </FrameLayout>
 </FrameLayout>

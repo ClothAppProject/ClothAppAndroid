@@ -467,8 +467,13 @@ public class ImageDetailFragment extends Fragment {
             like.setText(" 0 like");
         }else {
             final int numLike = immagine.getNumLike();
-            String text = getString(R.string.he_likes) + " " + immagine.getLike().get(0).toString()
-                    + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
+            String text;
+            if (numLike>2)  {
+                text = getString(R.string.he_likes) + " " + immagine.getLike().get(0).toString()
+                        + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
+            }else{
+                text = Integer.toString(numLike) + " " + getString(R.string.likes);
+            }
             like.setText(text);
             //listener che apre dialog per persone che hanno messo like
             like.setOnClickListener(new View.OnClickListener() {
