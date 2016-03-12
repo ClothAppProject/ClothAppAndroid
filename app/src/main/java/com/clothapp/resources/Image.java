@@ -137,7 +137,7 @@ public class Image implements Parcelable {
     }
 
     public void addLike(String user) {
-        like.add(0,user);
+        like.add(user);
         nLike++;
     }
 

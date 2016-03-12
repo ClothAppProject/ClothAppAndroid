@@ -469,7 +469,7 @@ public class ImageDetailFragment extends Fragment {
             final int numLike = immagine.getNumLike();
             String text;
             if (numLike>2)  {
-                text = getString(R.string.he_likes) + " " + immagine.getLike().get(0).toString()
+                text = getString(R.string.he_likes) + " " + immagine.getLike().get(numLike-1).toString()
                         + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
             }else{
                 text = Integer.toString(numLike) + " " + getString(R.string.likes);
