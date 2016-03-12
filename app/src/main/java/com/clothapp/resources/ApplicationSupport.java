@@ -8,6 +8,7 @@ import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -75,16 +76,26 @@ public class ApplicationSupport extends Application {
         // Initialize Facebook SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        // Initialize Parse SDK
+        // Enable Parse local data store
         Parse.enableLocalDatastore(this);
+
+        // Initialize Parse SDK
         Parse.initialize(this);
+
+        // This is needed for push notifications
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        // This is needed for Facebook login
         ParseFacebookUtils.initialize(this);
+
         try {
+            // Update current user profile
             if (ParseUser.getCurrentUser() != null) {
                 ParseUser.getCurrentUser().fetch();
             }
         } catch (ParseException e) {
-            // Errore nell'aggiornare il profilo locale
+
+            // Error while updating current user profile
             ExceptionCheck.check(e.getCode(), new View(this), e.getMessage());
             Log.d("ApplicationSupport", "ParseUser.getCurrentUser().fetch() failed...");
             Log.d("ApplicationSupport", "Error: " + e.getMessage());
