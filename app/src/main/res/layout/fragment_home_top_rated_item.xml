@@ -61,21 +61,21 @@
                 android:id="@+id/fragment_home_top_rated_item_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:paddingTop="12dp"
                 android:text="Item name"
-                android:textSize="20sp"
-                android:maxLines="3"
-                android:ellipsize="end" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/fragment_home_top_rated_item_hashtags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:paddingTop="10dp"
                 android:text="#Test1, #Hashtag2"
-                android:textSize="14sp"
-                android:maxLines="2"
-                android:ellipsize="end" />
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
