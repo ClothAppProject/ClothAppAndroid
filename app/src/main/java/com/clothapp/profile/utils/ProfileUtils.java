@@ -89,9 +89,6 @@ public class ProfileUtils {
                     RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
-                    if (photos.isEmpty() && adapter.photos.isEmpty()) {
-                        UserProfileActivity.viewPager.setCurrentItem(0, false);
-                    }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
 
                     for (final ParseObject photo : photos) {
@@ -148,9 +145,6 @@ public class ProfileUtils {
                     RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
-                    if (photos.isEmpty() && adapter.photos.isEmpty()) {
-                        ShopProfileActivity.viewPager.setCurrentItem(0, false);
-                    }
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
 
                     for (final ParseObject photo : photos) {
