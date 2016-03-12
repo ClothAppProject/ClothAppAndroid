@@ -269,7 +269,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                 }
             });
 
-            address.setThreshold(3);
+            address.setThreshold(4);
             address.addTextChangedListener(new TextWatcher() {
                @Override
                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -283,7 +283,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
                    else {
 
 
-                       if (!s.toString().toLowerCase().contains("www")) {
+                       if (!s.toString().toLowerCase().contains("www") && !s.toString().toLowerCase().contains("http")) {
                            // Register a listener that receives callbacks when a suggestion has been selected
                            address.setOnItemClickListener(mAutocompleteClickListener);
 

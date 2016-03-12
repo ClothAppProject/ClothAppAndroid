@@ -67,14 +67,15 @@ public class MyCardListAdapter extends BaseAdapter {
                 String strAddress = cloths.get(position).getAddress();
 
                 if (strAddress != null && !strAddress.isEmpty()) {
-                    if (!cloths.get(position).getAddress().contains("www")) {
+                    if (!cloths.get(position).getAddress().contains("www") && !cloths.get(position).getAddress().contains("http")) {
                         Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
                         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mapIntent);
                     } else {
-                        String url = "http://" + cloths.get(position).getAddress();
+                        String url=cloths.get(position).getAddress();
+                        if(!cloths.get(position).getAddress().contains("http")) url = "http://" +url ;
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
