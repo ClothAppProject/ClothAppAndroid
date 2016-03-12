@@ -58,7 +58,9 @@
         <item>Logout</item>
     </string-array>
 
+    <string name="no_photos_uploaded">Non è stata caricata nessuna foto</string>
     <string name="edit_profile">Modifica Profilo</string>
+    <string name="save">Salva</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="ask_back_from_upload">Vuoi annullare la procedura di upload?</string>
