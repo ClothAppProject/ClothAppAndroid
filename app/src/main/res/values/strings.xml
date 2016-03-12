@@ -28,6 +28,7 @@
     <string name="check_data">Controllo dati</string>
     <string name="data_edited">Dati modificati</string>
     <string name="name">Nome</string>
+    <string name="username">Username</string>
     <string name="name_shop">Nome del Negozio</string>
     <string name="lastname">Cognome</string>
     <string name="sex">Sesso</string>
