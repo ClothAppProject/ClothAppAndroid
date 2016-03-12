@@ -142,12 +142,12 @@ public class FacebookUsernameActivity extends AppCompatActivity {
     //funzione per eliminare utente appena creato con facebook
     private void deleteUser(ParseUser user)   {
         try {
+            //elimino prima la persona
             ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
             query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-            List<ParseObject> utente = query.find();
-            ParseObject persona = utente.get(0);
+            ParseObject persona = query.getFirst();
             persona.delete();
-
+            //e poi l'user
             user.delete();
         } catch (ParseException e) {
             check(e.getCode(), vi, e.getMessage());

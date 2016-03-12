@@ -97,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //show profile picutre
         profile_picture = (ImageView) findViewById(R.id.profile_picture);
-        ProfileUtils.loadProfilePicture(profile_picture,getApplicationContext());
+        ProfileUtils.getParseUserProfileImage(this,utente.getUsername(),profile_picture,getApplicationContext(),false);
         profile_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +187,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        ProfileUtils.loadProfilePicture(profile_picture,getApplicationContext());
+        ProfileUtils.getParseUserProfileImage(this,ParseUser.getCurrentUser().getUsername(),profile_picture,getApplicationContext(),false);
     }
     @Override
     public void onBackPressed() {

@@ -146,6 +146,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+        loadProfilePicture();
         if (ProfileUploadedPhotosFragment.adapter != null)
             ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }

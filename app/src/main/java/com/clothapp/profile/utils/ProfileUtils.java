@@ -410,30 +410,6 @@ public class ProfileUtils {
         dialog.show();
     }
 
-    public static void loadProfilePicture(final ImageView profile_picture, final Context context)    {
-        ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-        query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject photo, ParseException e) {
-                if (e == null) {
-                    ParseFile parseFile = photo.getParseFile("profilePhoto");
-                    parseFile.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-                            if (e == null) {
-                                Glide.with(context)
-                                        .load(file)
-                                        .transform(new CircleTransform(context))
-                                        .into(profile_picture);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
     public static Intent goToProfile(Context contesto, String utente) {
         Intent i = null;
         //controllo se username è un negozio o una persona
