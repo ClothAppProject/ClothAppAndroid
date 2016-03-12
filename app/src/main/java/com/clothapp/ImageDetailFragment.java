@@ -299,74 +299,8 @@ public class ImageDetailFragment extends Fragment {
                     }
                 });
 
-                //mostro il numero di like
-                int numLikes = object.getInt("nLike");
-                //  se ho zero likes scrivo like sennò likes
-                String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
-
-                like.setText(Integer.toString(numLikes) + " " + singPlur);
-                //listener che apre dialog per persone che hanno messo like
-                like.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final AlertDialog.Builder lista_like = new AlertDialog.Builder(getActivity());
-                        // Get the layout inflater
-                        LayoutInflater inflater = getActivity().getLayoutInflater();
-                        // Inflate and set the layout for the dialog
-                        final View dialogView = inflater.inflate(R.layout.dialog_like_list, null);
-                        lista_like.setView(dialogView);
-
-                        ListView listLike = (ListView) dialogView.findViewById(R.id.lista_like);
-                        progressBar = (ProgressBar)dialogView.findViewById(R.id.progressbar);
-                        //chiama l'adattatore che inserisce gli item nella listview
-                        likeList = new ArrayList<User>();
-                        likeAdapter = new SearchAdapterUser(getActivity().getBaseContext(), likeList);
-                        listLike.setAdapter(likeAdapter);
-                        getLikeUserList();
-                        /*
-                        listLike.setOnScrollListener(new AbsListView.OnScrollListener() {
-                            @Override
-                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                                    if (canLoad && likeList.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
-                                        if (likeList != null) {
-                                            canLoad = false;
-                                            //faccio la query a Parse
-                                            getLikeUserList();
-                                        }
-                                    }
-                                }
-                            }
-                            @Override
-                            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                            }
-                        });*/
-
-                        final AlertDialog dialog_like_list = lista_like.create();
-                        // display dialog
-                        dialog_like_list.show();
-
-                        //listener su ogni persona
-                        listLike.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), likeAdapter.getItem(position).getUsername());
-                                startActivity(i);
-                                dialog_like_list.dismiss();
-                            }
-                        });
-
-                        //listener on the close button of dialog
-                        ImageView close_dialog = (ImageView) dialogView.findViewById(R.id.close_dialog);
-                        close_dialog.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog_like_list.dismiss();
-                            }
-                        });
-                    }
-                });
+                //chiamo funzione del testo dei like
+                setTextLike();
 
                 //controllo se ho messo like sull'attuale foto
                 final String username = ParseUser.getCurrentUser().getUsername();
@@ -385,11 +319,6 @@ public class ImageDetailFragment extends Fragment {
                             LikeRes.deleteLike(object, immagine, username);
 
                             cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-
-                            int numLikes = object.getInt("nLike");
-                            //  se ho zero likes scrivo like sennò likes
-                            String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
-                            like.setText(Integer.toString(numLikes) + " " + singPlur);
                         } else {
                             //aggiungo like e aggiorno anche in parse
                             LikeRes.addLike(object, immagine, username);
@@ -398,8 +327,7 @@ public class ImageDetailFragment extends Fragment {
                         //aggiorno il numero di like
                         int numLikes = object.getInt("nLike");
                         //  se ho zero likes scrivo like sennò likes
-                        String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
-                        like.setText(Integer.toString(numLikes) + " " + singPlur);
+                        setTextLike();
                     }
                 });
             }
@@ -534,6 +462,80 @@ public class ImageDetailFragment extends Fragment {
             return false;
         }
     }
+    private void setTextLike()  {
+        if (immagine.getLike().isEmpty()) {
+            like.setText(" 0 like");
+        }else {
+            final int numLike = immagine.getNumLike();
+            String text = "Piace a "+immagine.getLike().get(0).toString() + " e altri "+Integer.toString(numLike);
+            like.setText(text);
+            //listener che apre dialog per persone che hanno messo like
+            like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog.Builder lista_like = new AlertDialog.Builder(getActivity());
+                    // Get the layout inflater
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    // Inflate and set the layout for the dialog
+                    final View dialogView = inflater.inflate(R.layout.dialog_like_list, null);
+                    lista_like.setView(dialogView);
+
+                    TextView numLikeText = (TextView) dialogView.findViewById(R.id.numLike);
+                    numLikeText.setText(Integer.toString(numLike) + " " + (numLike == 0 || numLike == 1 ? "like" : "likes"));
+
+                    ListView listLike = (ListView) dialogView.findViewById(R.id.lista_like);
+                    progressBar = (ProgressBar) dialogView.findViewById(R.id.progressbar);
+                    //chiama l'adattatore che inserisce gli item nella listview
+                    likeList = new ArrayList<User>();
+                    likeAdapter = new SearchAdapterUser(getActivity().getBaseContext(), likeList);
+                    listLike.setAdapter(likeAdapter);
+                    getLikeUserList();
+                        /*
+                        listLike.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                                    if (canLoad && likeList.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                                        if (likeList != null) {
+                                            canLoad = false;
+                                            //faccio la query a Parse
+                                            getLikeUserList();
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                            }
+                        });*/
+
+                    final AlertDialog dialog_like_list = lista_like.create();
+                    // display dialog
+                    dialog_like_list.show();
+
+                    //listener su ogni persona
+                    listLike.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), likeAdapter.getItem(position).getUsername());
+                            startActivity(i);
+                            dialog_like_list.dismiss();
+                        }
+                    });
+
+                    //listener on the close button of dialog
+                    ImageView close_dialog = (ImageView) dialogView.findViewById(R.id.close_dialog);
+                    close_dialog.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog_like_list.dismiss();
+                        }
+                    });
+                }
+            });
+        }
+    }
 
     //funzione per ottenere la lista di user dai like nell'immagine
     private void getLikeUserList()    {
@@ -589,20 +591,13 @@ public class ImageDetailFragment extends Fragment {
 
                     cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
 
-                    int numLikes = object.getInt("nLike");
-                    //  se ho zero likes scrivo like sennò likes
-                    String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
-                    like.setText(Integer.toString(numLikes) + " " + singPlur);
                 } else {
                     //aggiungo like e aggiorno anche in parse
                     LikeRes.addLike(object, immagine, username);
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
-                //aggiorno il numero di like
-                int numLikes = object.getInt("nLike");
                 //  se ho zero likes scrivo like sennò likes
-                String singPlur = numLikes == 0 || numLikes == 1 ? "like" : "likes";
-                like.setText(Integer.toString(numLikes) + " " + singPlur);
+                setTextLike();
 
                 //inizializzo animazione del cuore che entra ed esce
                 Animation pulse_fade = AnimationUtils.loadAnimation(context, R.anim.pulse_fade_in);
