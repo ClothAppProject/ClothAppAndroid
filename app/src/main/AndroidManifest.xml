@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission android:protectionLevel="signature"
+        android:name="com.parse.starter.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.clothapp.permission.C2D_MESSAGE" />
 
     <application
         android:name=".resources.ApplicationSupport"
@@ -26,9 +33,11 @@
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8" />
+
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -38,7 +47,6 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!--  -->
 
         <activity
             android:name=".LauncherActivity"
@@ -170,6 +178,31 @@
         <activity
             android:name=".settings.ChangePassword"
             android:theme="@style/AppTheme" />
+
+        <!-- This is needed for Parse Push Notifications -->
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.clothapp" />
+            </intent-filter>
+        </receiver>
+
+        <!-- End Parse Push Notifications-->
+
     </application>
 
 </manifest>
