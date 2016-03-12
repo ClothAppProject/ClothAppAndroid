@@ -467,7 +467,8 @@ public class ImageDetailFragment extends Fragment {
             like.setText(" 0 like");
         }else {
             final int numLike = immagine.getNumLike();
-            String text = "Piace a "+immagine.getLike().get(0).toString() + " e altri "+Integer.toString(numLike);
+            String text = getString(R.string.he_likes) + " " + immagine.getLike().get(0).toString()
+                    + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
             like.setText(text);
             //listener che apre dialog per persone che hanno messo like
             like.setOnClickListener(new View.OnClickListener() {
@@ -490,25 +491,24 @@ public class ImageDetailFragment extends Fragment {
                     likeAdapter = new SearchAdapterUser(getActivity().getBaseContext(), likeList);
                     listLike.setAdapter(likeAdapter);
                     getLikeUserList();
-                        /*
-                        listLike.setOnScrollListener(new AbsListView.OnScrollListener() {
-                            @Override
-                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                                    //se ho raggiunto l'ultima immagine in basso carico altre immagini
-                                    if (canLoad && likeList.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
-                                        if (likeList != null) {
-                                            canLoad = false;
-                                            //faccio la query a Parse
-                                            getLikeUserList();
-                                        }
+                    listLike.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                                //se ho raggiunto l'ultima immagine in basso carico altre immagini
+                                if (canLoad && likeList.size() > 0) { //controllo se size>0 perchè altrimenti chiama automaticamente all'apertura dell'activity
+                                    if (likeList != null) {
+                                        canLoad = false;
+                                        //faccio la query a Parse
+                                        getLikeUserList();
                                     }
                                 }
                             }
-                            @Override
-                            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                            }
-                        });*/
+                        }
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        }
+                    });
 
                     final AlertDialog dialog_like_list = lista_like.create();
                     // display dialog
@@ -570,7 +570,7 @@ public class ImageDetailFragment extends Fragment {
                 }
             });
         }
-        //canLoad = true;
+        canLoad = true;
     }
 
     //funzione che ritorna il gestureDetector per il doubletap
