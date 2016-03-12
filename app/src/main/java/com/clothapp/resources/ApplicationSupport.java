@@ -18,26 +18,26 @@ import java.util.List;
 /**
  * Created by giacomoceribelli on 02/01/16.
  */
-public class ApplicationSupport extends Application {
+
+
 //Questa classe viene chiamata ogni ciclo di vita intero dell'applicazione, infatti parse va invocato solamente una volta durante tutto
 //il ciclo di vita dell'app mentre se si lasciava nella launcher se la launcher era richiamata andava in errore perchè si cercava
 //di inizializzare parse un'altra volta.
 
-    //inizializzo la variabile globale photos
+public class ApplicationSupport extends Application {
+
+    // Inizializzo la variabile globale photos
     private ArrayList<Image> photos;
-    //private User lastUser;
-    //private Date lastCloth;
-    //private Date lastTag;
     private ArrayList<User> users = new ArrayList<>();
     private ArrayList<Image> cloth = new ArrayList<>();
     private ArrayList<Image> tag = new ArrayList<>();
 
+//    private User lastUser;
+//    private Date lastCloth;
+//    private Date lastTag;
+
     public void setUsers(ArrayList<User> users) {
         this.users = users;
-    }
-
-    public void addUser(User u) {
-        users.add(u);
     }
 
     public ArrayList<User> getUsers() {
@@ -60,12 +60,6 @@ public class ApplicationSupport extends Application {
         this.tag = tag;
     }
 
-    public String getId(int i) {
-        return photos.get(i).getObjectId();
-    }
-
-    // Getter e setter variabili globali
-
     public ArrayList<Image> getPhotos() {
         return photos;
     }
@@ -74,20 +68,14 @@ public class ApplicationSupport extends Application {
         this.photos = photos;
     }
 
-    public void addFirstPhoto(Image photo) {
-        photos.add(0, photo);
-    }
-
-    public void addLastPhoto(Image photo) {
-        photos.add(photo);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Initialize Facebook SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-
+        // Initialize Parse SDK
         Parse.enableLocalDatastore(this);
         Parse.initialize(this);
         ParseFacebookUtils.initialize(this);
@@ -103,29 +91,24 @@ public class ApplicationSupport extends Application {
         }
 
     }
-/*
-    public User getLastUser() {
-        return lastUser;
-    }
 
-    public void setLastUser(User lastUser) {
-        this.lastUser = lastUser;
-    }
 
-    public void setLastCloth(Date lastCloth) {
-        this.lastCloth = lastCloth;
-    }
+    // These methods are not used at the moment
 
-    public Date getLastCloth() {
-        return lastCloth;
-    }
+//    public void addFirstPhoto(Image photo) {
+//        photos.add(0, photo);
+//    }
+//
+//    public void addLastPhoto(Image photo) {
+//        photos.add(photo);
+//    }
+//
+//    public String getId(int i) {
+//        return photos.get(i).getObjectId();
+//    }
+//
+//    public void addUser(User u) {
+//        users.add(u);
+//    }
 
-    public Date getLastTag() {
-        return lastTag;
-    }
-
-    public void setLastTag(Date lastTag) {
-        this.lastTag = lastTag;
-    }
-    */
 }
