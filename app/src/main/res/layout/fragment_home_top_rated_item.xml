@@ -63,7 +63,9 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
                 android:text="Item name"
-                android:textSize="24sp" />
+                android:textSize="20sp"
+                android:maxLines="3"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/fragment_home_top_rated_item_hashtags"
@@ -71,7 +73,9 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="#Test1, #Hashtag2"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
