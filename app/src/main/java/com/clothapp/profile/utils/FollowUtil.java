@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.clothapp.R;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.adapters.PeopleListAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.profile.fragments.ProfileFollowersFragment;
@@ -30,11 +31,13 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by niccolò on 24/02/2016.
  */
 public class FollowUtil {
+
     private static ParseObject relazione;
     private static ParseObject found = null;
-    public static ParseObject isfollow(String from, String to){
 
-        ParseQuery<ParseObject> queryfollow= new ParseQuery("Follow");
+    public static ParseObject isFollower(String from, String to) {
+
+        ParseQuery<ParseObject> queryfollow = new ParseQuery("Follow");
         queryfollow.whereEqualTo("from", from);
         queryfollow.whereEqualTo("to", to);
         queryfollow.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -45,8 +48,9 @@ public class FollowUtil {
         });
         return found;
     }
-    public static void setFollowButton(final Button follow_edit, final String usernameTo)  {
-        ParseQuery<ParseObject> queryfollow= new ParseQuery("Follow");
+
+    public static void setFollowButton(final Button follow_edit, final String usernameTo) {
+        ParseQuery<ParseObject> queryfollow = new ParseQuery("Follow");
         queryfollow.whereEqualTo("from", ParseUser.getCurrentUser().getUsername());
         queryfollow.whereEqualTo("to", usernameTo);
         queryfollow.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -61,19 +65,29 @@ public class FollowUtil {
                     follow_edit.setText(R.string.follow);
                 }
                 follow_edit.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
+
                         if (relazione != null) {
-                            //elimino l'oggetto
+                            // Elimino l'oggetto
                             relazione.deleteInBackground();
                             relazione = null;
                             follow_edit.setText(R.string.follow);
+
                         } else {
-                            //creo una nuova relazione
+
+                            String usernameFrom = ParseUser.getCurrentUser().getUsername();
+
+                            // Creo una nuova relazione
                             relazione = new ParseObject("Follow");
-                            relazione.put("from", ParseUser.getCurrentUser().getUsername());
+                            relazione.put("from", usernameFrom);
                             relazione.put("to", usernameTo);
                             relazione.saveInBackground();
+
+                            // Send "Like" notification to the user who posted the image
+                            NotificationsUtils.sendNotification(usernameTo, usernameFrom + " ha cominciato a seguirti!");
+
                             follow_edit.setText(R.string.unfollow);
                         }
                     }
@@ -82,10 +96,10 @@ public class FollowUtil {
         });
     }
 
-    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view, String username, final TextView noFollowing)   {
+    public static void getFollowing(final List<User> users, final View rootView, final RecyclerView view, String username, final TextView noFollowing) {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
-        ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
+        ParseQuery<ParseObject> queryUser = new ParseQuery<ParseObject>("Follow");
         queryUser.addDescendingOrder("createdAt");
         queryUser.setSkip(users.size());
         queryUser.setLimit(15);
@@ -93,20 +107,20 @@ public class FollowUtil {
         queryUser.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
-                if(e==null) {
+                if (e == null) {
                     //check if user has no followers and set noFollowers text
-                    if (users.isEmpty() && objects.isEmpty())   {
+                    if (users.isEmpty() && objects.isEmpty()) {
                         noFollowing.setText(R.string.no_following);
                         noFollowing.setVisibility(View.VISIBLE);
                     }
                     for (ParseObject o : objects) {
-                        final User u=new User(o.getString("to"),null,null);
-                        ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");
+                        final User u = new User(o.getString("to"), null, null);
+                        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
                         queryFoto.whereEqualTo("username", u.getUsername());
                         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject object, ParseException e) {
-                                if (object!=null) {
+                                if (object != null) {
                                     ParseFile foto = object.getParseFile("thumbnail");
                                     foto.getFileInBackground(new GetFileCallback() {
                                         @Override
@@ -122,15 +136,15 @@ public class FollowUtil {
                         //adapter.add(u);
                         adapter.notifyDataSetChanged();
                     }
-                }
-                else check(e.getCode(), rootView, e.getMessage());
+                } else check(e.getCode(), rootView, e.getMessage());
             }
         });
     }
-    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view, final String username, final TextView noFollowers)   {
+
+    public static void getFollower(final List<User> users, final View rootView, final RecyclerView view, final String username, final TextView noFollowers) {
         //funzione ausiliare per la query
         final PeopleListAdapter adapter = (PeopleListAdapter) view.getAdapter();
-        ParseQuery<ParseObject> queryUser=new ParseQuery<ParseObject>("Follow");
+        ParseQuery<ParseObject> queryUser = new ParseQuery<ParseObject>("Follow");
         queryUser.addDescendingOrder("createdAt");
         queryUser.setSkip(users.size());
         queryUser.setLimit(15);
@@ -138,20 +152,20 @@ public class FollowUtil {
         queryUser.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(final List<ParseObject> objects, ParseException e) {
-                if(e==null) {
+                if (e == null) {
                     //check if user has no followers and set noFollowers text
-                    if (users.isEmpty() && objects.isEmpty())   {
+                    if (users.isEmpty() && objects.isEmpty()) {
                         noFollowers.setText(R.string.no_followers);
                         noFollowers.setVisibility(View.VISIBLE);
                     }
                     for (ParseObject o : objects) {
-                        final User u=new User(o.getString("from"),null,null);
-                        ParseQuery<ParseObject> queryFoto=new ParseQuery<ParseObject>("UserPhoto");
+                        final User u = new User(o.getString("from"), null, null);
+                        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
                         queryFoto.whereEqualTo("username", u.getUsername());
                         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject object, ParseException e) {
-                                if (object!=null) {
+                                if (object != null) {
                                     ParseFile parseFile = object.getParseFile("thumbnail");
                                     parseFile.getFileInBackground(new GetFileCallback() {
                                         @Override
@@ -167,11 +181,11 @@ public class FollowUtil {
                         //adapter.add(u);
                         adapter.notifyDataSetChanged();
                     }
-                }
-                else check(e.getCode(), rootView, e.getMessage());
+                } else check(e.getCode(), rootView, e.getMessage());
             }
         });
     }
+
     public static ParseUser getParseUser(String username) {
 
         ParseUser user = null;
