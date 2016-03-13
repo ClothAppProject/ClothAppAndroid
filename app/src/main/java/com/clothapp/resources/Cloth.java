@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Created by jack1 on 09/02/2016.
  */
 public class Cloth implements Parcelable {
-    private String cloth;
-    private String address;
-    private String shop;
-    private String shopUsername;
-    private String brand;
+    private String cloth = "";
+    private String address = "";
+    private String shop = "";
+    private String shopUsername = "";
+    private String brand = "";
     private Float price;
     private int id;
 

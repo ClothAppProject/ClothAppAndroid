@@ -506,8 +506,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                             Cloth c = infoListAdapter.getItem(i);
                             System.out.println("address "+c.getAddress());
                             System.out.println("insert "+cloth_isInserted);
-                            if (c.getCloth() == null &&
-                                    (c.getAddress() != null || c.getShop() != null) || c.getAddress() != null || c.getPrice() != null || c.getBrand() != null)
+                            if (c.getCloth() == "" && !c.isEmpty())
                                 cloth_isPresent = false;
                             if(!c.isEmpty()) cloth_isInserted=true;
                         }
