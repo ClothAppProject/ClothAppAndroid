@@ -255,7 +255,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mainImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (username.equals(ParseUser.getCurrentUser().getUsername().toString())) {
+                if (username.equals(ParseUser.getCurrentUser().getUsername())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
                     builder.setTitle(R.string.choose_profile_picture)
                             //.set
