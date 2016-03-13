@@ -17,13 +17,6 @@
             android:key="change_password"
             android:summary="@string/password_summary">
         </PreferenceScreen>
-
-    </PreferenceCategory>
-
-    <!-- APP settings -->
-    <PreferenceCategory
-        android:title="@string/app_settings"
-        android:layout="@layout/preferences_category">
         <PreferenceScreen
             android:title="@string/account_collegati">
             <SwitchPreference
@@ -35,11 +28,32 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:title="@string/salva_foto"
-        android:defaultValue="true"
-        android:key="savingPhoto">
-    </CheckBoxPreference>
+    <!-- Linked Accounts -->
+    <PreferenceCategory
+        android:title="@string/app_settings"
+        android:layout="@layout/preferences_category">
+        <PreferenceScreen
+            android:title="@string/notification">
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="like"
+                android:title="@string/like_notification"
+                android:persistent="false">
+            </SwitchPreference>
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="follower"
+                android:title="@string/follower_notification"
+                android:persistent="false">
+            </SwitchPreference>
+        </PreferenceScreen>
+        <CheckBoxPreference
+            android:title="@string/salva_foto"
+            android:defaultValue="true"
+            android:key="savingPhoto">
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
 
     <!-- Assistenza settings -->
     <PreferenceCategory

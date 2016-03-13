@@ -1,4 +1,8 @@
 <resources>
+
+    <string name="notification">Notifiche</string>
+    <string name="like_notification">Notifiche Like</string>
+    <string name="follower_notification">Notifiche Follower</string>
     <string name="facebook">Facebook</string>
     <string name="facebook_connected">Connesso con Facebook!</string>
     <string name="facebook_disconnected">Disconnesso da Facebook!</string>
