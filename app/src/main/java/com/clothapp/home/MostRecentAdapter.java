@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
@@ -206,27 +207,29 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                         photo.put("nLike", photo.getInt("nLike") + 1);
                                         photo.saveInBackground();
 
-                                        // Send "Like" notification to
-                                        HashMap<String, Object> params = new HashMap<>();
-                                        params.put("recipientUsername", imageUsername);
-                                        params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+                                        // Send "Like" notification to the user who posted the image
+                                        NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
 
-                                        // Call a Parse Cloud Code function. This function is hosted on Parse and
-                                        // allows a deeper level of security. If you want to change the Cloud function
-                                        // code, you have to modify the code hosted at ClothAppServer.
-                                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-
-                                            @Override
-                                            public void done(String success, ParseException e) {
-                                                if (e == null) {
-                                                    // Push sent successfully
-                                                    Log.d("MostRecentAdapter", "Push sent successfully to " + username);
-                                                } else {
-                                                    // Error...
-                                                    Log.d("MostRecentAdapter", "Could not send push notification...");
-                                                }
-                                            }
-                                        });
+//                                        HashMap<String, Object> params = new HashMap<>();
+//                                        params.put("recipientUsername", imageUsername);
+//                                        params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+//
+//                                        // Call a Parse Cloud Code function. This function is hosted on Parse and
+//                                        // allows a deeper level of security. If you want to change the Cloud function
+//                                        // code, you have to modify the code hosted at ClothAppServer.
+//                                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+//
+//                                            @Override
+//                                            public void done(String success, ParseException e) {
+//                                                if (e == null) {
+//                                                    // Push sent successfully
+//                                                    Log.d("MostRecentAdapter", "Push sent successfully to " + username);
+//                                                } else {
+//                                                    // Error...
+//                                                    Log.d("MostRecentAdapter", "Could not send push notification...");
+//                                                }
+//                                            }
+//                                        });
                                     } else {
                                         photo.removeAll("like", Collections.singletonList(username));
                                         photo.put("nLike", photo.getInt("nLike") - 1);
