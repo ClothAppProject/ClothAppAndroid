@@ -2,8 +2,8 @@ package com.clothapp.settings;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
@@ -200,6 +200,44 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    return false;
+                }
+            });
+
+            final String username = ParseUser.getCurrentUser().getUsername();
+
+            final CheckBoxPreference savePhotos = (CheckBoxPreference) findPreference("savePhotos");
+            savePhotos.setChecked(UserSettingsUtil.checkIfSavePhotos());
+            savePhotos.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean nuovoValore = !UserSettingsUtil.checkIfSavePhotos();
+                    savePhotos.setChecked(nuovoValore);
+                    UserSettingsUtil.setSavePhotos(nuovoValore);
+                    return false;
+                }
+            });
+
+            final SwitchPreference like = (SwitchPreference) findPreference("like");
+            like.setChecked(UserSettingsUtil.checkNotificationLike(username));
+            like.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean nuovoValore = !UserSettingsUtil.checkNotificationLike(username);
+                    like.setChecked(nuovoValore);
+                    UserSettingsUtil.setLikeNotifications(nuovoValore);
+                    return false;
+                }
+            });
+
+            final SwitchPreference follower = (SwitchPreference) findPreference("follower");
+            follower.setChecked(UserSettingsUtil.checkNotificationFollower(username));
+            follower.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean nuovoValore = !UserSettingsUtil.checkNotificationFollower(username);
+                    follower.setChecked(nuovoValore);
+                    UserSettingsUtil.setFollowerNotifications(nuovoValore);
                     return false;
                 }
             });

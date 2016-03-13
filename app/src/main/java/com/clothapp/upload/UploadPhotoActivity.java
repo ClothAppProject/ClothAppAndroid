@@ -51,6 +51,7 @@ import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
+import com.clothapp.settings.UserSettingsUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -659,6 +660,10 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             Get g = new Get();
                                             g.execute(url);
 
+                                            //controllo se eliminare foto in impostazioni
+                                            if (!UserSettingsUtil.checkIfSavePhotos())  {
+                                                deleteImage();
+                                            }
                                             getActivity().finish();
                                         } else {
                                             // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server

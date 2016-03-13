@@ -20,15 +20,13 @@ import com.clothapp.SplashScreenActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.Arrays;
 import java.util.List;
 import static com.clothapp.resources.RegisterUtil.setButtonTint;
 import static com.clothapp.resources.ExceptionCheck.check;
-import static com.clothapp.resources.FacebookUtil.getUserDetailsRegisterFB;
+import static com.clothapp.login_signup.FacebookUtil.getUserDetailsRegisterFB;
 
 
 public class MainActivity extends AppCompatActivity {

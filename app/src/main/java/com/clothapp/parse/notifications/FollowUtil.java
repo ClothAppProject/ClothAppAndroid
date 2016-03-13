@@ -77,16 +77,14 @@ public class FollowUtil {
 
                         } else {
 
-                            String usernameFrom = ParseUser.getCurrentUser().getUsername();
-
                             // Creo una nuova relazione
                             relazione = new ParseObject("Follow");
-                            relazione.put("from", usernameFrom);
+                            relazione.put("from", ParseUser.getCurrentUser().getUsername());
                             relazione.put("to", usernameTo);
                             relazione.saveInBackground();
 
                             // Send "Like" notification to the user who posted the image
-                            NotificationsUtils.sendNotification(usernameTo, usernameFrom + " ha cominciato a seguirti!");
+                            NotificationsUtils.sendNotification(usernameTo, "follow");
 
                             follow_edit.setText(R.string.unfollow);
                         }

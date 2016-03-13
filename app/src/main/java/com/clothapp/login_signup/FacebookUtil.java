@@ -1,4 +1,4 @@
-package com.clothapp.resources;
+package com.clothapp.login_signup;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.clothapp.R;
 import com.clothapp.http.Get;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -79,6 +80,7 @@ public class FacebookUtil {
                     user.setEmail(email);
                     user.put("name", name.trim());
                     user.put("flagISA","Persona");
+                    user.put("Settings", R.string.default_settings);
                     try {
                         //uso save e non savebackground perchè non deve essere asincrona
                         user.save();

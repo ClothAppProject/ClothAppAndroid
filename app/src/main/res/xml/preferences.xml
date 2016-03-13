@@ -2,21 +2,25 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Account settings -->
     <PreferenceCategory
         android:title="@string/account_settings"
         android:layout="@layout/preferences_category">
+
+        <!-- Account settings -->
         <PreferenceScreen
             android:title="@string/profile_settings"
             android:key="edit_profile"
             android:summary="@string/profile_summary">
         </PreferenceScreen>
 
+        <!-- Password Settings -->
         <PreferenceScreen
             android:title="@string/password_settings"
             android:key="change_password"
             android:summary="@string/password_summary">
         </PreferenceScreen>
+
+        <!-- Linked Accounts -->
         <PreferenceScreen
             android:title="@string/account_collegati">
             <SwitchPreference
@@ -28,10 +32,11 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
-    <!-- Linked Accounts -->
     <PreferenceCategory
         android:title="@string/app_settings"
         android:layout="@layout/preferences_category">
+
+        <!-- Notification -->
         <PreferenceScreen
             android:title="@string/notification">
             <SwitchPreference
@@ -47,15 +52,17 @@
                 android:persistent="false">
             </SwitchPreference>
         </PreferenceScreen>
+
+        <!-- Save Fotos -->
         <CheckBoxPreference
             android:title="@string/salva_foto"
             android:defaultValue="true"
-            android:key="savingPhoto">
+            android:key="savePhotos">
         </CheckBoxPreference>
     </PreferenceCategory>
 
 
-    <!-- Assistenza settings -->
+    <!-- Report -->
     <PreferenceCategory
         android:title="@string/assitance_settings"
         android:layout="@layout/preferences_category">
@@ -66,7 +73,7 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
-    <!-- INFO settings -->
+    <!-- INFO  -->
     <PreferenceCategory
         android:title="@string/info_set"
         android:layout="@layout/preferences_category">
@@ -77,6 +84,4 @@
                 android:data="http://www.clothapp.it" />
         </PreferenceScreen>
     </PreferenceCategory>
-
-
 </PreferenceScreen>

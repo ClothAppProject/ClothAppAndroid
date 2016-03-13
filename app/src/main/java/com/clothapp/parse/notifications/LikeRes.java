@@ -27,7 +27,7 @@ public class LikeRes {
 
         // Send "Like" notification to the user who posted the image
         if (!image.getUser().equals(ParseUser.getCurrentUser().getUsername())) {
-            NotificationsUtils.sendNotification(image.getUser(), ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+            NotificationsUtils.sendNotification(image.getUser(), "like");
         }
 
         //aggiungo like su parse

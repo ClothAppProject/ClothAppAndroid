@@ -160,6 +160,7 @@ public class ShopSignupActivity extends AppCompatActivity {
                             user.put("name", edit_name.getText().toString().trim());
                             user.put("lowercase", user.getUsername().toLowerCase());
                             user.put("flagISA", "Negozio");
+                            user.put("Settings",R.string.default_settings);
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
