@@ -211,6 +211,9 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                         params.put("recipientUsername", imageUsername);
                                         params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
 
+                                        // Call a Parse Cloud Code function. This function is hosted on Parse and
+                                        // allows a deeper level of security. If you want to change the Cloud function
+                                        // code, you have to modify the code hosted at ClothAppServer.
                                         ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
 
                                             @Override
