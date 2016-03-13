@@ -25,15 +25,19 @@ import java.util.List;
  * Created by giacomoceribelli on 25/02/16.
  */
 public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private Context context;
     private List<User> users;
     private String profilo;
-    public PeopleListAdapter(List<User> utenti,String profilo) {
-        this.profilo=profilo;
-        this.users=utenti;
-        if (profilo.equals("persona")) context = UserProfileActivity.activity.getApplicationContext();
+
+    public PeopleListAdapter(List<User> utenti, String profilo) {
+        this.profilo = profilo;
+        this.users = utenti;
+        if (profilo.equals("persona"))
+            context = UserProfileActivity.activity.getApplicationContext();
         else context = ShopProfileActivity.activity.getApplicationContext();
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item_user, parent, false);
@@ -43,14 +47,14 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         PersonViewHolder profileViewHolder = (PersonViewHolder) holder;
-        if (users.get(position).getProfilo()!=null) {
+        if (users.get(position).getProfilo() != null) {
             // Create a bitmap from a file
             File imageFile = users.get(position).getProfilo();
             Glide.with(context)
                     .load(imageFile)
                     .transform(new CircleTransform(context))
                     .into(profileViewHolder.photo);
-        }else{
+        } else {
             Glide.with(context)
                     .load(R.drawable.com_facebook_profile_picture_blank_square)
                     .transform(new CircleTransform(context))
@@ -63,13 +67,14 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         profileViewHolder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = ProfileUtils.goToProfile(context,users.get(position).getUsername());
+                Intent i = ProfileUtils.goToProfile(context, users.get(position).getUsername());
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
         });
     }
-    public void add(User usr)   {
+
+    public void add(User usr) {
         if (users.contains(usr)) users.add(usr);
     }
 
@@ -77,17 +82,19 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public int getItemCount() {
         return users.size();
     }
+
     public class PersonViewHolder extends RecyclerView.ViewHolder {
         ImageView photo;
         TextView user;
         TextView name;
         LinearLayout ll;
+
         PersonViewHolder(View itemView) {
             super(itemView);
             ll = (LinearLayout) itemView.findViewById(R.id.striscia);
-            photo=(ImageView) itemView.findViewById(R.id.foto);
-            user=(TextView)itemView.findViewById(R.id.user);
-            name=(TextView)itemView.findViewById(R.id.name);
+            photo = (ImageView) itemView.findViewById(R.id.foto);
+            user = (TextView) itemView.findViewById(R.id.user);
+            name = (TextView) itemView.findViewById(R.id.name);
         }
     }
 }
