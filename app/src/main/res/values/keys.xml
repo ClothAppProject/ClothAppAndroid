@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="secret_parse_app_id">JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8</string>
+    <string name="secret_parse_client_key">NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk</string>
+    <string name="secret_facebook_app_id">1088170274561501</string>
+    <string name="secret_google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCFLwLj5rYQ-ucsZm5Oqe6SXRnztnh9KJM</string>
+</resources>

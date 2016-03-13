@@ -7,13 +7,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:protectionLevel="signature"
-        android:name="com.parse.starter.permission.C2D_MESSAGE" />
+    <permission
+        android:name="com.parse.starter.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
     <uses-permission android:name="com.clothapp.permission.C2D_MESSAGE" />
 
     <application
@@ -27,20 +28,20 @@
         <!-- meta-data per google -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key"/>
+            android:value="@string/secret_google_maps_key" />
 
         <!-- meta-data per parse & facebook -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
-            android:value="JdgT5RtwJaaoDRNe9bx5LF3TyVj20RGXMKMv6jQ8" />
+            android:value="@string/secret_parse_app_id" />
 
         <meta-data
             android:name="com.parse.CLIENT_KEY"
-            android:value="NcZTNmBoULYmGhC9P1SRYHfhhQNJxcFOWSOYFImk" />
+            android:value="@string/secret_parse_client_key" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/secret_facebook_app_id" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -58,6 +59,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".search.SearchResultsActivity"
             android:label="@string/app_name"
@@ -85,23 +87,27 @@
             android:name=".login_signup.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Login" />
+
         <activity
             android:name=".ImageFragment"
             android:label="@string/app_name" />
+
         <activity
             android:name=".upload.UploadProfilePictureActivity"
             android:label="@string/app_name"
             android:largeHeap="true" />
+
         <activity
             android:name=".upload.UploadActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:largeHeap="true">
-        </activity>
+            android:largeHeap="true" />
+
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".login_signup.SignupActivity"
             android:label="@string/app_name"
@@ -124,14 +130,17 @@
             android:name=".login_signup.FacebookUsernameActivity"
             android:label="@string/app_name"
             android:parentActivityName=".login_signup.MainActivity" />
+
         <activity
             android:name=".login_signup.ResetPasswordActivity"
             android:label="@string/app_name"
             android:parentActivityName=".login_signup.MainActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".login_signup.MainActivity" />
         </activity>
+
         <activity android:name=".BaseActivity" />
 
         <meta-data
@@ -141,42 +150,53 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/app_name" />
+
         <activity
             android:name=".settings.EditProfileActivity"
             android:label="@string/app_name">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".settings.SettingsActivity" />
         </activity>
+
         <activity
             android:name=".settings.EditShopProfileActivity"
             android:label="@string/app_name">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".settings.SettingsActivity" />
         </activity>
+
         <activity
             android:name=".profile.UserProfileActivity"
             android:label="@string/title_activity_new_profile"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".profile_shop.ShopProfileActivity"
             android:label="@string/title_activity_new_profile"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".home.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".search.SearchResultsActivity" />
         </activity>
+
         <activity
             android:name=".search.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".upload.UploadPhotoActivity"
             android:label="@string/title_activity_upload_photo"
             android:theme="@style/AppTheme.Upload" />
+
         <activity
             android:name=".settings.ChangePassword"
             android:theme="@style/AppTheme" />
@@ -185,10 +205,14 @@
 
         <service android:name="com.parse.PushService" />
 
-        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/logo_small"/>
+        <meta-data
+            android:name="com.parse.push.notification_icon"
+            android:resource="@drawable/logo_small" />
 
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
+
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
@@ -196,11 +220,14 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
+
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.clothapp" />
             </intent-filter>
         </receiver>
