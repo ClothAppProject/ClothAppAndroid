@@ -182,6 +182,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
                         Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
+                        final String imageUsername = image.getUser();
 
                         final boolean add = !image.getLike().contains(username);
                         if (add) {
@@ -204,6 +205,25 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                         photo.addUnique("like", username);
                                         photo.put("nLike", photo.getInt("nLike") + 1);
                                         photo.saveInBackground();
+
+                                        // Send "Like" notification to
+                                        HashMap<String, Object> params = new HashMap<>();
+                                        params.put("recipientUsername", imageUsername);
+                                        params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+
+                                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+
+                                            @Override
+                                            public void done(String success, ParseException e) {
+                                                if (e == null) {
+                                                    // Push sent successfully
+                                                    Log.d("MostRecentAdapter", "Push sent successfully to " + username);
+                                                } else {
+                                                    // Error...
+                                                    Log.d("MostRecentAdapter", "Could not send push notification...");
+                                                }
+                                            }
+                                        });
                                     } else {
                                         photo.removeAll("like", Collections.singletonList(username));
                                         photo.put("nLike", photo.getInt("nLike") - 1);
@@ -243,23 +263,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //                            }
 //                        });
 
-                        HashMap<String, Object> params = new HashMap<>();
-                        params.put("recipientUsername", image.getUser());
-                        params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
-
-                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-
-                            @Override
-                            public void done(String success, ParseException e) {
-                                if (e == null) {
-                                    // Push sent successfully
-                                    Log.d("MostRecentAdapter", "Push sent successfully to " + username);
-                                } else {
-                                    // Error...
-                                    Log.d("MostRecentAdapter", "Could not send push notification...");
-                                }
-                            }
-                        });
                     }
                 }
             });
