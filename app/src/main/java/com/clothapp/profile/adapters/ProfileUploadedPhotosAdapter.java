@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
@@ -112,7 +113,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photo = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_image);
             txtLikeCount = (TextView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_count);
             likeImage = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_like_image);
-            share=(ImageView)itemView.findViewById(R.id.profile_uploaded_photos_card_share);
+            share = (ImageView) itemView.findViewById(R.id.profile_uploaded_photos_card_share);
 
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,6 +137,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                 public void onClick(View v) {
 
                     Image image = ProfileUploadedPhotosAdapter.photos.get(PhotoViewHolder.this.getAdapterPosition());
+                    final String imageUsername = image.getUser();
 
                     final boolean add = !image.getLike().contains(username);
                     if (add) {
@@ -161,6 +163,9 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                                     photo.removeAll("like", Collections.singletonList(username));
                                     photo.put("nLike", photo.getInt("nLike") - 1);
                                     photo.saveInBackground();
+
+                                    // Send "Like" notification to the user who posted the image
+                                    NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
                                 }
                             } else {
                                 Log.d("ProfileUploadedPhotos", "Error: " + e.getMessage());
@@ -188,8 +193,10 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     }
 
                     share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-                    if (profilo.equals("persona")) UserProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
-                    else ShopProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
+                    if (profilo.equals("persona"))
+                        UserProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
+                    else
+                        ShopProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
                 }
             });
         }
