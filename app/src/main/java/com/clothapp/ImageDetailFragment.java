@@ -176,7 +176,7 @@ public class ImageDetailFragment extends Fragment {
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(final ParseObject object, ParseException e) {
-                if(e!=null) e.printStackTrace();
+
                 parseObject = object;
                 //setto username e listener
                 t.setText(immagine.getUser());
