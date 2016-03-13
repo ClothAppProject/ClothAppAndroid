@@ -1,42 +1,24 @@
 package com.clothapp.home;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.parse.notifications.NotificationsUtils;
-import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
-import com.parse.FunctionCallback;
-import com.parse.GetCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
-import com.parse.ParsePush;
-import com.parse.ParseQuery;
+import com.clothapp.parse.notifications.LikeRes;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -183,43 +165,18 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
                         Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
-                        final String imageUsername = image.getUser();
 
-                        final boolean add = !image.getLike().contains(username);
+                        final boolean add = image.getLike().contains(username);
                         if (add) {
-                            // Log.d("MostRecentAdapter", "Adding...");
-                            image.addLike(username);
-                        } else {
                             // Log.d("MostRecentAdapter", "Removing...");
-                            image.remLike(username);
+                            LikeRes.deleteLike(image.getObjectId(), image, username);
+
+                        } else {
+                            // Log.d("MostRecentAdapter", "Adding...");
+                            LikeRes.addLike(image.getObjectId(), image, username);
                         }
 
                         notifyDataSetChanged();
-
-                        // Update like list on Parse database.
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-
-                        query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
-                            public void done(ParseObject photo, ParseException e) {
-                                if (e == null) {
-                                    if (add) {
-                                        photo.addUnique("like", username);
-                                        photo.put("nLike", photo.getInt("nLike") + 1);
-                                        photo.saveInBackground();
-
-                                        // Send "Like" notification to the user who posted the image
-                                        NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
-
-                                    } else {
-                                        photo.removeAll("like", Collections.singletonList(username));
-                                        photo.put("nLike", photo.getInt("nLike") - 1);
-                                        photo.saveInBackground();
-                                    }
-                                } else {
-                                    Log.d("MostRecentAdapter", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
                     }
                 }
             });

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +18,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.parse.notifications.NotificationsUtils;
-import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
+import com.clothapp.parse.notifications.LikeRes;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
@@ -33,7 +31,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -76,7 +73,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         List likeUsers = image.getLike();
 
-        if (likeUsers != null && likeUsers.contains(username)) {
+        if (likeUsers.contains(username)) {
             holder.setHeartImage(true);
         } else {
             holder.setHeartImage(false);
@@ -301,40 +298,18 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         final String imageUsername = image.getUser();
 
-                        final boolean add = !image.getLike().contains(username);
+                        final boolean add = image.getLike().contains(username);
                         if (add) {
-                            // Log.d("TopRatedAdapter", "Adding...");
-                            image.addLike(username);
+                            // Log.d("MostRecentAdapter", "Removing...");
+                            LikeRes.deleteLike(image.getObjectId(), image, username);
+
                         } else {
-                            // Log.d("TopRatedAdapter", "Removing...");
-                            image.remLike(username);
+                            // Log.d("MostRecentAdapter", "Adding...");
+                            LikeRes.addLike(image.getObjectId(), image, username);
                         }
 
                         notifyDataSetChanged();
 
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-
-                        query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
-                            public void done(ParseObject photo, ParseException e) {
-                                if (e == null) {
-                                    if (add) {
-                                        photo.addUnique("like", username);
-                                        photo.put("nLike", photo.getInt("nLike") + 1);
-                                        photo.saveInBackground();
-                                        
-                                        // Send "Like" notification to the user who posted the image
-                                        NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
-
-                                    } else {
-                                        photo.removeAll("like", Collections.singletonList(username));
-                                        photo.put("nLike", photo.getInt("nLike") - 1);
-                                        photo.saveInBackground();
-                                    }
-                                } else {
-                                    Log.d("TopRatedAdapter", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
                     }
                 }
             });

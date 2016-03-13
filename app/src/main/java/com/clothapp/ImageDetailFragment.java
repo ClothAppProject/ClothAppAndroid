@@ -28,17 +28,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
-import com.clothapp.resources.LikeRes;
+import com.clothapp.parse.notifications.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
 import com.clothapp.resources.User;
-import com.clothapp.search.SearchAdapter;
 import com.clothapp.search.SearchAdapterUser;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
@@ -315,21 +312,16 @@ public class ImageDetailFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (immagine.getLike().contains(username)) {
-                            //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
-                            //rimuovo il like e cambio la lista
-                            LikeRes.deleteLike(object, immagine, username);
+                            //rimuovo il like chiamando deleteLike
+                            LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
 
                             cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
                         } else {
-                            //aggiungo like e aggiorno anche in parse
-                            LikeRes.addLike(object, immagine, username);
-                            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                            //aggiungo like chiamando addLike
+                            LikeRes.addLike(immagine.getObjectId(), immagine, username);
 
-                            // Send "Like" notification to the user who posted the image
-                            NotificationsUtils.sendNotification(immagine.getUser(), ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+                            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                         }
-                        //aggiorno il numero di like
-                        int numLikes = object.getInt("nLike");
                         //  se ho zero likes scrivo like sennò likes
                         setTextLike();
                     }
@@ -594,15 +586,14 @@ public class ImageDetailFragment extends Fragment {
             public boolean onDoubleTap(MotionEvent e) {
                 final String username = ParseUser.getCurrentUser().getUsername();
                 if (immagine.getLike().contains(username)) {
-                    //possibile problema di concorrenza sull'oggetto in caso più persone stiano mettendo like contemporaneamente
-                    //rimuovo il like e cambio la lista
-                    LikeRes.deleteLike(object, immagine, username);
+                    //chiamo delete like
+                    LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
 
                     cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-
                 } else {
-                    //aggiungo like e aggiorno anche in parse
-                    LikeRes.addLike(object, immagine, username);
+                    //chiamo addlike
+                    LikeRes.addLike(immagine.getObjectId(), immagine, username);
+
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
                 //  se ho zero likes scrivo like sennò likes

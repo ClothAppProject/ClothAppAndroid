@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.PeopleListAdapter;
-import com.clothapp.profile.utils.FollowUtil;
+import com.clothapp.parse.notifications.FollowUtil;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.User;
 

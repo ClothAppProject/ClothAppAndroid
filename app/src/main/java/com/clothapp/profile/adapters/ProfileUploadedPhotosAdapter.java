@@ -7,33 +7,25 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.clothapp.parse.notifications.LikeRes;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -139,39 +131,16 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     Image image = ProfileUploadedPhotosAdapter.photos.get(PhotoViewHolder.this.getAdapterPosition());
                     final String imageUsername = image.getUser();
 
-                    final boolean add = !image.getLike().contains(username);
+                    final boolean add = image.getLike().contains(username);
                     if (add) {
-                        // Log.d("ProfileUploadedPhotos", "Adding...");
-                        image.addLike(username);
-                    } else {
                         // Log.d("ProfileUploadedPhotos", "Removing...");
-                        image.remLike(username);
+                        LikeRes.deleteLike(image.getObjectId(), image, username);
+                    } else {
+                        // Log.d("ProfileUploadedPhotos", "Adding...");
+                        LikeRes.addLike(image.getObjectId(), image, username);
                     }
 
                     notifyDataSetChanged();
-
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-
-                    query.getInBackground(image.getObjectId(), new GetCallback<ParseObject>() {
-                        public void done(ParseObject photo, ParseException e) {
-                            if (e == null) {
-                                if (add) {
-                                    photo.addUnique("like", username);
-                                    photo.put("nLike", photo.getInt("nLike") + 1);
-                                    photo.saveInBackground();
-                                } else {
-                                    photo.removeAll("like", Collections.singletonList(username));
-                                    photo.put("nLike", photo.getInt("nLike") - 1);
-                                    photo.saveInBackground();
-
-                                    // Send "Like" notification to the user who posted the image
-                                    NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
-                                }
-                            } else {
-                                Log.d("ProfileUploadedPhotos", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
                 }
             });
 

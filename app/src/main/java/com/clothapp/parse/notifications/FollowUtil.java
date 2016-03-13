@@ -1,4 +1,4 @@
-package com.clothapp.profile.utils;
+package com.clothapp.parse.notifications;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
