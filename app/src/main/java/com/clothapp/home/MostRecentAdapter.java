@@ -26,7 +26,9 @@ import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -221,9 +223,9 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //                            @Override
 //                            public void done(ParseUser userObject, ParseException e) {
 //
-//                                HashMap<String, Object> params = new HashMap<String, Object>();
+//                                HashMap<String, Object> params = new HashMap<>();
 //                                params.put("recipientId", userObject.getObjectId());
-//                                params.put("message", username + " ha messo \"Mi Piace\" a una tua foto!");
+//                                params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
 //
 //                                ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
 //
@@ -240,6 +242,24 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //                                });
 //                            }
 //                        });
+
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put("recipientUsername", image.getUser());
+                        params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+
+                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+
+                            @Override
+                            public void done(String success, ParseException e) {
+                                if (e == null) {
+                                    // Push sent successfully
+                                    Log.d("MostRecentAdapter", "Push sent successfully to " + username);
+                                } else {
+                                    // Error...
+                                    Log.d("MostRecentAdapter", "Could not send push notification...");
+                                }
+                            }
+                        });
                     }
                 }
             });
