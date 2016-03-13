@@ -22,7 +22,9 @@ import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -31,6 +33,7 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -209,6 +212,34 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 }
                             }
                         });
+
+                        // Send push notification
+//                        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+//                        userQuery.whereEqualTo("username", image.getUser());
+//                        userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+//
+//                            @Override
+//                            public void done(ParseUser userObject, ParseException e) {
+//
+//                                HashMap<String, Object> params = new HashMap<String, Object>();
+//                                params.put("recipientId", userObject.getObjectId());
+//                                params.put("message", username + " ha messo \"Mi Piace\" a una tua foto!");
+//
+//                                ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+//
+//                                    @Override
+//                                    public void done(String success, ParseException e) {
+//                                        if (e == null) {
+//                                            // Push sent successfully
+//                                            Log.d("MostRecentAdapter", "Push sent successfully to " + username);
+//                                        } else {
+//                                            // Error...
+//                                            Log.d("MostRecentAdapter", "Could not send push notification...");
+//                                        }
+//                                    }
+//                                });
+//                            }
+//                        });
                     }
                 }
             });
