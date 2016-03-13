@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
@@ -298,6 +299,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
                         Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        final String imageUsername = image.getUser();
 
                         final boolean add = !image.getLike().contains(username);
                         if (add) {
@@ -319,6 +321,10 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         photo.addUnique("like", username);
                                         photo.put("nLike", photo.getInt("nLike") + 1);
                                         photo.saveInBackground();
+                                        
+                                        // Send "Like" notification to the user who posted the image
+                                        NotificationsUtils.sendNotification(imageUsername, ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
+
                                     } else {
                                         photo.removeAll("like", Collections.singletonList(username));
                                         photo.put("nLike", photo.getInt("nLike") - 1);

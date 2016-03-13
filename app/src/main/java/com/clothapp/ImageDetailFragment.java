@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
@@ -323,6 +324,9 @@ public class ImageDetailFragment extends Fragment {
                             //aggiungo like e aggiorno anche in parse
                             LikeRes.addLike(object, immagine, username);
                             cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+
+                            // Send "Like" notification to the user who posted the image
+                            NotificationsUtils.sendNotification(immagine.getUser(), ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
                         }
                         //aggiorno il numero di like
                         int numLikes = object.getInt("nLike");
@@ -370,15 +374,15 @@ public class ImageDetailFragment extends Fragment {
                         segnalazione.put("comment", comment.getText().toString());
                         segnalazione.put("from_username", ParseUser.getCurrentUser().getUsername());
                         segnalazione.put("reason", spinner.getSelectedItem());
-                        segnalazione.put("photo",immagine.getObjectId());
+                        segnalazione.put("photo", immagine.getObjectId());
                         segnalazione.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
                                 if (e != null) {
                                     check(e.getCode(), getView(), e.getMessage());
-                                }else{
+                                } else {
 
-                                    Toast.makeText(getActivity().getApplicationContext(),R.string.report_sent,Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity().getApplicationContext(), R.string.report_sent, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -404,7 +408,7 @@ public class ImageDetailFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 //prendo i vestiti della foto e li elimino
                                 if (parseObject.getList("vestiti") != null) {
-                                    for (int i=0;i<parseObject.getList("vestiti").size();i++)   {
+                                    for (int i = 0; i < parseObject.getList("vestiti").size(); i++) {
                                         ParseObject vestito = ParseObject.createWithoutData("Vestito", parseObject.getList("vestiti").get(i).toString());
                                         vestito.deleteInBackground();
                                     }
