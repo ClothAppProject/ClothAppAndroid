@@ -83,15 +83,24 @@ public class ApplicationSupport extends Application {
         Parse.initialize(this);
 
         // This is needed for push notifications
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        // ParseInstallation.getCurrentInstallation().saveInBackground();
 
         // This is needed for Facebook login
         ParseFacebookUtils.initialize(this);
 
         try {
-            // Update current user profile
-            if (ParseUser.getCurrentUser() != null) {
-                ParseUser.getCurrentUser().fetch();
+            // Update current user profile if current user is not null
+            ParseUser currentUser = ParseUser.getCurrentUser();
+
+            if (currentUser != null) {
+                currentUser.fetch();
+
+                // This is needed for Parse push notifications
+                // Associate current user username to current installation object
+                // and save it in background on Parse.
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                installation.put("username", currentUser.getUsername());
+                installation.saveInBackground();
             }
         } catch (ParseException e) {
 
