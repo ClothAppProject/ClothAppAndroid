@@ -20,7 +20,7 @@
     <string name="main_password">Password</string>
     <string name="main_login">Login</string>
     <string name="signup">Registrati</string>
-    <string name="main_login_facebook">Login with Facebook</string>
+    <string name="main_login_facebook">Login with Facebook (Experimental)</string>
     <string name="main_login_twitter">Login with Twitter</string>
     <string name="main_forgot_password"><u>Forgot password?</u></string>
     <string name="main_signup"><u>New here? Sign up!</u></string>
