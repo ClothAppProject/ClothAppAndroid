@@ -189,4 +189,5 @@
         \n-   NON contenere spazi
         \n-   NON contenere caratteri speciali (i.e. new line o tab)</string>
 
+    <string name="wrongDate">La data inserita non è valida</string>
 </resources>

@@ -28,6 +28,7 @@ import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
+import com.clothapp.resources.RegisterUtil;
 import com.clothapp.upload.UploadProfilePictureActivity;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -152,32 +153,48 @@ public class EditProfileActivity extends AppCompatActivity {
                         editDay.getText().toString()==""||editMonth.getText().toString()==""||editYear.getText().toString()==""){
                     Snackbar.make(v, R.string.empty_field, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 } else {
-                    //inizializzo progressbar di caricamento
-                    final ProgressDialog dialog = ProgressDialog.show(EditProfileActivity.this, "",
-                            getString(R.string.check_data), true);
+
 
                     utente.setEmail(editEmail.getText().toString());
                     utente.put("name",editName.getText().toString());
                     try {
                         utente.save();
-                        persona.put("lastname",editLastname.getText().toString());
+                        persona.put("lastname", editLastname.getText().toString());
 
-                        // Formatto data
-                        final String edit_date = editYear.getText().toString() + "-" + editMonth.getText().toString() + "-" + editDay.getText().toString();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date date = null;
-                        try {
-                             date = sdf.parse(edit_date);
-                        } catch (java.text.ParseException e) {
+
+                        String year = editYear.getText().toString();
+                        String month = editMonth.getText().toString();
+                        String day = editDay.getText().toString();
+
+                        int anno = Integer.parseInt(year);
+                        int mese = Integer.parseInt(month);
+                        int giorno = Integer.parseInt(day);
+
+                        if (!RegisterUtil.isValidBirthday(giorno, mese, anno)) {
+                            Snackbar.make(v, R.string.wrongDate, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        } else {
+                            //inizializzo progressbar di caricamento
+                            final ProgressDialog dialog = ProgressDialog.show(EditProfileActivity.this, "",
+                                    getString(R.string.check_data), true);
+                            // Formatto data
+                            final String edit_date = year + "-" + month + "-" + day;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = null;
+                            try {
+                                date = sdf.parse(edit_date);
+                            } catch (java.text.ParseException e) {
+                                e.printStackTrace();
+                            }
+                            persona.put("date", date);
+                            persona.save();
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), R.string.data_edited, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        }catch(ParseException e){
                             e.printStackTrace();
                         }
-                        persona.put("date",date);
-                        persona.save();
-                        dialog.dismiss();
-                        Toast.makeText(getApplicationContext(),R.string.data_edited,Toast.LENGTH_SHORT).show();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+
 
                 }
             }

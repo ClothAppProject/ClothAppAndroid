@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.clothapp.R;
+import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
@@ -249,6 +250,9 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
                     String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+picture.getObjectId();
                     Get g = new Get();
                     g.execute(url);
+
+                    //  notifying the navigation drawer about the changing
+                    HomeActivity.changePic = 1;
 
                     finish();
                 } else {

@@ -61,6 +61,8 @@ public class HomeActivity extends AppCompatActivity {
     // of the HomeActivity.
     public static File drawerProfilePhotoFile;
 
+    public static int changePic = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +130,9 @@ public class HomeActivity extends AppCompatActivity {
         drawerUsername.setText(capitalize(currentUser.getUsername()));
         drawerRealName.setText(capitalize(currentUser.getString("name")));
 
-        if (drawerProfilePhotoFile == null) {
+
+        //if (drawerProfilePhotoFile == null) {
+        if (changePic==1) {
             ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
             query.whereEqualTo("username", currentUser.getUsername());
 
@@ -160,6 +164,8 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                             }
                         });
+
+                        changePic = 0;
 
                     } else {
                         Log.d("HomeActivity", "Error: " + e.getMessage());

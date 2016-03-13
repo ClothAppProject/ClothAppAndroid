@@ -236,6 +236,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
             // A questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
+            System.out.println("DEB1"+imageBitmap);
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
