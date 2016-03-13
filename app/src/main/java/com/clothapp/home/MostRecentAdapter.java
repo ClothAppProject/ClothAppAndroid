@@ -234,35 +234,6 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 }
                             }
                         });
-
-                        // Send push notification
-//                        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-//                        userQuery.whereEqualTo("username", image.getUser());
-//                        userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
-//
-//                            @Override
-//                            public void done(ParseUser userObject, ParseException e) {
-//
-//                                HashMap<String, Object> params = new HashMap<>();
-//                                params.put("recipientId", userObject.getObjectId());
-//                                params.put("message", ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!");
-//
-//                                ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-//
-//                                    @Override
-//                                    public void done(String success, ParseException e) {
-//                                        if (e == null) {
-//                                            // Push sent successfully
-//                                            Log.d("MostRecentAdapter", "Push sent successfully to " + username);
-//                                        } else {
-//                                            // Error...
-//                                            Log.d("MostRecentAdapter", "Could not send push notification...");
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        });
-
                     }
                 }
             });
