@@ -55,7 +55,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     private AutoCompleteTextView tipo;
 
     private int size = 1;
-    private ArrayList<Cloth> listCloth = new ArrayList<>();
+    private ArrayList<Cloth> listCloth = new ArrayList<>(1);
     private Resources resources;
     private String output = null;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;

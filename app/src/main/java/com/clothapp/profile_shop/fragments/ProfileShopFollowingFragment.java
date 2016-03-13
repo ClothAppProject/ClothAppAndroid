@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.PeopleListAdapter;
@@ -40,6 +42,8 @@ public class ProfileShopFollowingFragment extends Fragment {
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
         ShopProfileActivity.viewProfileShopFollowing = (RecyclerView) rootView.findViewById(R.id.profile_follow_recycler_view);
 
+        //Set the no followers textview
+        final TextView noFollowing = (TextView) rootView.findViewById(R.id.no_follow);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(ShopProfileActivity.context);
@@ -50,7 +54,7 @@ public class ProfileShopFollowingFragment extends Fragment {
         adapter = new PeopleListAdapter(users,"negozio");
         ShopProfileActivity.viewProfileShopFollowing.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollowing(users,rootView,ShopProfileActivity.viewProfileShopFollowing,ShopProfileActivity.username);
+        FollowUtil.getFollowing(users, rootView, ShopProfileActivity.viewProfileShopFollowing, ShopProfileActivity.username, noFollowing);
 
         //scroll per aggiungere nuovi follower
         ShopProfileActivity.viewProfileShopFollowing.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -58,7 +62,7 @@ public class ProfileShopFollowingFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update following list
-                FollowUtil.getFollowing(users,rootView,ShopProfileActivity.viewProfileShopFollowing,ShopProfileActivity.username);
+                FollowUtil.getFollowing(users, rootView, ShopProfileActivity.viewProfileShopFollowing, ShopProfileActivity.username, noFollowing);
             }
         });
 

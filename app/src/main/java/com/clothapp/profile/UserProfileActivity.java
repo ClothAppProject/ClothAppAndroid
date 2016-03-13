@@ -235,7 +235,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),getApplicationContext());
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);

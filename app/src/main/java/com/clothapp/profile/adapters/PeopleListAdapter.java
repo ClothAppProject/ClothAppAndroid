@@ -56,7 +56,10 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     .transform(new CircleTransform(context))
                     .into(profileViewHolder.photo);
         }
-        profileViewHolder.nome.setText(users.get(position).getUsername());
+        profileViewHolder.user.setText(users.get(position).getUsername());
+        //commentato perchè tanto il nome è null, bisognerebbe fare una query per prendere anche il nome
+        //profileViewHolder.name.setText(users.get(position).getName());
+
         profileViewHolder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,13 +79,15 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
     public class PersonViewHolder extends RecyclerView.ViewHolder {
         ImageView photo;
-        TextView nome;
+        TextView user;
+        TextView name;
         LinearLayout ll;
         PersonViewHolder(View itemView) {
             super(itemView);
             ll = (LinearLayout) itemView.findViewById(R.id.striscia);
             photo=(ImageView) itemView.findViewById(R.id.foto);
-            nome=(TextView)itemView.findViewById(R.id.user);
+            user=(TextView)itemView.findViewById(R.id.user);
+            name=(TextView)itemView.findViewById(R.id.name);
         }
     }
 }

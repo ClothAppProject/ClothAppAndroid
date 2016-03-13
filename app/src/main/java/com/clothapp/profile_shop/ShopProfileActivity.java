@@ -230,7 +230,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager());
+        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext());
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);

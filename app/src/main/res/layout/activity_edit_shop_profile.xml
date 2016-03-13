@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:theme="@android:style/Theme.Material.Light"
-                android:text="@string/edit_profile" />
+                android:text="@string/save" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

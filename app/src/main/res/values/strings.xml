@@ -28,6 +28,7 @@
     <string name="check_data">Controllo dati</string>
     <string name="data_edited">Dati modificati</string>
     <string name="name">Nome</string>
+    <string name="username">Username</string>
     <string name="name_shop">Nome del Negozio</string>
     <string name="lastname">Cognome</string>
     <string name="sex">Sesso</string>
@@ -58,7 +59,14 @@
         <item>Logout</item>
     </string-array>
 
+    <string name="he_likes">Piace a</string>
+    <string name="and_others">e altri</string>
+    <string name="likes">likes</string>
+    <string name="no_following">L\' utente non segue nessuno</string>
+    <string name="no_followers">L\' utente non ha nessun followers</string>
+    <string name="no_photos_uploaded">L\' utente non ha caricato nessuna foto</string>
     <string name="edit_profile">Modifica Profilo</string>
+    <string name="save">Salva</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="ask_back_from_upload">Vuoi annullare la procedura di upload?</string>
@@ -171,5 +179,16 @@
     </string-array>
     <string name="title_activity_upload_photo">UploadPhotoActivity</string>
 
+    <string name="info_profilo">INFO</string>
+    <string name="photo">MY OUTFITS</string>
+    <string name="followers">FOLLOWERS</string>
+    <string name="following">FOLLOWING</string>
+
+    <string name="passSignup">Password</string>
+
+    <string name="pswdStruct">La password da inserire deve:
+    -   Contenere almeno una lettera maiuscola \n-   Contenere almeno una lettera minuscola\n-   Contenere almeno un numero
+        \n-   NON contenere spazi
+        \n-   NON contenere caratteri speciali (i.e. new line o tab)</string>
 
 </resources>
