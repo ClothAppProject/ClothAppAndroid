@@ -78,6 +78,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //set adapter to  ViewPager
         searchAdapter = new SearchAdapter(getSupportFragmentManager(), titles, query, getApplicationContext(), sex, pricefrom, priceto, order);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(searchAdapter);
         //viewPager.setCurrentItem(1);
         //viewPager.setCurrentItem(1);
