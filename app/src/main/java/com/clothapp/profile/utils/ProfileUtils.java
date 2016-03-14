@@ -211,22 +211,21 @@ public class ProfileUtils {
 
                                 if (!shop) {
                                     //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
-                                    if (UserProfileActivity.username.equals(username)) {
-                                        System.out.println("debug carico foto di "+username+ " in "+UserProfileActivity.username);
+                                    //if (UserProfileActivity.username.equals(username)) {
                                         Glide.clear(mainImageView);
                                         Glide.with(context)
                                                 .load(file)
                                                 .transform(new CircleTransform(context))
                                                 .into(mainImageView);
-                                    }
+                                    //}
                                 } else {
                                     //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
-                                    if (ShopProfileActivity.username.equals(username)) {
+                                    //if (ShopProfileActivity.username.equals(username)) {
                                         Glide.clear(mainImageView);
                                         Glide.with(context)
                                                 .load(file)
                                                 .into(mainImageView);
-                                    }
+                                    //}
                                 }
 
                             } else {
