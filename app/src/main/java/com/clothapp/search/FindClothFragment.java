@@ -116,7 +116,7 @@ public class FindClothFragment extends Fragment {
     public void search() {
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
-        //System.out.println("search");
+        System.out.println("search "+query);
 
         //faccio la query a Parse delle foto
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
@@ -150,7 +150,7 @@ public class FindClothFragment extends Fragment {
                         //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
-                            if (tag.get(j).contains(query)) {
+                            if (tag.get(j).toLowerCase().contains(query)) {
                                 final Image image = new Image(o);
                                 //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
                                 //System.out.println(image+" "+cloth.contains(image));
