@@ -37,9 +37,7 @@ Let everybody know about your fashion skills!
 
 <a href="https://www.clothapp.it/webapp">ClothApp Web Client</a>
 
-<a href="https://drive.google.com/file/d/0B9L9fgnPwZntOXotLXRLYm5GdE0/view?usp=sharing">Android APK file</a>
-
-<a href="https://docs.google.com/document/d/1Oz0-bGhi9H724wei3maeqoo8ga_PGFZu32Api91oAkU/edit?usp=drive_web">Instructions for APK installation</a>
+<a href="https://goo.gl/DdZySh">Form to parecipate in the closed Beta</a>
 
 ##Milestone 3 - Final
 -Improve Milestone 2 items based on received feedback
