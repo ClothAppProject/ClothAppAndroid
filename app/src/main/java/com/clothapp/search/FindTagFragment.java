@@ -133,12 +133,12 @@ public class FindTagFragment extends Fragment {
                         List<String> tag = new ArrayList<String>();
                         final ParseObject o = i.next();
                         //prendo i tipi di vestito e li metto nella lista tag
-                        tag = (ArrayList) o.get("tipo");
+                        tag = (ArrayList) o.get("hashtag");
                         if (tag == null) tag = new ArrayList<String>(0);
                         //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
-                            if (tag.get(j).contains(query)) {
+                            if (tag.get(j).toLowerCase().contains(query)) {
                                 final Image image = new Image(o);
                                 //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
                                 if (!cloth.contains(image)) {
