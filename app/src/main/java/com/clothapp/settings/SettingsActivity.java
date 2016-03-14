@@ -168,20 +168,37 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                         //utente è già connesso: gli do solo l'opzione per disconnettersi da facebook
-                        ParseFacebookUtils.unlinkInBackground(ParseUser.getCurrentUser(), new SaveCallback() {
+                        AlertDialog.Builder disconnect_facebook = new AlertDialog.Builder(getActivity());
+                        disconnect_facebook.setTitle(R.string.ask_disconnect_facebook);
+                        // Add action buttons
+                        disconnect_facebook.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
-                            public void done(ParseException ex) {
-                                if (ex == null) {
-                                    Log.d("SettingsActivity", "Disconesso da Facebook");
-                                    facebookPref.setChecked(false);
-                                    Toast.makeText(getActivity().getApplicationContext(),R.string.facebook_disconnected,Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // Controllo che non ci siano eccezioni Parse
-                                    ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
-                                    Toast.makeText(getActivity().getApplicationContext(), ex.getMessage(),Toast.LENGTH_SHORT).show();
-                                }
+                            public void onClick(DialogInterface dialog, int id) {
+                                ParseFacebookUtils.unlinkInBackground(ParseUser.getCurrentUser(), new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException ex) {
+                                        if (ex == null) {
+                                            Log.d("SettingsActivity", "Disconesso da Facebook");
+                                            facebookPref.setChecked(false);
+                                            Toast.makeText(getActivity().getApplicationContext(),R.string.facebook_disconnected,Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Controllo che non ci siano eccezioni Parse
+                                            ExceptionCheck.check(ex.getCode(), getView(), ex.getMessage());
+                                            Toast.makeText(getActivity().getApplicationContext(), ex.getMessage(),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                         });
+                        disconnect_facebook.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //annullata
+                            }
+                        });
+                        AlertDialog disconnectReport = disconnect_facebook.create();
+                        // display dialog
+                        disconnectReport.show();
                     }else{
                         // Specifico i campi ai quali sono interessato quando richiedo permesso ad utente
                         List<String> permissions = Arrays.asList("email", "public_profile", "user_birthday");

@@ -8,6 +8,7 @@
     <string name="follower_notification">Notifiche Follower</string>
     <string name="new_photo_notification">Notifiche nuove foto caricate</string>
     <string name="facebook">Facebook</string>
+    <string name="ask_disconnect_facebook">Sei sicuro di volerti disconnettere da Facebook?</string>
     <string name="facebook_connected">Connesso con Facebook!</string>
     <string name="facebook_disconnected">Disconnesso da Facebook!</string>
 
