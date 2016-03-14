@@ -52,7 +52,7 @@
             android:layout_height="50dp"
             android:paddingLeft="0dp"
             android:id="@+id/tipo"
-            android:textColor="@color/input_text_hint"
+            android:textColor="@color/primaryText"
             android:layout_gravity="right|center"
             android:layout_marginRight="16dp"
             android:text="vestito"

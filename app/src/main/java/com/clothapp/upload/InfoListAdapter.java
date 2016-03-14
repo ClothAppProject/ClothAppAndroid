@@ -347,7 +347,8 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setPrize(Float.parseFloat(s.toString()));
+                    if (!s.toString().equals(""))listCloth.get(c.getID() - 1).setPrize(Float.parseFloat(s.toString()));
+                    else listCloth.get(c.getID() - 1).setPrize(null);
                 }
             });
         }

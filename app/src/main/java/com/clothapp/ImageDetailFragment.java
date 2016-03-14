@@ -445,6 +445,13 @@ public class ImageDetailFragment extends Fragment {
             for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
                 View item = listAdapter.getView(itemPos, null, listView);
                 item.measure(0, 0);
+                //View a=item.findViewById(R.id.address);
+                //a.measure(0, 0);
+                //int address=a.getMeasuredHeight();
+                //System.out.println(address);
+                //int shop=item.findViewById(R.id.shop).getMeasuredHeight();
+                //int brand=item.findViewById(R.id.brand).getMeasuredHeight();
+                //int price=item.findViewById(R.id.price).getMeasuredHeight();
                 totalItemsHeight += item.getMeasuredHeight();
             }
 

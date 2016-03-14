@@ -148,7 +148,7 @@ public class Cloth implements Parcelable {
 
     public boolean isEmpty(){
         if(cloth=="" && shop=="" && address=="" && brand=="" && price==null) return true;
-        return cloth==null && shop==null && address==null && brand==null && price==null;
+        else return false;
 
     }
 }

@@ -31,7 +31,7 @@ import java.util.List;
 public class SearchResultsActivity extends AppCompatActivity {
 
     private SearchView searchView;
-    private ListView listUser;
+    ListView listUser;
     private ListView listCloth;
     private ListView listTag;
     private ViewPager viewPager;
