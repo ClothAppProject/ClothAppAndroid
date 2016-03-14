@@ -230,7 +230,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                                     user.put("name", edit_name.getText().toString().trim());
                                     user.put("flagISA","Persona");
                                     user.put("lowercase", user.getUsername().toLowerCase());
-                                    user.put("Settings",R.string.default_settings);
+                                    user.put("Settings",getString(R.string.default_settings));
                                     user.signUpInBackground(new SignUpCallback() {
                                         public void done(ParseException e) {
                                             if (e == null) {

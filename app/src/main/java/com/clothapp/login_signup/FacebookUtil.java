@@ -1,5 +1,6 @@
 package com.clothapp.login_signup;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class FacebookUtil {
     private static ParseException ret = null;
 
     // Funzione per prelevare le informazioni da facebook e inserirle in Parse
-    public static ParseException getUserDetailsRegisterFB(ParseUser uth, View v) throws InterruptedException {
+    public static ParseException getUserDetailsRegisterFB(ParseUser uth, View v, final Context context) throws InterruptedException {
         final View vi = v;
         final ParseUser user = uth;
         // final SharedPreferences userInformation = userInfo;
@@ -80,7 +81,7 @@ public class FacebookUtil {
                     user.setEmail(email);
                     user.put("name", name.trim());
                     user.put("flagISA","Persona");
-                    user.put("Settings", R.string.default_settings);
+                    user.put("Settings", context.getString(R.string.default_settings));
                     try {
                         //uso save e non savebackground perchè non deve essere asincrona
                         user.save();

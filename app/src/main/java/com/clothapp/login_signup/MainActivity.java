@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                                             //inserisco dati facebook nel nuovo utente
                                             try {
                                                 //assegno alla variabile ParseException ret il ritorno della funzione
-                                                ret=getUserDetailsRegisterFB(ParseUser.getCurrentUser(),v);
+                                                ret=getUserDetailsRegisterFB(ParseUser.getCurrentUser(),v, getApplicationContext());
                                             } catch (InterruptedException e) {
                                                 e.printStackTrace();
                                             }
