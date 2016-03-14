@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -432,10 +433,13 @@ public class ProfileUtils {
         query.whereEqualTo("username", utente);
         try {
             ParseUser user = query.getFirst();
-            if (user.getString("flagISA").equals("Persona")) {
-                i = new Intent(contesto, UserProfileActivity.class);
-            } else {
-                i = new Intent(contesto, ShopProfileActivity.class);
+            if(user==null || user.getString("flagISA")==null) Snackbar.make( new View(contesto),"riprova",Snackbar.LENGTH_SHORT);
+            else {
+                if (user.getString("flagISA").equals("Persona")) {
+                    i = new Intent(contesto, UserProfileActivity.class);
+                } else {
+                    i = new Intent(contesto, ShopProfileActivity.class);
+                }
             }
         } catch (ParseException e) {
             check(e.getCode(), new View(contesto), e.getMessage());
