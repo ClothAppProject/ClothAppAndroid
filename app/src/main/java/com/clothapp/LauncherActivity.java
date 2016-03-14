@@ -35,62 +35,65 @@ public class LauncherActivity extends AppCompatActivity {
             showDialog(LauncherActivity.this, "Error!", "Please check your Internet connection.");
         } else {
             Log.d("LauncherActivity", "Network OK");
-        }
 
-        // nascondo la status bar
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // Straight from android documentation:
-        // Then, from the onCreate() method in your application's main activity—and in any other activity
-        // through which the user may enter your application for the first time—call setDefaultValues():
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+            // nascondo la status bar
+            // requestWindowFeature(Window.FEATURE_NO_TITLE);
+            // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.clothapp",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("LauncherActivity", "KeyHash = " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            // Straight from android documentation:
+            // Then, from the onCreate() method in your application's main activity—and in any other activity
+            // through which the user may enter your application for the first time—call setDefaultValues():
+            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+            try {
+                PackageInfo info = getPackageManager().getPackageInfo(
+                        "com.clothapp",
+                        PackageManager.GET_SIGNATURES);
+                for (Signature signature : info.signatures) {
+                    MessageDigest md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    Log.d("LauncherActivity", "KeyHash = " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                }
+
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.d("LauncherActivity", "Error: " + e.getMessage());
+                e.printStackTrace();
+
+            } catch (NoSuchAlgorithmException e) {
+                Log.d("LauncherActivity", "Error: " + e.getMessage());
+                e.printStackTrace();
             }
 
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.d("LauncherActivity", "Error: " + e.getMessage());
-            e.printStackTrace();
+            // Current user initialization. Parse handles all the data on its own.
+            ParseUser currentUser = ParseUser.getCurrentUser();
 
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("LauncherActivity", "Error: " + e.getMessage());
-            e.printStackTrace();
+            if (currentUser != null) {
+                //update the ParseUser
+                currentUser.fetchInBackground();
+
+                // The user has already logged in once before.
+                Log.d("LauncherActivity", "Already logged in as " + currentUser.getUsername());
+
+                // Skip log in page. Go directly to Splash Screen Activity.
+                // Intent intent = new Intent(this, SplashScreenActivity.class);
+                Intent intent = new Intent(this, SplashScreenActivity.class);
+                startActivity(intent);
+
+                // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
+                finish();
+            } else {
+                // The current user needs to log in or sign up.
+                Log.d("LauncherActivity", "Not logged in... Redirecting to login activity");
+
+                // Go to the login/signup page.
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+
+                // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
+                finish();
+            }
         }
-
-        // Current user initialization. Parse handles all the data on its own.
-        ParseUser currentUser = ParseUser.getCurrentUser();
-
-        if (currentUser != null) {
-            // The user has already logged in once before.
-            Log.d("LauncherActivity", "Already logged in as " + currentUser.getUsername());
-
-            // Skip log in page. Go directly to Splash Screen Activity.
-            // Intent intent = new Intent(this, SplashScreenActivity.class);
-            Intent intent = new Intent(this, SplashScreenActivity.class);
-            startActivity(intent);
-
-            // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
-            finish();
-        } else {
-            // The current user needs to log in or sign up.
-            Log.d("LauncherActivity", "Not logged in... Redirecting to login activity");
-
-            // Go to the login/signup page.
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-
-            // This function stops the current activity and calls OnPause(), OnStop() and OnDestroy in this order.
-            finish();
-        }
-
     }
 
     public boolean isNetworkAvailable() {
@@ -113,17 +116,9 @@ public class LauncherActivity extends AppCompatActivity {
                     }
                 });
 
-//        String negativeText = "CANCEL";
-//        builder.setNegativeButton(negativeText,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // negative button logic
-//                    }
-//                });
-
         AlertDialog dialog = builder.create();
         // display dialog
         dialog.show();
     }
+
 }

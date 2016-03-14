@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
+import com.clothapp.resources.ExceptionCheck;
 import com.clothapp.resources.Image;
 import com.clothapp.parse.notifications.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
@@ -176,102 +177,102 @@ public class ImageDetailFragment extends Fragment {
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(final ParseObject object, ParseException e) {
-
-                parseObject = object;
-                //setto username e listener
-                t.setText(immagine.getUser());
-                t.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-                        startActivity(i);
-                    }
-                });
-
-                //listener on the profile pic
-                profilePic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-                        startActivity(i);
-                        getActivity().finish();
-                    }
-                });
-
-                //setto gli hashtag
-                hashtag.setText(immagine.getHashtagToString());
-
-                //per ogni vestito cerco le informazioni
-                ArrayList arrayList = (ArrayList) object.get("vestiti");
-                if (arrayList == null) arrayList = new ArrayList<>();
-                vestiti = new ArrayList<>(arrayList.size());
-                for (int i = 0; i < arrayList.size(); i++) {
-                    ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
-                    query1.whereEqualTo("objectId", arrayList.get(i));
-                    query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                if (e==null) {
+                    parseObject = object;
+                    //setto username e listener
+                    t.setText(immagine.getUser());
+                    t.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void done(ParseObject info, ParseException e) {
-                            if (e == null) {
-                                Float fl = null;
-                                if (info.get("prezzo") != null) {
-                                    if (info.get("prezzo").getClass() != Float.class)
-                                        fl = Float.parseFloat(info.get("prezzo").toString());
-                                    else fl = (float) info.get("prezzo");
-                                }
-                                Cloth c = new Cloth(info.getString("tipo"),
-                                        info.getString("luogoAcquisto"),
-                                        fl,
-                                        info.getString("shop"),
-                                        info.getString("shopUsername"),
-                                        info.getString("brand"));
-                                vestiti.add(c);
-                                MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
-                                listView.setAdapter(adapter);
-                                setListViewHeightBasedOnItems(listView);
-                            }
+                        public void onClick(View v) {
+                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+                            startActivity(i);
                         }
                     });
-                }
 
-                object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
-                    @Override
-                    public void done(final File file, ParseException e) {
-                        if (e == null) {
-                            //Gesture Detector for detecting double tap
-                            //code is at the end of page
-                            final GestureDetector gd = doubleTapGesture(object);
+                    //listener on the profile pic
+                    profilePic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+                            startActivity(i);
+                            getActivity().finish();
+                        }
+                    });
 
-                            Glide.with(context)
-                                    .load(file)
-                                    .fitCenter()
-                                    .into(imageView);
-                            imageView.setOnTouchListener(new View.OnTouchListener() {
-                                @Override
-                                public boolean onTouch(View v, MotionEvent event) {
-                                    return gd.onTouchEvent(event);
-                                }
-                            });
+                    //setto gli hashtag
+                    hashtag.setText(immagine.getHashtagToString());
 
-                            //setto il listener sull'icona share
-                            share.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Bitmap icon = BitmapFactory.decodeFile(file.getPath());
-                                    Intent share = new Intent(Intent.ACTION_SEND);
-                                    share.setType("image/jpeg");
-                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                                    icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                                    File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
-                                    try {
-                                        f.createNewFile();
-                                        FileOutputStream fo = new FileOutputStream(f);
-                                        fo.write(bytes.toByteArray());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                    //per ogni vestito cerco le informazioni
+                    ArrayList arrayList = (ArrayList) object.get("vestiti");
+                    if (arrayList == null) arrayList = new ArrayList<>();
+                    vestiti = new ArrayList<>(arrayList.size());
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
+                        query1.whereEqualTo("objectId", arrayList.get(i));
+                        query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject info, ParseException e) {
+                                if (e == null) {
+                                    Float fl = null;
+                                    if (info.get("prezzo") != null) {
+                                        if (info.get("prezzo").getClass() != Float.class)
+                                            fl = Float.parseFloat(info.get("prezzo").toString());
+                                        else fl = (float) info.get("prezzo");
                                     }
+                                    Cloth c = new Cloth(info.getString("tipo"),
+                                            info.getString("luogoAcquisto"),
+                                            fl,
+                                            info.getString("shop"),
+                                            info.getString("shopUsername"),
+                                            info.getString("brand"));
+                                    vestiti.add(c);
+                                    MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
+                                    listView.setAdapter(adapter);
+                                    setListViewHeightBasedOnItems(listView);
+                                }
+                            }
+                        });
+                    }
 
-                                    share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-                                    startActivity(Intent.createChooser(share, "Share Image"));
+                    object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
+                        @Override
+                        public void done(final File file, ParseException e) {
+                            if (e == null) {
+                                //Gesture Detector for detecting double tap
+                                //code is at the end of page
+                                final GestureDetector gd = doubleTapGesture(object);
+
+                                Glide.with(context)
+                                        .load(file)
+                                        .fitCenter()
+                                        .into(imageView);
+                                imageView.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        return gd.onTouchEvent(event);
+                                    }
+                                });
+
+                                //setto il listener sull'icona share
+                                share.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Bitmap icon = BitmapFactory.decodeFile(file.getPath());
+                                        Intent share = new Intent(Intent.ACTION_SEND);
+                                        share.setType("image/jpeg");
+                                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                        icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                        File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                                        try {
+                                            f.createNewFile();
+                                            FileOutputStream fo = new FileOutputStream(f);
+                                            fo.write(bytes.toByteArray());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                                        startActivity(Intent.createChooser(share, "Share Image"));
                                     /*
                                     Intent shareIntent = new Intent();
                                     shareIntent.setAction(Intent.ACTION_SEND);
@@ -282,51 +283,54 @@ public class ImageDetailFragment extends Fragment {
                                     shareIntent.setFlags( Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                                     startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
                                     */
-                                }
-                            });
+                                    }
+                                });
 
+                            }
                         }
-                    }
-                }, new ProgressCallback() {
-                    @Override
-                    public void done(Integer percentDone) {
-                        //passo percentuale
-                        if (percentDone == 100) {
-                            percentuale.setVisibility(View.INVISIBLE);
+                    }, new ProgressCallback() {
+                        @Override
+                        public void done(Integer percentDone) {
+                            //passo percentuale
+                            if (percentDone == 100) {
+                                percentuale.setVisibility(View.INVISIBLE);
+                            }
+                            percentuale.setText(percentDone + "%");
                         }
-                        percentuale.setText(percentDone + "%");
+                    });
+
+                    //chiamo funzione del testo dei like
+                    setTextLike();
+
+                    //controllo se ho messo like sull'attuale foto
+                    final String username = ParseUser.getCurrentUser().getUsername();
+                    if (immagine.getLike().contains(username)) {
+                        cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                    } else {
+                        cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
                     }
-                });
+                    //metto i listener sul cuore
+                    cuore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (immagine.getLike().contains(username)) {
+                                //rimuovo il like chiamando deleteLike
+                                LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
 
-                //chiamo funzione del testo dei like
-                setTextLike();
+                                cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+                            } else {
+                                //aggiungo like chiamando addLike
+                                LikeRes.addLike(immagine.getObjectId(), immagine, username);
 
-                //controllo se ho messo like sull'attuale foto
-                final String username = ParseUser.getCurrentUser().getUsername();
-                if (immagine.getLike().contains(username)) {
-                    cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                } else {
-                    cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+                                cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                            }
+                            //  se ho zero likes scrivo like sennò likes
+                            setTextLike();
+                        }
+                    });
+                }else{
+                    ExceptionCheck.check(e.getCode(),getView(),e.getMessage());
                 }
-                //metto i listener sul cuore
-                cuore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (immagine.getLike().contains(username)) {
-                            //rimuovo il like chiamando deleteLike
-                            LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
-
-                            cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-                        } else {
-                            //aggiungo like chiamando addLike
-                            LikeRes.addLike(immagine.getObjectId(), immagine, username);
-
-                            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                        }
-                        //  se ho zero likes scrivo like sennò likes
-                        setTextLike();
-                    }
-                });
             }
         });
     }

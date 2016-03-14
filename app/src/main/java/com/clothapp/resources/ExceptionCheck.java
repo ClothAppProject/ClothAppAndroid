@@ -1,8 +1,22 @@
 package com.clothapp.resources;
 
+import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.clothapp.R;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 /**
  * Created by giacomoceribelli on 27/12/15.
@@ -160,7 +174,9 @@ public class ExceptionCheck {
                 output = "Errore: "+message;
                 break;
         }
-        Snackbar.make(vi, output, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if (vi!=null) {
+            Snackbar.make(vi, output, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }

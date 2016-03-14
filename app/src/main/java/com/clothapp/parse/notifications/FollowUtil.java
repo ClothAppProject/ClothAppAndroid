@@ -56,40 +56,42 @@ public class FollowUtil {
         queryfollow.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                relazione = object;
-                if (relazione != null) {
-                    //Seguo l'utente, posso smettere di seguirlo
-                    follow_edit.setText(R.string.unfollow);
-                } else {
-                    //Non seguo l'utente, posso seguirlo
-                    follow_edit.setText(R.string.follow);
-                }
-                follow_edit.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        if (relazione != null) {
-                            // Elimino l'oggetto
-                            relazione.deleteInBackground();
-                            relazione = null;
-                            follow_edit.setText(R.string.follow);
-
-                        } else {
-
-                            // Creo una nuova relazione
-                            relazione = new ParseObject("Follow");
-                            relazione.put("from", ParseUser.getCurrentUser().getUsername());
-                            relazione.put("to", usernameTo);
-                            relazione.saveInBackground();
-
-                            // Send "Like" notification to the user who posted the image
-                            NotificationsUtils.sendNotification(usernameTo, "follow");
-
-                            follow_edit.setText(R.string.unfollow);
-                        }
+                if (e==null) {
+                    relazione = object;
+                    if (relazione != null) {
+                        //Seguo l'utente, posso smettere di seguirlo
+                        follow_edit.setText(R.string.unfollow);
+                    } else {
+                        //Non seguo l'utente, posso seguirlo
+                        follow_edit.setText(R.string.follow);
                     }
-                });
+                    follow_edit.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+
+                            if (relazione != null) {
+                                // Elimino l'oggetto
+                                relazione.deleteInBackground();
+                                relazione = null;
+                                follow_edit.setText(R.string.follow);
+
+                            } else {
+
+                                // Creo una nuova relazione
+                                relazione = new ParseObject("Follow");
+                                relazione.put("from", ParseUser.getCurrentUser().getUsername());
+                                relazione.put("to", usernameTo);
+                                relazione.saveInBackground();
+
+                                // Send "Like" notification to the user who posted the image
+                                NotificationsUtils.sendNotification(usernameTo, "follow");
+
+                                follow_edit.setText(R.string.unfollow);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -134,7 +136,8 @@ public class FollowUtil {
                         //adapter.add(u);
                         adapter.notifyDataSetChanged();
                     }
-                } else check(e.getCode(), rootView, e.getMessage());
+                    //bisogna fixare la view da passare altrimenti crasha
+                } //else check(e.getCode(), rootView.getRootView(), e.getMessage());
             }
         });
     }
@@ -179,7 +182,9 @@ public class FollowUtil {
                         //adapter.add(u);
                         adapter.notifyDataSetChanged();
                     }
-                } else check(e.getCode(), rootView, e.getMessage());
+                }
+                //bisogna fixare la view da passare altrimenti crasha
+                //else check(e.getCode(), rootView.getRootView(), e.getMessage());
             }
         });
     }

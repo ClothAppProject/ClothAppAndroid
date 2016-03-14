@@ -1,6 +1,7 @@
 <resources>
 
     <string name="default_settings">1111111111</string>
+    <string name="connection_error">Errore di connessione</string>
 
     <string name="notification">Notifiche</string>
     <string name="like_notification">Notifiche Like</string>
