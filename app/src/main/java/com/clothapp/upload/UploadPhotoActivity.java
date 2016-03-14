@@ -48,6 +48,7 @@ import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
@@ -664,6 +665,11 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             if (!UserSettingsUtil.checkIfSavePhotos())  {
                                                 deleteImage();
                                             }
+
+
+                                            // Send "New Photo Uploaded" notification followers
+                                            NotificationsUtils.sendNotification(null, "newPhoto");
+
                                             getActivity().finish();
                                         } else {
                                             // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server

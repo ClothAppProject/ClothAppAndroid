@@ -241,6 +241,18 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            final SwitchPreference new_photo = (SwitchPreference) findPreference("newPhoto");
+            new_photo.setChecked(UserSettingsUtil.checkNotificationNewPhoto(username));
+            new_photo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean nuovoValore = !UserSettingsUtil.checkNotificationNewPhoto(username);
+                    new_photo.setChecked(nuovoValore);
+                    UserSettingsUtil.setNetPhotoNotifications(nuovoValore);
+                    return false;
+                }
+            });
         }
     }
     @Override

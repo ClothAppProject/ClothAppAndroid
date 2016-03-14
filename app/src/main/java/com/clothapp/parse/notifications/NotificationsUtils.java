@@ -36,20 +36,21 @@ public class NotificationsUtils {
                 send(check, receiver, message);
                 break;
             case "newPhoto":
-                System.out.println("debug invio notifiche ai follower");
                 //caso in cui devo inviare notifica per nuova foto caricata
-                message = ParseUser.getCurrentUser().getUsername() + " ha caricato una nuova foto!";
+                final String photoMessage = ParseUser.getCurrentUser().getUsername() + " ha caricato una nuova foto!";
 
                 //ottengo follower ai quali inviare la foto
                 ParseQuery<ParseObject> notifyFollowers = new ParseQuery<>("Follow");
+                notifyFollowers.whereEqualTo("to",ParseUser.getCurrentUser().getUsername());
                 notifyFollowers.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if (e==null)    {
                             for (ParseObject o : objects)    {
+
                                 //controllo se l'utente ha attiva la ricezione di notifiche per nuove foto di persone che segue
                                 boolean check = UserSettingsUtil.checkNotificationNewPhoto(o.getString("from"));
-                                send(check, receiver, o.getString("from"));
+                                send(check, o.getString("from"), photoMessage);
                             }
                         }
                     }
@@ -62,7 +63,6 @@ public class NotificationsUtils {
     public static void send(boolean check, final String receiver, String message) {
         //send notification only if granted
         if (check) {
-            System.out.println("debug "+message);
             HashMap<String, Object> params = new HashMap<>();
             params.put("recipientUsername", receiver);
             params.put("message", message);

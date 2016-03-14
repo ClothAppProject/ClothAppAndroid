@@ -56,7 +56,7 @@ public class FollowUtil {
         queryfollow.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                if (e==null) {
+                if (e==null || e.getCode()==101) {
                     relazione = object;
                     if (relazione != null) {
                         //Seguo l'utente, posso smettere di seguirlo
@@ -69,7 +69,6 @@ public class FollowUtil {
 
                         @Override
                         public void onClick(View v) {
-
                             if (relazione != null) {
                                 // Elimino l'oggetto
                                 relazione.deleteInBackground();

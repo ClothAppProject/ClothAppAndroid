@@ -51,6 +51,12 @@
                 android:title="@string/follower_notification"
                 android:persistent="false">
             </SwitchPreference>
+            <SwitchPreference
+                android:defaultValue="true"
+                android:key="newPhoto"
+                android:title="@string/new_photo_notification"
+                android:persistent="false">
+            </SwitchPreference>
         </PreferenceScreen>
 
         <!-- Save Fotos -->
