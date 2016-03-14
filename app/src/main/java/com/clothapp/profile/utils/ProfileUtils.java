@@ -182,7 +182,7 @@ public class ProfileUtils {
         });
     }
 
-    public static void getParseUserProfileImage(final Activity activity, String username, final ImageView mainImageView, final Context context, final boolean shop) {
+    public static void getParseUserProfileImage(final Activity activity, final String username, final ImageView mainImageView, final Context context, final boolean shop) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
         query.whereEqualTo("username", username);
@@ -194,7 +194,7 @@ public class ProfileUtils {
                 if (e == null) {
                     Log.d("ProfileUtils", "ParseObject for profile image found!");
 
-                    ParseFile parseFile = photo.getParseFile("profilePhoto");
+                    ParseFile parseFile = photo.getParseFile("thumbnail");
                     parseFile.getFileInBackground(new GetFileCallback() {
                         @Override
                         public void done(File file, ParseException e) {
@@ -210,14 +210,23 @@ public class ProfileUtils {
 //                                mainImageView.setImageDrawable(rounded);
 
                                 if (!shop) {
-                                    Glide.with(context)
-                                            .load(file)
-                                            .transform(new CircleTransform(context))
-                                            .into(mainImageView);
+                                    //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
+                                    if (UserProfileActivity.username.equals(username)) {
+                                        System.out.println("debug carico foto di "+username+ " in "+UserProfileActivity.username);
+                                        Glide.clear(mainImageView);
+                                        Glide.with(context)
+                                                .load(file)
+                                                .transform(new CircleTransform(context))
+                                                .into(mainImageView);
+                                    }
                                 } else {
-                                    Glide.with(context)
-                                            .load(file)
-                                            .into(mainImageView);
+                                    //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
+                                    if (ShopProfileActivity.username.equals(username)) {
+                                        Glide.clear(mainImageView);
+                                        Glide.with(context)
+                                                .load(file)
+                                                .into(mainImageView);
+                                    }
                                 }
 
                             } else {

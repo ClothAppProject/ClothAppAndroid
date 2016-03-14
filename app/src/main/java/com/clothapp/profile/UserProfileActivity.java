@@ -74,7 +74,7 @@ public class UserProfileActivity extends AppCompatActivity {
         username = getIntent().getExtras().getString("user");
 
         // Set context to current context.
-        context = UserProfileActivity.this;
+        context = getApplicationContext();
 
         // Set activity to current activity.
         activity = this;

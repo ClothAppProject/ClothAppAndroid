@@ -75,7 +75,7 @@ public class ShopProfileActivity extends AppCompatActivity {
         username = getIntent().getExtras().getString("user");
 
         // Set context to current context.
-        context = ShopProfileActivity.this;
+        context = getApplicationContext();
 
         // Set activity to current activity.
         activity = this;
