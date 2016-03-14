@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
+import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -253,6 +254,10 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
 
                     //  notifying the navigation drawer about the changing
                     HomeActivity.changePic = 1;
+
+                    // Send "New Photo Uploaded" notification followers
+                    NotificationsUtils.sendNotification(ParseUser.getCurrentUser().getUsername(), "newPhoto");
+
 
                     finish();
                 } else {

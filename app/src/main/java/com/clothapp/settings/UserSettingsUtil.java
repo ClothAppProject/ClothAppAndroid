@@ -102,4 +102,34 @@ public class UserSettingsUtil {
         ParseUser.getCurrentUser().put("Settings",settings);
         ParseUser.getCurrentUser().saveInBackground();
     }
+
+    //Notifiche Nuove Foto dei following su Dispositivo POSIZIONE=3
+    public static boolean checkNotificationNewPhoto(String username) {
+        ParseUser object = null;
+        //if username different from mine ask for the parseuser
+        if (!ParseUser.getCurrentUser().getUsername().toString().equals(username)) {
+            ParseQuery<ParseUser> user = ParseUser.getQuery();
+            user.whereEqualTo("username", username);
+            try {
+                object = user.getFirst();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else{
+            object = ParseUser.getCurrentUser();
+        }
+
+        if (object.getString("Settings").charAt(3) == '1') {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //Settare notifiche follower
+    public static void setNetPhotoNotifications(boolean value)    {
+        String settings = setValue(3,value);
+        ParseUser.getCurrentUser().put("Settings",settings);
+        ParseUser.getCurrentUser().saveInBackground();
+    }
 }
