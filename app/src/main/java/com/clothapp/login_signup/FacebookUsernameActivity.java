@@ -54,12 +54,10 @@ public class FacebookUsernameActivity extends AppCompatActivity {
         // Add OnClick listener to Sign Up button.
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
                 // Prendo tutti valori
                 final EditText edit_username = (EditText) findViewById(R.id.edit_username);
-                final EditText edit_password = (EditText) findViewById(R.id.edit_password);
-                vi = v;
 
                 // Checking if username is nulll
                 if (edit_username.getText().toString().trim().equalsIgnoreCase("")) {
@@ -70,82 +68,72 @@ public class FacebookUsernameActivity extends AppCompatActivity {
                     Log.d("SignupActivity", "Il campo username è vuoto");
                     // Checking if password and confirm password match
                 }else{
-                    if(edit_password.getText().toString().trim().equalsIgnoreCase("")) {
-                        // Nel caso in cui l'username è lasciato in bianco
-                        Snackbar.make(v, "La password non può essere vuota", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                    // Inizializzo la barra di caricamento
+                    final ProgressDialog dialog = ProgressDialog.show(FacebookUsernameActivity.this, "",
+                            "Loading. Please wait...", true);
 
-                        Log.d("SignupActivity", "Il campo password è vuoto");
-                    }
-                    //TODO:fare il check della password
-                    else{
-                        // Inizializzo la barra di caricamento
-                        final ProgressDialog dialog = ProgressDialog.show(FacebookUsernameActivity.this, "",
-                                "Loading. Please wait...", true);
+                    // Create a new thread to handle signup in background
+                    Thread signup = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final ParseUser user = ParseUser.getCurrentUser();
+                            final String nomevecchio = ParseUser.getCurrentUser().getUsername();
+                            user.setUsername(edit_username.getText().toString().trim());
+                            user.put("lowercase",edit_username.getText().toString().trim().toLowerCase());
 
-                        // Create a new thread to handle signup in background
-                        Thread signup = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                final ParseUser user = ParseUser.getCurrentUser();
-                                final String nomevecchio = ParseUser.getCurrentUser().getUsername();
-                                user.setUsername(edit_username.getText().toString().trim());
-                                user.put("lowercase",edit_username.getText().toString().trim().toLowerCase());
-                                user.setPassword(edit_password.getText().toString().trim());
-
-                                user.saveInBackground(new SaveCallback() {
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            //prendo l'oggetto Persona riferito a
-                                            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
-                                            query.whereEqualTo("username", nomevecchio);
-                                            try {
-                                                List<ParseObject> utente = query.find();
-                                                ParseObject persona = utente.get(0);
-                                                persona.put("username",user.getUsername());
-                                                persona.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e==null) {
-                                                            ParseQuery<ParseObject> userPhoto = new ParseQuery<ParseObject>("UserPhoto");
-                                                            userPhoto.whereEqualTo("username", nomevecchio);
-                                                            try {
-                                                                List<ParseObject> pp = userPhoto.find();
-                                                                ParseObject picture = pp.get(0);
-                                                                picture.put("username",user.getUsername());
-                                                                picture.saveInBackground();
-                                                            } catch (ParseException e1) {
-                                                                check(e1.getCode(), vi, e1.getMessage());
-                                                            }
-                                                            // Redirect user to Splash Screen Activity.
-                                                            Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                                            startActivity(form_intent);
-
-                                                            // Chiudo la dialogBar
-                                                            dialog.dismiss();
-
-                                                            finish();
+                            user.saveInBackground(new SaveCallback() {
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        //prendo l'oggetto Persona riferito a
+                                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Persona");
+                                        query.whereEqualTo("username", nomevecchio);
+                                        try {
+                                            List<ParseObject> utente = query.find();
+                                            ParseObject persona = utente.get(0);
+                                            persona.put("username",user.getUsername());
+                                            persona.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    if (e==null) {
+                                                        ParseQuery<ParseObject> userPhoto = new ParseQuery<ParseObject>("UserPhoto");
+                                                        userPhoto.whereEqualTo("username", nomevecchio);
+                                                        try {
+                                                            List<ParseObject> pp = userPhoto.find();
+                                                            ParseObject picture = pp.get(0);
+                                                            picture.put("username",user.getUsername());
+                                                            picture.saveInBackground();
+                                                        } catch (ParseException e1) {
+                                                            check(e1.getCode(), vi, e1.getMessage());
                                                         }
-                                                    }
-                                                });
-                                            } catch (ParseException e1) {
-                                                check(e1.getCode(), vi, e1.getMessage());
-                                            }
-                                        } else {
-                                            // Chiudo la dialogBar
-                                            dialog.dismiss();
+                                                        // Redirect user to Splash Screen Activity.
+                                                        Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                                        startActivity(form_intent);
 
-                                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                            check(e.getCode(), vi, e.getMessage());
+                                                        // Chiudo la dialogBar
+                                                        dialog.dismiss();
+
+                                                        finish();
+                                                    }
+                                                }
+                                            });
+                                        } catch (ParseException e1) {
+                                            check(e1.getCode(), vi, e1.getMessage());
                                         }
+                                    } else {
+                                        // Chiudo la dialogBar
+                                        dialog.dismiss();
+
+                                        // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                        check(e.getCode(), vi, e.getMessage());
                                     }
-                                });
-                            }
-                        });
+                                }
+                            });
+                        }
+                    });
 
                         // Start the signup thread
                         signup.start();
-                    }
+
                 }
             }
         });

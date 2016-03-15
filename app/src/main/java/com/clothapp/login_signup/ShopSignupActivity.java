@@ -1,6 +1,8 @@
 package com.clothapp.login_signup;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.SplashScreenActivity;
@@ -31,6 +34,7 @@ public class ShopSignupActivity extends AppCompatActivity {
 
     //static CheckBox checkOnline;
 
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,12 @@ public class ShopSignupActivity extends AppCompatActivity {
 
         final EditText edit_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
         final EditText edit_password = (EditText) findViewById(R.id.edit_password);
+
+        //  getting the context
+        mContext = this;
+
+        //  Punto interrogativo
+        TextView txtSuggestions = (TextView) findViewById(R.id.suggestions);
 
         //checkOnline = (CheckBox) findViewById(R.id.checkbox_shop);
 
@@ -216,6 +226,18 @@ public class ShopSignupActivity extends AppCompatActivity {
                     // Start the signup thread
                     signup.start();
                 }
+            }
+        });
+
+        // Add an OnClick listener to the question mark button
+        txtSuggestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle(R.string.passSignup)
+                        .setMessage(ShopSignupActivity.this.getString((R.string.pswdStruct)));
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
