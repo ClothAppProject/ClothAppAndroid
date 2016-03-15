@@ -47,6 +47,8 @@ import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
+import com.clothapp.home.MostRecentAdapter;
+import com.clothapp.home.MostRecentFragment;
 import com.clothapp.http.Get;
 import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.resources.BitmapUtil;
@@ -66,6 +68,8 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -538,8 +542,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                 System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                                 infoListAdapter.notifyDataSetChanged();
                                 System.out.println(infoListAdapter.getListCloth());
-                                ArrayList<String> tipi = new ArrayList<String>();
-                                ArrayList<String> id = new ArrayList<>();
+                                final ArrayList<String> tipi = new ArrayList<String>();
+                                final ArrayList<String> id = new ArrayList<>();
                                 for (int i = 0; i < infoListAdapter.getCount(); i++) {
                                     Cloth c = infoListAdapter.getItem(i);
                                     if (!c.isEmpty()) {
@@ -615,7 +619,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                 Log.d("UploadActivity", "toCompress = " + toCompress);
 
                                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
-                                byte[] byteImg = stream.toByteArray();
+                                final byte[] byteImg = stream.toByteArray();
                                 Log.d("UploadActivity", "Dimensione del file: " + getAllocationByteCount(imageBitmap));
 
 
@@ -645,7 +649,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                 final ParseObject picture = new ParseObject("Photo");
                                 picture.put("user", ParseUser.getCurrentUser().getUsername());
                                 picture.put("photo", file);
-                                String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
+                                final String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                                 picture.put("hashtag", Arrays.asList(hashtags));
                                 picture.put("tipo", tipi);
                                 picture.put("nLike", 0);
@@ -661,6 +665,20 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
                                             Get g = new Get();
                                             g.execute(url);
+
+                                            //aggiungo file alle immagini delle most recent
+                                            File tempFile = null;
+                                            try {
+                                                tempFile = File.createTempFile("img", ".jpg", null);
+                                                FileOutputStream fos = new FileOutputStream(tempFile);
+                                                fos.write(byteImg);
+                                            } catch (IOException e1) {
+                                                e1.printStackTrace();
+                                            }
+                                            Image new_img = new Image(tempFile, picture.getObjectId().toString(), ParseUser.getCurrentUser().getUsername().toString(),
+                                                    null, 0, Arrays.asList(hashtags), id, tipi);
+                                            MostRecentAdapter.itemList.add(0,new_img);
+                                            MostRecentFragment.mostRecentAdapter.notifyDataSetChanged();
 
                                             //controllo se eliminare foto in impostazioni
                                             if (!UserSettingsUtil.checkIfSavePhotos())  {
