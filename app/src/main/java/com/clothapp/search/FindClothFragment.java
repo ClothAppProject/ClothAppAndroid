@@ -128,7 +128,7 @@ public class FindClothFragment extends Fragment {
         if (order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        queryFoto.setLimit(5);
+        //queryFoto.setLimit(5);
         skip = skip + 5;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {

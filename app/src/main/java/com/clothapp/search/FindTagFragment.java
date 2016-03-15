@@ -117,7 +117,7 @@ public class FindTagFragment extends Fragment {
         //if(order.equals() queryFoto.addAscendingOrder("nLike");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        queryFoto.setLimit(5);
+        //queryFoto.setLimit(5);
         skip = skip + 5;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
@@ -139,7 +139,9 @@ public class FindTagFragment extends Fragment {
                         //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
-                            if (tag.get(j).toLowerCase().contains(query)) {
+                            System.out.println(tag.get(j).trim().toLowerCase()+": "+query);
+                            if (tag.get(j).trim().toLowerCase().contains(query)) {
+
                                 final Image image = new Image(o);
                                 //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
                                 if (!cloth.contains(image)) {
