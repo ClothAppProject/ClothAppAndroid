@@ -242,6 +242,7 @@ public class ImageDetailFragment extends Fragment {
                                 //code is at the end of page
                                 final GestureDetector gd = doubleTapGesture(object);
 
+                                Glide.clear(new View(getContext()));
                                 Glide.with(context)
                                         .load(file)
                                         .fitCenter()
@@ -298,39 +299,39 @@ public class ImageDetailFragment extends Fragment {
                             percentuale.setText(percentDone + "%");
                         }
                     });
-
-                    //chiamo funzione del testo dei like
-                    setTextLike();
-
-                    //controllo se ho messo like sull'attuale foto
-                    final String username = ParseUser.getCurrentUser().getUsername();
-                    if (immagine.getLike().contains(username)) {
-                        cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                    } else {
-                        cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-                    }
-                    //metto i listener sul cuore
-                    cuore.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (immagine.getLike().contains(username)) {
-                                //rimuovo il like chiamando deleteLike
-                                LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
-
-                                cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
-                            } else {
-                                //aggiungo like chiamando addLike
-                                LikeRes.addLike(immagine.getObjectId(), immagine, username);
-
-                                cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
-                            }
-                            //  se ho zero likes scrivo like sennò likes
-                            setTextLike();
-                        }
-                    });
                 }else{
                     ExceptionCheck.check(e.getCode(),getView(),e.getMessage());
                 }
+            }
+        });
+
+        //chiamo funzione del testo dei like
+        setTextLike();
+
+        //controllo se ho messo like sull'attuale foto
+        final String username = ParseUser.getCurrentUser().getUsername();
+        if (immagine.getLike().contains(username)) {
+            cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+        } else {
+            cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+        }
+        //metto i listener sul cuore
+        cuore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (immagine.getLike().contains(username)) {
+                    //rimuovo il like chiamando deleteLike
+                    LikeRes.deleteLike(immagine.getObjectId(), immagine, username);
+
+                    cuore.setImageResource(R.mipmap.ic_favorite_border_white_48dp);
+                } else {
+                    //aggiungo like chiamando addLike
+                    LikeRes.addLike(immagine.getObjectId(), immagine, username);
+
+                    cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
+                }
+                //  se ho zero likes scrivo like sennò likes
+                setTextLike();
             }
         });
     }
