@@ -188,6 +188,12 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
     }
 
     public void upload()    {
+
+        int toCompress = BitmapUtil.checkToCompress(imageBitmap);
+        //  in caso non ho scelto da galleria o scattato foto, per ora dovrebbe risolvere il bug se vado
+        //  indietro senza scegliere foto da modifica profilo->modifica foto profilo
+        if(toCompress==-1)return;
+
         //inizializzo barra di caricamento
         final ProgressDialog dialog = ProgressDialog.show(UploadProfilePictureActivity.this, "",
                 getResources().getString(R.string.setting_pp), true);
@@ -210,8 +216,6 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // e la funzione a fine file checkToCompress()
-
-        int toCompress = BitmapUtil.checkToCompress(imageBitmap);
 
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, toCompress, stream);
         byte[] byteImg = stream.toByteArray();
