@@ -22,7 +22,8 @@
 
         <!-- Linked Accounts -->
         <PreferenceScreen
-            android:title="@string/account_collegati">
+            android:title="@string/account_collegati"
+            android:summary="@string/linked_account">
             <SwitchPreference
                 android:defaultValue="true"
                 android:key="facebook"
@@ -38,7 +39,8 @@
 
         <!-- Notification -->
         <PreferenceScreen
-            android:title="@string/notification">
+            android:title="@string/notification"
+            android:summary="@string/notification_pref">
             <SwitchPreference
                 android:defaultValue="true"
                 android:key="like"
@@ -63,7 +65,8 @@
         <CheckBoxPreference
             android:title="@string/salva_foto"
             android:defaultValue="true"
-            android:key="savePhotos">
+            android:key="savePhotos"
+            android:summary="@string/saving_photo">
         </CheckBoxPreference>
     </PreferenceCategory>
 
@@ -75,7 +78,8 @@
         <PreferenceScreen
             android:key="signal"
             android:title="@string/report"
-            android:persistent="false">
+            android:persistent="false"
+            android:summary="@string/report_settings">
         </PreferenceScreen>
     </PreferenceCategory>
 

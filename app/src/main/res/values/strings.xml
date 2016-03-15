@@ -133,6 +133,11 @@
     <string name="profile_settings">Profilo</string>
     <string name="profile_summary">Impostazioni e modifiche del profilo utente</string>
     <string name="password_summary">Modifica la tua password</string>
+    <string name="linked_account">Collegati con tutti i social network</string>
+    <string name="notification_pref">Scegli le notifiche che vuoi ricevere</string>
+    <string name="report_settings">Riportaci quello che pensi</string>
+    <string name="saving_photo">Scegli se salvare le foto che scatti sul telefono</string>
+
 
     <string name="password_settings">Password</string>
 
