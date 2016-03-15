@@ -64,6 +64,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 import static com.clothapp.resources.ExceptionCheck.check;
 
 public class ImageDetailFragment extends Fragment {
@@ -89,6 +91,8 @@ public class ImageDetailFragment extends Fragment {
     private ImageView profilePic;
     private ParseObject parseObject;
     private ViewGroup rootView;
+
+    private PhotoViewAttacher mAttacher;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
         context = c;
@@ -255,6 +259,10 @@ public class ImageDetailFragment extends Fragment {
                                         return gd.onTouchEvent(event);
                                     }
                                 });
+
+                                // The MAGIC happens here!
+                                mAttacher = new PhotoViewAttacher(imageView);
+
 
                                 //setto il listener sull'icona share
                                 share.setOnClickListener(new View.OnClickListener() {
@@ -642,4 +650,13 @@ public class ImageDetailFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Need to call clean-up
+        mAttacher.cleanup();
+    }
+
 }
