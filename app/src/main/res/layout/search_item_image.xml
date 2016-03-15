@@ -56,7 +56,10 @@
             android:layout_gravity="right|center"
             android:layout_marginRight="16dp"
             android:text="vestito"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:capitalize="words"
+            android:maxLines="2"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/hashtag"
@@ -67,7 +70,10 @@
             android:layout_gravity="right|bottom"
             android:layout_marginRight="16dp"
             android:text="#hashtag"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:capitalize="words"
+            android:ellipsize="end" />
 
 
 

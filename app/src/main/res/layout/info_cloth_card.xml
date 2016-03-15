@@ -76,7 +76,10 @@
                     android:text="Address"
                     android:textColor="@color/info_text"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:capitalize="words"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,7 +103,9 @@
                     android:text="Shop"
                     android:textColor="@color/info_text"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +129,9 @@
                     android:text="Brand"
                     android:textColor="@color/info_text"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
             <LinearLayout
@@ -148,7 +155,9 @@
                     android:text="Price"
                     android:textColor="@color/info_text"
                     android:textSize="15sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
         </LinearLayout>

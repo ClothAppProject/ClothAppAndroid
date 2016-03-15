@@ -13,12 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:dividerHeight="4dp"
         android:id="@+id/clothlist"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:layout_gravity="center_horizontal" />
