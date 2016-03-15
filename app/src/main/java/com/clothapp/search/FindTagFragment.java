@@ -103,6 +103,7 @@ public class FindTagFragment extends Fragment {
     }
 
     public void search() {
+        SearchResultsActivity.tabHashtagResultCount.setText("0");
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
 
@@ -144,15 +145,15 @@ public class FindTagFragment extends Fragment {
                                 if (!cloth.contains(image)) {
                                     //System.out.println("sex:" + sex + ":");
                                     //------------------inizio filtro sesso-----------------
-                                    /*SPIEGAZIONE:ci sono 3 tipi di sesso man, woman e all. Con all si prendono tutte le foto
-                                      quindi se sex==ALL posso evitare di fare controlli inutili sul sesso
-                                                                    */
+                                    //SPIEGAZIONE:ci sono 3 tipi di sesso man, woman e all. Con all si prendono tutte le foto
+                                    // quindi se sex==ALL posso evitare di fare controlli inutili sul sesso
+
                                     if (!sex.equals(ALL)) {
                                         //System.out.println("1");
                                         //faccio una query a parse nella tabella Persona per sapere il sesso dell'user
-                                        /*
-                                        LE FOTO DEI NEGOZI vengono scartate!!!!!
-                                         */
+
+                                        // LE FOTO DEI NEGOZI vengono scartate!!!!!
+
                                         ParseQuery<ParseObject> persona = new ParseQuery<ParseObject>("Persona");
                                         persona.whereEqualTo("username", o.getString("user"));
                                         final List<String> finalTag = tag;
@@ -172,15 +173,15 @@ public class FindTagFragment extends Fragment {
                                                         if (s.equals(sex)) {
                                                             //----------filtro prezzo---------------
                                                             //System.out.println("sesso uguale");
-                                                            /*
-                                                            Per ogni vestito nella foto devo controllare il prezzo facendo un'altra query a parse nella tabella Vestito
-                                                             */
+
+                                                            // Per ogni vestito nella foto devo controllare il prezzo facendo un'altra query a parse nella tabella Vestito
+
 
                                                             //System.out.println(prezzoDa + " A " + prezzoA);
-                                                                /*
-                                                                prima di procedere e fare controlli inutili, controllo se il filtro del prezzo è stato impostato
-                                                                Il valore -1 indica che non è stato impostato
-                                                                 */
+
+                                                            //prima di procedere e fare controlli inutili, controllo se il filtro del prezzo è stato impostato
+                                                            //Il valore -1 indica che non è stato impostato
+
                                                             if (prezzoDa != -1 || prezzoA != -1) {
                                                                 ArrayList<String> v = (ArrayList) o.get("vestiti");
                                                                 for (String st : v) {
@@ -210,7 +211,8 @@ public class FindTagFragment extends Fragment {
                                                                                             cloth.add(image);
                                                                                             global.setCloth(cloth);
                                                                                             adapter.notifyDataSetChanged();
-                                                                                            SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                                        }
+                                                                                            SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
+                                                                                        }
                                                                                     }
 
                                                                                 }//else{
@@ -229,7 +231,8 @@ public class FindTagFragment extends Fragment {
                                                                     cloth.add(image);
                                                                     global.setCloth(cloth);
                                                                     adapter.notifyDataSetChanged();
-                                                                    SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                }
+                                                                    SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
+                                                                }
 
                                                             }
                                                         }
@@ -247,9 +250,9 @@ public class FindTagFragment extends Fragment {
                                     }
                                     //-------------fine filtro sesso----------
 
-                                    /*
-                                    Caso in cui non c'è il filtro del sesso, Salto tutti i controlli a riguardo
-                                     */
+
+                                    // Caso in cui non c'è il filtro del sesso, Salto tutti i controlli a riguardo
+
                                     else {
                                         //.out.println("aggiungo all");
                                         //------------------------filtro prezzo-------------------------
@@ -283,7 +286,8 @@ public class FindTagFragment extends Fragment {
                                                                         cloth.add(image);
                                                                         global.setCloth(cloth);
                                                                         adapter.notifyDataSetChanged();
-                                                                        SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());                                                                    }
+                                                                        SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
+                                                                    }
                                                                 }
 
                                                             }//else{
@@ -298,9 +302,9 @@ public class FindTagFragment extends Fragment {
 
                                                     }
                                                 });
-                                            /*
-                                            caso in cui non devo fare nessun controllo
-                                             */
+
+                                                //caso in cui non devo fare nessun controllo
+
                                             } else {
                                                 if (!cloth.contains(image)) {
                                                     cloth.add(image);
@@ -321,7 +325,7 @@ public class FindTagFragment extends Fragment {
                         }
                     }
                     canLoad = true;
-                    if(global.getCloth().size()==0) notfound.setVisibility(View.VISIBLE);
+                    if (global.getCloth().size() == 0) notfound.setVisibility(View.VISIBLE);
                 } else
 
                 {
@@ -330,6 +334,7 @@ public class FindTagFragment extends Fragment {
                 }
             }
         });
+
 
 
         listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
