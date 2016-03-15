@@ -28,6 +28,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
@@ -84,8 +87,8 @@ public class ImageDetailFragment extends Fragment {
     private TextView like;
     private TextView percentuale;
     private ImageView profilePic;
-    private View vi;
     private ParseObject parseObject;
+    private ViewGroup rootView;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
         context = c;
@@ -105,7 +108,7 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
+         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         t = (TextView) rootView.findViewById(R.id.user);
         imageView = (ImageView) rootView.findViewById(R.id.photo);
         heartAnim = (ImageView) rootView.findViewById(R.id.heart_anim);
@@ -118,7 +121,6 @@ public class ImageDetailFragment extends Fragment {
         profilePic = (ImageView) rootView.findViewById(R.id.pic);
         percentuale = (TextView) rootView.findViewById(R.id.percentuale);
 
-        vi = new View(context);
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
         return rootView;
@@ -242,7 +244,7 @@ public class ImageDetailFragment extends Fragment {
                                 //code is at the end of page
                                 final GestureDetector gd = doubleTapGesture(object);
 
-                                Glide.clear(new View(getContext()));
+
                                 Glide.with(context)
                                         .load(file)
                                         .fitCenter()
@@ -570,8 +572,8 @@ public class ImageDetailFragment extends Fragment {
             queryLike.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     if (e==null)    {
-                        progressBar.setVisibility(View.INVISIBLE);
                         ParseFile f = object.getParseFile("thumbnail");
                         f.getFileInBackground(new GetFileCallback() {
                             @Override
