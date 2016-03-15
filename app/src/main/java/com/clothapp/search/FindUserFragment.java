@@ -98,7 +98,7 @@ public class FindUserFragment extends Fragment {
 
     public void search() {
 
-        SearchResultsActivity.tabUserResultCount.setText("0");
+        SearchResultsActivity.tabUserResultCount.setText(""+adapter.getCount());
 
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();

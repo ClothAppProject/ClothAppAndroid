@@ -103,7 +103,7 @@ public class FindTagFragment extends Fragment {
     }
 
     public void search() {
-        SearchResultsActivity.tabHashtagResultCount.setText("0");
+        SearchResultsActivity.tabHashtagResultCount.setText(""+adapter.getCount());
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
 

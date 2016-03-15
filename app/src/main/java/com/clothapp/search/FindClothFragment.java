@@ -114,7 +114,7 @@ public class FindClothFragment extends Fragment {
     }
 
     public void search() {
-        SearchResultsActivity.tabClothesResultCount.setText("0");
+        SearchResultsActivity.tabClothesResultCount.setText(""+adapter.getCount());
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
         System.out.println("search "+query);
