@@ -207,7 +207,7 @@
 
         <meta-data
             android:name="com.parse.push.notification_icon"
-            android:resource="@drawable/logo_small" />
+            android:resource="@drawable/logo_small_white" />
 
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
