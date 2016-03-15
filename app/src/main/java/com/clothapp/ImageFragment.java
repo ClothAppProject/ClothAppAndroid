@@ -138,8 +138,10 @@ public class ImageFragment extends AppCompatActivity {
                                     Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
                                             object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
                                             object.getList("vestiti"), object.getList("tipo"));
-                                    lista.add(toAdd);
-                                    mPagerAdapter.notifyDataSetChanged();
+                                    if (!lista.contains(toAdd)) {
+                                        lista.add(toAdd);
+                                        mPagerAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             });
                         }
@@ -160,8 +162,10 @@ public class ImageFragment extends AppCompatActivity {
                                         Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
                                                 object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
                                                 object.getList("vestiti"), object.getList("tipo"));
-                                        lista.add(toAdd);
-                                        mPagerAdapter.notifyDataSetChanged();
+                                        if (!lista.contains(toAdd)) {
+                                            lista.add(toAdd);
+                                            mPagerAdapter.notifyDataSetChanged();
+                                        }
                                     }
                                 });
                             }
@@ -182,8 +186,10 @@ public class ImageFragment extends AppCompatActivity {
                                     Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
                                             object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
                                             object.getList("vestiti"), object.getList("tipo"));
-                                    lista.add(toAdd);
-                                    mPagerAdapter.notifyDataSetChanged();
+                                    if (!lista.contains(toAdd)) {
+                                        lista.add(toAdd);
+                                        mPagerAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             });
                         }

@@ -108,10 +108,11 @@ public class ProfileUtils {
                                             photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
                                             photo.getList("vestiti"), photo.getList("tipo"));
 
-                                    adapter.photos.add(item);
+                                    if (!adapter.photos.contains(item)) {
 
-
-                                    adapter.notifyDataSetChanged();
+                                        adapter.photos.add(item);
+                                        adapter.notifyDataSetChanged();
+                                    }
 
                                 } else {
                                     Log.d("ProfileUtils", "Error: " + e.getMessage());
@@ -164,10 +165,10 @@ public class ProfileUtils {
                                             photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
                                             photo.getList("vestiti"), photo.getList("tipo"));
 
-                                    adapter.photos.add(item);
-
-
-                                    adapter.notifyDataSetChanged();
+                                    if (!adapter.photos.contains(item)) {
+                                        adapter.photos.add(item);
+                                        adapter.notifyDataSetChanged();
+                                    }
 
                                 } else {
                                     Log.d("ProfileUtils", "Error: " + e.getMessage());
