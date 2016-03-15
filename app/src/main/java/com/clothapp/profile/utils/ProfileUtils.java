@@ -212,7 +212,6 @@ public class ProfileUtils {
 //                                rounded.setCornerRadius(imageBitmap.getWidth());
 //
 //                                mainImageView.setImageDrawable(rounded);
-
                                 if (!shop) {
                                     //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
                                     //if (UserProfileActivity.username.equals(username)) {
@@ -260,8 +259,11 @@ public class ProfileUtils {
                     user = object;
                     // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
-                    updateListItem(0, user.get("name").toString());
-                    updateListItem(3, user.getEmail());
+                    //controllo che parametri non siano null
+                    if (user.getString("name")!=null) {
+                        updateListItem(0, user.get("name").toString());
+                        updateListItem(3, user.getEmail());
+                    }
 
                 } else {
                     e.printStackTrace();
@@ -283,8 +285,11 @@ public class ProfileUtils {
                     user = object;
                     // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
-                    updateShopListItem(0, user.get("name").toString());
-                    updateShopListItem(3, user.getEmail());
+                    //controllo in caso di valori nulli
+                    if (user.getString("name")!=null) {
+                        updateShopListItem(0, user.get("name").toString());
+                        updateShopListItem(3, user.getEmail());
+                    }
 
                 } else {
                     e.printStackTrace();
@@ -309,13 +314,15 @@ public class ProfileUtils {
                     persona = object;
                     // showDialog(context, "Success", "Successfully retrieved person info from Parse.");
 
-                    long age = getAge(persona.getDate("date"));
+                    //controllo in caso di valori nulli
+                    if (persona.getDate("date")!=null) {
+                        long age = getAge(persona.getDate("date"));
 
-                    if (age < 0) updateListItem(1, "Not found");
-                    else updateListItem(1, age + " years old");
+                        if (age < 0) updateListItem(1, "Not found");
+                        else updateListItem(1, age + " years old");
 
-                    updateListItem(2, persona.getString("city"));
-
+                        updateListItem(2, persona.getString("city"));
+                    }
                 } else {
                     e.printStackTrace();
                     // showDialog(context, "Error", "Failed to retrieve person info. Check your Internet connection.");
@@ -334,9 +341,13 @@ public class ProfileUtils {
                 if (e == null) {
                     shop = object;
                     // showDialog(context, "Success", "Successfully retrieved shop info from Parse.");
-                    updateShopListItem(1, shop.getString("address"));
-                    updateShopListItem(2, shop.getString("Citta"));
-                    updateShopListItem(4, shop.getString("webSite"));
+
+                    //controllo in caso di valori nulli
+                    if (!(shop.getString("address")==null && shop.getString("webSite")==null)) {
+                        updateShopListItem(1, shop.getString("address"));
+                        updateShopListItem(2, shop.getString("Citta"));
+                        updateShopListItem(4, shop.getString("webSite"));
+                    }
 
                 } else {
                     e.printStackTrace();
