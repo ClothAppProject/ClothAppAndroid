@@ -169,7 +169,8 @@ public class SettingsActivity extends AppCompatActivity {
                     if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
                         //utente è già connesso: gli do solo l'opzione per disconnettersi da facebook
                         AlertDialog.Builder disconnect_facebook = new AlertDialog.Builder(getActivity());
-                        disconnect_facebook.setTitle(R.string.ask_disconnect_facebook);
+                        disconnect_facebook.setTitle(R.string.attention);
+                        disconnect_facebook.setMessage(R.string.ask_disconnect_facebook);
                         // Add action buttons
                         disconnect_facebook.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
