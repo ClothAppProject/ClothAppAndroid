@@ -128,8 +128,8 @@ public class FindClothFragment extends Fragment {
         if (order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        //queryFoto.setLimit(5);
-        skip = skip + 5;
+        //queryFoto.setLimit(10);
+        skip = skip + 10;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -411,10 +411,13 @@ public class FindClothFragment extends Fragment {
         if (isVisibleToUser) {
             //System.out.println("visibile");
             adapter.notifyDataSetChanged();
+            if(adapter.getCount()==0) search();
         } else {
             //System.out.println("nonvisibile");
         }
     }
+
+
 
     public static ArrayList<Image> getCloth() {
         return cloth;

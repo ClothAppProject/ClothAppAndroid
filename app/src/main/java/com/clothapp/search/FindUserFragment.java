@@ -114,7 +114,7 @@ public class FindUserFragment extends Fragment {
         username.orderByAscending("lowercase");
         username.whereContains("lowercase", query);
         username.setSkip(skip);
-        //username.setLimit(10);
+        username.setLimit(10);
         skip = skip + 10;
         username.findInBackground(new FindCallback<ParseUser>() {
             @Override
