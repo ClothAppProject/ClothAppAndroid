@@ -77,9 +77,8 @@
                     android:textColor="@color/info_text"
                     android:textSize="15sp"
                     android:textStyle="italic"
-                    android:capitalize="words"
                     android:maxLines="1"
-                    android:ellipsize="end" />
+                    android:ellipsize="end"/>
             </LinearLayout>
 
             <LinearLayout
