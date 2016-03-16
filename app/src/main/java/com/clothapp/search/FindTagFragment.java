@@ -117,8 +117,8 @@ public class FindTagFragment extends Fragment {
         //if(order.equals() queryFoto.addAscendingOrder("nLike");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        //queryFoto.setLimit(5);
-        skip = skip + 5;
+        //queryFoto.setLimit(10);
+        skip = skip + 10;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -393,6 +393,18 @@ public class FindTagFragment extends Fragment {
         super.onResume();  // Always call the superclass method first
         //System.out.println("onresume"+user);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //System.out.println("visibile");
+            adapter.notifyDataSetChanged();
+            if(adapter.getCount()==0) search();
+        } else {
+            //System.out.println("nonvisibile");
+        }
     }
 
     public static ArrayList<Image> getCloth() {

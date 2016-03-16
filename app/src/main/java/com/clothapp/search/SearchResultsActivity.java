@@ -23,6 +23,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.clothapp.R;
+import com.clothapp.resources.ApplicationSupport;
+import com.clothapp.resources.Image;
+import com.clothapp.resources.User;
 import com.clothapp.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -196,6 +199,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // In caso sia premuto il pulsante indietro termino semplicemente l'activity
             case android.R.id.home:
+                ApplicationSupport global = (ApplicationSupport) getApplicationContext();
+                global.setCloth(new ArrayList<Image>());
+                global.setTag(new ArrayList<Image>());
+                global.setUsers(new ArrayList<User>());
                 onBackPressed();
                 break;
             //premuto settings
