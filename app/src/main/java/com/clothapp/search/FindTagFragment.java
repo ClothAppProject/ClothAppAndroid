@@ -139,7 +139,7 @@ public class FindTagFragment extends Fragment {
                         //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
-                            System.out.println(tag.get(j).trim().toLowerCase()+": "+query);
+                            //System.out.println(tag.get(j).trim().toLowerCase()+": "+query);
                             if (tag.get(j).trim().toLowerCase().contains(query)) {
 
                                 final Image image = new Image(o);

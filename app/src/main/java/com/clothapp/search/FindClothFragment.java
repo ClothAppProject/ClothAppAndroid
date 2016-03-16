@@ -335,10 +335,11 @@ public class FindClothFragment extends Fragment {
 
                             }
                         }
+
                     }
                     first = false;
                     canLoad = true;
-                    if(global.getCloth().size()==0) notfound.setVisibility(View.VISIBLE);
+
                 } else
 
                 {
