@@ -1,9 +1,11 @@
 package com.clothapp.resources;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.clothapp.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
+import com.clothapp.search.SearchResultsActivity;
 import com.parse.FindCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -92,9 +95,22 @@ public class MyCardListAdapter extends BaseAdapter {
         if (cloths.get(position).getPrice() != null) p = cloths.get(position).getPrice().toString();
         if (p.split("\\.").length > 1 && p.split("\\.")[1].length() == 1) p = p + "0";
         //System.out.println(p.s());
-        price.setText(p+" "+context.getString(R.string.euro));
+        if(price.length()>0 && !price.equals(""))price.setText(p+" "+context.getString(R.string.euro));
         brand.setText(capitalize(cloths.get(position).getBrand()));
         cloth.setText(capitalize(cloths.get(position).getCloth()));
+        cloth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(context, SearchResultsActivity.class);
+                i.putExtra("query", cloth.getText().toString());
+                i.putExtra("sex","all");
+                i.putExtra("prezzoDa",-1f);
+                i.putExtra("prezzoA",-1f);
+                i.putExtra("order", context.getResources().getStringArray(R.array.array_order)[0]);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+        });
         if (cloths.get(position).getShopUsername() != null) {
             row.setOnClickListener(new View.OnClickListener() {
                 @Override

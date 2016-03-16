@@ -1,13 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#e1e1e1"
-    android:fitsSystemWindows="true">
+    android:background="#e1e1e1">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="450dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="8dp"
@@ -56,41 +55,57 @@
 
             </ScrollView>
 
-
-            <View
-                android:layout_height="2dp"
-                android:layout_width="match_parent"
-                android:paddingBottom="14dp"
-                android:background="@color/darkred"
-                android:layout_above="@+id/add"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <Button
-                android:id="@+id/add"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add More"
-                android:textColor="@color/red"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-
-            <Button
-                android:id="@+id/remove"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove Last"
-                android:textColor="@color/red"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/add"
-                android:layout_toStartOf="@+id/add" />
-
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+<!---
+        <View
+            android:layout_height="2dp"
+            android:layout_width="match_parent"
+            android:paddingBottom="14dp"
+            android:background="@color/darkred"
+            android:layout_above="@+id/add"
+            android:fitsSystemWindows="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+-->
+        <Button
+            android:id="@+id/add"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="Add More"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:fitsSystemWindows="false"
+            android:textColor="@color/red"
+            android:backgroundTint="#f9f9f9"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
+            android:id="@+id/remove"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="Remove Last"
+            android:fitsSystemWindows="false"
+            android:textColor="@color/red"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="20dp"
+            android:backgroundTint="#f9f9f9"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -167,5 +182,5 @@
             android:textColor="@color/darkred" />
 
     </RelativeLayout>
-
+    </LinearLayout>
 </RelativeLayout>

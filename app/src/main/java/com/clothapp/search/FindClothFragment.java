@@ -151,7 +151,8 @@ public class FindClothFragment extends Fragment {
                         //una foto puù avere più vestiti quindi itero su ogni vestito
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
-                            if (tag.get(j).toLowerCase().contains(query)) {
+                            if (tag.get(j).trim().toLowerCase().contains(query)) {
+                                System.out.println("tag "+tag.get(j).trim().toLowerCase());
                                 final Image image = new Image(o);
                                 //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
                                 //System.out.println(image+" "+cloth.contains(image));
@@ -267,12 +268,12 @@ public class FindClothFragment extends Fragment {
                                     Caso in cui non c'è il filtro del sesso, Salto tutti i controlli a riguardo
                                      */
                                     else {
-                                        //.out.println("aggiungo all");
+                                        System.out.println("aggiungo all");
                                         //------------------------filtro prezzo-------------------------
                                         //qui valgono le stesse considerazione fatte prima (ho fatto copia e incolla)
                                         ArrayList<String> v = (ArrayList) o.get("vestiti");
                                         for (String st : v) {
-                                            //System.out.println(prezzoDa + " A " + prezzoA);
+                                            System.out.println(prezzoDa + " A " + prezzoA);
                                             if (prezzoDa != -1 || prezzoA != -1) {
                                                 ParseQuery<ParseObject> vestito = new ParseQuery<ParseObject>("Vestito");
                                                 vestito.whereEqualTo("objectId", st);
@@ -319,6 +320,7 @@ public class FindClothFragment extends Fragment {
                                             caso in cui non devo fare nessun controllo
                                              */
                                             } else {
+
                                                 if (!cloth.contains(image)) {
                                                     cloth.add(image);
                                                     global.setCloth(cloth);
