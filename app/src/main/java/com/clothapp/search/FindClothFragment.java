@@ -355,6 +355,7 @@ public class FindClothFragment extends Fragment {
         listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("click");
                 Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
                 i.putExtra("classe", "FindCloth");
                 i.putExtra("position", position);

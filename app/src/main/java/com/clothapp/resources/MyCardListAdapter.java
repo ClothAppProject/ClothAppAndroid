@@ -113,7 +113,7 @@ public class MyCardListAdapter extends BaseAdapter {
             }
         });
         if (cloths.get(position).getShopUsername() != null) {
-            row.setOnClickListener(new View.OnClickListener() {
+            shop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, ShopProfileActivity.class);
@@ -123,7 +123,20 @@ public class MyCardListAdapter extends BaseAdapter {
                 }
             });
         } else {
-            // TODO: se il negozio non ha username e quindi non è registrato, lo rimando all'activity della search
+            shop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i=new Intent(context, SearchResultsActivity.class);
+                    i.putExtra("query", cloth.getText().toString());
+                    i.putExtra("sex","all");
+                    i.putExtra("prezzoDa",-1f);
+                    i.putExtra("prezzoA",-1f);
+                    i.putExtra("order", context.getResources().getStringArray(R.array.array_order)[0]);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+            });
+
         }
 
         return row;
