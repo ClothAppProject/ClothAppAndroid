@@ -114,26 +114,28 @@ public class FollowUtil {
                     }
                     for (ParseObject o : objects) {
                         final User u = new User(o.getString("to"), null, null);
-                        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-                        queryFoto.whereEqualTo("username", u.getUsername());
-                        queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                if (object != null) {
-                                    ParseFile foto = object.getParseFile("thumbnail");
-                                    foto.getFileInBackground(new GetFileCallback() {
-                                        @Override
-                                        public void done(File file, ParseException e) {
-                                            u.setProfilo(file);
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    });
+                        if (!users.contains(u)) {
+                            ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+                            queryFoto.whereEqualTo("username", u.getUsername());
+                            queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
+                                @Override
+                                public void done(ParseObject object, ParseException e) {
+                                    if (object != null) {
+                                        ParseFile foto = object.getParseFile("thumbnail");
+                                        foto.getFileInBackground(new GetFileCallback() {
+                                            @Override
+                                            public void done(File file, ParseException e) {
+                                                u.setProfilo(file);
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                        users.add(u);
-                        //adapter.add(u);
-                        adapter.notifyDataSetChanged();
+                            });
+                            users.add(u);
+                            //adapter.add(u);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                     //bisogna fixare la view da passare altrimenti crasha
                 } //else check(e.getCode(), rootView.getRootView(), e.getMessage());
@@ -160,26 +162,28 @@ public class FollowUtil {
                     }
                     for (ParseObject o : objects) {
                         final User u = new User(o.getString("from"), null, null);
-                        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
-                        queryFoto.whereEqualTo("username", u.getUsername());
-                        queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                if (object != null) {
-                                    ParseFile parseFile = object.getParseFile("thumbnail");
-                                    parseFile.getFileInBackground(new GetFileCallback() {
-                                        @Override
-                                        public void done(File file, ParseException e) {
-                                            u.setProfilo(file);
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    });
+                        if (!users.contains(u)) {
+                            ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("UserPhoto");
+                            queryFoto.whereEqualTo("username", u.getUsername());
+                            queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
+                                @Override
+                                public void done(ParseObject object, ParseException e) {
+                                    if (object != null) {
+                                        ParseFile parseFile = object.getParseFile("thumbnail");
+                                        parseFile.getFileInBackground(new GetFileCallback() {
+                                            @Override
+                                            public void done(File file, ParseException e) {
+                                                u.setProfilo(file);
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
-                        users.add(u);
-                        //adapter.add(u);
-                        adapter.notifyDataSetChanged();
+                            });
+                            users.add(u);
+                            //adapter.add(u);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
                 //bisogna fixare la view da passare altrimenti crasha
