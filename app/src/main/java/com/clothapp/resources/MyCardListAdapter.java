@@ -95,7 +95,8 @@ public class MyCardListAdapter extends BaseAdapter {
         if (cloths.get(position).getPrice() != null) p = cloths.get(position).getPrice().toString();
         if (p.split("\\.").length > 1 && p.split("\\.")[1].length() == 1) p = p + "0";
         //System.out.println(p.s());
-        if(price.length()>0 && !price.equals(""))price.setText(p+" "+context.getString(R.string.euro));
+        if(!p.equals(""))price.setText(p+" "+context.getString(R.string.euro));
+        else price.setText("");
         brand.setText(capitalize(cloths.get(position).getBrand()));
         cloth.setText(capitalize(cloths.get(position).getCloth()));
         cloth.setOnClickListener(new View.OnClickListener() {
