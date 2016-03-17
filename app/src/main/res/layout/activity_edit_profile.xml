@@ -25,7 +25,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:id="@+id/profile_picture"
-                android:src="@drawable/com_facebook_profile_picture_blank_square"
+                android:src="@drawable/com_facebook_profile_picture_blank_circle"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp" />
 

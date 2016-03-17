@@ -158,6 +158,7 @@ public class ImageDetailFragment extends Fragment {
                             if (e == null) {
                                 Glide.with(context)
                                         .load(file)
+                                        .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                                         .centerCrop()
                                         .transform(new CircleTransform(context))
                                         .into(profilePic);
@@ -169,7 +170,7 @@ public class ImageDetailFragment extends Fragment {
                 } else {
                     // Log.d("ImageDetailFragment", "Error: " + e.getMessage());
                     Glide.with(context)
-                            .load(R.drawable.com_facebook_profile_picture_blank_square)
+                            .load(R.drawable.com_facebook_profile_picture_blank_circle)
                             .transform(new CircleTransform(context))
                             .into(profilePic);
                 }
@@ -251,6 +252,7 @@ public class ImageDetailFragment extends Fragment {
 
                                 Glide.with(context)
                                         .load(file)
+                                        .placeholder(R.mipmap.gallery_icon)
                                         .fitCenter()
                                         .into(imageView);
                                 imageView.setOnTouchListener(new View.OnTouchListener() {

@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_home);
 
-        context = HomeActivity.this;
+        context = getApplicationContext();
         activity = this;
 
         // Initialize Toolbar.

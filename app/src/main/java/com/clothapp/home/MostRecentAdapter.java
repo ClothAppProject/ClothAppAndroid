@@ -123,6 +123,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             Glide.with(HomeActivity.context)
                     .load(file)
+                    .placeholder(R.mipmap.gallery_icon)
                     .centerCrop()
                     .into(imgPhoto);
         }

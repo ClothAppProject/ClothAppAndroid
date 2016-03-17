@@ -52,11 +52,12 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             File imageFile = users.get(position).getProfilo();
             Glide.with(context)
                     .load(imageFile)
+                    .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                     .transform(new CircleTransform(context))
                     .into(profileViewHolder.photo);
         } else {
             Glide.with(context)
-                    .load(R.drawable.com_facebook_profile_picture_blank_square)
+                    .load(R.drawable.com_facebook_profile_picture_blank_circle)
                     .transform(new CircleTransform(context))
                     .into(profileViewHolder.photo);
         }
