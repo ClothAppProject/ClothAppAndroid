@@ -91,11 +91,18 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViewPagerAndTabs() {
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
+        viewPager.setOffscreenPageLimit(3);
+
         HomePagerAdapter pagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
+
         pagerAdapter.addFragment(MostRecentFragment.newInstance(), "Most Recent");
         pagerAdapter.addFragment(TopRatedFragment.newInstance(), "Top Rated");
+        pagerAdapter.addFragment(PopularShopsFragment.newInstance(), "Popular Shops");
+
         viewPager.setAdapter(pagerAdapter);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.home_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
     }
