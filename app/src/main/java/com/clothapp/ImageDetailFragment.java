@@ -345,6 +345,17 @@ public class ImageDetailFragment extends Fragment {
                 setTextLike();
             }
         });
+
+        //listener sulla foto
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(context,ZoomPhoto.class);
+                i.putExtra("immagine",immagine);
+                startActivity(i);
+
+            }
+        });
     }
 
     @Override
@@ -601,6 +612,15 @@ public class ImageDetailFragment extends Fragment {
     //funzione che ritorna il gestureDetector per il doubletap
     public GestureDetector doubleTapGesture(final ParseObject object) {
         return new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e){
+                Intent i=new Intent(context,ZoomPhoto.class);
+                i.setData(Uri.fromFile(immagine.getFile()));
+                startActivity(i);
+                return true;
+            }
+
             @Override
             public boolean onDown(MotionEvent e) {
                 return true;
@@ -649,6 +669,8 @@ public class ImageDetailFragment extends Fragment {
             public boolean onDoubleTapEvent(MotionEvent e) {
                 return true;
             }
+
+
         });
     }
 /*

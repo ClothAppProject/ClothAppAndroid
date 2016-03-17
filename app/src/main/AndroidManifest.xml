@@ -191,6 +191,9 @@
         <activity
             android:name=".search.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ZoomPhoto"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".upload.UploadPhotoActivity"
