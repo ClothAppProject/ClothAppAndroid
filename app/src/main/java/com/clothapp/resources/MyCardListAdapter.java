@@ -56,9 +56,9 @@ public class MyCardListAdapter extends BaseAdapter {
 
         //prendo i vari oggetti del card_layout
         TextView address = (TextView) row.findViewById(R.id.address);
-        TextView shop = (TextView) row.findViewById(R.id.shop);
+        final TextView shop = (TextView) row.findViewById(R.id.shop);
         TextView price = (TextView) row.findViewById(R.id.price);
-        TextView brand = (TextView) row.findViewById(R.id.brand);
+        final TextView brand = (TextView) row.findViewById(R.id.brand);
         final TextView cloth = (TextView) row.findViewById(R.id.cloth);
         LinearLayout map = (LinearLayout) row.findViewById(R.id.map);
         //latidune e longitudine sono quelle di roma
@@ -127,7 +127,7 @@ public class MyCardListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent i=new Intent(context, SearchResultsActivity.class);
-                    i.putExtra("query", cloth.getText().toString());
+                    i.putExtra("query", shop.getText().toString());
                     i.putExtra("sex","all");
                     i.putExtra("prezzoDa",-1f);
                     i.putExtra("prezzoA",-1f);
@@ -138,6 +138,20 @@ public class MyCardListAdapter extends BaseAdapter {
             });
 
         }
+
+        brand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(context, SearchResultsActivity.class);
+                i.putExtra("query", brand.getText().toString());
+                i.putExtra("sex","all");
+                i.putExtra("prezzoDa",-1f);
+                i.putExtra("prezzoA",-1f);
+                i.putExtra("order", context.getResources().getStringArray(R.array.array_order)[0]);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+        });
 
         return row;
     }
