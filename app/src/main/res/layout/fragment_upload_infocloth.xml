@@ -39,7 +39,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Clothing Name"
-                        android:textSize="24dp" />
+                        android:textSize="24dp"
+                        android:inputType="textEmailAddress|textEmailSubject"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -72,7 +73,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Shop"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress|textEmailSubject"/>
 
 
                 </android.support.design.widget.TextInputLayout>
@@ -106,7 +108,8 @@
                         android:id="@+id/address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Address or Website"/>
+                        android:hint="Address or Website"
+                        android:inputType="textEmailAddress|textEmailSubject"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -139,7 +142,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Brand"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress|textEmailSubject"/>
 
                 </android.support.design.widget.TextInputLayout>
 
