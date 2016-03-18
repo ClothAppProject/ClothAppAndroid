@@ -54,8 +54,8 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
     private AutoCompleteTextView tipo;
 
-    private int size = 1;
-    private ArrayList<Cloth> listCloth = new ArrayList<>(1);
+
+    private ArrayList<Cloth> listCloth = new ArrayList<>(3);
     private Resources resources;
     private String output = null;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -66,6 +66,10 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
     private PlaceAutocompleteAdapter mAdapter;
     private String output2=null;
+    private AutoCompleteTextView shop;
+    private AutoCompleteTextView brand;
+    private AutoCompleteTextView address;
+    private EditText price;
 
 
     public InfoListAdapter(Context context, GoogleApiClient googleApiClient) {
@@ -74,6 +78,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
         mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+        addCard();
     }
 /*
     public InfoListAdapter(Context context, List<Cloth> cloth) {
@@ -83,13 +88,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 */
 
 
-    public int getListCloth() {
-        return listCloth.size();
-    }
+
 
     @Override
     public int getCount() {
-        return size;
+        return listCloth.size();
     }
 
     @Override
@@ -104,13 +107,15 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        System.out.println("getView "+(listCloth.get(position))+" position "+position);
         View row = convertView;
-        if (row == null) {
+        //if (row == null) {
+
             //se la convertView di quest'immagine è nulla la inizializzo
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.fragment_upload_infocloth, parent, false);
-        }
+        //}
 
         resources = context.getResources();
 
@@ -158,36 +163,45 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
-        final AutoCompleteTextView shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
-        AutoCompleteTextView brand = (AutoCompleteTextView) row.findViewById(R.id.brand);
-        final AutoCompleteTextView address = (AutoCompleteTextView) row.findViewById(R.id.address);
-        EditText price = (EditText) row.findViewById(R.id.price);
+        shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
+        brand = (AutoCompleteTextView) row.findViewById(R.id.brand);
+        address = (AutoCompleteTextView) row.findViewById(R.id.address);
+        price = (EditText) row.findViewById(R.id.price);
 
         //adattatore per i suggerimenti
         final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(row.getContext(),
                 android.R.layout.simple_dropdown_item_1line, output2.split("\n"));
         brand.setAdapter(adapter2);
         brand.setThreshold(1);
-      /*
-        tipo.setText("");
-        shop.setText("");
-        brand.setText("");
-        address.setText("");
-        price.setText("");
-        */
-        final Cloth c = new Cloth();
-        c.setId(size);
+
+
+        if(tipo!=null) tipo.setText(getItem(position).getCloth());
+        if(shop!=null) shop.setText(getItem(position).getShop());
+        if(address!=null) address.setText(getItem(position).getAddress());
+        if(brand!=null) brand.setText(getItem(position).getBrand());
+        if(price!=null){
+            if(listCloth.get(position).getPrice()!=null)price.setText(getItem(position).getPrice().toString());
+            else price.setText("");
+        }
+
+
+
+        //final Cloth c=listCloth.get(position);
+        //c.setId(listCloth.size());
         //c.setCloth(tipo.getText().toString());
         //c.setShop(shop.getText().toString());
         //c.setBrand(brand.getText().toString());
         //c.setAddress(address.getText().toString());
+       /*
         if (!listCloth.contains(c)) {
             //System.out.println("add:"+c.getID());
-            listCloth.add(c);
+            //listCloth.add(c);
         }
+        */
 
 
-        if (position == size - 1) {
+        if (position == listCloth.size() - 1) {
+
             tipo.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -203,7 +217,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setCloth(s.toString());
+                    try{
+                        listCloth.get(position).setCloth(s.toString().trim());
+                    }catch (Exception e){
+
+                    }
 
                 }
             });
@@ -218,7 +236,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    System.out.println("qui");
+                    //System.out.println("qui");
                     final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
                     shopUser.whereContains("lowercase", s.toString().toLowerCase());
                     shopUser.findInBackground(new FindCallback<ParseObject>() {
@@ -248,7 +266,12 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setShop(s.toString());
+                    try {
+                        listCloth.get(position).setShop(s.toString().trim());
+                    }
+                    catch (Exception e){
+
+                    }
                 }
             });
 
@@ -265,7 +288,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setBrand(s.toString());
+                    try{
+                        listCloth.get(position).setBrand(s.toString().trim());
+                    }catch (Exception e){
+
+                    }
                 }
             });
 
@@ -328,7 +355,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                @Override
                public void afterTextChanged(Editable s) {
-                   listCloth.get(c.getID() - 1).setAddress(s.toString());
+                   try{
+                       listCloth.get(position).setAddress(s.toString().trim());
+                   }catch (Exception e){
+
+                   }
 
                }
 
@@ -347,8 +378,13 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (!s.toString().equals(""))listCloth.get(c.getID() - 1).setPrize(Float.parseFloat(s.toString()));
-                    else listCloth.get(c.getID() - 1).setPrize(null);
+                    try {
+                        if (!s.toString().equals(""))
+                            listCloth.get(position).setPrize(Float.parseFloat(s.toString().trim()));
+                        else listCloth.get(position).setPrize(null);
+                    }catch (Exception e){
+
+                    }
                 }
             });
         }
@@ -370,14 +406,28 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
 
     public void addCard() {
-        size++;
+        //System.out.println("addCard");
+        Cloth c=new Cloth();
+        c.setId(listCloth.size() + 1);
+        /*
+        if(tipo!=null) tipo.setText("");
+        if(shop!=null) shop.setText("");
+        if(address!=null) address.setText("");
+        if(brand!=null) brand.setText("");
+        if(price!=null) price.setText("");
+        */
+        listCloth.add(c);
+        System.out.println(listCloth.size());
 
     }
 
     public void deleteCard() {
-        if(size>0) {
-            listCloth.remove(size - 1);
-             size--;
+        if(listCloth.size()>1) {
+            ArrayList<Cloth> a=new ArrayList<Cloth>();
+            for (int i=0;i<listCloth.size()-1;i++){
+                a.add(listCloth.get(i));
+            }
+            listCloth=a;
         }
     }
 
