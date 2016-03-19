@@ -35,9 +35,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -183,6 +186,29 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             if(listCloth.get(position).getPrice()!=null)price.setText(getItem(position).getPrice().toString());
             else price.setText("");
         }
+
+
+        //se è un negozio setto già la via e il nome
+        if(ParseUser.getCurrentUser().getString("flagISA").equals("Negozio")) {
+            final ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
+            System.out.println(ParseUser.getCurrentUser().getUsername());
+            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null && object != null) {
+                        String n = (object.getString("name"));
+                        if (n != null && n.length() > 0) shop.setText(n);
+                        else shop.setText(object.getString("username"));
+                        String s = object.getString("address");
+                        if (s != null && s.length() > 0) address.setText(s);
+                        else address.setText(object.getString("webSite"));
+                    }
+                }
+            });
+        }
+
+
 
 
 

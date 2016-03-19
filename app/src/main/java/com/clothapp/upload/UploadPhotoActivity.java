@@ -565,11 +565,11 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             //se lo shop è registrato inserisco il nome nel campo shopusername
                                             ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
                                             address.whereEqualTo("address", c.getAddress());
-                                            address.whereEqualTo("username", c.getShop());
+                                            address.whereEqualTo("username", c.getShop().trim());
 
                                             final ParseQuery<ParseObject> website = ParseQuery.getQuery("LocalShop");
                                             website.whereEqualTo("webSite", c.getAddress());
-                                            website.whereEqualTo("username", c.getShop());
+                                            website.whereEqualTo("username", c.getShop().trim());
 
                                             address.getFirstInBackground(new GetCallback<ParseObject>() {
                                                 @Override
