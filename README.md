@@ -33,11 +33,10 @@ Let everybody know about your fashion skills!
 
 <a href="https://docs.google.com/presentation/d/1IVHUUHgL3tFHkTFAf8R6Q-FazIAPwUzy8d3uyJKMEDI/edit?usp=sharing">Milestone 2 Presentation</a>
 
-<a href="https://www.youtube.com/watch?v=xy_4AmtxX3I">Video Demonstration</a>
+<a href="https://www.youtube.com/watch?v=xy_4AmtxX3I">Video Promo</a>
 
 <a href="https://www.clothapp.it/webapp">ClothApp Web Client</a>
 
-<a href="https://goo.gl/DdZySh">Form to parecipate in the closed Beta</a>
 
 ##Milestone 3 - Final
 -Improve Milestone 2 items based on received feedback
@@ -45,3 +44,9 @@ Let everybody know about your fashion skills!
 -Social networks support (share with functionalities)
 
 -Beta version release of the application
+
+<a href="https://www.facebook.com/ClothAppProject/videos/950198985087567/">Video Demonstration</a>
+
+<a href="https://docs.google.com/presentation/d/1EmsCzn_WhuxvvLtPFCi-MAbZ19BrXo6iXx5fTZoc3zs/edit?usp=sharing">Milestone 3 Presentation</a>
+
+<a href="https://goo.gl/DdZySh">Form to parecipate in the closed Beta</a>
