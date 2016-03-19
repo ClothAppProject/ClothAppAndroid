@@ -589,8 +589,10 @@ public class ImageDetailFragment extends Fragment {
                         f.getFileInBackground(new GetFileCallback() {
                             @Override
                             public void done(File file, ParseException e) {
-                                u.setProfilo(file);
-                                likeAdapter.notifyDataSetChanged();
+                                if(e==null) {
+                                    u.setProfilo(file);
+                                    likeAdapter.notifyDataSetChanged();
+                                }
                             }
                         });
                     }
@@ -623,7 +625,11 @@ public class ImageDetailFragment extends Fragment {
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
                 //  se ho zero likes scrivo like sennò likes
-                setTextLike();
+               try{
+                   setTextLike();
+               }catch (Exception err){
+                   like.setText(" error!");
+               }
 
                 //inizializzo animazione del cuore che entra ed esce
                 Animation pulse_fade = AnimationUtils.loadAnimation(context, R.anim.pulse_fade_in);
