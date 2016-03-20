@@ -235,7 +235,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void setPhoto(File file) {
             Glide.with(HomeActivity.context)
                     .load(file)
-                    .placeholder(R.mipmap.gallery_icon)
                     .centerCrop()
                     .into(imgPhoto);
         }
