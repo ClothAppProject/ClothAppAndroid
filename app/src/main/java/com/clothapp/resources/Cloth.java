@@ -151,4 +151,12 @@ public class Cloth implements Parcelable {
         else return false;
 
     }
+
+    private boolean set=false;
+    public void setSet(boolean set){
+        this.set=set;
+    }
+    public boolean isSet() {
+        return set;
+    }
 }
