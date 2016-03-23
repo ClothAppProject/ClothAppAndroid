@@ -80,10 +80,10 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     private AutoCompleteTextView address;
     private EditText price;
     private ArrayAdapter<String> adapter_shop;
-    private boolean flag=true;
     private ArrayList<String>string=new ArrayList<>();
     private List<ParseObject> objects=new ArrayList<ParseObject>();
     private ArrayAdapter<String> adapter_address;
+
 
 
     public InfoListAdapter(Context context, GoogleApiClient googleApiClient) {
@@ -371,16 +371,18 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             address.setAdapter(adapter_address);
             address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                     InfoListAdapter.this.notifyDataSetChanged();
-                    shop.setText(objects.get(position).getString("username"));
-                    //System.out.println(objects.get(position).getString("address").length() == 0);
-                    //System.out.println(objects.get(position).getString("webSite"));
-                    //System.out.println(objects.get(position).getString("address"));
-                    if (objects.get(position).getString("address") == null || objects.get(position).getString("address").length() == 0)
-                        address.setText(objects.get(position).getString("webSite"));
-                    else
-                        address.setText(objects.get(position).getString("address"));
+
+                    if(objects.get(pos).getString("username")!=null) shop.setText(objects.get(pos).getString("username"));
+                        //System.out.println(objects.get(position).getString("address").length() == 0);
+                        //System.out.println(objects.get(position).getString("webSite"));
+                        //System.out.println(objects.get(position).getString("address"));
+                        if (objects.get(pos).getString("address") == null || objects.get(pos).getString("address").length() == 0)
+                            address.setText(objects.get(pos).getString("webSite"));
+                        else
+                            address.setText(objects.get(pos).getString("address"));
+
 
                     listCloth.get(position).setShop(shop.getText().toString());
                     listCloth.get(position).setAddress(address.getText().toString());
@@ -640,13 +642,19 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
     private String[] predictionToString(ArrayList<AutocompletePrediction> arrayList){
         if (arrayList == null) return new String[]{};
         String[] s = new String[arrayList.size()];
+        ArrayList<ParseObject> p=new ArrayList<>();
         for(int i=0;i<arrayList.size();i++){
             try{
                 s[i]=arrayList.get(i).getDescription();
+                ParseObject o=new ParseObject("LocalShop");
+                o.put("address",s[i]);
+                p.add(o);
+
             }catch (Exception e){
 
             }
         }
+        this.objects=p;
         return s;
     }
 
