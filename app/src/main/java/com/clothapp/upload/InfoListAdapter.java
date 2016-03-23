@@ -193,27 +193,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
 
 
-        //se è un negozio setto già la via e il nome
-        if(ParseUser.getCurrentUser().getString("flagISA").equals("Negozio")) {
-            final ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
-            //System.out.println(ParseUser.getCurrentUser().getUsername());
-            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject object, ParseException e) {
-                    if (e == null && object != null) {
-                        String n = (object.getString("name"));
-                        if (n != null && n.length() > 0) shop.setText(n);
-                        else shop.setText(object.getString("username"));
-                        String s = object.getString("address");
-                        if (s != null && s.length() > 0) address.setText(s);
-                        else address.setText(object.getString("webSite"));
-                        listCloth.get(position).setShop(shop.getText().toString());
-                        listCloth.get(position).setAddress(address.getText().toString());
-                    }
-                }
-            });
-        }
+
 
         if(tipo!=null) tipo.setText(getItem(position).getCloth());
         if(shop!=null) shop.setText(getItem(position).getShop());
@@ -495,7 +475,27 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
     public void addCard() {
         //System.out.println("addCard");
-        Cloth c = new Cloth();
+        final Cloth c = new Cloth();
+        //se è un negozio setto già la via e il nome
+        if(ParseUser.getCurrentUser().getString("flagISA").equals("Negozio")) {
+            final ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
+            //System.out.println(ParseUser.getCurrentUser().getUsername());
+            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            try {
+                ParseObject object = query.getFirst();
+                if (object != null) {
+                    String n = (object.getString("name"));
+                    if (n != null && n.length() > 0) c.setShop(n);
+                    else c.setShop(object.getString("username"));
+                    String s = object.getString("address");
+                    if (s != null && s.length() > 0) c.setAddress(s);
+                    else c.setAddress(object.getString("webSite"));
+                }
+            } catch (Exception e) {
+
+            }
+        }
+
         c.setId(listCloth.size() + 1);
         /*
         if(tipo!=null) tipo.setText("");
