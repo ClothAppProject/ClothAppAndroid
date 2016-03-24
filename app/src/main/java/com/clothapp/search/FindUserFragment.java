@@ -48,6 +48,7 @@ public class FindUserFragment extends Fragment {
     private SearchAdapterUser adapter;
     private ProgressBar progressBar;
     private TextView notfound;
+    private int count;
 
 
     @Override
@@ -98,7 +99,7 @@ public class FindUserFragment extends Fragment {
 
     public void search() {
 
-        SearchResultsActivity.tabUserResultCount.setText(""+adapter.getCount());
+        SearchResultsActivity.tabUserResultCount.setText("" + adapter.getCount());
 
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
@@ -121,7 +122,8 @@ public class FindUserFragment extends Fragment {
             public void done(List<ParseUser> objects, ParseException e) {
                 if (e == null) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    if(objects.size()==0 && global.getUsers().size()==0) notfound.setVisibility(View.VISIBLE);
+                    if (objects.size() == 0 && global.getUsers().size() == 0)
+                        notfound.setVisibility(View.VISIBLE);
 
                     for (ParseUser parseUser : objects) {
                         final User u = new User();
@@ -152,6 +154,7 @@ public class FindUserFragment extends Fragment {
                                     adapter.notifyDataSetChanged();
                                     SearchResultsActivity.tabUserResultCount.setText("" + adapter.getCount());
                                 }
+                                checkLast();
 
 
                             }
@@ -214,6 +217,15 @@ public class FindUserFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    synchronized private void checkLast(){
+
+            if(adapter.getCount()<5 && skip<50){
+                adapter.notifyDataSetChanged();
+                search();
+
+            }
+
+    }
 
     public void setQuery(String query) {
         this.query = query;

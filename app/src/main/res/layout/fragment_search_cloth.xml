@@ -15,6 +15,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="4dp"
         android:id="@+id/clothlist"
+        android:focusable="false"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:layout_gravity="center_horizontal" />

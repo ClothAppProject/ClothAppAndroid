@@ -158,6 +158,7 @@ public class ImageDetailFragment extends Fragment {
                             if (e == null) {
                                 Glide.with(context)
                                         .load(file)
+                                        .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                                         .centerCrop()
                                         .transform(new CircleTransform(context))
                                         .into(profilePic);
@@ -169,7 +170,7 @@ public class ImageDetailFragment extends Fragment {
                 } else {
                     // Log.d("ImageDetailFragment", "Error: " + e.getMessage());
                     Glide.with(context)
-                            .load(R.drawable.com_facebook_profile_picture_blank_square)
+                            .load(R.drawable.com_facebook_profile_picture_blank_circle)
                             .transform(new CircleTransform(context))
                             .into(profilePic);
                 }
@@ -251,6 +252,7 @@ public class ImageDetailFragment extends Fragment {
 
                                 Glide.with(context)
                                         .load(file)
+                                        .placeholder(R.mipmap.gallery_icon)
                                         .fitCenter()
                                         .into(imageView);
                                 imageView.setOnTouchListener(new View.OnTouchListener() {
@@ -598,8 +600,10 @@ public class ImageDetailFragment extends Fragment {
                         f.getFileInBackground(new GetFileCallback() {
                             @Override
                             public void done(File file, ParseException e) {
-                                u.setProfilo(file);
-                                likeAdapter.notifyDataSetChanged();
+                                if(e==null) {
+                                    u.setProfilo(file);
+                                    likeAdapter.notifyDataSetChanged();
+                                }
                             }
                         });
                     }
@@ -641,7 +645,11 @@ public class ImageDetailFragment extends Fragment {
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
                 //  se ho zero likes scrivo like sennò likes
-                setTextLike();
+               try{
+                   setTextLike();
+               }catch (Exception err){
+                   like.setText(" error!");
+               }
 
                 //inizializzo animazione del cuore che entra ed esce
                 Animation pulse_fade = AnimationUtils.loadAnimation(context, R.anim.pulse_fade_in);

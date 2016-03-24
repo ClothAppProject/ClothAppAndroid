@@ -220,6 +220,7 @@ public class ProfileUtils {
                                         Glide.with(context)
                                                 .load(file)
                                                 .transform(new CircleTransform(context))
+                                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                                                 .into(mainImageView);
                                     //}
                                 } else {
@@ -228,6 +229,7 @@ public class ProfileUtils {
                                         Glide.clear(mainImageView);
                                         Glide.with(context)
                                                 .load(file)
+                                                .placeholder(R.drawable.shop)
                                                 .into(mainImageView);
                                     //}
                                 }

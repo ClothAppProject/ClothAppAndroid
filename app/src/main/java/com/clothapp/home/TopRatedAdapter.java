@@ -245,12 +245,13 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (file != null) {
                 Glide.with(HomeActivity.context)
                         .load(file)
+                        .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                         .centerCrop()
                         .transform(new CircleTransform(HomeActivity.context))
                         .into(imgProfilePhoto);
             } else {
                 Glide.with(HomeActivity.context)
-                        .load(R.drawable.com_facebook_profile_picture_blank_square)
+                        .load(R.drawable.com_facebook_profile_picture_blank_circle)
                         .centerCrop()
                         .transform(new CircleTransform(HomeActivity.context))
                         .into(imgProfilePhoto);

@@ -113,7 +113,7 @@ public class MyCardListAdapter extends BaseAdapter {
             }
         });
         if (cloths.get(position).getShopUsername() != null) {
-            shop.setOnClickListener(new View.OnClickListener() {
+            row.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(context, ShopProfileActivity.class);

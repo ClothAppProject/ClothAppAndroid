@@ -57,10 +57,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         if (profilo.equals("persona")) {
             Glide.with(UserProfileActivity.context)
                     .load(imageFile)
+                    .placeholder(R.mipmap.gallery_icon)
                     .into(photoViewHolder.photo);
         } else {
             Glide.with(ShopProfileActivity.context)
                     .load(imageFile)
+                    .placeholder(R.mipmap.gallery_icon)
                     .into(photoViewHolder.photo);
         }
 

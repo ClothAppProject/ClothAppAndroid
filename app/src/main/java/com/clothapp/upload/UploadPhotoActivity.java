@@ -484,8 +484,9 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                     @Override
                     public void onClick(View v) {
                         infoListAdapter.addCard();
-                        infoListAdapter.notifyDataSetChanged();
                         setListViewHeightBasedOnItems(listView);
+                        //infoListAdapter.notifyDataSetChanged();
+
 
                     }
                 });
@@ -509,7 +510,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         //nascondo pulsanti
                         boolean cloth_isPresent = true;
                         boolean cloth_isInserted=false;
-                        System.out.println("getCount "+infoListAdapter.getCount());
+
                         for (int i = 0; i < infoListAdapter.getCount(); i++) {
                             Cloth c = infoListAdapter.getItem(i);
                             System.out.println("address "+c.getAddress());
@@ -541,7 +542,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
                                 System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                                 infoListAdapter.notifyDataSetChanged();
-                                System.out.println(infoListAdapter.getListCloth());
+
                                 final ArrayList<String> tipi = new ArrayList<String>();
                                 final ArrayList<String> id = new ArrayList<>();
                                 for (int i = 0; i < infoListAdapter.getCount(); i++) {
@@ -564,11 +565,11 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             //se lo shop è registrato inserisco il nome nel campo shopusername
                                             ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
                                             address.whereEqualTo("address", c.getAddress());
-                                            address.whereEqualTo("username", c.getShop());
+                                            address.whereEqualTo("username", c.getShop().trim());
 
                                             final ParseQuery<ParseObject> website = ParseQuery.getQuery("LocalShop");
                                             website.whereEqualTo("webSite", c.getAddress());
-                                            website.whereEqualTo("username", c.getShop());
+                                            website.whereEqualTo("username", c.getShop().trim());
 
                                             address.getFirstInBackground(new GetCallback<ParseObject>() {
                                                 @Override

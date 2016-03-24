@@ -28,22 +28,31 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.DataBufferUtils;
 import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -54,18 +63,27 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
     private AutoCompleteTextView tipo;
 
-    private int size = 1;
-    private ArrayList<Cloth> listCloth = new ArrayList<>(1);
+
+    private ArrayList<Cloth> listCloth = new ArrayList<>(3);
     private Resources resources;
     private String output = null;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
+    private static final LatLngBounds BOUNDS_GREATER_ROME = new LatLngBounds(
             new LatLng(41.9027835, 12.4963655), new LatLng(42.9027835, 13.4963655));
 
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutocompleteAdapter mAdapter;
     private String output2=null;
+    private AutoCompleteTextView shop;
+    private AutoCompleteTextView brand;
+    private AutoCompleteTextView address;
+    private EditText price;
+    private ArrayAdapter<String> adapter_shop;
+    private ArrayList<String>string=new ArrayList<>();
+    private List<ParseObject> objects=new ArrayList<ParseObject>();
+    private ArrayAdapter<String> adapter_address;
+
 
 
     public InfoListAdapter(Context context, GoogleApiClient googleApiClient) {
@@ -73,7 +91,10 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         this.mGoogleApiClient = googleApiClient;
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
-        mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+        mAdapter = new PlaceAutocompleteAdapter(context, mGoogleApiClient, BOUNDS_GREATER_ROME, null);
+        adapter_shop=new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line,string);
+        adapter_address = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, string);
+        addCard();
     }
 /*
     public InfoListAdapter(Context context, List<Cloth> cloth) {
@@ -83,13 +104,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 */
 
 
-    public int getListCloth() {
-        return listCloth.size();
-    }
+
 
     @Override
     public int getCount() {
-        return size;
+        return listCloth.size();
     }
 
     @Override
@@ -104,13 +123,15 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
+        //System.out.println("getView "+listCloth);
         View row = convertView;
-        if (row == null) {
+        //if (row == null) {
+
             //se la convertView di quest'immagine è nulla la inizializzo
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.fragment_upload_infocloth, parent, false);
-        }
+        //}
 
         resources = context.getResources();
 
@@ -158,36 +179,52 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         tipo.setAdapter(adapter);
         //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
         tipo.setThreshold(1);
-        final AutoCompleteTextView shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
-        AutoCompleteTextView brand = (AutoCompleteTextView) row.findViewById(R.id.brand);
-        final AutoCompleteTextView address = (AutoCompleteTextView) row.findViewById(R.id.address);
-        EditText price = (EditText) row.findViewById(R.id.price);
+        shop = (AutoCompleteTextView) row.findViewById(R.id.shop);
+        brand = (AutoCompleteTextView) row.findViewById(R.id.brand);
+        address = (AutoCompleteTextView) row.findViewById(R.id.address);
+        price = (EditText) row.findViewById(R.id.price);
 
         //adattatore per i suggerimenti
         final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(row.getContext(),
                 android.R.layout.simple_dropdown_item_1line, output2.split("\n"));
         brand.setAdapter(adapter2);
         brand.setThreshold(1);
-      /*
-        tipo.setText("");
-        shop.setText("");
-        brand.setText("");
-        address.setText("");
-        price.setText("");
-        */
-        final Cloth c = new Cloth();
-        c.setId(size);
+
+
+
+
+
+
+        if(tipo!=null) tipo.setText(getItem(position).getCloth());
+        if(shop!=null) shop.setText(getItem(position).getShop());
+        if(address!=null) address.setText(getItem(position).getAddress());
+        if(brand!=null) brand.setText(getItem(position).getBrand());
+        if(price!=null){
+            if(listCloth.get(position).getPrice()!=null)price.setText(getItem(position).getPrice().toString());
+            else price.setText("");
+        }
+
+
+
+
+
+        //final Cloth c=listCloth.get(position);
+        //c.setId(listCloth.size());
         //c.setCloth(tipo.getText().toString());
         //c.setShop(shop.getText().toString());
         //c.setBrand(brand.getText().toString());
         //c.setAddress(address.getText().toString());
+       /*
         if (!listCloth.contains(c)) {
             //System.out.println("add:"+c.getID());
-            listCloth.add(c);
+            //listCloth.add(c);
         }
+        */
 
 
-        if (position == size - 1) {
+        if (true) {
+            listCloth.get(position).setSet(true);
+                //System.out.println("set " + listCloth.get(position).getID());
             tipo.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -203,12 +240,46 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setCloth(s.toString());
+                    try {
+                        listCloth.get(position).setCloth(s.toString().trim());
+                    } catch (Exception e) {
+
+                    }
 
                 }
             });
 
             final View finalRow = row;
+
+
+
+            shop.setAdapter(adapter_shop);
+
+
+            shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                    System.out.println("click");
+
+                    InfoListAdapter.this.notifyDataSetChanged();
+
+                    System.out.println(objects.get(pos).getString("username"));
+                    shop.setText((CharSequence) objects.get(pos).getString("username"));
+                    //System.out.println(objects.get(position).getString("address").length() == 0);
+                    //System.out.println(objects.get(position).getString("webSite"));
+                    //System.out.println(objects.get(position).getString("address"));
+                    if (objects.get(pos).getString("address") == null || objects.get(pos).getString("address").length() == 0)
+                        address.setText(objects.get(pos).getString("webSite"));
+                    else
+                        address.setText(objects.get(pos).getString("address"));
+
+                    listCloth.get(position).setShop(shop.getText().toString());
+                    listCloth.get(position).setAddress(address.getText().toString());
+
+
+                }
+            });
+
 
             shop.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -218,28 +289,27 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    System.out.println("qui");
+                    //System.out.println("qui");
+
                     final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
                     shopUser.whereContains("lowercase", s.toString().toLowerCase());
                     shopUser.findInBackground(new FindCallback<ParseObject>() {
                         @Override
-                        public void done(final List<ParseObject> objects, ParseException e) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(), android.R.layout.simple_dropdown_item_1line, shopToString(objects));
-                            //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
-                            shop.setAdapter(adapter);
-                            shop.setThreshold(1);
-                            shop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    shop.setText(objects.get(position).getString("username"));
-                                    //System.out.println(objects.get(position).getString("address").length() == 0);
-                                    //System.out.println(objects.get(position).getString("webSite"));
-                                    //System.out.println(objects.get(position).getString("address"));
-                                    if(objects.get(position).getString("address")==null || objects.get(position).getString("address").length()==0)  address.setText(objects.get(position).getString("webSite"));
-                                    else address.setText(objects.get(position).getString("address"));
+                        public void done(final List<ParseObject> obj, ParseException e) {
+                            //System.out.println(objects);
+                            if (obj != null && obj.size() > 0) {
+                                adapter_shop.clear();
+                                adapter_shop.addAll(shopToString(obj));
+                                shop.setThreshold(1);
+                                objects = obj;
 
-                                }
-                            });
+                            }
+
+                            //InfoListAdapter.this.adapter_shop.notifyDataSetChanged();
+                            //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
+                            //System.out.println(adapter.getItem(0));
+
+
 
                         }
                     });
@@ -248,7 +318,11 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setShop(s.toString());
+                    try {
+                        listCloth.get(position).setShop(s.toString().trim());
+                    } catch (Exception e) {
+
+                    }
                 }
             });
 
@@ -265,75 +339,99 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    listCloth.get(c.getID() - 1).setBrand(s.toString());
+                    try {
+                        listCloth.get(position).setBrand(s.toString().trim());
+                    } catch (Exception e) {
+
+                    }
                 }
             });
 
             address.setThreshold(4);
+            address.setAdapter(adapter_address);
+            address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                    InfoListAdapter.this.notifyDataSetChanged();
+
+                    if(objects.get(pos).getString("username")!=null) shop.setText(objects.get(pos).getString("username"));
+                        //System.out.println(objects.get(position).getString("address").length() == 0);
+                        //System.out.println(objects.get(position).getString("webSite"));
+                        //System.out.println(objects.get(position).getString("address"));
+                        if (objects.get(pos).getString("address") == null || objects.get(pos).getString("address").length() == 0)
+                            address.setText(objects.get(pos).getString("webSite"));
+                        else
+                            address.setText(objects.get(pos).getString("address"));
+
+
+                    listCloth.get(position).setShop(shop.getText().toString());
+                    listCloth.get(position).setAddress(address.getText().toString());
+
+                }
+            });
+            //System.out.println("prima");
             address.addTextChangedListener(new TextWatcher() {
-               @Override
-               public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-               }
+                }
 
-               @Override
-               public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //System.out.println("changed " + s.length());
 
-                   if (s.length()<=3) address.setAdapter(null);
-                   else {
+                    if (s.length() <= 3) address.setAdapter(null);
+                    else {
+                        //System.out.println("prima di maps api");
+
+                        if (!s.toString().toLowerCase().contains("www") && !s.toString().toLowerCase().contains("http")) {
+                            //System.out.println("maps api");
+                            adapter_address.clear();
+                            ArrayList<AutocompletePrediction> a=getAutocomplete(s.toString().toLowerCase());
+                            //System.out.println("ArrayList= "+a);
+                            adapter_address.addAll(predictionToString(a));
+
+                        } else {
+                            //System.out.println("query website");
+                            final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
+                            shopUser.whereContains("webSite", s.toString().toLowerCase());
+                            shopUser.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(final List<ParseObject> obj, ParseException e) {
+                                    // System.out.println("trovati!!!" + objects);
+                                    if (obj != null && obj.size() > 0) {
+                                        adapter_address.clear();
+                                        adapter_address.addAll(shopToString(obj));
+                                        objects = obj;
+
+                                    }
 
 
-                       if (!s.toString().toLowerCase().contains("www") && !s.toString().toLowerCase().contains("http")) {
-                           // Register a listener that receives callbacks when a suggestion has been selected
-                           address.setOnItemClickListener(mAutocompleteClickListener);
 
-                           // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
-                           // the entire world.
-                           address.setAdapter(mAdapter);
-                       }
+                                    //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
+                                   /*
 
-                       else {
+*/
+                                }
+                            });
+                        }
+                    }
 
-                           final ParseQuery<ParseObject> shopUser = new ParseQuery<ParseObject>("LocalShop");
-                           shopUser.whereContains("webSite", s.toString().toLowerCase());
-                           shopUser.findInBackground(new FindCallback<ParseObject>() {
-                               @Override
-                               public void done(final List<ParseObject> objects, ParseException e) {
-                                  // System.out.println("trovati!!!" + objects);
-                                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(finalRow.getContext(), android.R.layout.simple_dropdown_item_1line, shopToString(objects));
-                                   //appena si preme una lettera appaiono i suggerimenti. Il minimo è 1
-                                   address.setAdapter(adapter);
-                                   address.setThreshold(3);
-                                   address.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                       @Override
-                                       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                           shop.setText(objects.get(position).getString("username"));
-                                           //System.out.println(objects.get(position).getString("address").length() == 0);
-                                           //System.out.println(objects.get(position).getString("webSite"));
-                                           //System.out.println(objects.get(position).getString("address"));
-                                           if (objects.get(position).getString("address") == null || objects.get(position).getString("address").length() == 0)
-                                               address.setText(objects.get(position).getString("webSite"));
-                                           else
-                                               address.setText(objects.get(position).getString("address"));
+                }
 
-                                       }
-                                   });
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // System.out.println("after");
+                    try {
+                        listCloth.get(position).setAddress(s.toString().trim());
+                    } catch (Exception e) {
 
-                               }
-                           });
-                       }
-                   }
+                    }
 
-               }
+                }
 
-               @Override
-               public void afterTextChanged(Editable s) {
-                   listCloth.get(c.getID() - 1).setAddress(s.toString());
-
-               }
-
-           });
-
+            });
+           // System.out.println("dopo");
             price.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -347,8 +445,13 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (!s.toString().equals(""))listCloth.get(c.getID() - 1).setPrize(Float.parseFloat(s.toString()));
-                    else listCloth.get(c.getID() - 1).setPrize(null);
+                    try {
+                        if (!s.toString().equals(""))
+                            listCloth.get(position).setPrize(Float.parseFloat(s.toString().trim()));
+                        else listCloth.get(position).setPrize(null);
+                    }catch (Exception e){
+
+                    }
                 }
             });
         }
@@ -365,19 +468,54 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             if( objects.get(i).getString("address")!=null &&  objects.get(i).getString("address").length()>0) s[i]+= ", " + objects.get(i).getString("address");
             else s[i]+= ", " + objects.get(i).getString("webSite");
         }
+       // System.out.println("s="+s);
         return s;
     }
 
 
     public void addCard() {
-        size++;
+        //System.out.println("addCard");
+        final Cloth c = new Cloth();
+        //se è un negozio setto già la via e il nome
+        if(ParseUser.getCurrentUser().getString("flagISA").equals("Negozio")) {
+            final ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
+            //System.out.println(ParseUser.getCurrentUser().getUsername());
+            query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            try {
+                ParseObject object = query.getFirst();
+                if (object != null) {
+                    String n = (object.getString("name"));
+                    if (n != null && n.length() > 0) c.setShop(n);
+                    else c.setShop(object.getString("username"));
+                    String s = object.getString("address");
+                    if (s != null && s.length() > 0) c.setAddress(s);
+                    else c.setAddress(object.getString("webSite"));
+                }
+            } catch (Exception e) {
+
+            }
+        }
+
+        c.setId(listCloth.size() + 1);
+        /*
+        if(tipo!=null) tipo.setText("");
+        if(shop!=null) shop.setText("");
+        if(address!=null) address.setText("");
+        if(brand!=null) brand.setText("");
+        if(price!=null) price.setText("");
+        */
+        listCloth.add(c);
+        //System.out.println(listCloth.size());
 
     }
 
     public void deleteCard() {
-        if(size>0) {
-            listCloth.remove(size - 1);
-             size--;
+        if(listCloth.size()>1) {
+            ArrayList<Cloth> a=new ArrayList<Cloth>();
+            for (int i=0;i<listCloth.size()-1;i++){
+                a.add(listCloth.get(i));
+            }
+            listCloth=a;
         }
     }
 
@@ -432,7 +570,7 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
              The adapter stores each Place suggestion in a AutocompletePrediction from which we
              read the place ID and title.
               */
-            System.out.println("mAdapter=" + mAdapter + ":");
+            //System.out.println("mAdapter=" + mAdapter + ":");
             final AutocompletePrediction item = mAdapter.getItem(position);
             final String placeId = item.getPlaceId();
             final CharSequence primaryText = item.getPrimaryText(null);
@@ -453,6 +591,73 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         }
     };
 
+
+    private ArrayList<AutocompletePrediction> getAutocomplete(CharSequence constraint) {
+        if (mGoogleApiClient.isConnected()) {
+
+            // Submit the query to the autocomplete API and retrieve a PendingResult that will
+            // contain the results when the query completes.
+            final PendingResult<AutocompletePredictionBuffer> results =
+                    Places.GeoDataApi
+                            .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
+                                    BOUNDS_GREATER_ROME, null);
+
+            // This method should have been called off the main UI thread. Block and wait for at most 60s
+            // for a result from the API.
+            final AutocompletePredictionBuffer[] autocompletePredictions = {null};
+            Runnable r=new Runnable() {
+                @Override
+                public void run() {
+                    autocompletePredictions[0] = results
+                            .await(60, TimeUnit.SECONDS);
+
+                }
+            };
+            Thread t=new Thread(r);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Confirm that the query completed successfully, otherwise return null
+            final Status status = autocompletePredictions[0].getStatus();
+            if (!status.isSuccess()) {
+                Toast.makeText(context, "Error contacting API: " + status.toString(),
+                        Toast.LENGTH_SHORT).show();
+
+                autocompletePredictions[0].release();
+                return null;
+            }
+
+
+
+            // Freeze the results immutable representation that can be stored safely.
+            return DataBufferUtils.freezeAndClose(autocompletePredictions[0]);
+        }
+
+        return null;
+    }
+
+    private String[] predictionToString(ArrayList<AutocompletePrediction> arrayList){
+        if (arrayList == null) return new String[]{};
+        String[] s = new String[arrayList.size()];
+        ArrayList<ParseObject> p=new ArrayList<>();
+        for(int i=0;i<arrayList.size();i++){
+            try{
+                s[i]=arrayList.get(i).getDescription();
+                ParseObject o=new ParseObject("LocalShop");
+                o.put("address",s[i]);
+                p.add(o);
+
+            }catch (Exception e){
+
+            }
+        }
+        this.objects=p;
+        return s;
+    }
+
     /**
      * Callback for results from a Places Geo Data API query that shows the first place result in
      * the details view on screen.
@@ -471,9 +676,9 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
             final Place place = places.get(0);
 
             // Format details of the place for display and show it in a TextView.
-            System.out.println(place.getName() +
-                    place.getId() + place.getAddress() + place.getPhoneNumber() +
-                    place.getWebsiteUri());
+            //System.out.println(place.getName() +
+            //        place.getId() + place.getAddress() + place.getPhoneNumber() +
+            //       place.getWebsiteUri());
 
             // Display the third party attributions if set.
   /*
