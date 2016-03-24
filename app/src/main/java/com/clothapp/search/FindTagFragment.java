@@ -75,6 +75,16 @@ public class FindTagFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         search();
 
+        listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                i.putExtra("classe", "FindCloth");
+                i.putExtra("position", position);
+                startActivity(i);
+            }
+        });
+
         //setto il listener sullo scroller quando arrivo in fondo
         listTag.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -344,15 +354,7 @@ public class FindTagFragment extends Fragment {
 
 
 
-        listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
-                i.putExtra("classe", "FindCloth");
-                i.putExtra("position", position);
-                startActivity(i);
-            }
-        });
+
 
 
     }
