@@ -117,7 +117,7 @@ public class FindTagFragment extends Fragment {
         //if(order.equals() queryFoto.addAscendingOrder("nLike");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        //queryFoto.setLimit(10);
+        queryFoto.setLimit(10);
         skip = skip + 10;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
@@ -215,6 +215,7 @@ public class FindTagFragment extends Fragment {
                                                                                             adapter.notifyDataSetChanged();
                                                                                             SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
                                                                                         }
+                                                                                        checkLast();
                                                                                     }
 
                                                                                 }//else{
@@ -235,6 +236,7 @@ public class FindTagFragment extends Fragment {
                                                                     adapter.notifyDataSetChanged();
                                                                     SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
                                                                 }
+                                                                checkLast();
 
                                                             }
                                                         }
@@ -290,6 +292,7 @@ public class FindTagFragment extends Fragment {
                                                                         adapter.notifyDataSetChanged();
                                                                         SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
                                                                     }
+                                                                    checkLast();
                                                                 }
 
                                                             }//else{
@@ -314,6 +317,7 @@ public class FindTagFragment extends Fragment {
                                                     adapter.notifyDataSetChanged();
                                                     SearchResultsActivity.tabHashtagResultCount.setText("" + adapter.getCount());
                                                 }
+                                                checkLast();
 
                                             }
                                         }
@@ -326,6 +330,7 @@ public class FindTagFragment extends Fragment {
                             }
                         }
                     }
+                    checkLast();
                     canLoad = true;
                     if (global.getCloth().size() == 0) notfound.setVisibility(View.VISIBLE);
                 } else
@@ -405,6 +410,17 @@ public class FindTagFragment extends Fragment {
         } else {
             //System.out.println("nonvisibile");
         }
+    }
+
+    synchronized private void checkLast(){
+        //System.out.println("check "+listCloth.getCount());
+
+        if(adapter.getCount()<5 && skip<500){
+            //System.out.println("yes");
+            adapter.notifyDataSetChanged();
+            search();
+        }
+
     }
 
     public static ArrayList<Image> getCloth() {

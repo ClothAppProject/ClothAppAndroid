@@ -167,6 +167,7 @@
         <item>Users</item>
         <item>Clothes</item>
         <item>HashTag</item>
+        <item>Brand</item>
     </array>
     <string name="cloth">Vestito</string>
     <string name="title_template_step">ciao</string>

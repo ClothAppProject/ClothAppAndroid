@@ -23,6 +23,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
     String[] titles;
     String query;
     Context context;
+    private FindBrandFragment findBrandFragment;
 
     public SearchAdapter(FragmentManager fm, String[] titles, String query, Context context, String sex, float pricefrom, float priceto, String order) {
         //passo il fragment manager e i titoli delle tab
@@ -60,6 +61,9 @@ public class SearchAdapter extends FragmentPagerAdapter {
             case 2:
 
                 return findTagFragment = (FindTagFragment) new FindTagFragment().newIstance(query, sex, priceFrom, priceTo, context, order);
+            case 3:
+                return findBrandFragment = (FindBrandFragment) new FindBrandFragment().newIstance(query, sex, priceFrom, priceTo, context, order);
+
         }
 
         return null;
@@ -72,6 +76,7 @@ public class SearchAdapter extends FragmentPagerAdapter {
         //System.out.println(findClothFragment);
         if (findClothFragment != null) findClothFragment.refresh(query);
         if (findTagFragment != null) findTagFragment.refresh(query);
+        if (findBrandFragment != null) findBrandFragment.refresh(query);
 
     }
 

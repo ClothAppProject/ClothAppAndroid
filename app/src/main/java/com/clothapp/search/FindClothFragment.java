@@ -61,6 +61,7 @@ public class FindClothFragment extends Fragment {
     private static final String RECENT = "Most Recent";
     private ProgressBar progressBar;
     private TextView notfound;
+    private int count=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +87,18 @@ public class FindClothFragment extends Fragment {
         notfound.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         search();
+
+
+        listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("click");
+                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                i.putExtra("classe", "FindCloth");
+                i.putExtra("position", position);
+                startActivity(i);
+            }
+        });
 
         //setto il listener sullo scroller quando arrivo in fondo
         listCloth.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -117,7 +130,10 @@ public class FindClothFragment extends Fragment {
         SearchResultsActivity.tabClothesResultCount.setText(""+adapter.getCount());
         //se si utilizzano altre tastiere (come swiftkey) viene aggiunto uno spazio quindi lo tolgo
         query = query.trim().toLowerCase();
-        System.out.println("search "+query);
+        System.out.println("search " + query);
+
+
+
 
         //faccio la query a Parse delle foto
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
@@ -128,7 +144,7 @@ public class FindClothFragment extends Fragment {
         if (order.equals(RECENT)) queryFoto.addDescendingOrder("createdAt");
         //setto il limit e lo skip della query
         queryFoto.setSkip(skip);
-        //queryFoto.setLimit(10);
+        queryFoto.setLimit(10);
         skip = skip + 10;
         //System.out.println(order + " " + query + " " + skip);
         queryFoto.findInBackground(new FindCallback<ParseObject>() {
@@ -152,7 +168,7 @@ public class FindClothFragment extends Fragment {
                         for (int j = 0; j < tag.size(); j++) {
                             //se la query matcha (contenuta) in un tipo di vestito allora è una candidata per essere inserita in lista
                             if (tag.get(j).trim().toLowerCase().contains(query)) {
-                                System.out.println("tag "+tag.get(j).trim().toLowerCase());
+                                System.out.println("tag " + tag.get(j).trim().toLowerCase());
                                 final Image image = new Image(o);
                                 //un ulteriore controllo= se la foto è già in lista la ignoro per evitare che ci sia 2 volte
                                 //System.out.println(image+" "+cloth.contains(image));
@@ -226,7 +242,9 @@ public class FindClothFragment extends Fragment {
                                                                                             cloth.add(image);
                                                                                             global.setCloth(cloth);
                                                                                             adapter.notifyDataSetChanged();
-                                                                                            SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                                                        }
+                                                                                            SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());
+                                                                                        }
+                                                                                        checkLast();
                                                                                     }
 
                                                                                 }//else{
@@ -245,7 +263,9 @@ public class FindClothFragment extends Fragment {
                                                                         cloth.add(image);
                                                                         global.setCloth(cloth);
                                                                         adapter.notifyDataSetChanged();
-                                                                        SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                                    }
+                                                                        SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());
+                                                                    }
+                                                                    checkLast();
 
                                                                 }
                                                             }
@@ -302,6 +322,7 @@ public class FindClothFragment extends Fragment {
                                                                         adapter.notifyDataSetChanged();
                                                                         SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());
                                                                     }
+                                                                    checkLast();
                                                                 }
 
                                                             }//else{
@@ -325,7 +346,9 @@ public class FindClothFragment extends Fragment {
                                                     cloth.add(image);
                                                     global.setCloth(cloth);
                                                     adapter.notifyDataSetChanged();
-                                                    SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());                                                }
+                                                    SearchResultsActivity.tabClothesResultCount.setText("" + adapter.getCount());
+                                                }
+                                                checkLast();
 
                                             }
                                         }
@@ -339,6 +362,7 @@ public class FindClothFragment extends Fragment {
                         }
 
                     }
+                    checkLast();
                     first = false;
                     canLoad = true;
 
@@ -352,16 +376,7 @@ public class FindClothFragment extends Fragment {
         });
 
 
-        listCloth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("click");
-                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
-                i.putExtra("classe", "FindCloth");
-                i.putExtra("position", position);
-                startActivity(i);
-            }
-        });
+
 
 
     }
@@ -412,15 +427,24 @@ public class FindClothFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            //System.out.println("visibile");
+            System.out.println("visibile");
             adapter.notifyDataSetChanged();
-            if(adapter.getCount()==0) search();
+            //checkLast();
         } else {
             //System.out.println("nonvisibile");
         }
     }
 
+    synchronized private void checkLast(){
+        System.out.println("check "+listCloth.getCount());
 
+            if(adapter.getCount()<5 && skip<500){
+                System.out.println("yes");
+                adapter.notifyDataSetChanged();
+                search();
+            }
+
+    }
 
     public static ArrayList<Image> getCloth() {
         return cloth;
