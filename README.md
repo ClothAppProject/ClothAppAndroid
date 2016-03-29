@@ -49,4 +49,6 @@ Let everybody know about your fashion skills!
 
 <a href="https://docs.google.com/presentation/d/1EmsCzn_WhuxvvLtPFCi-MAbZ19BrXo6iXx5fTZoc3zs/edit?usp=sharing">Milestone 3 Presentation</a>
 
+<a href="https://drive.google.com/open?id=0B9L9fgnPwZntd1ZZWkFwUkFxWm8">Milestone 3 Video</a>
+
 <a href="https://goo.gl/DdZySh">Form to parecipate in the closed Beta</a>
