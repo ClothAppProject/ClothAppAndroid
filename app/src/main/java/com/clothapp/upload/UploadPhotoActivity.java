@@ -688,7 +688,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
 
                                             // Send "New Photo Uploaded" notification followers
-                                            NotificationsUtils.sendNotification(null, "newPhoto");
+                                            NotificationsUtils.sendNotification(null, "newPhoto",new_img.getObjectId());
 
                                             getActivity().finish();
                                         } else {
