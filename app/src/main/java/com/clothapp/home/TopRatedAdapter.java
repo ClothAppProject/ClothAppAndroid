@@ -233,10 +233,18 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         // Set the photo for the Photo ImageView of the current view with the given File
         public void setPhoto(File file) {
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .into(imgPhoto);
+            if (file!=null) {
+                Glide.with(HomeActivity.context)
+                        .load(file)
+                        .centerCrop()
+                        .into(imgPhoto);
+            }else{
+                Glide.with(HomeActivity.context)
+                        .load(R.drawable.loading)
+                        .asGif()
+                        .centerCrop()
+                        .into(imgPhoto);
+            }
         }
 
         // Set the profile photo for the ProfilePhoto ImageView of the current view with the given File

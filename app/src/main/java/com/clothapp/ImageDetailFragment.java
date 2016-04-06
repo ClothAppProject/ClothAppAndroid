@@ -112,7 +112,7 @@ public class ImageDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         t = (TextView) rootView.findViewById(R.id.user);
         imageView = (ImageView) rootView.findViewById(R.id.photo);
         heartAnim = (ImageView) rootView.findViewById(R.id.heart_anim);
@@ -625,11 +625,11 @@ public class ImageDetailFragment extends Fragment {
                     cuore.setImageResource(R.mipmap.ic_favorite_white_48dp);
                 }
                 //  se ho zero likes scrivo like sennò likes
-               try{
-                   setTextLike();
-               }catch (Exception err){
-                   like.setText(" error!");
-               }
+                try{
+                    setTextLike();
+                }catch (Exception err){
+                    like.setText(" error!");
+                }
 
                 //inizializzo animazione del cuore che entra ed esce
                 Animation pulse_fade = AnimationUtils.loadAnimation(context, R.anim.pulse_fade_in);
@@ -663,7 +663,6 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // Need to call clean-up
         mAttacher.cleanup();
     }

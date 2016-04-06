@@ -17,10 +17,13 @@ import com.clothapp.R;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,14 +134,27 @@ public class MostRecentFragment extends Fragment {
                         // I don't like this: too slow...
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
-                        Image i= new Image(photo.getObjectId());
-                        if(!MostRecentAdapter.itemList.contains(i))
-                            MostRecentAdapter.itemList.add( new Image(photo));
+
+                        if(!MostRecentAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
+                            final Image i = new Image(null,photo.getObjectId(),photo.getString("user"),photo.getList("like"),
+                                    photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"));
+                            MostRecentAdapter.itemList.add(i);
+
+                            ParseFile image = photo.getParseFile("thumbnail");
+                            image.getFileInBackground(new GetFileCallback() {
+                                @Override
+                                public void done(File file, ParseException e) {
+                                    if (e==null) {
+                                        i.setFile(file);
+                                        mostRecentAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
                     }
 
                     // Log.d("MostRecentFragment", "Now itemList.size() is " + MostRecentAdapter.itemList.size());
 
-                    mostRecentAdapter.notifyDataSetChanged();
 
                     // Log.d("MostRecentFragment", "isRefreshing() is " + swipeRefreshLayout.isRefreshing());
                     if (swipeRefreshLayout.isRefreshing()) {

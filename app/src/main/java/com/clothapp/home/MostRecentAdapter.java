@@ -121,10 +121,18 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //            Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 //            imgPhoto.setImageBitmap(imageBitmap);
 
-            Glide.with(HomeActivity.context)
-                    .load(file)
-                    .centerCrop()
-                    .into(imgPhoto);
+            if (file!=null) {
+                Glide.with(HomeActivity.context)
+                        .load(file)
+                        .centerCrop()
+                        .into(imgPhoto);
+            }else{
+                Glide.with(HomeActivity.context)
+                        .load(R.drawable.loading)
+                        .asGif()
+                        .centerCrop()
+                        .into(imgPhoto);
+            }
         }
 
         // Use this method to set the heart image color.
