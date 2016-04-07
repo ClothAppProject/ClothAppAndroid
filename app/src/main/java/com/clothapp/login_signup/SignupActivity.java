@@ -26,6 +26,7 @@ import com.clothapp.SplashScreenActivity;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -119,6 +120,13 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                                     .setAction("Action", null).show();
 
                             Log.d("SignupActivity", "Il campo username è vuoto");
+                            // Checking username contains spaces
+                        } else if (edit_username.getText().toString().contains(" "))    {
+                            // Nel caso in cui l'username contiene spazi
+                            Snackbar.make(v, "L'username non può contenere spazi", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+
+                            Log.d("SignupActivity", "Il campo username contiene spazi");
                             // Checking if password and confirm password match
                         } else if (checkPassWordAndConfirmPassword(edit_password.getText().toString().trim(), edit_password_confirm.getText().toString())) {
                             // Nel caso in cui le password non coincidano
@@ -204,90 +212,105 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                                     break;
                             }
                         } else {
-                            // Inizializzo la barra di caricamento
-                            final ProgressDialog dialog = ProgressDialog.show(SignupActivity.this, "",
-                                    "Loading. Please wait...", true);
-
-                            // Formatto data
-                            // final String edit_date = edit_year.getText().toString() + "-" + edit_month.getText().toString() + "-" + edit_day.getText().toString();
-                            String stringDate = txt_birthday.getText().toString();
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd - MM - yyyy", Locale.US);
-
+                            //signup can proceed:
+                            ParseQuery<ParseUser> usr = ParseUser.getQuery();
+                            usr.whereEqualTo("lowercase",edit_username.getText().toString().toLowerCase());
                             try {
-                                date = sdf.parse(stringDate);
-                            } catch (java.text.ParseException e) {
-                                e.printStackTrace();
-                            }
+                                //check if lowercase of the username is already taken
+                                usr.getFirst();
+                                Snackbar.make(v, "L'username esiste già", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                            } catch (ParseException e) {
+                                if (e.getCode()==101)   {
+                                    //no user found with same username
+                                    // Inizializzo la barra di caricamento
+                                    final ProgressDialog dialog = ProgressDialog.show(SignupActivity.this, "",
+                                            "Loading. Please wait...", true);
 
-                            // Create a new thread to handle signup in background
-                            Thread signup = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final ParseUser user = new ParseUser();
-                                    user.setUsername(edit_username.getText().toString().trim());
-                                    user.setPassword(edit_password.getText().toString().trim());
-                                    user.setEmail(edit_email.getText().toString());
-                                    user.put("name", edit_name.getText().toString().trim());
-                                    user.put("flagISA","Persona");
-                                    user.put("lowercase", user.getUsername().toLowerCase());
-                                    user.put("Settings",getString(R.string.default_settings));
-                                    user.signUpInBackground(new SignUpCallback() {
-                                        public void done(ParseException e) {
-                                            if (e == null) {
+                                    // Formatto data
+                                    // final String edit_date = edit_year.getText().toString() + "-" + edit_month.getText().toString() + "-" + edit_day.getText().toString();
+                                    String stringDate = txt_birthday.getText().toString();
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd - MM - yyyy", Locale.US);
 
-                                                // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
-                                                Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
+                                    try {
+                                        date = sdf.parse(stringDate);
+                                    } catch (java.text.ParseException ex) {
+                                        ex.printStackTrace();
+                                    }
+
+                                    // Create a new thread to handle signup in background
+                                    Thread signup = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            final ParseUser user = new ParseUser();
+                                            user.setUsername(edit_username.getText().toString().trim());
+                                            user.setPassword(edit_password.getText().toString().trim());
+                                            user.setEmail(edit_email.getText().toString());
+                                            user.put("name", edit_name.getText().toString().trim());
+                                            user.put("flagISA","Persona");
+                                            user.put("lowercase", user.getUsername().toLowerCase());
+                                            user.put("Settings",getString(R.string.default_settings));
+                                            user.signUpInBackground(new SignUpCallback() {
+                                                public void done(ParseException e) {
+                                                    if (e == null) {
+
+                                                        // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
+                                                        Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
 
 
-                                                ParseObject persona = new ParseObject("Persona");
-                                                persona.put("username",user.getUsername());
-                                                persona.put("lastname", edit_lastname.getText().toString().trim());
+                                                        ParseObject persona = new ParseObject("Persona");
+                                                        persona.put("username",user.getUsername());
+                                                        persona.put("lastname", edit_lastname.getText().toString().trim());
 
-                                                RadioButton sex = (RadioButton) findViewById(edit_sex.getCheckedRadioButtonId());
-                                                String maleString = getResources().getString(R.string.man);
-                                                if (sex.getText().equals(maleString)) {
-                                                    persona.put("sex", "m");
-                                                }else{
-                                                    persona.put("sex", "f");
-                                                }
-                                                persona.put("date", date);
-                                                //persona.put("city",edit_citta.getText().toString.trim());
-                                                persona.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e == null) {
-                                                            // Redirect user to Splash Screen Activity.
-                                                            Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                                            startActivity(form_intent);
-
-                                                            // Chiudo la dialogBar
-                                                            dialog.dismiss();
-
-                                                            finish();
-                                                        } else {
-                                                            // Chiudo la dialogBar
-                                                            dialog.dismiss();
-
-                                                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                                            check(e.getCode(), vi, e.getMessage());
+                                                        RadioButton sex = (RadioButton) findViewById(edit_sex.getCheckedRadioButtonId());
+                                                        String maleString = getResources().getString(R.string.man);
+                                                        if (sex.getText().equals(maleString)) {
+                                                            persona.put("sex", "m");
+                                                        }else{
+                                                            persona.put("sex", "f");
                                                         }
+                                                        persona.put("date", date);
+                                                        //persona.put("city",edit_citta.getText().toString.trim());
+                                                        persona.saveInBackground(new SaveCallback() {
+                                                            @Override
+                                                            public void done(ParseException e) {
+                                                                if (e == null) {
+                                                                    // Redirect user to Splash Screen Activity.
+                                                                    Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                                                    startActivity(form_intent);
+
+                                                                    // Chiudo la dialogBar
+                                                                    dialog.dismiss();
+
+                                                                    finish();
+                                                                } else {
+                                                                    // Chiudo la dialogBar
+                                                                    dialog.dismiss();
+
+                                                                    // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                                    check(e.getCode(), vi, e.getMessage());
+                                                                }
+                                                            }
+                                                        });
+
+                                                    } else {
+                                                        // Chiudo la dialogBar
+                                                        dialog.dismiss();
+
+                                                        // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                        check(e.getCode(), vi, e.getMessage());
                                                     }
-                                                });
-
-                                            } else {
-                                                // Chiudo la dialogBar
-                                                dialog.dismiss();
-
-                                                // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                                check(e.getCode(), vi, e.getMessage());
-                                            }
+                                                }
+                                            });
                                         }
                                     });
-                                }
-                            });
 
-                            // Start the signup thread
-                            signup.start();
+                                    // Start the signup thread
+                                    signup.start();
+                                }else{
+                                    check(e.getCode(), vi, e.getMessage());
+                                }
+                            }
                         }
 
                         break;

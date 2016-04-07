@@ -21,6 +21,7 @@ import com.clothapp.SplashScreenActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Arrays;
@@ -62,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Get trimmed strings from the username and password fields
-                final String username = editUsername.getText().toString().trim();
+                final String usernameToLower = editUsername.getText().toString().trim();
                 final String password = editPassword.getText().toString().trim();
                 final View vi = v;
 
                 // Check if either the username or the password are not blank
-                if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
+                if (usernameToLower.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                     Snackbar.make(v, R.string.empty_field, Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                     return;
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
+                            //take the username from the lowercase of the username inserted by user
+                            ParseQuery<ParseUser> usr = ParseUser.getQuery();
+                            usr.whereEqualTo("lowercase",usernameToLower.toLowerCase());
+                            String username = usr.getFirst().getUsername();
                             ParseUser.logIn(username, password);
 
                             Log.d("MainActivity", "Login eseguito correttamente");

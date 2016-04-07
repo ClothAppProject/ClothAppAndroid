@@ -20,6 +20,7 @@ import com.clothapp.R;
 import com.clothapp.SplashScreenActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -85,7 +86,14 @@ public class ShopSignupActivity extends AppCompatActivity {
                 Snackbar.make(v, "L'ndirizzo fisico o l'indirizzo internet non può essere vuoto", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                // Checking if username is nulll
+                // Checking username contains spaces
+            } else if (edit_username.getText().toString().contains(" "))    {
+                // Nel caso in cui l'username contiene spazi
+                Snackbar.make(v, "L'username non può contenere spazi", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+                Log.d("SignupActivity", "Il campo username contiene spazi");
+                // Checking if password and confirm password match
             }else if (edit_username.getText().toString().trim().equalsIgnoreCase("")) {
                     // Nel caso in cui l'username è lasciato in bianco
                     Snackbar.make(v, "L'username non può essere vuoto", Snackbar.LENGTH_LONG)
@@ -154,77 +162,91 @@ public class ShopSignupActivity extends AppCompatActivity {
                             break;
                     }
                 } else {
+                    //signup can proceed:
+                    ParseQuery<ParseUser> usr = ParseUser.getQuery();
+                    usr.whereEqualTo("lowercase",edit_username.getText().toString().toLowerCase());
+                    try {
+                        //check if lowercase of the username is already taken
+                        usr.getFirst();
+                        Snackbar.make(v, "L'username esiste già", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } catch (ParseException e) {
+                        if (e.getCode() == 101) {
+                            //no user found with same username
+                            // Inizializzo la barra di caricamento
+                            final ProgressDialog dialog = ProgressDialog.show(ShopSignupActivity.this, "",
+                                    "Loading. Please wait...", true);
 
-                    // Inizializzo la barra di caricamento
-                    final ProgressDialog dialog = ProgressDialog.show(ShopSignupActivity.this, "",
-                            "Loading. Please wait...", true);
+                            // Create a new thread to handle signup in background
+                            Thread signup = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final ParseUser user = new ParseUser();
+                                    user.setUsername(edit_username.getText().toString().trim());
+                                    user.setPassword(edit_password.getText().toString().trim());
+                                    user.setEmail(edit_email.getText().toString());
+                                    user.put("name", edit_name.getText().toString().trim());
+                                    user.put("lowercase", user.getUsername().toLowerCase());
+                                    user.put("flagISA", "Negozio");
+                                    user.put("Settings", getString(R.string.default_settings));
 
-                    // Create a new thread to handle signup in background
-                    Thread signup = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final ParseUser user = new ParseUser();
-                            user.setUsername(edit_username.getText().toString().trim());
-                            user.setPassword(edit_password.getText().toString().trim());
-                            user.setEmail(edit_email.getText().toString());
-                            user.put("name", edit_name.getText().toString().trim());
-                            user.put("lowercase", user.getUsername().toLowerCase());
-                            user.put("flagISA", "Negozio");
-                            user.put("Settings",getString(R.string.default_settings));
+                                    user.signUpInBackground(new SignUpCallback() {
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
+                                                Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
 
-                            user.signUpInBackground(new SignUpCallback() {
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        // Caso in cui registrazione è andata a buon fine e non ci sono eccezioni
-                                        Log.d("SignupActivity", "Registrazione utente eseguita correttamente");
+                                                ParseObject negozio = new ParseObject("LocalShop");
 
-                                        ParseObject negozio = new ParseObject("LocalShop");
+                                                negozio.put("username", user.getUsername());
+                                                negozio.put("name", edit_name.getText().toString().trim());
+                                                negozio.put("lowercase", user.getUsername().toLowerCase());
+                                                //  checking if the shop has a physical address
+                                                negozio.put("address", edit_address.getText().toString().trim());
 
-                                        negozio.put("username", user.getUsername());
-                                        negozio.put("name", edit_name.getText().toString().trim());
-                                        negozio.put("lowercase", user.getUsername().toLowerCase());
-                                        //  checking if the shop has a physical address
-                                        negozio.put("address", edit_address.getText().toString().trim());
+                                                //  checking if the shop has a webisite
+                                                negozio.put("webSite", edit_webSite.getText().toString().trim());
 
-                                        //  checking if the shop has a webisite
-                                        negozio.put("webSite", edit_webSite.getText().toString().trim());
+                                                negozio.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (e == null) {
+                                                            // Redirect user to Splash Screen Activity.
+                                                            Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+                                                            startActivity(form_intent);
 
-                                        negozio.saveInBackground(new SaveCallback() {
-                                            @Override
-                                            public void done(ParseException e) {
-                                                if (e == null) {
-                                                    // Redirect user to Splash Screen Activity.
-                                                    Intent form_intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-                                                    startActivity(form_intent);
+                                                            // Chiudo la dialogBar
+                                                            dialog.dismiss();
 
-                                                    // Chiudo la dialogBar
-                                                    dialog.dismiss();
+                                                            finish();
+                                                        } else {
+                                                            // Chiudo la dialogBar
+                                                            dialog.dismiss();
 
-                                                    finish();
-                                                } else {
-                                                    // Chiudo la dialogBar
-                                                    dialog.dismiss();
+                                                            // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                            check(e.getCode(), vi, e.getMessage());
+                                                        }
+                                                    }
+                                                });
 
-                                                    // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                                    check(e.getCode(), vi, e.getMessage());
-                                                }
+                                            } else {
+                                                // Chiudo la dialogBar
+                                                dialog.dismiss();
+
+                                                // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
+                                                check(e.getCode(), vi, e.getMessage());
                                             }
-                                        });
-
-                                    } else {
-                                        // Chiudo la dialogBar
-                                        dialog.dismiss();
-
-                                        // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server
-                                        check(e.getCode(), vi, e.getMessage());
-                                    }
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
 
-                    // Start the signup thread
-                    signup.start();
+                            // Start the signup thread
+                            signup.start();
+                        } else {
+                            check(e.getCode(), vi, e.getMessage());
+                        }
+                    }
                 }
             }
         });
