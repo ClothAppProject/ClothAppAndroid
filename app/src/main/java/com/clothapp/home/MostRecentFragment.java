@@ -190,8 +190,8 @@ public class MostRecentFragment extends Fragment {
         private int previousTotal = 0;
         // Number of remaining loaded photos before loading more photos.
         private int visibleThreshold = 5;
-        int  firstVisibleItem1, visibleItemCount, totalItemCount;
-        int [] firstVisibleItem;
+        int  pastVisibleItems, visibleItemCount, totalItemCount;
+        int[] firstVisibleItems = null;
 
         public MostRecentScrollListener(StaggeredGridLayoutManager gridLayoutManager) {
             this.gridLayoutManager = gridLayoutManager;
@@ -203,8 +203,11 @@ public class MostRecentFragment extends Fragment {
 
             visibleItemCount = recyclerView.getChildCount();
             totalItemCount = gridLayoutManager.getItemCount();
-            gridLayoutManager.findFirstVisibleItemPositions(new int[2]);
-            System.out.println("array "+firstVisibleItem+" ," +firstVisibleItem1);
+            firstVisibleItems = gridLayoutManager.findFirstVisibleItemPositions(firstVisibleItems);
+            if(firstVisibleItems != null && firstVisibleItems.length > 0) {
+                pastVisibleItems = firstVisibleItems[0];
+            }
+          //  System.out.println("array "+firstVisibleItem+" ," +firstVisibleItem1);
 
 
             if (loading) {
@@ -214,7 +217,7 @@ public class MostRecentFragment extends Fragment {
                 }
             } else {
 
-                if ((totalItemCount - visibleItemCount) <= (firstVisibleItem1 + visibleThreshold)) {
+                if ((totalItemCount - visibleItemCount) <= (pastVisibleItems + visibleThreshold)) {
 
                     loading = true;
 
