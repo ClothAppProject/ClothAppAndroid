@@ -199,47 +199,19 @@ public class ProfileUtils {
                     ParseFile parseFile = photo.getParseFile("thumbnail");
 
                     if(parseFile==null)return;
-
-                    parseFile.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-
-                            if (e == null) {
-                                Log.d("ProfileUtils", "File for profile image found!");
-
-//                                Bitmap imageBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//
-//                                RoundedBitmapDrawable rounded = RoundedBitmapDrawableFactory.create(activity.getResources(), imageBitmap);
-//                                rounded.setCornerRadius(imageBitmap.getWidth());
-//
-//                                mainImageView.setImageDrawable(rounded);
-                                if (!shop) {
-                                    //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
-                                    //if (UserProfileActivity.username.equals(username)) {
-                                        Glide.clear(mainImageView);
-                                        Glide.with(context)
-                                                .load(file)
-                                                .transform(new CircleTransform(context))
-                                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
-                                                .into(mainImageView);
-                                    //}
-                                } else {
-                                    //controllo perchè magari è cambiato il profilo e non posso fare il load nell'activity sbagliata
-                                    //if (ShopProfileActivity.username.equals(username)) {
-                                        Glide.clear(mainImageView);
-                                        Glide.with(context)
-                                                .load(file)
-                                                .placeholder(R.drawable.shop)
-                                                .into(mainImageView);
-                                    //}
-                                }
-
-                            } else {
-                                Log.d("ProfileUtils", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
-
+                    if (!shop)  {
+                        Glide.with(context)
+                                .load(parseFile.getUrl())
+                                .transform(new CircleTransform(context))
+                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
+                                .into(mainImageView);
+                        System.out.println("debug caricata immagine all'url "+parseFile.getUrl());
+                    }else{
+                        Glide.with(context)
+                                .load(parseFile.getUrl())
+                                .placeholder(R.drawable.shop)
+                                .into(mainImageView);
+                    }
                 } else {
                     Log.d("ProfileUtils", "Error: " + e.getMessage());
                 }
