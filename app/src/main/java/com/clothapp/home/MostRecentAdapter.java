@@ -1,6 +1,7 @@
 package com.clothapp.home;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -122,10 +123,13 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //            imgPhoto.setImageBitmap(imageBitmap);
 
             if (file!=null) {
+                imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                /*
                 Glide.with(HomeActivity.context)
                         .load(file)
                         .centerCrop()
                         .into(imgPhoto);
+                        */
             }else{
                 Glide.with(HomeActivity.context)
                         .load(R.drawable.loading)

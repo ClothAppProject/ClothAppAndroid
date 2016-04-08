@@ -35,7 +35,6 @@ public class MostRecentFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private MostRecentScrollListener mostRecentScrollListener;
     private Boolean loading = true;
-    private StaggeredGridLayoutManager manager;
 
     public static MostRecentFragment newInstance() {
         return new MostRecentFragment();
@@ -48,10 +47,6 @@ public class MostRecentFragment extends Fragment {
         // Use SwipeRefreshLayout to allow pull to refresh
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        manager = new StaggeredGridLayoutManager(2, 1);
-
-        recyclerView.setLayoutManager(manager);
 
         setupSwipeRefreshLayout(swipeRefreshLayout, recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
@@ -82,7 +77,7 @@ public class MostRecentFragment extends Fragment {
                 // Remove the previous custom OnScrollListener
                 recyclerView.removeOnScrollListener(mostRecentScrollListener);
                 // Create a new custom OnScrollListener
-                mostRecentScrollListener = new MostRecentScrollListener((GridLayoutManager) recyclerView.getLayoutManager());
+                mostRecentScrollListener = new MostRecentScrollListener((StaggeredGridLayoutManager) recyclerView.getLayoutManager());
                 // Add the new OnScrollListener
                 recyclerView.addOnScrollListener(mostRecentScrollListener);
 
@@ -95,15 +90,17 @@ public class MostRecentFragment extends Fragment {
     // Setup the RecyclerView with a GridLayoutManager (GridView), adding an OnScrollListener and
     // loading the first 12 photos from Parse.
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setHasFixedSize(true); //dalla guida
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        recyclerView.setLayoutManager(layoutManager);
 
         // Load the first photos from ApplicationSupport
         ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
         // Log.d("MostRecentFragment", "appSupport.getPhotos() == null : " + (appSupport.getPhotos() == null));
         mostRecentAdapter = new MostRecentAdapter(appSupport.getPhotos());
         recyclerView.setAdapter(mostRecentAdapter);
-        mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
+        mostRecentScrollListener = new MostRecentScrollListener(layoutManager);
         recyclerView.addOnScrollListener(mostRecentScrollListener);
 
         // Log.d("MostRecentFragment", "MostRecentAdapter.itemList == null : " + (MostRecentAdapter.itemList == null));
@@ -146,7 +143,7 @@ public class MostRecentFragment extends Fragment {
                                     photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"));
                             MostRecentAdapter.itemList.add(i);
 
-                            ParseFile image = photo.getParseFile("thumbnail");
+                            ParseFile image = photo.getParseFile("photo");
                             image.getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
@@ -183,16 +180,17 @@ public class MostRecentFragment extends Fragment {
     // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class MostRecentScrollListener extends RecyclerView.OnScrollListener {
 
-        private GridLayoutManager gridLayoutManager;
+        private StaggeredGridLayoutManager layoutManager;
 
         // Total number of loaded photos.
         private int previousTotal = 0;
         // Number of remaining loaded photos before loading more photos.
         private int visibleThreshold = 5;
         int firstVisibleItem, visibleItemCount, totalItemCount;
+        int[] firstVisibleItems;
 
-        public MostRecentScrollListener(GridLayoutManager gridLayoutManager) {
-            this.gridLayoutManager = gridLayoutManager;
+        public MostRecentScrollListener(StaggeredGridLayoutManager layoutManager) {
+            this.layoutManager = layoutManager;
         }
 
         @Override
@@ -200,8 +198,9 @@ public class MostRecentFragment extends Fragment {
             super.onScrolled(recyclerView, dx, dy);
 
             visibleItemCount = recyclerView.getChildCount();
-            totalItemCount = gridLayoutManager.getItemCount();
-            firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+            totalItemCount = layoutManager.getItemCount();
+            firstVisibleItems = layoutManager.findFirstCompletelyVisibleItemPositions(null);
+            firstVisibleItem=firstVisibleItems[0];
 
             if (loading) {
                 if (totalItemCount > previousTotal) {

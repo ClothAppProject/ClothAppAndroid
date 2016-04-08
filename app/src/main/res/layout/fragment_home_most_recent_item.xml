@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/most_recent_item"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:padding="0dp"
@@ -15,7 +15,7 @@
         <com.clothapp.resources.SquaredImageView
             android:id="@+id/fragment_home_most_recent_item_image"
             android:src="@drawable/com_facebook_profile_picture_blank_square"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
 
