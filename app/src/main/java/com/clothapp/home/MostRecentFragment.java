@@ -7,14 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 
 import com.clothapp.R;
 import com.clothapp.resources.ApplicationSupport;
@@ -37,8 +35,7 @@ public class MostRecentFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private MostRecentScrollListener mostRecentScrollListener;
     private Boolean loading = true;
-
-    private StaggeredGridLayoutManager manager=new StaggeredGridLayoutManager(2,1);
+    private StaggeredGridLayoutManager manager;
 
     public static MostRecentFragment newInstance() {
         return new MostRecentFragment();
@@ -52,6 +49,9 @@ public class MostRecentFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_home_most_recent, container, false);
         RecyclerView recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
+        manager = new StaggeredGridLayoutManager(2, 1);
+
+        recyclerView.setLayoutManager(manager);
 
         setupSwipeRefreshLayout(swipeRefreshLayout, recyclerView);
         setupRecyclerView(recyclerView, container.getContext());
@@ -82,7 +82,7 @@ public class MostRecentFragment extends Fragment {
                 // Remove the previous custom OnScrollListener
                 recyclerView.removeOnScrollListener(mostRecentScrollListener);
                 // Create a new custom OnScrollListener
-                mostRecentScrollListener = new MostRecentScrollListener((StaggeredGridLayoutManager) recyclerView.getLayoutManager());
+                mostRecentScrollListener = new MostRecentScrollListener((GridLayoutManager) recyclerView.getLayoutManager());
                 // Add the new OnScrollListener
                 recyclerView.addOnScrollListener(mostRecentScrollListener);
 
@@ -95,13 +95,12 @@ public class MostRecentFragment extends Fragment {
     // Setup the RecyclerView with a GridLayoutManager (GridView), adding an OnScrollListener and
     // loading the first 12 photos from Parse.
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
-        final StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         // Load the first photos from ApplicationSupport
         ApplicationSupport appSupport = ((ApplicationSupport) HomeActivity.activity.getApplicationContext());
         // Log.d("MostRecentFragment", "appSupport.getPhotos() == null : " + (appSupport.getPhotos() == null));
-        recyclerView.setLayoutManager(manager);
         mostRecentAdapter = new MostRecentAdapter(appSupport.getPhotos());
         recyclerView.setAdapter(mostRecentAdapter);
         mostRecentScrollListener = new MostRecentScrollListener(gridLayoutManager);
@@ -184,16 +183,15 @@ public class MostRecentFragment extends Fragment {
     // This class is a custom OnScrollListener, so we don't have to write anonymous classes.
     class MostRecentScrollListener extends RecyclerView.OnScrollListener {
 
-        private StaggeredGridLayoutManager gridLayoutManager;
+        private GridLayoutManager gridLayoutManager;
 
         // Total number of loaded photos.
         private int previousTotal = 0;
         // Number of remaining loaded photos before loading more photos.
         private int visibleThreshold = 5;
-        int  pastVisibleItems, visibleItemCount, totalItemCount;
-        int[] firstVisibleItems = null;
+        int firstVisibleItem, visibleItemCount, totalItemCount;
 
-        public MostRecentScrollListener(StaggeredGridLayoutManager gridLayoutManager) {
+        public MostRecentScrollListener(GridLayoutManager gridLayoutManager) {
             this.gridLayoutManager = gridLayoutManager;
         }
 
@@ -203,12 +201,7 @@ public class MostRecentFragment extends Fragment {
 
             visibleItemCount = recyclerView.getChildCount();
             totalItemCount = gridLayoutManager.getItemCount();
-            firstVisibleItems = gridLayoutManager.findFirstVisibleItemPositions(firstVisibleItems);
-            if(firstVisibleItems != null && firstVisibleItems.length > 0) {
-                pastVisibleItems = firstVisibleItems[0];
-            }
-          //  System.out.println("array "+firstVisibleItem+" ," +firstVisibleItem1);
-
+            firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
 
             if (loading) {
                 if (totalItemCount > previousTotal) {
@@ -217,7 +210,7 @@ public class MostRecentFragment extends Fragment {
                 }
             } else {
 
-                if ((totalItemCount - visibleItemCount) <= (pastVisibleItems + visibleThreshold)) {
+                if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
                     loading = true;
 
@@ -229,8 +222,6 @@ public class MostRecentFragment extends Fragment {
                     getParseMostRecentPhotos(size, 12);
                 }
             }
-
         }
     }
 }
-
