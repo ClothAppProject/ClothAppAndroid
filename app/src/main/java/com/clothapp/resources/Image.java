@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +24,7 @@ public class Image implements Parcelable {
     private File file;
     private String objectId;
     private String user;
+    private String flag;
     private int nLike;
     private List<String> like;
     private List<String> hashtag;
@@ -76,6 +78,27 @@ public class Image implements Parcelable {
         if (o.getList("hashtag") == null) hashtag = new ArrayList<>();
         else this.hashtag = o.getList("hashtag");
 
+    }
+
+    public Image(File f, String Id, String user, List likes, int nLike, List hashtags, List idClothes, List typeClothes, String flag) {
+        this.user = user;
+        this.objectId = Id;
+        this.file = f;
+        this.nLike = nLike;
+
+        if (likes == null) like = new ArrayList<>();
+        else this.like = likes;
+
+        if (hashtags == null) hashtag = new ArrayList<>();
+        else this.hashtag = hashtags;
+
+        if (idClothes == null) this.idClothes = new ArrayList<>();
+        else this.idClothes = idClothes;
+
+        if (typeClothes == null) this.typeClothes = new ArrayList<>();
+        else this.typeClothes = typeClothes;
+
+        if(flag!=null) this.flag=flag;
     }
 
     public List<String> getIdVestiti() {
@@ -219,4 +242,8 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
+
+    public String getFlag() {
+        return flag;
+    }
 }

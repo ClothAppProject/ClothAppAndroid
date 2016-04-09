@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
 import com.clothapp.R;
+import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
 import com.clothapp.parse.notifications.LikeRes;
 import com.parse.ParseUser;
@@ -32,6 +34,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final static String username = ParseUser.getCurrentUser().getUsername();
 
     public int lastPosition = -1;
+    private String flag;
 
     public MostRecentAdapter(List<Image> itemList) {
         MostRecentAdapter.itemList = itemList;
@@ -55,10 +58,20 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
         //layoutParams.height=holder.imgPhoto.getHeight();
+       // if(position%2!=0) MostRecentFragment.totHeight[0]+=holder.itemView.getHeight();
+       // else MostRecentFragment.totHeight[1]+=holder.itemView.getHeight();
+       // if((position+1)%11==0) holder.itemView.setMinimumHeight(MostRecentFragment.totHeight[0]-MostRecentFragment.totHeight[1]);
+        if(position%11==0) layoutParams.setFullSpan(true);
+        else layoutParams.setFullSpan(false);
+
+
 
         Image image = itemList.get(position);
 
         holder.setItemImage(image.getFile());
+
+        flag=image.getFlag();
+        holder.setShop(flag);
 
         List likeUsers = image.getLike();
 
@@ -101,6 +114,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private CardView cardView;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
+        private ImageView imgShop;
         private TextView user;
 
         public MostRecentItemViewHolder(final View parent) {
@@ -109,6 +123,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             cardView = (CardView) parent.findViewById(R.id.most_recent_item);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
+            imgShop  = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_shop);
             user=(TextView) parent.findViewById(R.id.fragment_home_most_recent_item_user);
 
 //            Log.d("MostRecentAdapter", "Count: " + count);
@@ -116,8 +131,9 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             // Setting some OnClickListeners
             setPhotoOnClickListener();
             setHeartImageOnClickListener();
-            imgPhoto.setMaxHeight(500);
-            imgPhoto.setAdjustViewBounds(true);
+            //imgPhoto.setMaxHeight(500);
+            setShopOnClickListener();
+            setUserOnClickListener();
         }
 
         public CardView getAnimationView() {
@@ -134,15 +150,16 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //            imgPhoto.setImageBitmap(imageBitmap);
 
             if (file!=null) {
-                imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-               // imgPhoto.setAdjustViewBounds(true);
+               // imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+//                imgPhoto.setMinimumWidth(800);
 
-                /*
+
                 Glide.with(HomeActivity.context)
                         .load(file)
                         .centerCrop()
+                        .placeholder(R.mipmap.gallery_icon)
                         .into(imgPhoto);
-                        */
+
             }else{
                Glide.with(HomeActivity.context)
                         .load(R.drawable.loading)
@@ -162,6 +179,45 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void setUser(String username) {
             user.setText(username);
+        }
+
+        private void setUserOnClickListener() {
+            user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    } else {
+                        if(flag!=null && flag.equals("negozio")) {
+                            Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
+                            intent.putExtra("user", user.getText());
+                            HomeActivity.activity.startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(HomeActivity.context, UserProfileActivity.class);
+                            intent.putExtra("user", user.getText());
+                            HomeActivity.activity.startActivity(intent);
+                        }
+                    }
+
+                }
+            });
+        }
+
+        private void setShopOnClickListener() {
+            imgShop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (HomeActivity.menuMultipleActions.isExpanded()) {
+                        HomeActivity.menuMultipleActions.collapse();
+                    } else {
+                        Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
+                        intent.putExtra("user", user.getText());
+                        HomeActivity.activity.startActivity(intent);
+                    }
+
+                }
+            });
         }
 
         // Redirect user to ImageFragment (gallery) if he/she clicks on the photo
@@ -211,6 +267,10 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
         }
 
+        public void setShop(String flag) {
+            if(flag!=null && flag.equals("Negozio")) imgShop.setVisibility(View.VISIBLE);
+            else imgShop.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

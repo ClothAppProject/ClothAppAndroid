@@ -36,6 +36,8 @@ public class MostRecentFragment extends Fragment {
     private MostRecentScrollListener mostRecentScrollListener;
     private Boolean loading = true;
 
+    public static int[] totHeight={0,0};
+
     public static MostRecentFragment newInstance() {
         return new MostRecentFragment();
     }
@@ -142,10 +144,10 @@ public class MostRecentFragment extends Fragment {
 
                         if(!MostRecentAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
                             final Image i = new Image(null,photo.getObjectId(),photo.getString("user"),photo.getList("like"),
-                                    photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"));
+                                    photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"), photo.getString("flag"));
                             MostRecentAdapter.itemList.add(i);
 
-                            ParseFile image = photo.getParseFile("photo");
+                            ParseFile image = photo.getParseFile("thumbnail");
                             image.getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {
