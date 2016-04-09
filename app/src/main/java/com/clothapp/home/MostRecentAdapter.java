@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.ImageFragment;
@@ -53,13 +54,15 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         MostRecentItemViewHolder holder = (MostRecentItemViewHolder) viewHolder;
 
         StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
-        //layoutParams.setFullSpan(true);
+        //layoutParams.height=holder.imgPhoto.getHeight();
 
         Image image = itemList.get(position);
 
         holder.setItemImage(image.getFile());
 
         List likeUsers = image.getLike();
+
+        holder.setUser(image.getUser());
 
         if (likeUsers != null && likeUsers.contains(username)) {
             holder.setItemHeartImage(true);
@@ -98,6 +101,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private CardView cardView;
         private final ImageView imgPhoto;
         private ImageView imgHeart;
+        private TextView user;
 
         public MostRecentItemViewHolder(final View parent) {
             super(parent);
@@ -105,12 +109,15 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             cardView = (CardView) parent.findViewById(R.id.most_recent_item);
             imgPhoto = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_image);
             imgHeart = (ImageView) parent.findViewById(R.id.fragment_home_most_recent_item_heart);
+            user=(TextView) parent.findViewById(R.id.fragment_home_most_recent_item_user);
 
 //            Log.d("MostRecentAdapter", "Count: " + count);
 
             // Setting some OnClickListeners
             setPhotoOnClickListener();
             setHeartImageOnClickListener();
+            imgPhoto.setMaxHeight(500);
+            imgPhoto.setAdjustViewBounds(true);
         }
 
         public CardView getAnimationView() {
@@ -128,6 +135,8 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             if (file!=null) {
                 imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+               // imgPhoto.setAdjustViewBounds(true);
+
                 /*
                 Glide.with(HomeActivity.context)
                         .load(file)
@@ -135,7 +144,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .into(imgPhoto);
                         */
             }else{
-                Glide.with(HomeActivity.context)
+               Glide.with(HomeActivity.context)
                         .load(R.drawable.loading)
                         .asGif()
                         .centerCrop()
@@ -148,7 +157,11 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // White = false
         public void setItemHeartImage(boolean red) {
             if (red) imgHeart.setColorFilter(Color.rgb(210, 36, 36));
-            else imgHeart.setColorFilter(Color.rgb(255, 255, 255));
+            else imgHeart.setColorFilter(Color.rgb(219 , 134 , 134));
+        }
+
+        public void setUser(String username) {
+            user.setText(username);
         }
 
         // Redirect user to ImageFragment (gallery) if he/she clicks on the photo

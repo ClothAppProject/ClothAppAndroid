@@ -83,6 +83,7 @@ public class MostRecentFragment extends Fragment {
 
                 // Update the itemList with the result of a query to Parse.
                 getParseMostRecentPhotos(0, 12);
+
             }
         });
     }
@@ -92,7 +93,7 @@ public class MostRecentFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
         recyclerView.setHasFixedSize(true); //dalla guida
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-
+        System.out.println(layoutManager.getHeight());
         //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
 
