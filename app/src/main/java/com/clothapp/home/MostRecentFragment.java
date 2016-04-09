@@ -92,6 +92,7 @@ public class MostRecentFragment extends Fragment {
     private void setupRecyclerView(RecyclerView recyclerView, Context context) {
         recyclerView.setHasFixedSize(true); //dalla guida
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
 
