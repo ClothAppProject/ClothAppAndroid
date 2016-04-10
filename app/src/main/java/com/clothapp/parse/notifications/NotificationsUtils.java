@@ -17,7 +17,7 @@ import java.util.List;
 public class NotificationsUtils {
 
     // Send a push notification to a user with username = receiver
-    public static void sendNotification(final String receiver, String type) {
+    public static void sendNotification(final String receiver, String type, final String objectid) {
         String message = null;
         boolean check = false;
         switch (type)   {
@@ -26,14 +26,14 @@ public class NotificationsUtils {
                 message = ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!";
                 //controllo se l'utente ha attiva la ricezione le notifiche per like
                 check = UserSettingsUtil.checkNotificationLike(receiver);
-                send(check, receiver, message);
+                send(check, receiver, message,objectid); //obectid della foto
                 break;
             case "follow":
                 //caso in cui devo inviare notifica per follow
                 message = ParseUser.getCurrentUser().getUsername() + " ha cominciato a seguirti!";
                 //controllo se l'utente ha attiva la ricezione di notifiche per followers
                 check = UserSettingsUtil.checkNotificationFollower(receiver);
-                send(check, receiver, message);
+                send(check, receiver, message,objectid); //obectid del profilo
                 break;
             case "newPhoto":
                 //caso in cui devo inviare notifica per nuova foto caricata
@@ -50,7 +50,7 @@ public class NotificationsUtils {
 
                                 //controllo se l'utente ha attiva la ricezione di notifiche per nuove foto di persone che segue
                                 boolean check = UserSettingsUtil.checkNotificationNewPhoto(o.getString("from"));
-                                send(check, o.getString("from"), photoMessage);
+                                send(check, o.getString("from"), photoMessage,objectid); //obectid della foto
                             }
                         }
                     }
@@ -60,12 +60,13 @@ public class NotificationsUtils {
 
         }
     }
-    public static void send(boolean check, final String receiver, String message) {
+    public static void send(boolean check, final String receiver, String message, String objectid) {
         //send notification only if granted
         if (check) {
             HashMap<String, Object> params = new HashMap<>();
             params.put("recipientUsername", receiver);
             params.put("message", message);
+            params.put("objectid",objectid);
 
             // Call a Parse Cloud Code function. This function is hosted on Parse and
             // allows a deeper level of security. If you want to change the Cloud function

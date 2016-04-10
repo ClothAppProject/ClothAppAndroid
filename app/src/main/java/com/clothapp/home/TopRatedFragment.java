@@ -16,10 +16,13 @@ import android.view.ViewGroup;
 import com.clothapp.R;
 import com.clothapp.resources.Image;
 import com.parse.FindCallback;
+import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,12 +124,26 @@ public class TopRatedFragment extends Fragment {
                         // I don't like this: too slow...
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
-                        TopRatedAdapter.itemList.add(new Image(photo));
+
+                        if(!TopRatedAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
+                            final Image i = new Image(null,photo.getObjectId(),photo.getString("user"),photo.getList("like"),
+                                    photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"));
+                            TopRatedAdapter.itemList.add(i);
+
+                            ParseFile image = photo.getParseFile("thumbnail");
+                            image.getFileInBackground(new GetFileCallback() {
+                                @Override
+                                public void done(File file, ParseException e) {
+                                    if (e==null) {
+                                        i.setFile(file);
+                                        topRatedAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
                     }
 
                     // Log.d("TopRatedFragment", "Now itemList.size() is " + TopRatedAdapter.itemList.size());
-
-                    topRatedAdapter.notifyDataSetChanged();
 
                     // Log.d("TopRatedAdapter", "isRefreshing() is " + swipeRefreshLayout.isRefreshing());
                     if (swipeRefreshLayout.isRefreshing()) {

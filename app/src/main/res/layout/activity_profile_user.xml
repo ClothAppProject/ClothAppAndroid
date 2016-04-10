@@ -43,7 +43,7 @@
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/profile"
+                    android:src="@drawable/com_facebook_profile_picture_blank_circle"
                     app:layout_collapseMode="none" />
 
                 <Button

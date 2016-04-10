@@ -652,6 +652,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                 picture.put("photo", file);
                                 final String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                                 picture.put("hashtag", Arrays.asList(hashtags));
+                                picture.put("flag",ParseUser.getCurrentUser().getString("flagISA"));
                                 picture.put("tipo", tipi);
                                 picture.put("nLike", 0);
                                 picture.put("vestiti", id);
@@ -688,7 +689,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
 
                                             // Send "New Photo Uploaded" notification followers
-                                            NotificationsUtils.sendNotification(null, "newPhoto");
+                                            NotificationsUtils.sendNotification(null, "newPhoto",new_img.getObjectId());
 
                                             getActivity().finish();
                                         } else {

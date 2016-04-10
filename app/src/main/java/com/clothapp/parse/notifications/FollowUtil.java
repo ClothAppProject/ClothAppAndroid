@@ -49,7 +49,7 @@ public class FollowUtil {
         return found;
     }
 
-    public static void setFollowButton(final Button follow_edit, final String usernameTo) {
+    public static void setFollowButton(final Button follow_edit, final String usernameTo, final String id) {
         ParseQuery<ParseObject> queryfollow = new ParseQuery("Follow");
         queryfollow.whereEqualTo("from", ParseUser.getCurrentUser().getUsername());
         queryfollow.whereEqualTo("to", usernameTo);
@@ -84,7 +84,7 @@ public class FollowUtil {
                                 relazione.saveInBackground();
 
                                 // Send "Like" notification to the user who posted the image
-                                NotificationsUtils.sendNotification(usernameTo, "follow");
+                                NotificationsUtils.sendNotification(usernameTo, "follow",id);
 
                                 follow_edit.setText(R.string.unfollow);
                             }

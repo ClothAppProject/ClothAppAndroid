@@ -113,7 +113,7 @@ public class ShopProfileActivity extends AppCompatActivity {
                 }
             });
         } else {
-            FollowUtil.setFollowButton(follow_edit, username);
+            FollowUtil.setFollowButton(follow_edit, username, ParseUser.getCurrentUser().getObjectId());
         }
     }
 
