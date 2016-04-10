@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +64,14 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
        // if((position+1)%11==0) holder.itemView.setMinimumHeight(MostRecentFragment.totHeight[0]-MostRecentFragment.totHeight[1]);
         if(position%11==0) layoutParams.setFullSpan(true);
         else layoutParams.setFullSpan(false);
+/*
+        android.view.ViewGroup.LayoutParams layoutParamsImageView = holder.imgPhoto.getLayoutParams();
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, HomeActivity.context.getResources().getDisplayMetrics());
+        int extra = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, HomeActivity.context.getResources().getDisplayMetrics());
+        if(position%11!=0 && (position%6==0 || position%7==0) )layoutParamsImageView.height=(height+extra);
+        else layoutParamsImageView.height=(height);
 
-
+*/
 
         Image image = itemList.get(position);
 

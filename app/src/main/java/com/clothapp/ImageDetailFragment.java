@@ -247,7 +247,7 @@ public class ImageDetailFragment extends Fragment {
                             if (e == null) {
                                 //Gesture Detector for detecting double tap
                                 //code is at the end of page
-                                final GestureDetector gd = doubleTapGesture(object);
+                                final GestureDetector gd = doubleTapGesture(file);
 
 
                                 Glide.with(context)
@@ -614,13 +614,13 @@ public class ImageDetailFragment extends Fragment {
     }
 
     //funzione che ritorna il gestureDetector per il doubletap
-    public GestureDetector doubleTapGesture(final ParseObject object) {
+    public GestureDetector doubleTapGesture(final File file) {
         return new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e){
                 Intent i=new Intent(context,ZoomPhoto.class);
-                i.setData(Uri.fromFile(immagine.getFile()));
+                i.setData(Uri.fromFile(file));
                 startActivity(i);
                 return true;
             }
