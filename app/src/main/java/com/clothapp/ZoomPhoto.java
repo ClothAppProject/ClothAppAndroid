@@ -3,12 +3,20 @@ package com.clothapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.resources.ApplicationSupport;
+import com.clothapp.resources.Image;
+import com.clothapp.resources.User;
+import com.clothapp.search.FilterActivity;
+import com.clothapp.settings.SettingsActivity;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 /**
  * Created by jack1 on 17/03/2016.
@@ -18,10 +26,12 @@ public class ZoomPhoto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zoomphoto);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent i=getIntent();
         Uri uri=i.getData();
-        System.out.println(uri);
+
         ImageView photo= (ImageView) findViewById(R.id.photo);
         Glide.with(getBaseContext())
                 .load(uri)
@@ -30,6 +40,20 @@ public class ZoomPhoto extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
+            case android.R.id.home:
+                ApplicationSupport global = (ApplicationSupport) getApplicationContext();
+                global.setCloth(new ArrayList<Image>());
+                global.setTag(new ArrayList<Image>());
+                global.setUsers(new ArrayList<User>());
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
