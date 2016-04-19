@@ -406,6 +406,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                     @Override
                     public void onClick(View v) {
                         if (photoType != RESULT_LOAD_IMG) deleteImage();
+                        photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
                         Intent intent = getActivity().getIntent();
                         getActivity().finish();
                         startActivity(intent);

@@ -205,7 +205,6 @@ public class ProfileUtils {
                                 .transform(new CircleTransform(context))
                                 .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                                 .into(mainImageView);
-                        System.out.println("debug caricata immagine all'url "+parseFile.getUrl());
                     }else{
                         Glide.with(context)
                                 .load(parseFile.getUrl())
