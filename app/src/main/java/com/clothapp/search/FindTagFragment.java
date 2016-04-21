@@ -9,22 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.clothapp.ImageFragment;
+import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
-import com.clothapp.profile.utils.ProfileUtils;
 
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
-import com.clothapp.resources.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -78,7 +74,7 @@ public class FindTagFragment extends Fragment {
         listTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                Intent i = new Intent(getActivity().getApplicationContext(), ImageActivity.class);
                 i.putExtra("classe", "FindCloth");
                 i.putExtra("position", position);
                 startActivity(i);

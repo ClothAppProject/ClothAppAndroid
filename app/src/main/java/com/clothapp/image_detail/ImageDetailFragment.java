@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.image_detail;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,9 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
@@ -40,6 +38,7 @@ import com.clothapp.parse.notifications.LikeRes;
 import com.clothapp.resources.MyCardListAdapter;
 import com.clothapp.resources.User;
 import com.clothapp.search.SearchAdapterUser;
+import com.clothapp.upload.UploadPhotoActivity;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
@@ -364,8 +363,9 @@ public class ImageDetailFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate menu to add items to action bar if it is present.
         inflater.inflate(R.menu.image_fragment, menu);
-        MenuItem deletePhoto = menu.findItem(R.id.delete);
-        deletePhoto.setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        menu.findItem(R.id.report).setVisible(!immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        menu.findItem(R.id.edit).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        menu.findItem(R.id.delete).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
     }
 
     @Override
@@ -438,7 +438,7 @@ public class ImageDetailFragment extends Fragment {
                                 //prendo la foto e la elimino
                                 parseObject.deleteInBackground();
                                 //la tolgo dalla lista passata all'image fragment
-                                ImageFragment.lista.remove(immagine);
+                                ImageActivity.lista.remove(immagine);
                                 getActivity().finish();
                             }
                         });
@@ -452,6 +452,12 @@ public class ImageDetailFragment extends Fragment {
                 AlertDialog dialogDelete = delete.create();
                 // display dialog
                 dialogDelete.show();
+                return true;
+            case R.id.edit:
+                //cliccato su "modifica foto" apro activity passandogli objectID della foto
+                Intent i = new Intent(context, EditImageActivity.class);
+                i.putExtra("objectdId", immagine);
+                startActivity(i);
                 return true;
         }
         return super.onOptionsItemSelected(item);

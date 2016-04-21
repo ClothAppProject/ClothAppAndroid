@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.image_detail;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.R;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 import com.clothapp.resources.User;

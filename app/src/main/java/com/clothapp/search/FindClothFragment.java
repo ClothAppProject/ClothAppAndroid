@@ -9,18 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.clothapp.ImageFragment;
+import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
-import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.ApplicationSupport;
 import com.clothapp.resources.Image;
 
-import com.clothapp.resources.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -30,7 +27,6 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Objects;
 
 import static com.clothapp.resources.ExceptionCheck.check;
 
@@ -93,7 +89,7 @@ public class FindClothFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println("click");
-                Intent i = new Intent(getActivity().getApplicationContext(), ImageFragment.class);
+                Intent i = new Intent(getActivity().getApplicationContext(), ImageActivity.class);
                 i.putExtra("classe", "FindCloth");
                 i.putExtra("position", position);
                 startActivity(i);

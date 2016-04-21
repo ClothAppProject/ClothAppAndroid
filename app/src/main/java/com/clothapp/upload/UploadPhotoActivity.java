@@ -9,14 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,12 +28,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -44,9 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.home.HomeActivity;
 import com.clothapp.home.MostRecentAdapter;
 import com.clothapp.home.MostRecentFragment;
 import com.clothapp.http.Get;
@@ -56,7 +49,6 @@ import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
 import com.clothapp.settings.UserSettingsUtil;
 import com.google.android.gms.common.ConnectionResult;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -74,14 +66,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
 import static com.clothapp.resources.ExceptionCheck.check;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.location.places.Places;
 
 public class UploadPhotoActivity extends AppCompatActivity implements OnConnectionFailedListener {

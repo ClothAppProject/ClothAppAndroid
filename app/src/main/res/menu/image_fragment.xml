@@ -7,6 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/report_photo" />
 
+    <item android:id="@+id/edit"
+        android:title="@string/edit_photo"/>
+
     <item android:id="@+id/delete"
         android:title="@string/delete_photo"/>
 

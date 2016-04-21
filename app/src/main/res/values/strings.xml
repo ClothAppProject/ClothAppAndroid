@@ -82,6 +82,7 @@
     <string name="cancel">Cancel</string>
     <string name="ask_photo_delete">Vuoi eliminare questa foto?</string>
     <string name="report">Segnala</string>
+    <string name="edit_photo">Modifica Foto</string>
     <string name="delete_photo">Elimina Foto</string>
     <string name="report_photo">Segnala Foto</string>
     <string name="report_sent">Segnalazione Inviata!</string>

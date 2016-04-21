@@ -1,4 +1,4 @@
-package com.clothapp;
+package com.clothapp.image_detail;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.clothapp.R;
 import com.clothapp.home.MostRecentAdapter;
 import com.clothapp.home.TopRatedAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
@@ -23,7 +24,7 @@ import com.parse.ParseQuery;
 import java.io.File;
 import java.util.ArrayList;
 
-public class ImageFragment extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity {
     /**
      * The number of pages (wizard steps) to show in this demo.
      */

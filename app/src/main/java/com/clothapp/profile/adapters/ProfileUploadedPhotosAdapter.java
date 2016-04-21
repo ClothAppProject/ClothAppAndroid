@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.ImageFragment;
+import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
@@ -113,12 +113,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
                     if (profilo.equals("persona")) {
-                        Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
+                        Intent intent = new Intent(UserProfileActivity.context, ImageActivity.class);
                         intent.putExtra("classe", "profilo");
                         intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
                         UserProfileActivity.activity.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(ShopProfileActivity.context, ImageFragment.class);
+                        Intent intent = new Intent(ShopProfileActivity.context, ImageActivity.class);
                         intent.putExtra("classe", "profilo");
                         intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
                         ShopProfileActivity.activity.startActivity(intent);

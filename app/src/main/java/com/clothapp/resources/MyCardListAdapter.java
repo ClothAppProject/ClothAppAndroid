@@ -1,32 +1,20 @@
 package com.clothapp.resources;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.clothapp.ImageDetailFragment;
-import com.clothapp.ImageFragment;
 import com.clothapp.R;
-import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.search.SearchResultsActivity;
-import com.parse.FindCallback;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

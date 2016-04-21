@@ -1,12 +1,10 @@
 package com.clothapp.home;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.ImageFragment;
+import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
@@ -29,7 +27,7 @@ import java.util.List;
 
 public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    // This list is used by the ImageFragment to display the photos.
+    // This list is used by the ImageActivity to display the photos.
     public static List<Image> itemList;
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
@@ -227,7 +225,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
         }
 
-        // Redirect user to ImageFragment (gallery) if he/she clicks on the photo
+        // Redirect user to ImageActivity (gallery) if he/she clicks on the photo
         private void setPhotoOnClickListener() {
             imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -236,7 +234,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Intent intent = new Intent(HomeActivity.context, ImageFragment.class);
+                        Intent intent = new Intent(HomeActivity.context, ImageActivity.class);
                         intent.putExtra("classe", "MostRecentPhotos");
                         intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
                         HomeActivity.activity.startActivity(intent);
