@@ -456,6 +456,7 @@ public class ImageDetailFragment extends Fragment {
             case R.id.edit:
                 //cliccato su "modifica foto" apro activity passandogli objectID della foto
                 Intent i = new Intent(context, EditImageActivity.class);
+                System.out.println(immagine.getFile());
                 i.putExtra("objectdId", immagine);
                 startActivity(i);
                 return true;
