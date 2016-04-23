@@ -481,7 +481,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                         if (c.getAddress() != null)
                                             vestito.put("luogoAcquisto", c.getAddress());
                                         try {
-                                            //vestito.save();
+                                            vestito.save();
                                             //se lo shop è registrato inserisco il nome nel campo shopusername
                                             ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
                                             address.whereEqualTo("address", c.getAddress());
@@ -509,20 +509,20 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                                             public void done(ParseObject object, ParseException e) {
                                                                 if (e == null && object != null) {
                                                                     vestito.put("shopUsername", object.getString("username"));
-                                                                  /*
+
                                                                     try {
-                                                                        //vestito.save();
+                                                                        vestito.save();
                                                                     } catch (ParseException e1) {
                                                                         e1.printStackTrace();
                                                                     }
-                                                                */
+
                                                                 }
                                                             }
                                                         });
                                                     }
                                                 }
                                             });
-                                        } catch (Exception e) {
+                                        } catch (ParseException e) {
                                             e.printStackTrace();
                                         }
                                         id.add(vestito.getObjectId());
@@ -532,17 +532,16 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                 final View vi = v;
 
 
-                                // Creazione di un ParseObject da inviare
-                                final ParseObject picture = new ParseObject("Photo");
-                                picture.put("user", ParseUser.getCurrentUser().getUsername());
-
+                                parseImmagine.put("vestiti",id);
                                 final String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
-                                picture.put("hashtag", Arrays.asList(hashtags));
-                                picture.put("flag",ParseUser.getCurrentUser().getString("flagISA"));
-                                picture.put("tipo", tipi);
-                                picture.put("nLike", 0);
-                                picture.put("vestiti", id);
+                                parseImmagine.put("hashtag",Arrays.asList(hashtags));
+                                try {
+                                    parseImmagine.save();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
+                                getActivity().finish();
 
 
                             }
