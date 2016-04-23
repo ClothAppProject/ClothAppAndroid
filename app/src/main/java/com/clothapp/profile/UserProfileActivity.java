@@ -55,15 +55,9 @@ import static com.clothapp.resources.RegisterUtil.setButtonTint;
 public class UserProfileActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-    public static Context context;
-
-    public static String username;
-    public static RecyclerView viewProfileInfo;
-    public static RecyclerView viewProfileUploadedPhotos;
-    public static RecyclerView viewProfileFollowers;
-    public static RecyclerView viewProfileFollowing;
-    public static ViewPager viewPager;
-    public static Activity activity;
+    private Context context;
+    private String username;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +69,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // Set context to current context.
         context = getApplicationContext();
-
-        // Set activity to current activity.
-        activity = this;
 
         // Get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -109,7 +100,7 @@ public class UserProfileActivity extends AppCompatActivity {
             follow_edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(UserProfileActivity.this, EditProfileActivity.class);
+                    Intent i = new Intent(context, EditProfileActivity.class);
                     startActivity(i);
 
                 }
@@ -143,8 +134,6 @@ public class UserProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         loadProfilePicture();
-        if (ProfileUploadedPhotosFragment.adapter != null)
-            ProfileUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
 
     private void initDrawer(Toolbar toolbar) {
@@ -231,7 +220,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),getApplicationContext());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),getApplicationContext(), username);
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -246,7 +235,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void loadProfilePicture() {
 
         ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
-        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, UserProfileActivity.context, false);
+        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, context, false);
 
         mainImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,8 +268,8 @@ public class UserProfileActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (objects.size() > 0) {
                                                             objects.get(0).deleteInBackground();
-                                                            activity.finish();
-                                                            activity.startActivity(activity.getIntent());
+                                                            finish();
+                                                            startActivity(getIntent());
                                                         }
                                                     } else {
                                                         check(e.getCode(), v, e.getMessage());
@@ -314,7 +303,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
 
-                    intent = new Intent(UserProfileActivity.activity, HomeActivity.class);
+                    intent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(intent);
 
                     finish();
@@ -330,9 +319,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     if (!currentUser.equals(username)) {
                         Log.d("UserProfileActivity", currentUser + "!=" + username);
                         if (ParseUser.getCurrentUser().getString("flagISA").equals("Persona")) {
-                            intent = new Intent(UserProfileActivity.activity,UserProfileActivity.class);
+                            intent = new Intent(getApplicationContext(),UserProfileActivity.class);
                         }else {
-                            intent = new Intent(UserProfileActivity.activity, ShopProfileActivity.class);
+                            intent = new Intent(getApplicationContext(), ShopProfileActivity.class);
                         }
                         intent.putExtra("user", currentUser);
                         startActivity(intent);
@@ -344,7 +333,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     Log.d("HomeActivity", "Clicked on R.id.nav_settings");
 
-                    intent = new Intent(UserProfileActivity.this, SettingsActivity.class);
+                    intent = new Intent(context, SettingsActivity.class);
                     startActivity(intent);
                     break;
 
@@ -363,7 +352,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     });
                     logout.start();
 
-                    intent = new Intent(UserProfileActivity.activity, MainActivity.class);
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
                     dialog.dismiss();
                     startActivity(intent);
 
@@ -387,7 +376,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
 
             // Close the navigation drawer after item selection.
-            UserProfileActivity.this.mDrawerLayout.closeDrawer(GravityCompat.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
 
             return true;
         }

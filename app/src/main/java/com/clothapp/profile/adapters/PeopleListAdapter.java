@@ -28,14 +28,10 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private List<User> users;
-    private String profilo;
 
-    public PeopleListAdapter(List<User> utenti, String profilo) {
-        this.profilo = profilo;
+    public PeopleListAdapter(List<User> utenti, Context context) {
         this.users = utenti;
-        if (profilo.equals("persona"))
-            context = UserProfileActivity.activity.getApplicationContext();
-        else context = ShopProfileActivity.activity.getApplicationContext();
+        this.context = context;
     }
 
     @Override

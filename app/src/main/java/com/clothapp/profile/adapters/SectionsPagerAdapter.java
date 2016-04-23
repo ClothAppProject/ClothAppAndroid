@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.RecyclerView;
 
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
@@ -18,9 +19,12 @@ import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private Context context;
-    public SectionsPagerAdapter(FragmentManager fm, Context context) {
+    private String username;
+
+    public SectionsPagerAdapter(FragmentManager fm, Context context, String username) {
         super(fm);
         this.context = context;
+        this.username = username;
     }
 
     @Override
@@ -29,13 +33,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return ProfileInfoFragment.newInstance(UserProfileActivity.username);
+                return ProfileInfoFragment.newInstance(username, context);
             case 1:
-                return ProfileUploadedPhotosFragment.newInstance(UserProfileActivity.username);
+                return ProfileUploadedPhotosFragment.newInstance(username, context);
             case 2:
-                return ProfileFollowersFragment.newInstance(UserProfileActivity.username);
+                return ProfileFollowersFragment.newInstance(username, context);
             case 3:
-                return ProfileFollowingFragment.newInstance(UserProfileActivity.username);
+                return ProfileFollowingFragment.newInstance(username, context);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }

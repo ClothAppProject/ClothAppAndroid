@@ -1,5 +1,6 @@
 package com.clothapp.profile_shop.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,17 +20,17 @@ import java.util.ArrayList;
 // This fragment contains info about the user.
 public class ProfileShopInfoFragment extends Fragment {
 
-    private static final String PARSE_USERNAME = "username";
-
+    private String username;
+    private Context context;
+    private RecyclerView viewProfileInfo;
     public ProfileShopInfoFragment() {
 
     }
 
-    public static ProfileShopInfoFragment newInstance(String username) {
+    public static ProfileShopInfoFragment newInstance(String username, Context context) {
         ProfileShopInfoFragment fragment = new ProfileShopInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(PARSE_USERNAME, username);
-        fragment.setArguments(args);
+        fragment.username = username;
+        fragment.context = context;
         return fragment;
     }
 
@@ -41,12 +42,12 @@ public class ProfileShopInfoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
-        ShopProfileActivity.viewProfileInfo = (RecyclerView) rootView.findViewById(R.id.profile_info_recycler_view);
+        viewProfileInfo = (RecyclerView) rootView.findViewById(R.id.profile_info_recycler_view);
 
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
-        LinearLayoutManager llm = new LinearLayoutManager(ShopProfileActivity.context);
-        ShopProfileActivity.viewProfileInfo.setLayoutManager(llm);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        viewProfileInfo.setLayoutManager(llm);
 
         // itemDummy will be replaced by a header
         ProfileInfoListItem itemDummy = new ProfileInfoListItem("DUMMY", "Loading...");
@@ -69,11 +70,11 @@ public class ProfileShopInfoFragment extends Fragment {
         items.add(itemSite);
 
         // Create a new adapter for the recycler view
-        ProfileShopInfoAdapter adapter = new ProfileShopInfoAdapter(items);
-        ShopProfileActivity.viewProfileInfo.setAdapter(adapter);
+        ProfileShopInfoAdapter adapter = new ProfileShopInfoAdapter(items, username);
+        viewProfileInfo.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getParseShopInfo(ShopProfileActivity.context, ShopProfileActivity.username);
+        ProfileUtils.getParseShopInfo(context, username, viewProfileInfo);
 
         // Return the fragment
         return rootView;

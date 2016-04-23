@@ -1,5 +1,6 @@
 package com.clothapp.profile.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
@@ -19,21 +20,20 @@ import com.clothapp.resources.Image;
 import java.util.ArrayList;
 
 public class ProfileUploadedPhotosFragment extends Fragment {
-    public static ProfileUploadedPhotosAdapter adapter;
-    public static ArrayList<Image> photos = new ArrayList<>();
-
-    private static final String PARSE_USERNAME = "username";
-    public static TextView noPhotosText;
+    private ProfileUploadedPhotosAdapter adapter;
+    private ArrayList<Image> photos = new ArrayList<>();
+    private String username;
+    private Context context;
+    private RecyclerView viewProfileUploadedPhotos;
     public ProfileUploadedPhotosFragment() {
 
     }
 
-    public static ProfileUploadedPhotosFragment newInstance(String username) {
+    public static ProfileUploadedPhotosFragment newInstance(String username, Context context) {
         ProfileUploadedPhotosFragment fragment = new ProfileUploadedPhotosFragment();
-        Bundle args = new Bundle();
-        args.putString(PARSE_USERNAME, username);
-        fragment.setArguments(args);
-        photos = new ArrayList<>();
+        fragment.username = username;
+        fragment.context = context;
+        fragment.photos = new ArrayList<>();
         return fragment;
     }
 
@@ -45,31 +45,31 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile_uploaded_photos, container, false);
 
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
-        UserProfileActivity.viewProfileUploadedPhotos = (RecyclerView) rootView.findViewById(R.id.profile_uploaded_photos_recycler_view);
+        viewProfileUploadedPhotos = (RecyclerView) rootView.findViewById(R.id.profile_uploaded_photos_recycler_view);
 
         //set the no text for no photos uploaded
-        noPhotosText = (TextView) rootView.findViewById(R.id.no_photos);
+        final TextView noPhotosText = (TextView) rootView.findViewById(R.id.no_photos);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
-        LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
-        UserProfileActivity.viewProfileUploadedPhotos.setLayoutManager(llm);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        viewProfileUploadedPhotos.setLayoutManager(llm);
 
         // Create an array and add the previously created items to it.
         ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-         adapter = new ProfileUploadedPhotosAdapter(items,"persona");
-        UserProfileActivity.viewProfileUploadedPhotos.setAdapter(adapter);
+         adapter = new ProfileUploadedPhotosAdapter(items,"persona", context);
+        viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getParseUploadedPhotos(UserProfileActivity.username, 0, 10);
+        ProfileUtils.getParseUploadedPhotos(username, 0, 10, viewProfileUploadedPhotos, noPhotosText);
 
-        UserProfileActivity.viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update with more photos
-                ProfileUtils.getParseUploadedPhotos(UserProfileActivity.username,adapter.photos.size(),10);
+                ProfileUtils.getParseUploadedPhotos(username,adapter.photos.size(),10, viewProfileUploadedPhotos, noPhotosText);
             }
         });
 
