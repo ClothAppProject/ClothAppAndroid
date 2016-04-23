@@ -504,7 +504,12 @@ public class ImageDetailFragment extends Fragment {
             if (numLike>2)  {
                 text = getString(R.string.he_likes) + " " + immagine.getLike().get(numLike-1).toString()
                         + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
-            }else{
+            }else if(numLike==2){
+                text = getString(R.string.he_likes) + " " + immagine.getLike().get(numLike-1).toString()
+            //            + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
+                         + " e a un'altra persona";
+            }
+            else{
                 text = Integer.toString(numLike) + " " + getString(R.string.likes);
             }
             like.setText(text);
