@@ -46,7 +46,7 @@ public class FacebookUsernameActivity extends AppCompatActivity {
         }
 
         // Nascondo la tastiera all'avvio di quest'activity
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // Signup button initialization
         Button btnSignup = (Button) findViewById(R.id.form_register_button);
