@@ -71,6 +71,7 @@ import static com.clothapp.resources.ExceptionCheck.check;
 public class EditImageActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static Image immagine;
     private static ParseObject parseImmagine;
+    private static ArrayList<ParseObject> parseVestiti;
     private static ArrayList<Cloth> vestiti;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -86,6 +87,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
         System.out.println("id="+id);
 
         vestiti=new ArrayList<>();
+        parseVestiti=new ArrayList<>();
         ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereEqualTo("objectId",id);
         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -100,6 +102,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                         try {
                             ParseObject object1= queryVestiti.getFirst();
                             vestiti.add(new Cloth(object1));
+                            parseVestiti.add(object1);
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
@@ -449,7 +452,15 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                 infoListAdapter.notifyDataSetChanged();
 
                                 //cancello le vecchie informazioni dal db
-                                parseImmagine.remove("vestiti");
+                                parseImmagine.put("vestiti", new ArrayList<String>());
+                                try {
+                                    parseImmagine.save();
+                                    for(ParseObject o:parseVestiti){
+                                        o.delete();
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
 
 
                                 final ArrayList<String> tipi = new ArrayList<String>();
@@ -470,7 +481,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                         if (c.getAddress() != null)
                                             vestito.put("luogoAcquisto", c.getAddress());
                                         try {
-                                            vestito.save();
+                                            //vestito.save();
                                             //se lo shop è registrato inserisco il nome nel campo shopusername
                                             ParseQuery<ParseObject> address = ParseQuery.getQuery("LocalShop");
                                             address.whereEqualTo("address", c.getAddress());
@@ -498,18 +509,20 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                                                             public void done(ParseObject object, ParseException e) {
                                                                 if (e == null && object != null) {
                                                                     vestito.put("shopUsername", object.getString("username"));
+                                                                  /*
                                                                     try {
-                                                                        vestito.save();
+                                                                        //vestito.save();
                                                                     } catch (ParseException e1) {
                                                                         e1.printStackTrace();
                                                                     }
+                                                                */
                                                                 }
                                                             }
                                                         });
                                                     }
                                                 }
                                             });
-                                        } catch (ParseException e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
                                         id.add(vestito.getObjectId());

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -455,10 +456,11 @@ public class ImageDetailFragment extends Fragment {
                 return true;
             case R.id.edit:
                 //cliccato su "modifica foto" apro activity passandogli objectID della foto
-                Intent i = new Intent(context, EditImageActivity.class);
-                System.out.println("id1="+immagine.getObjectId());
-                i.putExtra("objectId", immagine.getObjectId());
-                startActivity(i);
+                //Intent i = new Intent(context, EditImageActivity.class);
+                //System.out.println("id1="+immagine.getObjectId());
+                //i.putExtra("objectId", immagine.getObjectId());
+                //startActivity(i);
+                Snackbar.make(rootView,"coming soon",Snackbar.LENGTH_SHORT);
                 return true;
         }
         return super.onOptionsItemSelected(item);
