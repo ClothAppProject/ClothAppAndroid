@@ -456,11 +456,11 @@ public class ImageDetailFragment extends Fragment {
                 return true;
             case R.id.edit:
                 //cliccato su "modifica foto" apro activity passandogli objectID della foto
-                //Intent i = new Intent(context, EditImageActivity.class);
+                Intent i = new Intent(context, EditImageActivity.class);
                 //System.out.println("id1="+immagine.getObjectId());
-                //i.putExtra("objectId", immagine.getObjectId());
-                //startActivity(i);
-                Snackbar.make(rootView,"coming soon",Snackbar.LENGTH_SHORT);
+                i.putExtra("objectId", immagine.getObjectId());
+                startActivity(i);
+                //Snackbar.make(rootView,"coming soon",Snackbar.LENGTH_SHORT);
                 return true;
         }
         return super.onOptionsItemSelected(item);
