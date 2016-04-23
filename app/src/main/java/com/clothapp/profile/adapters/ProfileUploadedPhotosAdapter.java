@@ -1,11 +1,14 @@
 package com.clothapp.profile.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,18 +29,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
-public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Parcelable {
 
     private String profilo;
-    public static List<Image> photos;
+    public List<Image> photos;
+    private Context context;
+    private ProfileUploadedPhotosAdapter oggetto;
 
-    private final static String username = ParseUser.getCurrentUser().getUsername();
+    private final String username = ParseUser.getCurrentUser().getUsername();
 
-    public ProfileUploadedPhotosAdapter(List<Image> items, String profilo) {
+    public ProfileUploadedPhotosAdapter(List<Image> items, String profilo, Context context) {
         this.profilo = profilo;
-        ProfileUploadedPhotosAdapter.photos = items;
+        this.photos = items;
+        this.context = context;
+        this.oggetto = this;
     }
 
     @Override
@@ -55,12 +63,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         File imageFile = photos.get(position).getFile();
 
         if (profilo.equals("persona")) {
-            Glide.with(UserProfileActivity.context)
+            Glide.with(context)
                     .load(imageFile)
                     .placeholder(R.mipmap.gallery_icon)
                     .into(photoViewHolder.photo);
         } else {
-            Glide.with(ShopProfileActivity.context)
+            Glide.with(context)
                     .load(imageFile)
                     .placeholder(R.mipmap.gallery_icon)
                     .into(photoViewHolder.photo);
@@ -112,17 +120,12 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (profilo.equals("persona")) {
-                        Intent intent = new Intent(UserProfileActivity.context, ImageFragment.class);
-                        intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
-                        UserProfileActivity.activity.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(ShopProfileActivity.context, ImageFragment.class);
-                        intent.putExtra("classe", "profilo");
-                        intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
-                        ShopProfileActivity.activity.startActivity(intent);
-                    }
+                    Intent intent = new Intent(context, ImageFragment.class);
+                    intent.putExtra("classe", "profilo");
+                    intent.putExtra("photo", oggetto);
+                    intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
             });
 
@@ -130,7 +133,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                 @Override
                 public void onClick(View v) {
 
-                    Image image = ProfileUploadedPhotosAdapter.photos.get(PhotoViewHolder.this.getAdapterPosition());
+                    Image image = photos.get(PhotoViewHolder.this.getAdapterPosition());
                     final String imageUsername = image.getUser();
 
                     final boolean add = image.getLike().contains(username);
@@ -145,7 +148,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     notifyDataSetChanged();
                 }
             });
-
+            /*
             share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,13 +167,43 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
                     }
 
                     share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-                    if (profilo.equals("persona"))
-                        UserProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
-                    else
-                        ShopProfileActivity.context.startActivity(Intent.createChooser(share, "Share Image"));
+                    share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //TODO risolvere problema perchè crasha
+                    if (profilo.equals("persona")) {
+                        context.startActivity(Intent.createChooser(share, "Share Image"));
+                    }else {
+                        context.startActivity(Intent.createChooser(share, "Share Image"));
+                    }
                 }
-            });
+            });*/
         }
     }
 
+
+    //implementato Parcelable per poter passare l'oggetto
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(photos);
+    }
+
+    protected ProfileUploadedPhotosAdapter(Parcel in) {
+        this.photos = in.createTypedArrayList(Image.CREATOR);
+    }
+
+    public static final Parcelable.Creator<ProfileUploadedPhotosAdapter> CREATOR = new Parcelable.Creator<ProfileUploadedPhotosAdapter>() {
+        @Override
+        public ProfileUploadedPhotosAdapter createFromParcel(Parcel source) {
+            return new ProfileUploadedPhotosAdapter(source);
+        }
+
+        @Override
+        public ProfileUploadedPhotosAdapter[] newArray(int size) {
+            return new ProfileUploadedPhotosAdapter[size];
+        }
+    };
 }

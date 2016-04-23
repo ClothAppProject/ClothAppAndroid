@@ -54,17 +54,9 @@ import static com.clothapp.resources.RegisterUtil.setButtonTint;
 public class ShopProfileActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-
-    public static Context context;
-
-    public static String username;
-    private ParseObject relazione;
-    public static RecyclerView viewProfileInfo;
-    public static RecyclerView viewProfileUploadedPhotos;
-    public static RecyclerView viewProfileShopFollowers;
-    public static RecyclerView viewProfileShopFollowing;
-    public static ViewPager viewPager;
-    public static Activity activity;
+    private Context context;
+    private String username;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +68,6 @@ public class ShopProfileActivity extends AppCompatActivity {
 
         // Set context to current context.
         context = getApplicationContext();
-
-        // Set activity to current activity.
-        activity = this;
 
         // Get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,7 +97,7 @@ public class ShopProfileActivity extends AppCompatActivity {
             follow_edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(ShopProfileActivity.this, EditShopProfileActivity.class);
+                    Intent i = new Intent(context, EditShopProfileActivity.class);
                     startActivity(i);
                 }
             });
@@ -140,8 +129,6 @@ public class ShopProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         loadProfilePicture();
-        if (ProfileShopUploadedPhotosFragment.adapter != null)
-            ProfileShopUploadedPhotosFragment.adapter.notifyDataSetChanged();
     }
 
     private void initDrawer(Toolbar toolbar) {
@@ -228,7 +215,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext());
+        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -243,7 +230,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     private void loadProfilePicture() {
 
         ImageView background = (ImageView) findViewById(R.id.profile_cover_image);
-        ProfileUtils.getParseUserProfileImage(this, username, background, ShopProfileActivity.context, true);
+        ProfileUtils.getParseUserProfileImage(this, username, background, context, true);
 
         background.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,8 +263,8 @@ public class ShopProfileActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (objects.size() > 0) {
                                                             objects.get(0).deleteInBackground();
-                                                            activity.finish();
-                                                            activity.startActivity(activity.getIntent());
+                                                            finish();
+                                                            startActivity(getIntent());
                                                         }
                                                     } else {
                                                         check(e.getCode(), v, e.getMessage());
@@ -312,7 +299,7 @@ public class ShopProfileActivity extends AppCompatActivity {
 
                     Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
 
-                    intent = new Intent(ShopProfileActivity.activity, HomeActivity.class);
+                    intent = new Intent(context, HomeActivity.class);
                     startActivity(intent);
 
                     finish();
@@ -327,7 +314,7 @@ public class ShopProfileActivity extends AppCompatActivity {
 
                     if (!currentUser.equals(username)) {
                         Log.d("UserProfileActivity", currentUser + "!=" + username);
-                        intent = ProfileUtils.goToProfile(ShopProfileActivity.context, currentUser);
+                        intent = ProfileUtils.goToProfile(context, currentUser);
                         intent.putExtra("user", currentUser);
                         startActivity(intent);
                     }
@@ -338,7 +325,7 @@ public class ShopProfileActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     Log.d("HomeActivity", "Clicked on R.id.nav_settings");
 
-                    intent = new Intent(ShopProfileActivity.this, SettingsActivity.class);
+                    intent = new Intent(context, SettingsActivity.class);
                     startActivity(intent);
                     break;
 
@@ -347,7 +334,7 @@ public class ShopProfileActivity extends AppCompatActivity {
 
                     Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
 
-                    final ProgressDialog dialog = ProgressDialog.show(ShopProfileActivity.this, "", "Logging out. Please wait...", true);
+                    final ProgressDialog dialog = ProgressDialog.show(context, "", "Logging out. Please wait...", true);
                     Thread logout = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -357,7 +344,7 @@ public class ShopProfileActivity extends AppCompatActivity {
                     });
                     logout.start();
 
-                    intent = new Intent(ShopProfileActivity.activity, MainActivity.class);
+                    intent = new Intent(context, MainActivity.class);
                     dialog.dismiss();
                     startActivity(intent);
 
@@ -381,7 +368,7 @@ public class ShopProfileActivity extends AppCompatActivity {
             }
 
             // Close the navigation drawer after item selection.
-            ShopProfileActivity.this.mDrawerLayout.closeDrawer(GravityCompat.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
 
             return true;
         }

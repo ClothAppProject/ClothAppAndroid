@@ -13,9 +13,11 @@ import com.clothapp.profile_shop.fragments.*;
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     private Context context;
-    public SectionsPagerAdapterShop(FragmentManager fm, Context context) {
+    private String username;
+    public SectionsPagerAdapterShop(FragmentManager fm, Context context, String username) {
         super(fm);
         this.context = context;
+        this.username = username;
     }
 
     @Override
@@ -24,13 +26,13 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return ProfileShopInfoFragment.newInstance(ShopProfileActivity.username);
+                return ProfileShopInfoFragment.newInstance(username, context);
             case 1:
-                return ProfileShopUploadedPhotosFragment.newInstance(ShopProfileActivity.username);
+                return ProfileShopUploadedPhotosFragment.newInstance(username, context);
             case 2:
-                return ProfileShopFollowersFragment.newInstance(ShopProfileActivity.username);
+                return ProfileShopFollowersFragment.newInstance(username, context);
             case 3:
-                return ProfileShopFollowingFragment.newInstance(ShopProfileActivity.username);
+                return ProfileShopFollowingFragment.newInstance(username, context);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }

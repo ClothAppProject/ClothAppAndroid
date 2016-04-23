@@ -1,5 +1,6 @@
 package com.clothapp.profile.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,18 +19,18 @@ import java.util.ArrayList;
 
 // This fragment contains info about the user.
 public class ProfileInfoFragment extends Fragment {
-    public static ProfileInfoAdapter adapter;
-    private static final String PARSE_USERNAME = "username";
-
+    private ProfileInfoAdapter adapter;
+    private Context context;
+    private RecyclerView viewProfileInfo;
+    private String username;
     public ProfileInfoFragment() {
 
     }
 
-    public static ProfileInfoFragment newInstance(String username) {
+    public static ProfileInfoFragment newInstance(String username, Context context) {
         ProfileInfoFragment fragment = new ProfileInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(PARSE_USERNAME, username);
-        fragment.setArguments(args);
+        fragment.username= username;
+        fragment.context = context;
         return fragment;
     }
 
@@ -41,12 +42,12 @@ public class ProfileInfoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile_info, container, false);
 
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
-        UserProfileActivity.viewProfileInfo = (RecyclerView) rootView.findViewById(R.id.profile_info_recycler_view);
+        viewProfileInfo = (RecyclerView) rootView.findViewById(R.id.profile_info_recycler_view);
 
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
-        LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
-        UserProfileActivity.viewProfileInfo.setLayoutManager(llm);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        viewProfileInfo.setLayoutManager(llm);
 
         // itemDummy will be replace by a header
         ProfileInfoListItem itemDummy = new ProfileInfoListItem("DUMMY", "Loading...");
@@ -67,11 +68,11 @@ public class ProfileInfoFragment extends Fragment {
         items.add(itemEmail);
 
         // Create a new adapter for the recycler view
-        adapter = new ProfileInfoAdapter(items);
-        UserProfileActivity.viewProfileInfo.setAdapter(adapter);
+        adapter = new ProfileInfoAdapter(items, username);
+        viewProfileInfo.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getParseInfo(UserProfileActivity.context, UserProfileActivity.username);
+        ProfileUtils.getParseInfo(context, username, viewProfileInfo);
 
         // Return the fragment
         return rootView;

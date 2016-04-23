@@ -12,16 +12,13 @@ import com.clothapp.R;
 // This is a placeholder fragment for unimplemented sections.
 public class PlaceholderFragment extends Fragment {
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private final String ARG_SECTION_NUMBER = "section_number";
 
     public PlaceholderFragment() {
     }
 
     public static PlaceholderFragment newInstance(int sectionNumber) {
         PlaceholderFragment fragment = new PlaceholderFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
         return fragment;
     }
 
