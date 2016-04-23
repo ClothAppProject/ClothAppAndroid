@@ -15,12 +15,13 @@ import java.util.List;
 public class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<ProfileInfoListItem> items;
+    private String username;
+    private final int ITEM_TYPE_HEADER = 0;
+    private final int ITEM_TYPE_INFO = 1;
 
-    private final static int ITEM_TYPE_HEADER = 0;
-    private final static int ITEM_TYPE_INFO = 1;
-
-    public ProfileInfoAdapter(List<ProfileInfoListItem> items) {
+    public ProfileInfoAdapter(List<ProfileInfoListItem> items, String username) {
         this.items = items;
+        this.username = username;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             case ITEM_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-                String username = UserProfileActivity.username.substring(0, 1).toUpperCase() + UserProfileActivity.username.substring(1);
+                String username = this.username.substring(0, 1).toUpperCase() + this.username.substring(1);
                 headerViewHolder.txtUsername.setText(username);
 
                 break;

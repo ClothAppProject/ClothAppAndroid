@@ -1,5 +1,6 @@
 package com.clothapp.profile_shop.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,13 @@ import java.util.List;
 public class ProfileShopInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<ProfileInfoListItem> items;
-
+    private String username;
     private final static int ITEM_TYPE_HEADER = 0;
     private final static int ITEM_TYPE_INFO = 1;
 
-    public ProfileShopInfoAdapter(List<ProfileInfoListItem> items) {
+    public ProfileShopInfoAdapter(List<ProfileInfoListItem> items, String username) {
         this.items = items;
+        this.username = username;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ProfileShopInfoAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             case ITEM_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-                String username = ShopProfileActivity.username.substring(0, 1).toUpperCase() + ShopProfileActivity.username.substring(1);
+                String username = this.username.substring(0, 1).toUpperCase() + this.username.substring(1);
                 headerViewHolder.txtUsername.setText(username);
 
                 break;

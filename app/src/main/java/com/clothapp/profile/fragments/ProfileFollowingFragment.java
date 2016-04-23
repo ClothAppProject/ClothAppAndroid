@@ -1,5 +1,6 @@
 package com.clothapp.profile.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,17 +22,18 @@ import java.util.ArrayList;
  * Created by giacomoceribelli on 25/02/16.
  */
 public class ProfileFollowingFragment extends Fragment {
-    private static final String PARSE_USERNAME = "username";
-    public static ArrayList<User> users;
+    private String username;
+    private Context context;
+    private RecyclerView viewProfileFollowing;
+    public ArrayList<User> users;
     private PeopleListAdapter adapter;
     public ProfileFollowingFragment() {
     }
 
-    public static ProfileFollowingFragment newInstance(String username) {
+    public static ProfileFollowingFragment newInstance(String username, Context context) {
         ProfileFollowingFragment fragment = new ProfileFollowingFragment();
-        Bundle args = new Bundle();
-        args.putString(PARSE_USERNAME, username);
-        fragment.setArguments(args);
+        fragment.username = username;
+        fragment.context = context;
         return fragment;
     }
 
@@ -40,29 +42,29 @@ public class ProfileFollowingFragment extends Fragment {
         // Inflate the fragment which will contain the RecyclerView
         final View rootView = inflater.inflate(R.layout.fragment_profile_follow, container, false);
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
-        UserProfileActivity.viewProfileFollowing = (RecyclerView) rootView.findViewById(R.id.profile_follow_recycler_view);
+        viewProfileFollowing = (RecyclerView) rootView.findViewById(R.id.profile_follow_recycler_view);
 
         //Set the no following textview
         final TextView noFollowing = (TextView) rootView.findViewById(R.id.no_follow);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
-        LinearLayoutManager llm = new LinearLayoutManager(UserProfileActivity.context);
-        UserProfileActivity.viewProfileFollowing.setLayoutManager(llm);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        viewProfileFollowing.setLayoutManager(llm);
 
 
         users = new ArrayList<User>();
         //chiama l'adattatore che inserisce gli item nella listview
-        adapter = new PeopleListAdapter(users,"persona");
-        UserProfileActivity.viewProfileFollowing.setAdapter(adapter);
+        adapter = new PeopleListAdapter(users, context);
+        viewProfileFollowing.setAdapter(adapter);
         //faccio la query
-        FollowUtil.getFollowing(users, rootView, UserProfileActivity.viewProfileFollowing, UserProfileActivity.username, noFollowing);
+        FollowUtil.getFollowing(users, rootView, viewProfileFollowing, username, noFollowing);
 
         //scroll per aggiungere followers
-        UserProfileActivity.viewProfileFollowing.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        viewProfileFollowing.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                FollowUtil.getFollowing(users, rootView, UserProfileActivity.viewProfileFollowing, UserProfileActivity.username, noFollowing);
+                FollowUtil.getFollowing(users, rootView, viewProfileFollowing, username, noFollowing);
             }
         });
 

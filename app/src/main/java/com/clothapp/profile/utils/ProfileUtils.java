@@ -59,19 +59,20 @@ public class ProfileUtils {
 
     // Get info about the user from Parse.
     // Call getParseUser() and getParsePerson() and getParseShop.
-    public static void getParseInfo(final Context context, String username) {
-        getParseUser(context, username);
-        getParsePerson(context, username);
+    public static void getParseInfo(final Context context, String username, RecyclerView viewProfileInfo) {
+        getParseUser(context, username, viewProfileInfo);
+        getParsePerson(context, username, viewProfileInfo);
     }
 
     // Call getParseUser() and getParseShop().
-    public static void getParseShopInfo(final Context context, String username) {
-        getParseUserShop(context, username);
-        getParseShop(context, username);
+    public static void getParseShopInfo(final Context context, String username, RecyclerView viewProfileInfo) {
+        getParseUserShop(context, username, viewProfileInfo);
+        getParseShop(context, username, viewProfileInfo);
     }
 
 
-    public static void getParseUploadedPhotos(String username, final int start, int limit) {
+    public static void getParseUploadedPhotos(String username, final int start, int limit,
+                                              final RecyclerView viewProfileUploadedPhotos, final TextView noPhotosText) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("user", username);
@@ -84,10 +85,10 @@ public class ProfileUtils {
                 if (e == null) {
                     //check if user has no photo uploaded
                     if (start==0 && photos.isEmpty())   {
-                        ProfileUploadedPhotosFragment.noPhotosText.setVisibility(View.VISIBLE);
+                        noPhotosText.setVisibility(View.VISIBLE);
                     }
 
-                    RecyclerView view = UserProfileActivity.viewProfileUploadedPhotos;
+                    RecyclerView view = viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -128,7 +129,8 @@ public class ProfileUtils {
         });
     }
 
-    public static void getShopParseUploadedPhotos(String username,final int start, int limit) {
+    public static void getShopParseUploadedPhotos(String username,final int start, int limit,
+                                                  final RecyclerView viewProfileUploadedPhotos, final TextView noPhotosText) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
         query.whereEqualTo("user", username);
@@ -141,10 +143,10 @@ public class ProfileUtils {
                 if (e == null) {
                     //check if user has no photo uploaded
                     if (start==0 && photos.isEmpty())   {
-                        ProfileShopUploadedPhotosFragment.noPhotosText.setVisibility(View.VISIBLE);
+                        noPhotosText.setVisibility(View.VISIBLE);
                     }
 
-                    RecyclerView view = ShopProfileActivity.viewProfileUploadedPhotos;
+                    RecyclerView view = viewProfileUploadedPhotos;
                     final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
 
                     // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
@@ -220,7 +222,7 @@ public class ProfileUtils {
 
     // Gets a ParseUser object for the given username.
     // The context arguments is needed to show a dialog in case of success or failure.
-    private static void getParseUser(final Context context, final String username) {
+    private static void getParseUser(final Context context, final String username, final RecyclerView viewProfileInfo) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", username);
@@ -235,8 +237,8 @@ public class ProfileUtils {
 
                     //controllo che parametri non siano null
                     if (user.getString("name")!=null) {
-                        updateListItem(0, user.get("name").toString());
-                        updateListItem(3, user.getEmail());
+                        updateListItem(0, user.get("name").toString(), viewProfileInfo);
+                        updateListItem(3, user.getEmail(), viewProfileInfo);
                     }
 
                 } else {
@@ -247,7 +249,7 @@ public class ProfileUtils {
         });
     }
 
-    private static void getParseUserShop(final Context context, final String username) {
+    private static void getParseUserShop(final Context context, final String username, final RecyclerView viewProfileInfo) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", username);
@@ -261,8 +263,8 @@ public class ProfileUtils {
 
                     //controllo in caso di valori nulli
                     if (user.getString("name")!=null) {
-                        updateShopListItem(0, user.get("name").toString());
-                        updateShopListItem(3, user.getEmail());
+                        updateShopListItem(0, user.get("name").toString(), viewProfileInfo);
+                        updateShopListItem(3, user.getEmail(), viewProfileInfo);
                     }
 
                 } else {
@@ -275,7 +277,7 @@ public class ProfileUtils {
 
     // Gets a ParseObject ("Persona") object for the given username.
     // The context arguments is needed to show a dialog in case of success or failure.
-    private static void getParsePerson(final Context context, String username) {
+    private static void getParsePerson(final Context context, String username, final RecyclerView viewProfileInfo) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Persona");
         query.whereEqualTo("username", username);
@@ -292,10 +294,10 @@ public class ProfileUtils {
                     if (persona.getDate("date")!=null) {
                         long age = getAge(persona.getDate("date"));
 
-                        if (age < 0) updateListItem(1, "Not found");
-                        else updateListItem(1, age + " years old");
+                        if (age < 0) updateListItem(1, "Not found", viewProfileInfo);
+                        else updateListItem(1, age + " years old", viewProfileInfo);
 
-                        updateListItem(2, persona.getString("city"));
+                        updateListItem(2, persona.getString("city"), viewProfileInfo);
                     }
                 } else {
                     e.printStackTrace();
@@ -305,7 +307,7 @@ public class ProfileUtils {
         });
     }
 
-    private static void getParseShop(final Context context, final String username) {
+    private static void getParseShop(final Context context, final String username, final RecyclerView viewProfileInfo) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("LocalShop");
         query.whereEqualTo("username", username);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -318,9 +320,9 @@ public class ProfileUtils {
 
                     //controllo in caso di valori nulli
                     if (!(shop.getString("address")==null && shop.getString("webSite")==null)) {
-                        updateShopListItem(1, shop.getString("address"));
-                        updateShopListItem(2, shop.getString("Citta"));
-                        updateShopListItem(4, shop.getString("webSite"));
+                        updateShopListItem(1, shop.getString("address"), viewProfileInfo);
+                        updateShopListItem(2, shop.getString("Citta"), viewProfileInfo);
+                        updateShopListItem(4, shop.getString("webSite"), viewProfileInfo);
                     }
 
                 } else {
@@ -331,9 +333,9 @@ public class ProfileUtils {
         });
     }
 
-    private static void updateListItem(int position, String text) {
+    private static void updateListItem(int position, String text, RecyclerView viewProfileInfo) {
 
-        ProfileInfoAdapter adapter = (ProfileInfoAdapter) UserProfileActivity.viewProfileInfo.getAdapter();
+        ProfileInfoAdapter adapter = (ProfileInfoAdapter) viewProfileInfo.getAdapter();
 
         if (text != null && !text.isEmpty()) {
             ProfileInfoListItem item = adapter.items.get(position + 1 - (USER_INFO_COUNT - adapter.items.size() + 1));
@@ -345,9 +347,9 @@ public class ProfileUtils {
         adapter.notifyDataSetChanged();
     }
 
-    private static void updateShopListItem(int position, String text) {
+    private static void updateShopListItem(int position, String text, RecyclerView viewProfileInfo) {
 
-        ProfileShopInfoAdapter adapter = (ProfileShopInfoAdapter) ShopProfileActivity.viewProfileInfo.getAdapter();
+        ProfileShopInfoAdapter adapter = (ProfileShopInfoAdapter) viewProfileInfo.getAdapter();
 
         int toGet = position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1);
 

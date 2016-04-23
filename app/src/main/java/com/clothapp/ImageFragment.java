@@ -59,7 +59,8 @@ public class ImageFragment extends AppCompatActivity {
                 break;
 
             case "profilo":
-                lista = (ArrayList<Image>) ProfileUploadedPhotosAdapter.photos;
+                ProfileUploadedPhotosAdapter adattatore = (ProfileUploadedPhotosAdapter) getIntent().getParcelableExtra("photo");
+                lista = (ArrayList<Image>) adattatore.photos;
                 break;
 
             case "FindCloth":
