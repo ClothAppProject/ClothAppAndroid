@@ -41,6 +41,7 @@ import com.clothapp.upload.UploadPhotoActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -58,6 +59,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
@@ -67,19 +69,62 @@ import static com.clothapp.resources.ExceptionCheck.check;
  * Created by giacomoceribelli on 21/04/16.
  */
 public class EditImageActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private Image immagine;
+    private static Image immagine;
+    private static ParseObject parseImmagine;
+    private static ArrayList<Cloth> vestiti;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     Uri takenPhotoUri;
     private static GoogleApiClient mGoogleApiClient;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
-        immagine = (Image) getIntent().getSerializableExtra("objectId");
-        System.out.println(immagine);
-        takenPhotoUri=Uri.fromFile(immagine.getFile());
+        id = getIntent().getStringExtra("objectId");
+        System.out.println("id="+id);
+
+        vestiti=new ArrayList<>();
+        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+        queryFoto.whereEqualTo("objectId",id);
+        queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if(e==null && object!=null) {
+                    parseImmagine=object;
+                    immagine = new Image(object);
+                    for (String s : (ArrayList<String>) object.get("vestiti")) {
+                        ParseQuery<ParseObject> queryVestiti = new ParseQuery<ParseObject>("Vestito");
+                        queryVestiti.whereEqualTo("objectId", s);
+                        try {
+                            ParseObject object1= queryVestiti.getFirst();
+                            vestiti.add(new Cloth(object1));
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+
+                    }
+                    takenPhotoUri=Uri.fromFile(immagine.getFile());
+                    // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                    // setSupportActionBar(toolbar);
+                    // Create the adapter that will return a fragment for each of the three
+                    // primary sections of the activity.
+                    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+                    // Set up the ViewPager with the sections adapter.
+                    mViewPager = (ViewPager) findViewById(R.id.container);
+                    mViewPager.setAdapter(mSectionsPagerAdapter);
+                    mViewPager.setOffscreenPageLimit(3);
+                    System.out.println(immagine.getFile());
+                }
+                else if(object==null) System.out.println("oggetto null");
+                else System.out.println("errore");
+            }
+        });
+
 
 
         // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
@@ -92,16 +137,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                 .build();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
 
 
     }
@@ -257,7 +293,12 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_1, container, false);
                 //listener sul pulsante annulla
                 Button cancel = (Button) rootView.findViewById(R.id.cancel);
-
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
                 //listener sul bottone next
                 Button next = (Button) rootView.findViewById(R.id.next);
                 next.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +315,8 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                         .load(uri)
                         .placeholder(R.mipmap.gallery_icon)
                         .into(foto);
+
+
                 //fragment 2
             } else if (sectionNumber == 2) {
                 rootView = inflater.inflate(R.layout.fragment_upload_photo_page_2, container, false);
@@ -297,6 +340,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
 
                 description = (EditText) rootView.findViewById(R.id.description);
                 hashtag = (EditText) rootView.findViewById(R.id.hashtag);
+                hashtag.setText(immagine.getHashtagToString());
 
 
                 //listener bottone next
@@ -335,7 +379,10 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                 //listview delle card per aggiungere le info dei vestiti
                 final ListView listView = (ListView) rootView.findViewById(R.id.listView);
                 final InfoListAdapter infoListAdapter = new InfoListAdapter(getContext(),mGoogleApiClient);
+                infoListAdapter.setCard(vestiti);
+                setListViewHeightBasedOnItems(listView);
                 listView.setAdapter(infoListAdapter);
+                setListViewHeightBasedOnItems(listView);
                 //listener bottone add clothing
                 final Button add = (Button) rootView.findViewById(R.id.add);
                 add.setOnClickListener(new View.OnClickListener() {
@@ -400,6 +447,10 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
 
                                 System.out.println(sectionsPagerAdapter.getDescription() + ":" + sectionsPagerAdapter.getHashtag() + ":");
                                 infoListAdapter.notifyDataSetChanged();
+
+                                //cancello le vecchie informazioni dal db
+                                parseImmagine.remove("vestiti");
+
 
                                 final ArrayList<String> tipi = new ArrayList<String>();
                                 final ArrayList<String> id = new ArrayList<>();

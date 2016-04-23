@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.ImageFragment;
+import com.clothapp.image_detail.ImageFragment;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;

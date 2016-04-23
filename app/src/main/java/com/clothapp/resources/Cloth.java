@@ -3,6 +3,8 @@ package com.clothapp.resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.ParseObject;
+
 /**
  * Created by jack1 on 09/02/2016.
  */
@@ -26,6 +28,14 @@ public class Cloth implements Parcelable {
 
     public Cloth() {
 
+    }
+
+    public Cloth(ParseObject o){
+        if( o.getString("tipo")!=null) this.cloth = o.getString("tipo");
+        if( o.getString("luogoAcquisto")!=null) this.address = o.getString("luogoAcquisto");
+        if( o.get("prezzo")!=null) this.price = Float.parseFloat(o.get("prezzo").toString());
+        if( o.getString("shop")!=null) this.shop = o.getString("shop");
+        if( o.getString("brand")!=null) this.brand=o.getString("brand");
     }
 
     public String getCloth() {

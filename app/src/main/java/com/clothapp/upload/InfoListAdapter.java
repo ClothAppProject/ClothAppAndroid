@@ -701,4 +701,8 @@ public class InfoListAdapter extends BaseAdapter implements GoogleApiClient.OnCo
         // TODO(Developer): Check error code and notify the user of error state and resolution.
         System.out.println("error connection");
     }
+
+    public void setCard(ArrayList<Cloth> card) {
+        this.listCloth = card;
+    }
 }
