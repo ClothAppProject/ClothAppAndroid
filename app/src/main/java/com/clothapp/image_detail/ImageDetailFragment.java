@@ -40,6 +40,7 @@ import com.clothapp.resources.MyCardListAdapter;
 import com.clothapp.resources.User;
 import com.clothapp.search.SearchAdapterUser;
 import com.clothapp.upload.UploadPhotoActivity;
+import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;

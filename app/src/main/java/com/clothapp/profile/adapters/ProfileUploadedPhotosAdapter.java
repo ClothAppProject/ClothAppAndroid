@@ -2,11 +2,7 @@ package com.clothapp.profile.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
@@ -17,19 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.clothapp.image_detail.ImageFragment;
+import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
-import com.clothapp.profile.UserProfileActivity;
-import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
 import com.clothapp.parse.notifications.LikeRes;
 import com.parse.ParseUser;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Parcelable {
@@ -120,7 +110,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ImageFragment.class);
+                    Intent intent = new Intent(context, ImageActivity.class);
                     intent.putExtra("classe", "profilo");
                     intent.putExtra("photo", oggetto);
                     intent.putExtra("position", PhotoViewHolder.this.getAdapterPosition());
