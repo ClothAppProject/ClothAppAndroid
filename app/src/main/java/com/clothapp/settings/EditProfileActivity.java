@@ -191,7 +191,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), R.string.data_edited, Toast.LENGTH_SHORT).show();
                             finish();
                         }
-                        }catch(ParseException e){
+                        }catch(Exception e){
                             e.printStackTrace();
                         }
 

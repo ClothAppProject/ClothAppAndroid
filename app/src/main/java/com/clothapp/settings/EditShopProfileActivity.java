@@ -149,7 +149,7 @@ public class EditShopProfileActivity extends AppCompatActivity {
                         negozio.save();
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(),R.string.data_edited,Toast.LENGTH_SHORT).show();
-                    } catch (ParseException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
