@@ -82,6 +82,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="ask_photo_delete">Vuoi eliminare questa foto?</string>
+    <string name="ask_back_from_edit">Vuoi tornare indietro?</string>
+    <string name="ask_back_from_edit_text">Cosi\' facendo annullerai tutte le modifiche</string>
     <string name="report">Segnala</string>
     <string name="edit_photo">Modifica Foto</string>
     <string name="delete_photo">Elimina Foto</string>

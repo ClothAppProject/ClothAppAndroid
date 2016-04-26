@@ -179,7 +179,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="Modifica"
+            android:text="Upload"
             android:textColor="@color/darkred" />
 
     </RelativeLayout>

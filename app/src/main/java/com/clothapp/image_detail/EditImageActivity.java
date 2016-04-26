@@ -126,7 +126,26 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
         switch (item.getItemId()) {
             // In caso sia premuto il pulsante sulla toolbar
             case android.R.id.home:
-                finish();
+                AlertDialog.Builder delete = new AlertDialog.Builder(EditImageActivity.this);
+                delete.setTitle(R.string.ask_back_from_edit);
+                delete.setMessage(R.string.ask_back_from_edit_text);
+                delete.setPositiveButton(R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                delete.setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //eliminazione foto annullata
+                            }
+                        });
+                AlertDialog dialogDelete = delete.create();
+                // display dialog
+                dialogDelete.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -386,6 +405,7 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                 });
                 //listener bottone upload
                 final Button upload = (Button) rootView.findViewById(R.id.upload);
+                upload.setText("Modifica");
                 upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
