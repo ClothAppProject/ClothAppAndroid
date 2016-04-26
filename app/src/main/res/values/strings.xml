@@ -60,6 +60,7 @@
     <string name="label_form_lastname">Cognome Inserito:</string>
     <string name="finale">You Won!</string>
     <string name="loading">Caricamento…</string>
+    <string name="load">Loading</string>
 
     <string-array name="string_menu">
         <item>Profilo</item>

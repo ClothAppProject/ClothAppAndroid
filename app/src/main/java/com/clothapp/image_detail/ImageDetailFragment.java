@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -88,7 +89,7 @@ public class ImageDetailFragment extends Fragment {
     private ImageView share;
     private ImageView cuore;
     private TextView like;
-    private TextView percentuale;
+    private ArcProgress percentuale;
     private ImageView profilePic;
     private ParseObject parseObject;
     private ViewGroup rootView;
@@ -124,8 +125,12 @@ public class ImageDetailFragment extends Fragment {
         cuore = (ImageView) rootView.findViewById(R.id.heart);
         like = (TextView) rootView.findViewById(R.id.like);
         profilePic = (ImageView) rootView.findViewById(R.id.pic);
-        percentuale = (TextView) rootView.findViewById(R.id.percentuale);
-
+        percentuale = (ArcProgress) rootView.findViewById(R.id.bar_percentuale);
+        percentuale.setBottomText(getResources().getString(R.string.load));
+        percentuale.setTextColor(getResources().getColor(R.color.background));
+        percentuale.setUnfinishedStrokeColor(getResources().getColor(R.color.accentred));
+        percentuale.setFinishedStrokeColor(getResources().getColor(R.color.darkred));
+        //percentuale.setUnfinishedStrokeColor(R.color.red);
         //trovo le info delle foto e le inserisco nella view
         //findInfoPhoto();
         return rootView;
@@ -310,7 +315,7 @@ public class ImageDetailFragment extends Fragment {
                             if (percentDone == 100) {
                                 percentuale.setVisibility(View.INVISIBLE);
                             }
-                            percentuale.setText(percentDone + "%");
+                            percentuale.setProgress(percentDone);//.setText(percentDone + "%");
                         }
                     });
                 }else{
