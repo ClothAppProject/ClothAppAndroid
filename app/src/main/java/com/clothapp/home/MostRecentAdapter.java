@@ -2,6 +2,8 @@ package com.clothapp.home;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -25,10 +27,11 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.util.List;
 
-public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Parcelable {
 
     // This list is used by the ImageActivity to display the photos.
-    public static List<Image> itemList;
+    public List<Image> itemList;
+    public static MostRecentAdapter oggetto;
 
     private final static String username = ParseUser.getCurrentUser().getUsername();
 
@@ -36,7 +39,8 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private String flag;
 
     public MostRecentAdapter(List<Image> itemList) {
-        MostRecentAdapter.itemList = itemList;
+        this.itemList = itemList;
+        this.oggetto = this;
     }
 
     // This is called when a ViewHolder has been created.
@@ -237,6 +241,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Intent intent = new Intent(HomeActivity.context, ImageActivity.class);
                         intent.putExtra("classe", "MostRecentPhotos");
                         intent.putExtra("position", MostRecentItemViewHolder.this.getAdapterPosition());
+                        intent.putExtra("photo", oggetto);
                         HomeActivity.activity.startActivity(intent);
                     }
                 }
@@ -254,7 +259,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Image image = MostRecentAdapter.itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
+                        Image image = itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
 
                         final boolean add = image.getLike().contains(username);
                         if (add) {
@@ -278,4 +283,30 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    //implementato Parcelable per poter passare l'oggetto
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(itemList);
+    }
+
+    protected MostRecentAdapter(Parcel in) {
+        this.itemList = in.createTypedArrayList(Image.CREATOR);
+    }
+
+    public static final Parcelable.Creator<MostRecentAdapter> CREATOR = new Parcelable.Creator<MostRecentAdapter>() {
+        @Override
+        public MostRecentAdapter createFromParcel(Parcel source) {
+            return new MostRecentAdapter(source);
+        }
+
+        @Override
+        public MostRecentAdapter[] newArray(int size) {
+            return new MostRecentAdapter[size];
+        }
+    };
 }

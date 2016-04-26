@@ -3,6 +3,8 @@ package com.clothapp.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,17 +35,18 @@ import com.parse.ParseUser;
 import java.io.File;
 import java.util.List;
 
-public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Parcelable {
 
     // This list is used by the ImageActivity to display the photos.
-    public static List<Image> itemList;
-
+    public List<Image> itemList;
+    private TopRatedAdapter oggetto;
     private final static String username = ParseUser.getCurrentUser().getUsername();
 
     public int lastPosition = -1;
 
     public TopRatedAdapter(List<Image> itemList) {
-        TopRatedAdapter.itemList = itemList;
+        this.itemList = itemList;
+        this.oggetto = this;
     }
 
     // This is called when a ViewHolder has been created.
@@ -290,6 +293,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         Intent intent = new Intent(HomeActivity.context, ImageActivity.class);
                         intent.putExtra("classe", "TopRatedPhotos");
                         intent.putExtra("position", TopRatedItemViewHolder.this.getAdapterPosition());
+                        intent.putExtra("photo", oggetto);
                         HomeActivity.activity.startActivity(intent);
                     }
                 }
@@ -304,7 +308,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        Image image = itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         final String imageUsername = image.getUser();
 
                         final boolean add = image.getLike().contains(username);
@@ -332,7 +336,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        Image image = itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                         intent.putExtra("user", image.getUser());
                         HomeActivity.activity.startActivity(intent);
@@ -349,7 +353,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Image image = TopRatedAdapter.itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
+                        Image image = itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
                         Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                         intent.putExtra("user", image.getUser());
                         HomeActivity.activity.startActivity(intent);
@@ -359,4 +363,31 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
     }
+
+    //implementato Parcelable per poter passare l'oggetto
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(itemList);
+    }
+
+    protected TopRatedAdapter(Parcel in) {
+        this.itemList = in.createTypedArrayList(Image.CREATOR);
+    }
+
+    public static final Parcelable.Creator<TopRatedAdapter> CREATOR = new Parcelable.Creator<TopRatedAdapter>() {
+        @Override
+        public TopRatedAdapter createFromParcel(Parcel source) {
+            return new TopRatedAdapter(source);
+        }
+
+        @Override
+        public TopRatedAdapter[] newArray(int size) {
+            return new TopRatedAdapter[size];
+        }
+    };
 }

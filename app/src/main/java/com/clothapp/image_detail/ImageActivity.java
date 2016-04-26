@@ -18,6 +18,7 @@ import com.clothapp.search.FindTagFragment;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -52,16 +53,18 @@ public class ImageActivity extends AppCompatActivity {
 
         switch (classe) {
             case "MostRecentPhotos":
-                lista = (ArrayList<Image>) MostRecentAdapter.itemList;
+                MostRecentAdapter mostRecentAdapter = getIntent().getParcelableExtra("photo");
+                lista = (ArrayList<Image>) mostRecentAdapter.itemList;
                 break;
 
             case "TopRatedPhotos":
-                lista = (ArrayList<Image>) TopRatedAdapter.itemList;
+                TopRatedAdapter topRatedAdapter = getIntent().getParcelableExtra("photo");
+                lista = (ArrayList<Image>) topRatedAdapter.itemList;
                 break;
 
             case "profilo":
-                ProfileUploadedPhotosAdapter adattatore = (ProfileUploadedPhotosAdapter) getIntent().getParcelableExtra("photo");
-                lista = (ArrayList<Image>) adattatore.photos;
+                ProfileUploadedPhotosAdapter profileUploadedPhotosAdapter = getIntent().getParcelableExtra("photo");
+                lista = (ArrayList<Image>) profileUploadedPhotosAdapter.photos;
                 break;
 
             case "FindCloth":
@@ -124,7 +127,6 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     public void addPhotoToEnd() {
-        //TODO bisogna impostare il controllo sulle liste quando si scarica
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
         switch (classe) {
             case "MostRecentPhotos":
@@ -134,18 +136,7 @@ public class ImageActivity extends AppCompatActivity {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
                         if (object != null) {
-                            object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
-                                @Override
-                                public void done(File file, ParseException e) {
-                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
-                                            object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
-                                            object.getList("vestiti"), object.getList("tipo"));
-                                    if (!lista.contains(toAdd)) {
-                                        lista.add(toAdd);
-                                        mPagerAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
+                            addPhoto(object);
                         }
                     }
                 });
@@ -157,20 +148,7 @@ public class ImageActivity extends AppCompatActivity {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
                         if (object != null) {
-                            if (!lista.contains(new Image(null, object.getObjectId(), null, null, 0, null, null, null))) {
-                                object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
-                                    @Override
-                                    public void done(File file, ParseException e) {
-                                        Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
-                                                object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
-                                                object.getList("vestiti"), object.getList("tipo"));
-                                        if (!lista.contains(toAdd)) {
-                                            lista.add(toAdd);
-                                            mPagerAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                });
-                            }
+                            addPhoto(object);
                         }
                     }
                 });
@@ -182,22 +160,31 @@ public class ImageActivity extends AppCompatActivity {
                     @Override
                     public void done(final ParseObject object, ParseException e) {
                         if (object != null) {
-                            object.getParseFile("thumbnail").getFileInBackground(new GetFileCallback() {
-                                @Override
-                                public void done(File file, ParseException e) {
-                                    Image toAdd = new Image(file, object.getObjectId(), object.getString("user"),
-                                            object.getList("like"), object.getInt("nLike"), object.getList("hashtag"),
-                                            object.getList("vestiti"), object.getList("tipo"));
-                                    if (!lista.contains(toAdd)) {
-                                        lista.add(toAdd);
-                                        mPagerAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
+                            addPhoto(object);
                         }
                     }
                 });
                 break;
+        }
+    }
+
+    public void addPhoto(ParseObject object)    {
+        if (!lista.contains(new Image(object.getObjectId()))) {
+            final Image i = new Image(null, object.getObjectId(), object.getString("user"), object.getList("like"),
+                    object.getInt("nLike"), object.getList("hashtag"), object.getList("vestiti"),
+                    object.getList("tipo"), object.getString("flag"));
+            lista.add(i);
+            mPagerAdapter.notifyDataSetChanged();
+
+            ParseFile image = object.getParseFile("thumbnail");
+            image.getFileInBackground(new GetFileCallback() {
+                @Override
+                public void done(File file, ParseException e) {
+                    if (e==null) {
+                        i.setFile(file);
+                    }
+                }
+            });
         }
     }
 }

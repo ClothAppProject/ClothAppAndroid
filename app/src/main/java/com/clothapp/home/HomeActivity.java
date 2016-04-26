@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.home_toolbar);
         setSupportActionBar(mToolbar);
         setTitle(getString(R.string.app_name));
-        ////////////////////////////
+
         // Initialize the navigation drawer.
         mDrawerLayout = (DrawerLayout) findViewById(R.id.home_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

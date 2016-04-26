@@ -30,13 +30,11 @@ import java.util.List;
 
 public class MostRecentFragment extends Fragment {
 
-    public static MostRecentAdapter mostRecentAdapter;
+    public MostRecentAdapter mostRecentAdapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private MostRecentScrollListener mostRecentScrollListener;
     private Boolean loading = true;
-
-    public static int[] totHeight={0,0};
 
     public static MostRecentFragment newInstance() {
         return new MostRecentFragment();
@@ -67,7 +65,7 @@ public class MostRecentFragment extends Fragment {
 
                 // Create a new empty list and pass it to the adapter while we wait for the Parse
                 // query to complete and update the list.
-                MostRecentAdapter.itemList = new ArrayList<>();
+                mostRecentAdapter.itemList = new ArrayList<>();
                 mostRecentAdapter.lastPosition = -1;
                 mostRecentAdapter.notifyDataSetChanged();
 
@@ -110,10 +108,10 @@ public class MostRecentFragment extends Fragment {
         // Log.d("MostRecentFragment", "MostRecentAdapter.itemList == null : " + (MostRecentAdapter.itemList == null));
 
         int size = 0;
-        if (MostRecentAdapter.itemList != null) {
-            size = MostRecentAdapter.itemList.size();
+        if (mostRecentAdapter.itemList != null) {
+            size = mostRecentAdapter.itemList.size();
         } else {
-            MostRecentAdapter.itemList = new ArrayList<>();
+            mostRecentAdapter.itemList = new ArrayList<>();
         }
         getParseMostRecentPhotos(size, 12);
     }
@@ -142,10 +140,10 @@ public class MostRecentFragment extends Fragment {
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
 
-                        if(!MostRecentAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
+                        if(!mostRecentAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
                             final Image i = new Image(null,photo.getObjectId(),photo.getString("user"),photo.getList("like"),
                                     photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"), photo.getString("flag"));
-                            MostRecentAdapter.itemList.add(i);
+                            mostRecentAdapter.itemList.add(i);
 
                             ParseFile image = photo.getParseFile("thumbnail");
                             image.getFileInBackground(new GetFileCallback() {
@@ -217,7 +215,7 @@ public class MostRecentFragment extends Fragment {
 
                     loading = true;
 
-                    int size = MostRecentAdapter.itemList.size();
+                    int size = mostRecentAdapter.itemList.size();
 
                     // Log.d("MostRecentFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
 

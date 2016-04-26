@@ -670,8 +670,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             }
                                             Image new_img = new Image(tempFile, picture.getObjectId().toString(), ParseUser.getCurrentUser().getUsername().toString(),
                                                     null, 0, Arrays.asList(hashtags), id, tipi);
-                                            MostRecentAdapter.itemList.add(0,new_img);
-                                            MostRecentFragment.mostRecentAdapter.notifyDataSetChanged();
+                                            MostRecentAdapter.oggetto.itemList.add(0,new_img);
+                                            MostRecentAdapter.oggetto.notifyDataSetChanged();
 
                                             //controllo se eliminare foto in impostazioni
                                             if (!UserSettingsUtil.checkIfSavePhotos())  {

@@ -72,7 +72,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, UserProfileActivity.this);
 
-
         // Get the view pager and setup its content
         viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
         if (viewPager != null) {

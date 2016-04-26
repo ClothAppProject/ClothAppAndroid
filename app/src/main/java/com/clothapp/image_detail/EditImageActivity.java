@@ -28,43 +28,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
-import com.clothapp.home.MostRecentAdapter;
-import com.clothapp.home.MostRecentFragment;
-import com.clothapp.http.Get;
-import com.clothapp.parse.notifications.NotificationsUtils;
-import com.clothapp.resources.BitmapUtil;
 import com.clothapp.resources.Cloth;
 import com.clothapp.resources.Image;
-import com.clothapp.settings.UserSettingsUtil;
 import com.clothapp.upload.InfoListAdapter;
-import com.clothapp.upload.UploadPhotoActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.ProgressCallback;
-import com.parse.SaveCallback;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import static android.support.v4.graphics.BitmapCompat.getAllocationByteCount;
-import static com.clothapp.resources.ExceptionCheck.check;
-
 /**
  * Created by giacomoceribelli on 21/04/16.
  */

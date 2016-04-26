@@ -28,7 +28,7 @@ import java.util.List;
 
 public class TopRatedFragment extends Fragment {
 
-    public static TopRatedAdapter topRatedAdapter;
+    public TopRatedAdapter topRatedAdapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TopRatedScrollListener topRatedScrollListener;
@@ -63,7 +63,7 @@ public class TopRatedFragment extends Fragment {
 
                 // Create a new empty list and pass it to the adapter while we wait for the Parse
                 // query to complete and update the list.
-                TopRatedAdapter.itemList = new ArrayList<>();
+                topRatedAdapter.itemList = new ArrayList<>();
                 topRatedAdapter.lastPosition = -1;
                 topRatedAdapter.notifyDataSetChanged();
 
@@ -96,7 +96,7 @@ public class TopRatedFragment extends Fragment {
         topRatedScrollListener = new TopRatedScrollListener(linearLayoutManager);
         recyclerView.addOnScrollListener(topRatedScrollListener);
 
-        int size = TopRatedAdapter.itemList.size();
+        int size = topRatedAdapter.itemList.size();
         getParseTopRatedPhotos(size, 12);
     }
 
@@ -125,10 +125,10 @@ public class TopRatedFragment extends Fragment {
                         // Downloading image on main thread -> Download on a separate thread
                         // Downloading is sequential -> Multiple downloads at the same time
 
-                        if(!TopRatedAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
+                        if(!topRatedAdapter.itemList.contains( new Image(photo.getObjectId()) )) {
                             final Image i = new Image(null,photo.getObjectId(),photo.getString("user"),photo.getList("like"),
                                     photo.getInt("nLike"),photo.getList("hashtag"),photo.getList("vestiti"),photo.getList("tipo"));
-                            TopRatedAdapter.itemList.add(i);
+                            topRatedAdapter.itemList.add(i);
 
                             ParseFile image = photo.getParseFile("thumbnail");
                             image.getFileInBackground(new GetFileCallback() {
@@ -192,7 +192,7 @@ public class TopRatedFragment extends Fragment {
 
                 loading = true;
 
-                int size = TopRatedAdapter.itemList.size();
+                int size = topRatedAdapter.itemList.size();
                 // Log.d("TopRatedFragment", "Loading more photos (from " + size + " to " + (size + 12) + ")");
 
                 // Get more photos from Parse.

@@ -130,9 +130,6 @@ public class ImageDetailFragment extends Fragment {
         percentuale.setTextColor(getResources().getColor(R.color.background));
         percentuale.setUnfinishedStrokeColor(getResources().getColor(R.color.accentred));
         percentuale.setFinishedStrokeColor(getResources().getColor(R.color.darkred));
-        //percentuale.setUnfinishedStrokeColor(R.color.red);
-        //trovo le info delle foto e le inserisco nella view
-        //findInfoPhoto();
         return rootView;
     }
 
@@ -156,27 +153,11 @@ public class ImageDetailFragment extends Fragment {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
-                    ParseFile parseFile = object.getParseFile("thumbnail");
-
-                    parseFile.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-                            if (e == null) {
-                                Glide.with(context)
-                                        .load(file)
-                                        .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
-                                        .centerCrop()
-                                        .transform(new CircleTransform(context))
-                                        .into(profilePic);
-                            } else {
-                                Log.d("ImageDetailFragment", "Couldn't download profile image thumbnail");
-                            }
-                        }
-                    });
-                } else {
-                    // Log.d("ImageDetailFragment", "Error: " + e.getMessage());
+                    String url = object.getParseFile("thumbnail").getUrl();
                     Glide.with(context)
-                            .load(R.drawable.com_facebook_profile_picture_blank_circle)
+                            .load(url)
+                            .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
+                            .centerCrop()
                             .transform(new CircleTransform(context))
                             .into(profilePic);
                 }
@@ -208,7 +189,6 @@ public class ImageDetailFragment extends Fragment {
                         public void onClick(View v) {
                             Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
                             startActivity(i);
-                            getActivity().finish();
                         }
                     });
 
@@ -254,7 +234,6 @@ public class ImageDetailFragment extends Fragment {
                                 //Gesture Detector for detecting double tap
                                 //code is at the end of page
                                 final GestureDetector gd = doubleTapGesture(file);
-
 
                                 Glide.with(context)
                                         .load(file)
@@ -315,7 +294,7 @@ public class ImageDetailFragment extends Fragment {
                             if (percentDone == 100) {
                                 percentuale.setVisibility(View.INVISIBLE);
                             }
-                            percentuale.setProgress(percentDone);//.setText(percentDone + "%");
+                            percentuale.setProgress(percentDone);
                         }
                     });
                 }else{
@@ -364,6 +343,12 @@ public class ImageDetailFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        onActivityCreated(getArguments());
     }
 
     @Override
