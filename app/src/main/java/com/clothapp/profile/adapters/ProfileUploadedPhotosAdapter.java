@@ -51,18 +51,17 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
         PhotoViewHolder photoViewHolder = (PhotoViewHolder) holder;
 
         File imageFile = photos.get(position).getFile();
-
-        if (profilo.equals("persona")) {
+        if (imageFile!=null) {
             Glide.with(context)
                     .load(imageFile)
                     .placeholder(R.mipmap.gallery_icon)
                     .into(photoViewHolder.photo);
-        } else {
+        }else{
             Glide.with(context)
-                    .load(imageFile)
-                    .placeholder(R.mipmap.gallery_icon)
+                    .load(R.drawable.loading)
                     .into(photoViewHolder.photo);
         }
+
 
         // Set item names
         photoViewHolder.txtItemNames.setText(photos.get(position).getTypeVestitiToString());
