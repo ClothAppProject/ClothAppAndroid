@@ -154,6 +154,7 @@
     <string name="assitance_settings">Assistenza</string>
     <string name="info_set">Credits</string>
     <string name="info_settings">Info su di noi</string>
+    <string name="facebook_page">La nostra pagina Facebook</string>
     <!-- SETTINGS STRING -->
 
     <array name="home_titles">

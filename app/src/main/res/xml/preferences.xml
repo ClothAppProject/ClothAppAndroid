@@ -93,5 +93,9 @@
                 android:action="android.intent.action.VIEW"
                 android:data="http://www.clothapp.it" />
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="facebook_page"
+            android:title="@string/facebook_page">
+        </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>
