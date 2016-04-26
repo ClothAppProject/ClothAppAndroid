@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.clothapp.R;
@@ -52,6 +53,8 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
 
         //set the no text for no photos uploaded
         final TextView noPhotosText = (TextView) rootView.findViewById(R.id.no_photos);
+        final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_photos);
+
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(context);
@@ -65,14 +68,14 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
         viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getShopParseUploadedPhotos(username, 0, 10, viewProfileUploadedPhotos, noPhotosText);
+        ProfileUtils.getShopParseUploadedPhotos(username, 0, 10, progressBar, viewProfileUploadedPhotos, noPhotosText);
 
         viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update with more photos
-                ProfileUtils.getShopParseUploadedPhotos(username,adapter.photos.size(),10, viewProfileUploadedPhotos, noPhotosText);
+                ProfileUtils.getShopParseUploadedPhotos(username,adapter.photos.size(),10, progressBar, viewProfileUploadedPhotos, noPhotosText);
             }
         });
         // Return the fragment

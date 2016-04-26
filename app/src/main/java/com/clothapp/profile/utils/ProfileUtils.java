@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -71,7 +72,7 @@ public class ProfileUtils {
     }
 
 
-    public static void getParseUploadedPhotos(String username, final int start, int limit,
+    public static void getParseUploadedPhotos(String username, final int start, int limit, final ProgressBar progressBar,
                                               final RecyclerView viewProfileUploadedPhotos, final TextView noPhotosText) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -86,6 +87,7 @@ public class ProfileUtils {
                     //check if user has no photo uploaded
                     if (start==0 && photos.isEmpty())   {
                         noPhotosText.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     RecyclerView view = viewProfileUploadedPhotos;
@@ -102,7 +104,7 @@ public class ProfileUtils {
                             public void done(File file, ParseException e) {
 
                                 if (e == null) {
-
+                                    progressBar.setVisibility(View.INVISIBLE);
                                     // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
 
                                     Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
@@ -129,7 +131,7 @@ public class ProfileUtils {
         });
     }
 
-    public static void getShopParseUploadedPhotos(String username,final int start, int limit,
+    public static void getShopParseUploadedPhotos(String username, final int start, int limit, final ProgressBar progressBar,
                                                   final RecyclerView viewProfileUploadedPhotos, final TextView noPhotosText) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -144,6 +146,7 @@ public class ProfileUtils {
                     //check if user has no photo uploaded
                     if (start==0 && photos.isEmpty())   {
                         noPhotosText.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     RecyclerView view = viewProfileUploadedPhotos;
@@ -160,7 +163,7 @@ public class ProfileUtils {
                             public void done(File file, ParseException e) {
 
                                 if (e == null) {
-
+                                    progressBar.setVisibility(View.INVISIBLE);
                                     // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
 
                                     Image item = new Image(file, photo.getObjectId(), photo.getString("user"),

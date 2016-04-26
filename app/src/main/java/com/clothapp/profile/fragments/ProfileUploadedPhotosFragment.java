@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.clothapp.R;
@@ -47,8 +48,9 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         // Set the recycler view declared in UserProfileActivity to the newly created RecyclerView
         viewProfileUploadedPhotos = (RecyclerView) rootView.findViewById(R.id.profile_uploaded_photos_recycler_view);
 
-        //set the no text for no photos uploaded
+        //set the no text for no photos uploaded and progress bar
         final TextView noPhotosText = (TextView) rootView.findViewById(R.id.no_photos);
+        final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_photos);
         // Set the layout manager for the recycler view.
         // LinearLayoutManager makes the recycler view look like a ListView.
         LinearLayoutManager llm = new LinearLayoutManager(context);
@@ -58,18 +60,18 @@ public class ProfileUploadedPhotosFragment extends Fragment {
         ArrayList<Image> items = new ArrayList<>();
 
         // Create a new adapter for the recycler view
-         adapter = new ProfileUploadedPhotosAdapter(items,"persona", context);
+        adapter = new ProfileUploadedPhotosAdapter(items,"persona", context);
         viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getParseUploadedPhotos(username, 0, 10, viewProfileUploadedPhotos, noPhotosText);
+        ProfileUtils.getParseUploadedPhotos(username, 0, 10, progressBar, viewProfileUploadedPhotos, noPhotosText);
 
         viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update with more photos
-                ProfileUtils.getParseUploadedPhotos(username,adapter.photos.size(),10, viewProfileUploadedPhotos, noPhotosText);
+                ProfileUtils.getParseUploadedPhotos(username, adapter.photos.size(), 10, progressBar, viewProfileUploadedPhotos, noPhotosText);
             }
         });
 

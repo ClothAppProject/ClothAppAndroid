@@ -19,4 +19,11 @@
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loading_photos"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
