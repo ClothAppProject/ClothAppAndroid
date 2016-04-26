@@ -255,9 +255,6 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
                     Get g = new Get();
                     g.execute(url);
 
-                    //  notifying the navigation drawer about the changing
-                    HomeActivity.changePic = 1;
-
                     finish();
                 } else {
                     // Chiama ad altra classe per verificare qualsiasi tipo di errore dal server

@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.Menu;
 import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
@@ -77,8 +78,15 @@ public class ShopProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Set up navigation drawer
-        initDrawer(toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, ShopProfileActivity.this);
         viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
@@ -129,87 +137,6 @@ public class ShopProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         loadProfilePicture();
-    }
-
-    private void initDrawer(Toolbar toolbar) {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        // Setup OnClickListener for the navigation drawer.
-        navigationView.setNavigationItemSelectedListener(new ProfileNavigationItemSelectedListener());
-
-        // Get drawer header
-        View headerLayout = navigationView.getHeaderView(0);
-
-        // Get the image view containing the user profile photo
-        final ImageView drawerProfile = (ImageView) headerLayout.findViewById(R.id.navigation_drawer_profile_photo);
-        TextView drawerUsername = (TextView) headerLayout.findViewById(R.id.navigation_drawer_profile_username);
-        TextView drawerRealName = (TextView) headerLayout.findViewById(R.id.navigation_drawer_profile_real_name);
-
-        // Set the user profile photo to the just created rounded image
-        Glide.with(context)
-                .load(R.drawable.com_facebook_profile_picture_blank_square)
-                .transform(new CircleTransform(context))
-                .into(drawerProfile);
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        drawerUsername.setText(capitalize(currentUser.getUsername()));
-        drawerRealName.setText(capitalize(currentUser.getString("name")));
-
-        if (HomeActivity.drawerProfilePhotoFile == null) {
-            ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
-            query.whereEqualTo("username", currentUser.getUsername());
-
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject photo, ParseException e) {
-
-                    if (e == null) {
-                        Log.d("HomeActivity", "ParseObject for profile image found!");
-
-                        ParseFile parseFile = photo.getParseFile("thumbnail");
-                        parseFile.getFileInBackground(new GetFileCallback() {
-                            @Override
-                            public void done(File file, ParseException e) {
-
-                                if (e == null) {
-                                    Log.d("HomeActivity", "File for profile image found!");
-
-                                    HomeActivity.drawerProfilePhotoFile = file;
-
-                                    // Set the user profile photo to the just created rounded image
-                                    Glide.with(context)
-                                            .load(file)
-                                            .transform(new CircleTransform(context))
-                                            .into(drawerProfile);
-
-                                } else {
-                                    Log.d("HomeActivity", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
-
-                    } else {
-                        Log.d("HomeActivity", "Error: " + e.getMessage());
-                    }
-                }
-            });
-        } else {
-            // Set the user profile photo to the just created rounded image
-            Glide.with(context)
-                    .load(HomeActivity.drawerProfilePhotoFile)
-                    .transform(new CircleTransform(context))
-                    .into(drawerProfile);
-        }
-    }
-
-    private String capitalize(String input) {
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
     private void setupViewPagerContent(ViewPager viewPager) {
@@ -283,94 +210,4 @@ public class ShopProfileActivity extends AppCompatActivity {
 
     }
 
-    // This class handles click to each item of the navigation drawer
-    class ProfileNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
-
-        @SuppressWarnings("StatementWithEmptyBody")
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-
-            Intent intent;
-
-            switch (item.getItemId()) {
-
-                // Clicked on "Home" page button.
-                case R.id.nav_home:
-
-                    Log.d("UserProfileActivity", "Clicked on R.id.nav_home");
-
-                    intent = new Intent(context, HomeActivity.class);
-                    startActivity(intent);
-
-                    finish();
-                    break;
-
-                // Clicked on "My Profile" item.
-                case R.id.nav_profile:
-
-                    Log.d("UserProfileActivity", "Clicked on R.id.nav_profile");
-
-                    String currentUser = ParseUser.getCurrentUser().getUsername();
-
-                    if (!currentUser.equals(username)) {
-                        Log.d("UserProfileActivity", currentUser + "!=" + username);
-                        intent = ProfileUtils.goToProfile(context, currentUser);
-                        intent.putExtra("user", currentUser);
-                        startActivity(intent);
-                    }
-
-                    break;
-
-                // Clicked on "Settings" item.
-                case R.id.nav_settings:
-                    Log.d("HomeActivity", "Clicked on R.id.nav_settings");
-
-                    intent = new Intent(context, SettingsActivity.class);
-                    startActivity(intent);
-                    break;
-
-                // Clicked on "Logout" item.
-                case R.id.nav_logout:
-
-                    Log.d("UserProfileActivity", "Clicked on R.id.nav_logout");
-
-                    final ProgressDialog dialog = ProgressDialog.show(context, "", "Logging out. Please wait...", true);
-                    Thread logout = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ParseUser.logOut();
-                            Log.d("UserProfileActivity", "Successfully logged out");
-                        }
-                    });
-                    logout.start();
-
-                    intent = new Intent(context, MainActivity.class);
-                    dialog.dismiss();
-                    startActivity(intent);
-
-                    finish();
-                    break;
-
-                // Clicked on "Feedback" item.
-                case R.id.nav_feedback:
-                    Log.d("ShopProfileActivity", "Clicked on R.id.nav_logout");
-
-
-                    Intent mail = new Intent(Intent.ACTION_SENDTO);
-                    mail.setData(Uri.parse("mailto:")); // only email apps should handle this
-                    mail.putExtra(Intent.EXTRA_EMAIL, new String[]{"clothapp.project@gmail.com"});
-                    mail.putExtra(Intent.EXTRA_SUBJECT, "ClothApp Feedback");
-                    if (mail.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mail);
-                    }
-                    break;
-
-            }
-
-            // Close the navigation drawer after item selection.
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-
-            return true;
-        }
-    }
 }
