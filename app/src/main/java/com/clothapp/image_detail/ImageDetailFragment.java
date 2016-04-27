@@ -97,11 +97,9 @@ public class ImageDetailFragment extends Fragment {
     //private PhotoViewAttacher mAttacher;
 
     public ImageDetailFragment newInstance(Image image, Context c) {
-        context = c;
         final ImageDetailFragment f = new ImageDetailFragment();
-        final Bundle args = new Bundle();
-        args.putParcelable("ID", image);
-        f.setArguments(args);
+        f.immagine = image;
+        f.context = c;
         return f;
     }
 
@@ -109,7 +107,6 @@ public class ImageDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        this.immagine = getArguments() != null ? (Image) getArguments().getParcelable("ID") : null;
     }
 
     @Override
@@ -172,61 +169,6 @@ public class ImageDetailFragment extends Fragment {
             public void done(final ParseObject object, ParseException e) {
                 if (e==null) {
                     parseObject = object;
-                    //setto username e listener
-                    t.setText(immagine.getUser());
-                    t.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-
-                        }
-                    });
-
-                    //listener on the profile pic
-                    profilePic.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-
-                        }
-                    });
-
-                    //setto gli hashtag
-                    hashtag.setText(immagine.getHashtagToString());
-
-                    //per ogni vestito cerco le informazioni
-                    ArrayList arrayList = (ArrayList) object.get("vestiti");
-                    if (arrayList == null) arrayList = new ArrayList<>();
-                    vestiti = new ArrayList<>(arrayList.size());
-                    for (int i = 0; i < arrayList.size(); i++) {
-                        ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
-                        query1.whereEqualTo("objectId", arrayList.get(i));
-                        query1.getFirstInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject info, ParseException e) {
-                                if (e == null) {
-                                    Float fl = null;
-                                    if (info.get("prezzo") != null) {
-                                        if (info.get("prezzo").getClass() != Float.class)
-                                            fl = Float.parseFloat(info.get("prezzo").toString());
-                                        else fl = (float) info.get("prezzo");
-                                    }
-                                    Cloth c = new Cloth(info.getString("tipo"),
-                                            info.getString("luogoAcquisto"),
-                                            fl,
-                                            info.getString("shop"),
-                                            info.getString("shopUsername"),
-                                            info.getString("brand"));
-                                    if (!vestiti.contains(c)) {
-                                        vestiti.add(c);
-                                    }
-                                    MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
-                                    listView.setAdapter(adapter);
-                                    setListViewHeightBasedOnItems(listView);
-                                }
-                            }
-                        });
-                    }
 
                     object.getParseFile("photo").getFileInBackground(new GetFileCallback() {
                         @Override
@@ -303,6 +245,62 @@ public class ImageDetailFragment extends Fragment {
                 }
             }
         });
+
+        //setto username e listener
+        t.setText(immagine.getUser());
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+
+            }
+        });
+
+        //listener on the profile pic
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+
+            }
+        });
+
+        //setto gli hashtag
+        hashtag.setText(immagine.getHashtagToString());
+
+        //per ogni vestito cerco le informazioni
+        List arrayList = immagine.getIdVestiti();
+        if (arrayList == null) arrayList = new ArrayList<>();
+        vestiti = new ArrayList<>(arrayList.size());
+        for (int i = 0; i < arrayList.size(); i++) {
+            ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
+            query1.whereEqualTo("objectId", arrayList.get(i));
+            query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject info, ParseException e) {
+                    if (e == null) {
+                        Float fl = null;
+                        if (info.get("prezzo") != null) {
+                            if (info.get("prezzo").getClass() != Float.class)
+                                fl = Float.parseFloat(info.get("prezzo").toString());
+                            else fl = (float) info.get("prezzo");
+                        }
+                        Cloth c = new Cloth(info.getString("tipo"),
+                                info.getString("luogoAcquisto"),
+                                fl,
+                                info.getString("shop"),
+                                info.getString("shopUsername"),
+                                info.getString("brand"));
+                        if (!vestiti.contains(c)) {
+                            vestiti.add(c);
+                        }
+                        MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
+                        listView.setAdapter(adapter);
+                        setListViewHeightBasedOnItems(listView);
+                    }
+                }
+            });
+        }
 
         //chiamo funzione del testo dei like
         setTextLike();

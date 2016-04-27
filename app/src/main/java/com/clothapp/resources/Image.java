@@ -185,6 +185,9 @@ public class Image implements Parcelable {
         return this.objectId;
     }
 
+    public String getFlag() {
+        return flag;
+    }
     // Metodi equals e hashcode che controllano se un oggetto è uguale, basta controllare sull'objectId
     @Override
     public boolean equals(Object o) {
@@ -200,17 +203,6 @@ public class Image implements Parcelable {
     }
 
     // Funzioni per dell'interfaccia parcelable, per poter passare un ArrayList<Image> da una classe all'imageFragment
-    protected Image(Parcel in) {
-        objectId = in.readString();
-        user = in.readString();
-        if (in.readByte() == 0x01) {
-            like = new ArrayList<>();
-            in.readList(like, String.class.getClassLoader());
-        } else {
-            like = null;
-        }
-        nLike = in.readInt();
-    }
 
     @Override
     public int describeContents() {
@@ -219,22 +211,31 @@ public class Image implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(objectId);
-        dest.writeString(user);
-        if (like == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(like);
-        }
-        dest.writeInt(nLike);
+        dest.writeString(this.objectId);
+        dest.writeString(this.user);
+        dest.writeString(this.flag);
+        dest.writeInt(this.nLike);
+        dest.writeStringList(this.like);
+        dest.writeStringList(this.hashtag);
+        dest.writeStringList(this.idClothes);
+        dest.writeStringList(this.typeClothes);
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
+    protected Image(Parcel in) {
+        this.objectId = in.readString();
+        this.user = in.readString();
+        this.flag = in.readString();
+        this.nLike = in.readInt();
+        this.like = in.createStringArrayList();
+        this.hashtag = in.createStringArrayList();
+        this.idClothes = in.createStringArrayList();
+        this.typeClothes = in.createStringArrayList();
+    }
+
+    public static final Creator<Image> CREATOR = new Creator<Image>() {
         @Override
-        public Image createFromParcel(Parcel in) {
-            return new Image(in);
+        public Image createFromParcel(Parcel source) {
+            return new Image(source);
         }
 
         @Override
@@ -242,8 +243,4 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
-
-    public String getFlag() {
-        return flag;
-    }
 }
