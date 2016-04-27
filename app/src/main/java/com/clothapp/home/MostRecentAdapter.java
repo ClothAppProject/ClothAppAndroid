@@ -197,12 +197,13 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        if(flag!=null && flag.equals("negozio")) {
+                        if(flag!=null && flag.equals("Negozio")) {
                             Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
                             intent.putExtra("user", user.getText());
                             HomeActivity.activity.startActivity(intent);
                         }
                         else{
+                            System.out.println("click");
                             Intent intent = new Intent(HomeActivity.context, UserProfileActivity.class);
                             intent.putExtra("user", user.getText());
                             HomeActivity.activity.startActivity(intent);
@@ -220,9 +221,16 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
-                        intent.putExtra("user", user.getText());
-                        HomeActivity.activity.startActivity(intent);
+                        if(flag!=null && flag.equals("Negozio")) {
+                            Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
+                            intent.putExtra("user", user.getText());
+                            HomeActivity.activity.startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(HomeActivity.context, UserProfileActivity.class);
+                            intent.putExtra("user", user.getText());
+                            HomeActivity.activity.startActivity(intent);
+                        }
                     }
 
                 }

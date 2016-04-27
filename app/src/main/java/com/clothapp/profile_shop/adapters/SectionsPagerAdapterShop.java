@@ -14,6 +14,8 @@ import com.clothapp.profile_shop.fragments.*;
 public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     private Context context;
     private String username;
+    private int numberPage=5;
+
     public SectionsPagerAdapterShop(FragmentManager fm, Context context, String username) {
         super(fm);
         this.context = context;
@@ -33,6 +35,8 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
                 return ProfileShopFollowersFragment.newInstance(username, context);
             case 3:
                 return ProfileShopFollowingFragment.newInstance(username, context);
+            case 4:
+                return ProfileShopMapFragment.newInstance(username, context);
             default:
                 return PlaceholderFragment.newInstance(position + 1);
         }
@@ -41,7 +45,11 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Number of pages.
-        return 4;//7;
+        return numberPage;//7;
+    }
+
+    public void setNumberPage(int n){
+        numberPage=n;
     }
 
     @Override
@@ -55,6 +63,8 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
                 return context.getString(R.string.followers);
             case 3:
                 return context.getString(R.string.following);
+            case 4:
+                return context.getString(R.string.map);
             /*case 4:
                 return "FAVORITE PHOTOS";
             case 5:

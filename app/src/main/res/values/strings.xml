@@ -207,6 +207,7 @@
     <string name="photo">MY OUTFITS</string>
     <string name="followers">FOLLOWERS</string>
     <string name="following">FOLLOWING</string>
+    <string name="map">MAPPA</string>
 
     <string name="passSignup">Password</string>
 
@@ -216,4 +217,5 @@
         \n-   NON contenere caratteri speciali (i.e. new line o tab)</string>
 
     <string name="wrongDate">La data inserita non è valida</string>
+
 </resources>

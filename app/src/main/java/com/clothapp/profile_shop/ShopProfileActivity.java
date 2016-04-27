@@ -37,6 +37,10 @@ import com.clothapp.upload.UploadProfilePictureActivity;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -58,6 +62,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     private Context context;
     private String username;
     private ViewPager viewPager;
+    public SectionsPagerAdapterShop sectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +147,7 @@ public class ShopProfileActivity extends AppCompatActivity {
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
+        sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
