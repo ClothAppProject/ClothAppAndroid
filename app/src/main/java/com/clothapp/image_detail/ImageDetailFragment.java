@@ -486,6 +486,7 @@ public class ImageDetailFragment extends Fragment {
             return false;
         }
     }
+
     private void setTextLike()  {
         if (immagine.getLike().isEmpty()) {
             like.setText(" 0 like");
@@ -579,31 +580,31 @@ public class ImageDetailFragment extends Fragment {
         else max = size+15;
         for (int i=size;i<max;i++) {
             final User u = new User(immagine.getLike().get(i).toString(),null,null);
-            if (likeList.contains(u)) continue;
-            //aggiungiamo l'utente
-            likeList.add(u);
-            likeAdapter.notifyDataSetChanged();
+            if (!likeList.contains(u)) {
+                //aggiungiamo l'utente
+                likeList.add(u);
 
-            ParseQuery<ParseObject> queryLike = new ParseQuery<>("UserPhoto");
-            queryLike.whereEqualTo("username", immagine.getLike().get(i));
-            queryLike.getFirstInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject object, ParseException e) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (e==null)    {
-                        ParseFile f = object.getParseFile("thumbnail");
-                        f.getFileInBackground(new GetFileCallback() {
-                            @Override
-                            public void done(File file, ParseException e) {
-                                if(e==null) {
-                                    u.setProfilo(file);
-                                    likeAdapter.notifyDataSetChanged();
+                ParseQuery<ParseObject> queryLike = new ParseQuery<>("UserPhoto");
+                queryLike.whereEqualTo("username", immagine.getLike().get(i));
+                queryLike.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if (e == null) {
+                            ParseFile f = object.getParseFile("thumbnail");
+                            f.getFileInBackground(new GetFileCallback() {
+                                @Override
+                                public void done(File file, ParseException e) {
+                                    if (e == null) {
+                                        u.setProfilo(file);
+                                        likeAdapter.notifyDataSetChanged();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         canLoad = true;
     }
@@ -676,12 +677,4 @@ public class ImageDetailFragment extends Fragment {
 
         });
     }
-/*
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Need to call clean-up
-        mAttacher.cleanup();
-    }
-*/
 }
