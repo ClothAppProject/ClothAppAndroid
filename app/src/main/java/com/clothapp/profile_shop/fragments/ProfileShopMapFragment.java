@@ -60,7 +60,14 @@ public class ProfileShopMapFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the fragment which will contain the RecyclerView
-        View rootView = inflater.inflate(R.layout.fragment_profileshop_map, container, false);
+        View rootView;
+
+        try {
+            rootView = inflater.inflate(R.layout.fragment_profileshop_map, container, false);
+        }catch (Exception e2){
+            rootView = inflater.inflate(R.layout.fragment_profile_info,container,false);
+        }
+
         final SupportMapFragment mapFragment= (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapshop);
 
         final GoogleMap map = mapFragment.getMap();
@@ -83,10 +90,15 @@ public class ProfileShopMapFragment extends Fragment {
                             via[0] = shop.getString("address");
                             if (shop.getString("Città") != null)
                                 via[0] += (" " + shop.getString("Citta"));
-                            LatLng point = getLocationFromAddress(context, via[0]);
-                            Marker TP = map.addMarker(new MarkerOptions().position(point).title("Point"));
-                            map.getUiSettings().setZoomGesturesEnabled(true);
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 12.0f));
+                            try {
+                                LatLng point = getLocationFromAddress(context, via[0]);
+                                Marker TP = map.addMarker(new MarkerOptions().position(point).title("Point"));
+                                map.getUiSettings().setZoomGesturesEnabled(true);
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 12.0f));
+                            }
+                            catch (Exception e1){
+                                System.out.println("errore");
+                            }
                         } else {
                             via[0] = "roma";
                             map.getUiSettings().setZoomGesturesEnabled(true);
