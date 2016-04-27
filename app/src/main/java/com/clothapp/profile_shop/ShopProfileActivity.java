@@ -155,59 +155,8 @@ public class ShopProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfilePicture() {
-
         ImageView background = (ImageView) findViewById(R.id.profile_cover_image);
-        ProfileUtils.getParseUserProfileImage(this, username, background, context, true);
-
-        background.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (username.equals(ParseUser.getCurrentUser().getUsername())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ShopProfileActivity.this);
-                    builder.setTitle(R.string.choose_profile_picture)
-                            //.set
-                            .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(getApplicationContext(), UploadProfilePictureActivity.class);
-                                    switch (which) {
-                                        case 0:
-                                            // Redirect the user to the ProfilePictureActivity with camera
-                                            i.putExtra("photoType", 2187);
-                                            startActivity(i);
-                                            break;
-                                        case 1:
-                                            // Redirect the user to the ProfilePictureActivity with galery
-                                            i.putExtra("photoType", 1540);
-                                            startActivity(i);
-                                            break;
-                                        case 2:
-                                            //delete profile picture
-                                            ParseQuery<ParseObject> queryFotoProfilo = new ParseQuery<ParseObject>("UserPhoto");
-                                            queryFotoProfilo.whereEqualTo("username", username);
-                                            queryFotoProfilo.findInBackground(new FindCallback<ParseObject>() {
-                                                @Override
-                                                public void done(List<ParseObject> objects, ParseException e) {
-                                                    if (e == null) {
-                                                        if (objects.size() > 0) {
-                                                            objects.get(0).deleteInBackground();
-                                                            finish();
-                                                            startActivity(getIntent());
-                                                        }
-                                                    } else {
-                                                        check(e.getCode(), v, e.getMessage());
-                                                    }
-                                                }
-                                            });
-                                            break;
-                                    }
-                                }
-                            });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-        });
-
+        ProfileUtils.getParseUserProfileImage(username, background, context, true, ShopProfileActivity.this);
     }
 
 }

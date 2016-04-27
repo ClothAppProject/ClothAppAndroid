@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,17 +21,22 @@ import android.widget.ImageView;
 
 import com.clothapp.Menu;
 import com.clothapp.R;
+import com.clothapp.image_detail.ZoomPhoto;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.parse.notifications.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.settings.EditProfileActivity;
 import com.clothapp.upload.UploadProfilePictureActivity;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -145,57 +151,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void loadProfilePicture() {
 
-        ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
-        ProfileUtils.getParseUserProfileImage(this, username, mainImageView, context, false);
+        final ImageView mainImageView = (ImageView) findViewById(R.id.profile_user_image);
+        ProfileUtils.getParseUserProfileImage(username, mainImageView, context, false, UserProfileActivity.this);
 
-        mainImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (username.equals(ParseUser.getCurrentUser().getUsername())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
-                    builder.setTitle(R.string.choose_profile_picture)
-                            //.set
-                            .setItems(R.array.profile_picture_options, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(getApplicationContext(), UploadProfilePictureActivity.class);
-                                    switch (which) {
-                                        case 0:
-                                            // Redirect the user to the ProfilePictureActivity with camera
-                                            i.putExtra("photoType", 2187);
-                                            startActivity(i);
-                                            break;
-                                        case 1:
-                                            // Redirect the user to the ProfilePictureActivity with galery
-                                            i.putExtra("photoType", 1540);
-                                            startActivity(i);
-                                            break;
-                                        case 2:
-                                            //delete profile picture
-                                            ParseQuery<ParseObject> queryFotoProfilo = new ParseQuery<ParseObject>("UserPhoto");
-                                            queryFotoProfilo.whereEqualTo("username", username);
-                                            queryFotoProfilo.findInBackground(new FindCallback<ParseObject>() {
-                                                @Override
-                                                public void done(List<ParseObject> objects, ParseException e) {
-                                                    if (e == null) {
-                                                        if (objects.size() > 0) {
-                                                            objects.get(0).deleteInBackground();
-                                                            finish();
-                                                            startActivity(getIntent());
-                                                        }
-                                                    } else {
-                                                        check(e.getCode(), v, e.getMessage());
-                                                    }
-                                                }
-                                            });
-                                            break;
-                                    }
-                                }
-                            });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-        });
+
     }
 
 }

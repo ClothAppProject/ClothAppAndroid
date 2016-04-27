@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.image_detail.ZoomPhoto;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
@@ -24,6 +26,7 @@ import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
 import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
+import com.clothapp.upload.UploadProfilePictureActivity;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -189,35 +192,88 @@ public class ProfileUtils {
         });
     }
 
-    public static void getParseUserProfileImage(final Activity activity, final String username, final ImageView mainImageView, final Context context, final boolean shop) {
+    public static void getParseUserProfileImage(final String username, final ImageView mainImageView, final Context context, final boolean shop,final Context dialogContext) {
 
         ParseQuery<ParseObject> query = new ParseQuery<>("UserPhoto");
         query.whereEqualTo("username", username);
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
-            public void done(ParseObject photo, ParseException e) {
-
+            public void done(final ParseObject photo, final ParseException e) {
                 if (e == null) {
                     Log.d("ProfileUtils", "ParseObject for profile image found!");
 
                     ParseFile parseFile = photo.getParseFile("thumbnail");
-
-                    if(parseFile==null)return;
-                    if (!shop)  {
-                        Glide.with(context)
-                                .load(parseFile.getUrl())
-                                .transform(new CircleTransform(context))
-                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
-                                .into(mainImageView);
-                    }else{
-                        Glide.with(context)
-                                .load(parseFile.getUrl())
-                                .placeholder(R.drawable.shop)
-                                .into(mainImageView);
+                    if(parseFile!=null) {
+                        if (!shop) {
+                            Glide.with(context)
+                                    .load(parseFile.getUrl())
+                                    .transform(new CircleTransform(context))
+                                    .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
+                                    .into(mainImageView);
+                        } else {
+                            Glide.with(context)
+                                    .load(parseFile.getUrl())
+                                    .placeholder(R.drawable.shop)
+                                    .into(mainImageView);
+                        }
                     }
-                } else {
-                    Log.d("ProfileUtils", "Error: " + e.getMessage());
+                    mainImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(context, ZoomPhoto.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.setData(Uri.parse(photo.getParseFile("profilePhoto").getUrl()));
+                            context.startActivity(i);
+                        }
+                    });
+                }
+                if (username.equals(ParseUser.getCurrentUser().getUsername())) {
+                    mainImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View v) {
+                            final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(dialogContext);
+                            //esisite immagine del profilo
+                            int array = R.array.profile_picture_options;
+                            if (e != null) array = R.array.profile_picture_options_negative;
+                            builder.setTitle(R.string.choose_profile_picture)
+                                    .setItems(array, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent i = new Intent(context, UploadProfilePictureActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            switch (which) {
+                                                case 0:
+                                                    // Redirect the user to the ProfilePictureActivity with camera
+                                                    i.putExtra("photoType", 2187);
+                                                    context.startActivity(i);
+                                                    break;
+                                                case 1:
+                                                    // Redirect the user to the ProfilePictureActivity with galery
+                                                    i.putExtra("photoType", 1540);
+                                                    context.startActivity(i);
+                                                    break;
+                                                case 2:
+                                                    i = new Intent(context, ZoomPhoto.class);
+                                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    i.setData(Uri.parse(photo.getParseFile("profilePhoto").getUrl()));
+                                                    context.startActivity(i);
+                                                    break;
+                                                case 3:
+                                                    //delete profile picture
+                                                    photo.deleteInBackground();
+                                                    Glide.with(context)
+                                                            .load(R.drawable.com_facebook_profile_picture_blank_circle)
+                                                            .into(mainImageView);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            android.app.AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    });
+                }else{
+
                 }
             }
         });
@@ -236,7 +292,6 @@ public class ProfileUtils {
             public void done(ParseUser object, ParseException e) {
                 if (e == null) {
                     user = object;
-                    // showDialog(context, "Success", "Successfully retrieved user info from Parse.");
 
                     //controllo che parametri non siano null
                     if (user.getString("name")!=null) {

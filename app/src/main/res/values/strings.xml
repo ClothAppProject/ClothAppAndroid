@@ -127,9 +127,14 @@
     <string name="setting_pp">Imposto Immagine del profilo&#8230;</string>
     <string name="choose_profile_picture">Cambia immagina del profilo:</string>
     <array name="profile_picture_options">
-        <item>Fotocamera</item>
-        <item>Galleria</item>
+        <item>Scatta Foto</item>
+        <item>Carica da Galleria</item>
+        <item>Visualizza immagine</item>
         <item>Rimuovi immagine del profilo</item>
+    </array>
+    <array name="profile_picture_options_negative">
+        <item>Scatta Foto</item>
+        <item>Carica da Galleria</item>
     </array>
 
     <!-- SETTINGS STRING -->

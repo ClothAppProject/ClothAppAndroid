@@ -82,7 +82,7 @@ public class EditShopProfileActivity extends AppCompatActivity {
 
         //show profile picutre
         profile_picture = (ImageView) findViewById(R.id.profile_picture);
-        ProfileUtils.getParseUserProfileImage(this,utente.getUsername(),profile_picture,getApplicationContext(),false);
+        ProfileUtils.getParseUserProfileImage(utente.getUsername(),profile_picture,getApplicationContext(),false,EditShopProfileActivity.this);
         profile_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +161,7 @@ public class EditShopProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        ProfileUtils.getParseUserProfileImage(this,ParseUser.getCurrentUser().getUsername(),profile_picture,getApplicationContext(),false);
+        ProfileUtils.getParseUserProfileImage(ParseUser.getCurrentUser().getUsername(),profile_picture,getApplicationContext(),false,EditShopProfileActivity.this);
     }
 
     @Override
