@@ -25,6 +25,8 @@ import com.clothapp.settings.SettingsActivity;
 import java.net.URI;
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by jack1 on 17/03/2016.
  */
@@ -36,11 +38,10 @@ public class ZoomPhoto extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Intent i=getIntent();
-        Uri uri=i.getData();
+        Uri uri= Uri.parse(getIntent().getStringExtra("url"));
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        ImageView photo= (ImageView) findViewById(R.id.photo);
+        final ImageView photo= (ImageView) findViewById(R.id.photo);
 
         Glide.with(getBaseContext())
                 .load(uri)
@@ -53,6 +54,7 @@ public class ZoomPhoto extends AppCompatActivity {
                     public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         //image loaded, hide the progressbar
                         progressBar.setVisibility(View.INVISIBLE);
+                        PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(photo);
                         return false;
                     }
                 })
