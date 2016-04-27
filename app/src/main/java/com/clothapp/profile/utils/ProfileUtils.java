@@ -223,7 +223,7 @@ public class ProfileUtils {
                         public void onClick(View v) {
                             Intent i = new Intent(context, ZoomPhoto.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.setData(Uri.parse(photo.getParseFile("profilePhoto").getUrl()));
+                            i.putExtra("url",photo.getParseFile("profilePhoto").getUrl());
                             context.startActivity(i);
                         }
                     });
@@ -255,7 +255,7 @@ public class ProfileUtils {
                                                 case 2:
                                                     i = new Intent(context, ZoomPhoto.class);
                                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                    i.setData(Uri.parse(photo.getParseFile("profilePhoto").getUrl()));
+                                                    i.putExtra("url",photo.getParseFile("profilePhoto").getUrl());
                                                     context.startActivity(i);
                                                     break;
                                                 case 3:

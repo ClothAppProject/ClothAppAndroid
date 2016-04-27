@@ -63,6 +63,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,7 +177,7 @@ public class ImageDetailFragment extends Fragment {
                             if (e == null) {
                                 //Gesture Detector for detecting double tap
                                 //code is at the end of page
-                                final GestureDetector gd = doubleTapGesture(file);
+                                final GestureDetector gd = doubleTapGesture(file.toURI().toString());
 
                                 Glide.with(context)
                                         .load(file)
@@ -252,7 +253,6 @@ public class ImageDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-
             }
         });
 
@@ -261,7 +261,6 @@ public class ImageDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-
             }
         });
 
@@ -608,13 +607,13 @@ public class ImageDetailFragment extends Fragment {
     }
 
     //funzione che ritorna il gestureDetector per il doubletap
-    public GestureDetector doubleTapGesture(final File file) {
+    public GestureDetector doubleTapGesture(final String file) {
         return new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e){
                 Intent i=new Intent(context,ZoomPhoto.class);
-                i.setData(Uri.fromFile(file));
+                i.putExtra("url",file);
                 startActivity(i);
                 return true;
             }

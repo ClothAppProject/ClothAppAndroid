@@ -21,25 +21,11 @@ import android.widget.ImageView;
 
 import com.clothapp.Menu;
 import com.clothapp.R;
-import com.clothapp.image_detail.ZoomPhoto;
 import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.parse.notifications.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.settings.EditProfileActivity;
-import com.clothapp.upload.UploadProfilePictureActivity;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.List;
-
-import static com.clothapp.resources.ExceptionCheck.check;
 import static com.clothapp.resources.RegisterUtil.setButtonTint;
 
 public class UserProfileActivity extends AppCompatActivity {
