@@ -172,9 +172,7 @@ public class FindUserFragment extends Fragment {
         listUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("click");
-                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), adapter.getItem(position).getUsername());
-                startActivity(i);
+                ProfileUtils.goToProfile(getActivity().getApplicationContext(), adapter.getItem(position).getUsername());
             }
         });
 

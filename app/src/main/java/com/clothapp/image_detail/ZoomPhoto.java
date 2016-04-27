@@ -46,10 +46,6 @@ public class ZoomPhoto extends AppCompatActivity {
         switch (item.getItemId()) {
             // In caso sia premuto il pulsante indietro termino semplicemente l'activity
             case android.R.id.home:
-                ApplicationSupport global = (ApplicationSupport) getApplicationContext();
-                global.setCloth(new ArrayList<Image>());
-                global.setTag(new ArrayList<Image>());
-                global.setUsers(new ArrayList<User>());
                 onBackPressed();
                 break;
         }

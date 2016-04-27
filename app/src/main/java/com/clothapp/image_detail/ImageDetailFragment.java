@@ -141,8 +141,7 @@ public class ImageDetailFragment extends Fragment {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-                startActivity(i);
+                ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
 
             }
         });
@@ -178,8 +177,8 @@ public class ImageDetailFragment extends Fragment {
                     t.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-                            startActivity(i);
+                            ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+
                         }
                     });
 
@@ -187,8 +186,8 @@ public class ImageDetailFragment extends Fragment {
                     profilePic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
-                            startActivity(i);
+                            ProfileUtils.goToProfile(getActivity().getApplicationContext(), immagine.getUser());
+
                         }
                     });
 
@@ -333,16 +332,6 @@ public class ImageDetailFragment extends Fragment {
             }
         });
 
-        //listener sulla foto
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(context,ZoomPhoto.class);
-                i.putExtra("immagine",immagine);
-                startActivity(i);
-
-            }
-        });
     }
 
     @Override
@@ -561,8 +550,7 @@ public class ImageDetailFragment extends Fragment {
                     listLike.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent i = ProfileUtils.goToProfile(getActivity().getApplicationContext(), likeAdapter.getItem(position).getUsername());
-                            startActivity(i);
+                            ProfileUtils.goToProfile(getActivity().getApplicationContext(), likeAdapter.getItem(position).getUsername());
                             dialog_like_list.dismiss();
                         }
                     });

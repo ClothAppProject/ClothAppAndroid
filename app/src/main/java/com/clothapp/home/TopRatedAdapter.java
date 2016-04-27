@@ -260,12 +260,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .centerCrop()
                         .transform(new CircleTransform(HomeActivity.context))
                         .into(imgProfilePhoto);
-            } else {
-                Glide.with(HomeActivity.context)
-                        .load(R.drawable.com_facebook_profile_picture_blank_circle)
-                        .centerCrop()
-                        .transform(new CircleTransform(HomeActivity.context))
-                        .into(imgProfilePhoto);
             }
         }
 
@@ -337,9 +331,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
                         Image image = itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
-                        Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
-                        intent.putExtra("user", image.getUser());
-                        HomeActivity.activity.startActivity(intent);
+                        ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                     }
                 }
             });
@@ -354,9 +346,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
                         Image image = itemList.get(TopRatedItemViewHolder.this.getAdapterPosition());
-                        Intent intent = ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
-                        intent.putExtra("user", image.getUser());
-                        HomeActivity.activity.startActivity(intent);
+                        ProfileUtils.goToProfile(HomeActivity.activity.getApplicationContext(), image.getUser());
                     }
                 }
             });

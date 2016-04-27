@@ -197,8 +197,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case 1:
                 //profilo
-                 i = ProfileUtils.goToProfile(this,ParseUser.getCurrentUser().getUsername().toString());
-                startActivity(i);
+                 ProfileUtils.goToProfile(this,ParseUser.getCurrentUser().getUsername().toString());
                 break;
             case 2:
                 //settings

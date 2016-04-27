@@ -24,7 +24,7 @@
             android:layout_width="160dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/com_facebook_profile_picture_blank_square" />
+            android:src="@mipmap/gallery_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                     android:id="@+id/fragment_home_top_rated_item_profile_image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/com_facebook_profile_picture_blank_square" />
+                    android:src="@drawable/com_facebook_profile_picture_blank_circle" />
 
                 <TextView
                     android:id="@+id/fragment_home_top_rated_item_username"

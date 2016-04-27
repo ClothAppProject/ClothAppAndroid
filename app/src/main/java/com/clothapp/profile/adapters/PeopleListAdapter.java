@@ -64,9 +64,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         profileViewHolder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = ProfileUtils.goToProfile(context, users.get(position).getUsername());
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
+                ProfileUtils.goToProfile(context, users.get(position).getUsername());
             }
         });
     }

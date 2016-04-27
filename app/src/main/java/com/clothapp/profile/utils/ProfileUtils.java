@@ -419,25 +419,31 @@ public class ProfileUtils {
         dialog.show();
     }
 
-    public static Intent goToProfile(Context contesto, String utente) {
-        Intent i = null;
+    public static void goToProfile(final Context context, final String username) {
         //controllo se username è un negozio o una persona
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username", utente);
-        try {
-            ParseUser user = query.getFirst();
-            if(user==null || user.getString("flagISA")==null) Snackbar.make( new View(contesto),"riprova",Snackbar.LENGTH_SHORT);
-            else {
-                if (user.getString("flagISA").equals("Persona")) {
-                    i = new Intent(contesto, UserProfileActivity.class);
-                } else {
-                    i = new Intent(contesto, ShopProfileActivity.class);
+        query.whereEqualTo("username", username);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e==null)    {
+                    if(user==null || user.getString("flagISA")==null)   {
+                        Snackbar.make( new View(context),"riprova",Snackbar.LENGTH_SHORT);
+                    } else {
+                        Intent i = null;
+                        if (user.getString("flagISA").equals("Persona")) {
+                            i = new Intent(context, UserProfileActivity.class);
+                        } else {
+                            i = new Intent(context, ShopProfileActivity.class);
+                        }
+                        i.putExtra("user", username);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(i);
+                    }
+                }else{
+                    check(e.getCode(), new View(context), e.getMessage());
                 }
             }
-        } catch (ParseException e) {
-            check(e.getCode(), new View(contesto), e.getMessage());
-        }
-        i.putExtra("user", utente);
-        return i;
+        });
     }
 }
