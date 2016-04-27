@@ -1,5 +1,6 @@
 package com.clothapp.image_detail;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -345,6 +346,7 @@ public class ImageDetailFragment extends Fragment {
         menu.findItem(R.id.report).setVisible(!immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
         menu.findItem(R.id.edit).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
         menu.findItem(R.id.delete).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        menu.findItem(R.id.set_profile_picture).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
     }
 
     @Override
@@ -438,7 +440,40 @@ public class ImageDetailFragment extends Fragment {
                 //System.out.println("id1="+immagine.getObjectId());
                 i.putExtra("objectId", immagine.getObjectId());
                 startActivity(i);
-                //Snackbar.make(rootView,"coming soon",Snackbar.LENGTH_SHORT);
+                return true;
+            case R.id.set_profile_picture:
+                //cliccato su "Usa come immagine profilo" apro activity passandogli objectID della foto
+                final ProgressDialog dialog = ProgressDialog.show(getActivity(), "", "Imposto Immagine del Profilo...", true);
+                ParseQuery<ParseObject> checkPhoto = new ParseQuery("UserPhoto");
+                checkPhoto.whereEqualTo("username",ParseUser.getCurrentUser().getUsername());
+                checkPhoto.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        if (e==null || e.getCode()==101) {
+                            ParseObject profile_pic;
+                            if (e == null) {
+                                profile_pic = object;
+                            } else {
+                                profile_pic = new ParseObject("UserPhoto");
+                            }
+                            //get parseFiles from actual image
+                            ParseQuery<ParseObject> getPhoto = new ParseQuery("Photo");
+                            getPhoto.whereEqualTo("objectId",immagine.getObjectId());
+                            try {
+                                ParseObject oggetto = getPhoto.getFirst();
+                                //save parameters
+                                profile_pic.put("username",ParseUser.getCurrentUser().getUsername());
+                                profile_pic.put("profilePhoto",oggetto.getParseFile("photo"));
+                                profile_pic.put("thumbnail",oggetto.getParseFile("thumbnail"));
+                                profile_pic.save();
+                                Toast.makeText(getActivity(),"Immagine del Profilo impostata!",Toast.LENGTH_SHORT).show();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                });
                 return true;
         }
         return super.onOptionsItemSelected(item);

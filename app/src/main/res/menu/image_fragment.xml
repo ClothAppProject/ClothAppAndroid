@@ -13,4 +13,7 @@
     <item android:id="@+id/delete"
         android:title="@string/delete_photo"/>
 
+    <item android:id="@+id/set_profile_picture"
+        android:title="@string/set_as_profile_picture"/>
+
 </menu>

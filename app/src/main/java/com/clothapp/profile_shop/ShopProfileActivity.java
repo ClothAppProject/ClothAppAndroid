@@ -30,6 +30,7 @@ import com.clothapp.R;
 import com.clothapp.home.HomeActivity;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.parse.notifications.FollowUtil;
+import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.settings.EditShopProfileActivity;
@@ -37,10 +38,6 @@ import com.clothapp.upload.UploadProfilePictureActivity;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.settings.SettingsActivity;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetFileCallback;
@@ -62,7 +59,8 @@ public class ShopProfileActivity extends AppCompatActivity {
     private Context context;
     private String username;
     private ViewPager viewPager;
-    public SectionsPagerAdapterShop sectionsPagerAdapter;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +82,12 @@ public class ShopProfileActivity extends AppCompatActivity {
 
         // Set up navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, ShopProfileActivity.this);
         viewPager = (ViewPager) findViewById(R.id.profile_viewpager);
@@ -142,12 +140,13 @@ public class ShopProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         loadProfilePicture();
+        Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, ShopProfileActivity.this);
     }
 
     private void setupViewPagerContent(ViewPager viewPager) {
 
         // Create new adapter for ViewPager
-        sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
+        SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);

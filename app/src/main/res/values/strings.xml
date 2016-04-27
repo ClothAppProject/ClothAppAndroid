@@ -88,6 +88,7 @@
     <string name="edit_photo">Modifica Foto</string>
     <string name="delete_photo">Elimina Foto</string>
     <string name="report_photo">Segnala Foto</string>
+    <string name="set_as_profile_picture">Usa come Immagine del Profilo</string>
     <string name="report_sent">Segnalazione Inviata!</string>
     <string name="reason">Motivo:   </string>
     <string name="select">Seleziona</string>

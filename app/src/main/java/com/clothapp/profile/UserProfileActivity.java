@@ -26,6 +26,7 @@ import com.clothapp.parse.notifications.FollowUtil;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.settings.EditProfileActivity;
 import com.parse.ParseUser;
+
 import static com.clothapp.resources.RegisterUtil.setButtonTint;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -34,6 +35,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private Context context;
     private String username;
     private ViewPager viewPager;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +58,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // Set up navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.open_navigation, R.string.close_navigation);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, UserProfileActivity.this);
 
@@ -118,6 +121,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         loadProfilePicture();
+        Menu.initMenu(mDrawerLayout, context, navigationView, toggle, "profilo", username, UserProfileActivity.this);
     }
 
     private void setupViewPagerContent(ViewPager viewPager) {
