@@ -1,4 +1,4 @@
-package com.clothapp.resources;
+package com.clothapp.image_detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.clothapp.R;
 import com.clothapp.profile_shop.ShopProfileActivity;
+import com.clothapp.resources.Cloth;
 import com.clothapp.search.SearchResultsActivity;
 
 import java.util.ArrayList;
@@ -59,9 +60,13 @@ public class MyCardListAdapter extends BaseAdapter {
 
                 if (strAddress != null && !strAddress.isEmpty()) {
                     if (!cloths.get(position).getAddress().contains("www") && !cloths.get(position).getAddress().contains("http") && !cloths.get(position).getAddress().contains(".")) {
-                        Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
+                        //Uri gmmIntentUri = Uri.parse("geo:41.9027835,12.4963655?q=" + cloths.get(position).getAddress());
+                        //Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        //mapIntent.setPackage("com.google.android.apps.maps");
+                        //mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        Intent mapIntent =new Intent(context, MapActivity.class);
+                        mapIntent.putExtra("via",cloths.get(position).getAddress());
                         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mapIntent);
                     } else {

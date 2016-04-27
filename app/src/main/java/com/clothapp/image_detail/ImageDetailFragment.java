@@ -37,7 +37,6 @@ import com.clothapp.resources.Cloth;
 import com.clothapp.resources.ExceptionCheck;
 import com.clothapp.resources.Image;
 import com.clothapp.parse.notifications.LikeRes;
-import com.clothapp.resources.MyCardListAdapter;
 import com.clothapp.resources.User;
 import com.clothapp.search.SearchAdapterUser;
 import com.clothapp.upload.UploadPhotoActivity;
