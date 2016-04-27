@@ -217,7 +217,9 @@ public class ImageDetailFragment extends Fragment {
                                             info.getString("shop"),
                                             info.getString("shopUsername"),
                                             info.getString("brand"));
-                                    vestiti.add(c);
+                                    if (!vestiti.contains(c)) {
+                                        vestiti.add(c);
+                                    }
                                     MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
                                     listView.setAdapter(adapter);
                                     setListViewHeightBasedOnItems(listView);
