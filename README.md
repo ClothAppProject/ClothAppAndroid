@@ -22,7 +22,6 @@ Through a following and followers system between users and shops, through the "v
 
 * <a href="https://www.youtube.com/watch?v=xy_4AmtxX3I">Video Promo</a>
 
-
 ##Milestone 3 - Final
 
 * <a href="https://docs.google.com/presentation/d/1EmsCzn_WhuxvvLtPFCi-MAbZ19BrXo6iXx5fTZoc3zs/edit?usp=sharing">Milestone 3 Presentation</a>
@@ -31,7 +30,10 @@ Through a following and followers system between users and shops, through the "v
 
 * <a href="https://drive.google.com/open?id=0B9L9fgnPwZntd1ZZWkFwUkFxWm8">Milestone 3 Video (held during the Codemotion event at "Roma3 University" on March 18th)</a>
 
-* <a href="https://play.google.com/apps/testing/com.clothapp">Link to partecipate to the beta test version </a>
+* <a href="https://play.google.com/apps/testing/com.clothapp">Link to partecipate to the test version </a>
+
+* <a href="https://play.google.com/apps/testing/com.clothapp">Download the version</a> 
+
 
 ##Final Submission
 
@@ -39,6 +41,7 @@ Through a following and followers system between users and shops, through the "v
 
 * <a href="https://play.google.com/apps/testing/com.clothapp">Download the BETA version</a>
 
-* <a href="https://clothapp.firebaseapp.com/">Web Client</a>
+* <a href="https://drive.google.com/open?id=0B4CzQl36yBnQeG1jMk92NjhrVXc">Installation instruction</a>
 
+* <a href="https://clothapp.firebaseapp.com/">Web Client</a>
 
