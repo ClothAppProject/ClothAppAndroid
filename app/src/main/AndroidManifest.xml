@@ -199,7 +199,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".image_detail.ZoomPhoto"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".upload.UploadPhotoActivity"

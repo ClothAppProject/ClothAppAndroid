@@ -35,8 +35,6 @@ public class ZoomPhoto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zoomphoto);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Uri uri= Uri.parse(getIntent().getStringExtra("url"));
 
@@ -60,19 +58,16 @@ public class ZoomPhoto extends AppCompatActivity {
                 })
                 .into(photo);
 
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // In caso sia premuto il pulsante indietro termino semplicemente l'activity
-            case android.R.id.home:
+        ImageView back_button= (ImageView) findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 onBackPressed();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+            }
+        });
+
     }
+
 }
 
 
