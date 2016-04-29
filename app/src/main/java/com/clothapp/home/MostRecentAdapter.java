@@ -1,6 +1,7 @@
 package com.clothapp.home;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -59,13 +60,21 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         MostRecentItemViewHolder holder = (MostRecentItemViewHolder) viewHolder;
 
-        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
+         StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
         //layoutParams.height=holder.imgPhoto.getHeight();
-       // if(position%2!=0) MostRecentFragment.totHeight[0]+=holder.itemView.getHeight();
+         if(position==1){
+             holder.imgPhoto.setMaxHeight(350);
+             holder.imgPhoto.setMinimumHeight(350);
+         }
+         else{
+             holder.imgPhoto.setMaxHeight(500);
+             holder.imgPhoto.setMinimumHeight(500);
+         }
        // else MostRecentFragment.totHeight[1]+=holder.itemView.getHeight();
        // if((position+1)%11==0) holder.itemView.setMinimumHeight(MostRecentFragment.totHeight[0]-MostRecentFragment.totHeight[1]);
-        if(position%11==0) layoutParams.setFullSpan(true);
-        else layoutParams.setFullSpan(false);
+
+        //if(position%12==0) layoutParams.setFullSpan(true);
+        //else layoutParams.setFullSpan(false);
 /*
         android.view.ViewGroup.LayoutParams layoutParamsImageView = holder.imgPhoto.getLayoutParams();
         int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, HomeActivity.context.getResources().getDisplayMetrics());
@@ -121,7 +130,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class MostRecentItemViewHolder extends RecyclerView.ViewHolder {
 
         private CardView cardView;
-        private final ImageView imgPhoto;
+        private ImageView imgPhoto;
         private ImageView imgHeart;
         private ImageView imgShop;
         private TextView user;
@@ -161,6 +170,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (file!=null) {
                // imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
 //                imgPhoto.setMinimumWidth(800);
+                imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
 
 
                 Glide.with(HomeActivity.context)
@@ -176,6 +186,9 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .centerCrop()
                         .into(imgPhoto);
             }
+
+
+
         }
 
         // Use this method to set the heart image color.

@@ -8,21 +8,22 @@
     card_view:cardElevation="4dp">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/fragment_home_most_recent_item_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="0dp"
             android:layout_below="@+id/fragment_home_most_recent_item_image">
