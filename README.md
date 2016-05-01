@@ -37,9 +37,9 @@ Through a following and followers system between users and shops, through the "v
 
 ##Final Submission
 
-* <a href="https://drive.google.com/open?id=1Xd2EIFfSuAcMaQ1aSl1q9XTWQfAACz0oZYHsfJ7AGMs">Documentation and User Guide</a>
+* <a href="https://drive.google.com/open?id=0B8lgowbEWlfnc1lHa202ckg3Y2M">Documentation and User Guide</a>
 
-* <a href="https://play.google.com/apps/testing/com.clothapp">Download the BETA version</a>
+* <a href="https://play.google.com/apps/testing/com.clothapp">Download the APP</a>
 
 * <a href="https://drive.google.com/open?id=0B4CzQl36yBnQeG1jMk92NjhrVXc">Installation instruction</a>
 
