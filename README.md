@@ -32,7 +32,7 @@ Through a following and followers system between users and shops, through the "v
 
 * <a href="https://play.google.com/apps/testing/com.clothapp">Link to partecipate to the test version </a>
 
-* <a href="https://play.google.com/apps/testing/com.clothapp">Download the version</a> 
+* <a href="https://play.google.com/apps/testing/com.clothapp">Download the BETA version</a> 
 
 
 ##Final Submission
