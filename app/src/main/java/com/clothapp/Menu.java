@@ -65,12 +65,15 @@ public class Menu {
                     Log.d("HomeActivity", "ParseObject for profile image found!");
 
                     ParseFile parseFile = photo.getParseFile("thumbnail");
-                    String url = parseFile.getUrl();
+                    if (parseFile == null || parseFile.getUrl() == null) {
+                        //if thumbnail not already created
+                        parseFile = photo.getParseFile("profilePhoto");
+                    }
                     Glide.with(context)
-                            .load(url)
+                            .load(parseFile.getUrl())
                             .transform(new CircleTransform(context))
                             .into(drawerProfile);
-                    }
+                }
             }
         });
 

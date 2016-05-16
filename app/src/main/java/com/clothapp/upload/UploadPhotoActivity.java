@@ -79,8 +79,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
     private final int REQUEST_CAMERA = 101;
 
     // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 102;
-    private static String[] PERMISSIONS_STORAGE = {
+    private final int REQUEST_EXTERNAL_STORAGE = 102;
+    private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -100,7 +100,6 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
     static final String directoryName = "ClothApp";
     private static String photoFileName = new SimpleDateFormat("'IMG_'yyyyMMdd_hhmmss'.jpg'", Locale.US).format(new Date());
     Uri takenPhotoUri;
-    ImageView imageView = null;
     private static Bitmap imageBitmap = null;
     static int photoType;
     /* --------------------------------------- */
@@ -169,12 +168,9 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
             if (photoType == CAPTURE_IMAGE_ACTIVITY) {
                 // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
                 // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
-                //Log.d("UploadCamera", "E' il first");
 
                 // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                // TODO: Check if getPhotoFileUri returns null
 
                 // Set the image file name
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
@@ -195,8 +191,8 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                         // Starto l'attivity di cattura della foto passandogli l'intent
                         startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
                     }
-                } catch (Exception e) {
-                    //Log.d("UploadActivity", "Exception: " + e.getMessage());
+                } catch (Exception e)    {
+                    Log.d("UploadActivity", "Exception: " + e.getMessage());
                 }
             } else if (photoType == RESULT_LOAD_IMG) {
                 //inizializzo immagine da prendere in galleria
@@ -223,7 +219,6 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
 
             // A questo punto l'immagine è stata salvata sullo storage
             imageBitmap = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
-            System.out.println("DEB1"+imageBitmap);
 
             // Inserisco l'immagine nel bitmap
             // Prima però controllo in che modo è stata scattata (rotazione)
@@ -818,8 +813,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CAMERA: {
                 // If request is cancelled, the result arrays are empty.

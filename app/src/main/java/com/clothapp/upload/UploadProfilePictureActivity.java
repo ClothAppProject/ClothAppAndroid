@@ -1,7 +1,9 @@
 package com.clothapp.upload;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,13 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.clothapp.R;
-import com.clothapp.home.HomeActivity;
 import com.clothapp.http.Get;
 import com.clothapp.resources.BitmapUtil;
 import com.parse.FindCallback;
@@ -37,8 +40,18 @@ import java.util.List;
  * Created by giacomoceribelli on 29/12/15.
  */
 public class UploadProfilePictureActivity extends AppCompatActivity {
-    final static int CAPTURE_IMAGE_ACTIVITY = 2187;
-    final static int RESULT_LOAD_IMG = 1540;
+
+    private final int REQUEST_CAMERA = 101;
+
+    // Storage Permissions
+    private final int REQUEST_EXTERNAL_STORAGE = 102;
+    private String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    final int CAPTURE_IMAGE_ACTIVITY = 2187;
+    final int RESULT_LOAD_IMG = 1540;
     /* --------------------------------------- */
     boolean first = true;
     final String directoryName = "ClothApp";
@@ -53,7 +66,21 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        vi = new View(this);
+
+        Log.d("UploadPhotoActivity", "Roberto permission: " + (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED));
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
 
         // Controllo se ci sono savedIstance: se ce ne sono vuol dire che questa non activity era già stata creata e stoppata a causa
         // dell'apertura della fotocamera
@@ -66,24 +93,37 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
         }
         if (first) {
             //controllo da dove andare a prendere la foto galleria/camera
-            photoType = getIntent().getIntExtra("photoType",0);
-            Log.d("ProfilePicture", "E' il first");
-            if (photoType==CAPTURE_IMAGE_ACTIVITY) {
+            photoType = getIntent().getIntExtra("photoType", 0);
+            if (photoType == CAPTURE_IMAGE_ACTIVITY) {
                 // Non faccio direttamente il controllo su savedIstance perchè magari in futuro potremmo passare altri parametri
                 // questa è la prima volta che questa activity viene aperta, quindi richiamo direttamente la fotocamera
+
                 // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 // Set the image file name
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
 
-                // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
-                // quindi devo chiamare la fotocamera
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Starto l'attivity di cattura della foto passandogli l'intent
-                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            REQUEST_CAMERA);
                 }
-            }else if (photoType==RESULT_LOAD_IMG) {
+
+                try {
+                    // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
+                    // quindi devo chiamare la fotocamera
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        // Starto l'attivity di cattura della foto passandogli l'intent
+                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+                    }
+                } catch (Exception e)    {
+                    Log.d("UploadActivity", "Exception: " + e.getMessage());
+                }
+            } else if (photoType == RESULT_LOAD_IMG) {
                 //inizializzo immagine da prendere in galleria
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
@@ -265,4 +305,45 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void startCamera() {
+        // Creo un intent specificando che voglio un'immagine full size e il nome dell'uri dell'immagine
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // TODO: Check if getPhotoFileUri returns null
+
+        // Set the image file name
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName)); // set the image file name
+
+        // If fintanto che il resolveActivity di quell'intent non è null significa che la foto non è ancora stata scattata e
+        // quindi devo chiamare la fotocamera
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Starto l'attivity di cattura della foto passandogli l'intent
+            startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay!
+
+                    startCamera();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+
+                return;
+            }
+        }
+    }
+
 }

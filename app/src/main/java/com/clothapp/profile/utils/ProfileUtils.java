@@ -204,19 +204,22 @@ public class ProfileUtils {
                     Log.d("ProfileUtils", "ParseObject for profile image found!");
 
                     ParseFile parseFile = photo.getParseFile("thumbnail");
-                    if(parseFile!=null) {
-                        if (!shop) {
-                            Glide.with(context)
-                                    .load(parseFile.getUrl())
-                                    .transform(new CircleTransform(context))
-                                    .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
-                                    .into(mainImageView);
-                        } else {
-                            Glide.with(context)
-                                    .load(parseFile.getUrl())
-                                    .placeholder(R.drawable.shop)
-                                    .into(mainImageView);
-                        }
+                    if(parseFile==null || parseFile.getUrl()==null) {
+                        //if thumbnail not already created
+                        parseFile = photo.getParseFile("profilePhoto");
+                        System.out.println("debug richiesta foto a dimensione originale");
+                    }
+                    if (!shop) {
+                        Glide.with(context)
+                                .load(parseFile.getUrl())
+                                .transform(new CircleTransform(context))
+                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
+                                .into(mainImageView);
+                    } else {
+                        Glide.with(context)
+                                .load(parseFile.getUrl())
+                                .placeholder(R.drawable.shop)
+                                .into(mainImageView);
                     }
                     mainImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -261,6 +264,7 @@ public class ProfileUtils {
                                                 case 3:
                                                     //delete profile picture
                                                     photo.deleteInBackground();
+                                                    Glide.clear(mainImageView);
                                                     Glide.with(context)
                                                             .load(R.drawable.com_facebook_profile_picture_blank_circle)
                                                             .into(mainImageView);
@@ -272,8 +276,6 @@ public class ProfileUtils {
                             dialog.show();
                         }
                     });
-                }else{
-
                 }
             }
         });
