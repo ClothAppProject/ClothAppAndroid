@@ -97,5 +97,10 @@
             android:key="facebook_page"
             android:title="@string/facebook_page">
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="app_version"
+            android:title="@string/app_version"
+            android:summary="@string/report_settings">
+        </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

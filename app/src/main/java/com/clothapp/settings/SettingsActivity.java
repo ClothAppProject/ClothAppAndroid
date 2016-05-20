@@ -2,13 +2,17 @@ package com.clothapp.settings;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.appcompat.BuildConfig;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -67,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-    public static class SettingsFragment extends PreferenceFragment {
+    public class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -271,6 +275,17 @@ public class SettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            //write app version in settings
+            final PreferenceScreen app_version = (PreferenceScreen) findPreference("app_version");
+            PackageInfo pInfo = null;
+            try {
+                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            String version = pInfo.versionName;
+            app_version.setSummary(version);
         }
     }
     @Override
