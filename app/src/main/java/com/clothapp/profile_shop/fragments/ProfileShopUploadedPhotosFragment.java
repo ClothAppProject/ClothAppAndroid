@@ -68,14 +68,14 @@ public class ProfileShopUploadedPhotosFragment extends Fragment {
         viewProfileUploadedPhotos.setAdapter(adapter);
 
         // Get user info from Parse
-        ProfileUtils.getShopParseUploadedPhotos(username, 0, 10, progressBar, viewProfileUploadedPhotos, noPhotosText);
+        ProfileUtils.getParseUploadedPhotos(username, 0, 10, progressBar, viewProfileUploadedPhotos, noPhotosText);
 
         viewProfileUploadedPhotos.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //update with more photos
-                ProfileUtils.getShopParseUploadedPhotos(username,adapter.photos.size(),10, progressBar, viewProfileUploadedPhotos, noPhotosText);
+                ProfileUtils.getParseUploadedPhotos(username,adapter.photos.size(),10, progressBar, viewProfileUploadedPhotos, noPhotosText);
             }
         });
         // Return the fragment

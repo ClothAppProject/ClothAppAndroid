@@ -32,6 +32,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Cloth;
@@ -124,7 +125,7 @@ public class ImageDetailFragment extends Fragment {
         like = (TextView) rootView.findViewById(R.id.like);
         profilePic = (ImageView) rootView.findViewById(R.id.pic);
         percentuale = (ArcProgress) rootView.findViewById(R.id.bar_percentuale);
-        percentuale.setBottomText(getResources().getString(R.string.load));
+        //percentuale.setBottomText(getResources().getString(R.string.load));
         percentuale.setTextColor(getResources().getColor(R.color.background));
         percentuale.setUnfinishedStrokeColor(getResources().getColor(R.color.accentred));
         percentuale.setFinishedStrokeColor(getResources().getColor(R.color.darkred));
@@ -151,9 +152,18 @@ public class ImageDetailFragment extends Fragment {
                 @Override
                 public void done(ParseObject object, ParseException e) {
                     if (e == null) {
-                        String url = object.getParseFile("thumbnail").getUrl();
+                        ParseFile profile_img = object.getParseFile("thumbnail");
+                        if (profile_img == null || profile_img.getUrl() == null) {
+                            //if thumbnail not already created
+                            profile_img = object.getParseFile("profilePhoto");
+
+                            //chiamata get per salvare il thumbnail
+                            String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                            Get g = new Get();
+                            g.execute(url);
+                        }
                         Glide.with(context)
-                                .load(url)
+                                .load(profile_img.getUrl())
                                 .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
                                 .centerCrop()
                                 .transform(new CircleTransform(context))
@@ -624,6 +634,15 @@ public class ImageDetailFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         if (e == null) {
                             ParseFile f = object.getParseFile("thumbnail");
+                            if (f == null || f.getUrl() == null) {
+                                //if thumbnail not already created
+                                f = object.getParseFile("profilePhoto");
+
+                                //chiamata get per salvare il thumbnail
+                                String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                                Get g = new Get();
+                                g.execute(url);
+                            }
                             f.getFileInBackground(new GetFileCallback() {
                                 @Override
                                 public void done(File file, ParseException e) {

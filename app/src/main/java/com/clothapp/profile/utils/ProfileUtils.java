@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.image_detail.ZoomPhoto;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
@@ -102,6 +103,15 @@ public class ProfileUtils {
                         // Log.d("ProfileUtils", photo.getObjectId());
 
                         ParseFile parseFile = photo.getParseFile("thumbnail");
+                        if (parseFile == null || parseFile.getUrl() == null) {
+                            //if thumbnail not already created
+                            parseFile = photo.getParseFile("profilePhoto");
+
+                            //chiamata get per salvare il thumbnail
+                            String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+photo.getObjectId();
+                            Get g = new Get();
+                            g.execute(url);
+                        }
                         parseFile.getFileInBackground(new GetFileCallback() {
                             @Override
                             public void done(File file, ParseException e) {
@@ -116,64 +126,6 @@ public class ProfileUtils {
 
                                     if (!adapter.photos.contains(item)) {
 
-                                        adapter.photos.add(item);
-                                        adapter.notifyDataSetChanged();
-                                    }
-
-                                } else {
-                                    Log.d("ProfileUtils", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
-                    }
-
-                } else {
-                    Log.d("ProfileUtils", "Error: " + e.getMessage());
-                }
-            }
-        });
-    }
-
-    public static void getShopParseUploadedPhotos(String username, final int start, int limit, final ProgressBar progressBar,
-                                                  final RecyclerView viewProfileUploadedPhotos, final TextView noPhotosText) {
-
-        ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
-        query.whereEqualTo("user", username);
-        query.addDescendingOrder("createdAt");
-        query.setSkip(start);
-        query.setLimit(limit);
-
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> photos, ParseException e) {
-                if (e == null) {
-                    //check if user has no photo uploaded
-                    if (start==0 && photos.isEmpty())   {
-                        noPhotosText.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-
-                    RecyclerView view = viewProfileUploadedPhotos;
-                    final ProfileUploadedPhotosAdapter adapter = (ProfileUploadedPhotosAdapter) view.getAdapter();
-
-                    // Log.d("ProfileUtils", "Ehi, Retrieved " + photos.size() + " results");
-
-                    for (final ParseObject photo : photos) {
-                        // Log.d("ProfileUtils", photo.getObjectId());
-
-                        ParseFile parseFile = photo.getParseFile("thumbnail");
-                        parseFile.getFileInBackground(new GetFileCallback() {
-                            @Override
-                            public void done(File file, ParseException e) {
-
-                                if (e == null) {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    // Log.d("ProfileUtils", "Loaded thumbnail for " + photo.getObjectId());
-
-                                    Image item = new Image(file, photo.getObjectId(), photo.getString("user"),
-                                            photo.getList("like"), photo.getInt("nLike"), photo.getList("hashtag"),
-                                            photo.getList("vestiti"), photo.getList("tipo"));
-
-                                    if (!adapter.photos.contains(item)) {
                                         adapter.photos.add(item);
                                         adapter.notifyDataSetChanged();
                                     }
