@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.clothapp.http.Get;
 import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
 import com.clothapp.profile.utils.ProfileUtils;
@@ -115,22 +116,23 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         query.whereEqualTo("username", username);
 
         query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject photo, ParseException e) {
-                if (e == null) {
-                    ParseFile thumbnail = photo.getParseFile("thumbnail");
-                    thumbnail.getFileInBackground(new GetFileCallback() {
-                        @Override
-                        public void done(File file, ParseException e) {
-                            if (e == null) {
-                                holder.setProfilePhoto(file);
-                            } else {
-                                Log.d("TopRatedAdapter", "Error while downloading thumbnail: " + e.getMessage());
-                            }
-                        }
-                    });
-                } else {
-                    // Log.d("TopRatedAdapter", "Error: " + e.getMessage());
-                    holder.setProfilePhoto(null);
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e==null)    {
+                    if (object.getParseFile("thumbnail") != null && object.getParseFile("thumbnail").getUrl() != null)  {
+                        Glide.clear(holder.imgProfilePhoto);
+                        Glide.with(HomeActivity.context)
+                                .load(object.getParseFile("thumbnail").getUrl())
+                                .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
+                                .centerCrop()
+                                .transform(new CircleTransform(HomeActivity.context))
+                                .into(holder.imgProfilePhoto);
+                    }else{
+                        //chiamata get per salvare il thumbnail
+                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                        Get g = new Get();
+                        g.execute(url);
+                    }
                 }
             }
         });
@@ -247,19 +249,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .asGif()
                         .centerCrop()
                         .into(imgPhoto);
-            }
-        }
-
-        // Set the profile photo for the ProfilePhoto ImageView of the current view with the given File
-        public void setProfilePhoto(File file) {
-
-            if (file != null) {
-                Glide.with(HomeActivity.context)
-                        .load(file)
-                        .placeholder(R.drawable.com_facebook_profile_picture_blank_circle)
-                        .centerCrop()
-                        .transform(new CircleTransform(HomeActivity.context))
-                        .into(imgProfilePhoto);
             }
         }
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.clothapp.home.HomeActivity;
+import com.clothapp.http.Get;
 import com.clothapp.login_signup.MainActivity;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile_shop.ShopProfileActivity;
@@ -68,6 +69,11 @@ public class Menu {
                     if (parseFile == null || parseFile.getUrl() == null) {
                         //if thumbnail not already created
                         parseFile = photo.getParseFile("profilePhoto");
+
+                        //chiamata get per salvare il thumbnail
+                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+photo.getObjectId();
+                        Get g = new Get();
+                        g.execute(url);
                     }
                     Glide.with(context)
                             .load(parseFile.getUrl())
