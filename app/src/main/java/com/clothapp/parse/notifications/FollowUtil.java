@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.clothapp.R;
+import com.clothapp.http.Get;
 import com.clothapp.parse.notifications.NotificationsUtils;
 import com.clothapp.profile.adapters.PeopleListAdapter;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
@@ -122,6 +123,15 @@ public class FollowUtil {
                                 public void done(ParseObject object, ParseException e) {
                                     if (object != null) {
                                         ParseFile foto = object.getParseFile("thumbnail");
+                                        if (foto == null || foto.getUrl() == null) {
+                                            //if thumbnail not already created
+                                            foto = object.getParseFile("profilePhoto");
+
+                                            //chiamata get per salvare il thumbnail
+                                            String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                                            Get g = new Get();
+                                            g.execute(url);
+                                        }
                                         foto.getFileInBackground(new GetFileCallback() {
                                             @Override
                                             public void done(File file, ParseException e) {
@@ -169,8 +179,17 @@ public class FollowUtil {
                                 @Override
                                 public void done(ParseObject object, ParseException e) {
                                     if (object != null) {
-                                        ParseFile parseFile = object.getParseFile("thumbnail");
-                                        parseFile.getFileInBackground(new GetFileCallback() {
+                                        ParseFile foto = object.getParseFile("thumbnail");
+                                        if (foto == null || foto.getUrl() == null) {
+                                            //if thumbnail not already created
+                                            foto = object.getParseFile("profilePhoto");
+
+                                            //chiamata get per salvare il thumbnail
+                                            String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                                            Get g = new Get();
+                                            g.execute(url);
+                                        }
+                                        foto.getFileInBackground(new GetFileCallback() {
                                             @Override
                                             public void done(File file, ParseException e) {
                                                 u.setProfilo(file);

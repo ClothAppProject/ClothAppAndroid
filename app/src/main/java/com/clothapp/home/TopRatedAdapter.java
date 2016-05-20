@@ -239,6 +239,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Set the photo for the Photo ImageView of the current view with the given File
         public void setPhoto(File file) {
             if (file!=null) {
+                Glide.clear(imgPhoto);
                 Glide.with(HomeActivity.context)
                         .load(file)
                         .centerCrop()

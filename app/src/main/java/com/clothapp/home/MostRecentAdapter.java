@@ -162,7 +162,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                // imgPhoto.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
 //                imgPhoto.setMinimumWidth(800);
 
-
+                Glide.clear(imgPhoto);
                 Glide.with(HomeActivity.context)
                         .load(file)
                         .centerCrop()

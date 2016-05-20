@@ -52,6 +52,7 @@ public class ProfileUploadedPhotosAdapter extends RecyclerView.Adapter<RecyclerV
 
         File imageFile = photos.get(position).getFile();
         if (imageFile!=null) {
+            Glide.clear(photoViewHolder.photo);
             Glide.with(context)
                     .load(imageFile)
                     .placeholder(R.mipmap.gallery_icon)

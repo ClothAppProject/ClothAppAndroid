@@ -536,14 +536,13 @@ public class ImageDetailFragment extends Fragment {
             final int numLike = immagine.getNumLike();
             String text;
             if (numLike>2)  {
-                text = getString(R.string.he_likes) + " " + immagine.getLike().get(numLike-1).toString()
+                text = getString(R.string.he_likes) + " " + immagine.getLike().get(immagine.getLike().size()-1).toString()
                         + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
             }else if(numLike==2){
-                text = getString(R.string.he_likes) + " " + immagine.getLike().get(numLike-1).toString()
+                text = getString(R.string.he_likes) + " " + immagine.getLike().get(0).toString()
             //            + " " + getString(R.string.and_others) + " " + Integer.toString(numLike-1);
                          + " e a un'altra persona";
-            }
-            else{
+            } else {
                 text = Integer.toString(numLike) + " " + getString(R.string.likes);
             }
             like.setText(text);

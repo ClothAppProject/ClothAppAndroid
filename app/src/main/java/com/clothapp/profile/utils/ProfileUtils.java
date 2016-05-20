@@ -159,8 +159,9 @@ public class ProfileUtils {
                     if(parseFile==null || parseFile.getUrl()==null) {
                         //if thumbnail not already created
                         parseFile = photo.getParseFile("profilePhoto");
-                        System.out.println("debug richiesta foto a dimensione originale");
+                        Log.d("Profile","debug richiesta foto a dimensione originale");
                     }
+                    Glide.clear(mainImageView);
                     if (!shop) {
                         Glide.with(context)
                                 .load(parseFile.getUrl())
