@@ -38,18 +38,28 @@ import java.util.List;
 import static com.clothapp.resources.ExceptionCheck.check;
 
 public class SettingsActivity extends AppCompatActivity {
-
+    private static String version;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setto pulsante indietro
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        version = appVersion();
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+    }
 
+    private String appVersion() {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pInfo.versionName;
     }
 
 
@@ -71,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-    public class SettingsFragment extends PreferenceFragment {
+    public static class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -278,13 +288,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             //write app version in settings
             final PreferenceScreen app_version = (PreferenceScreen) findPreference("app_version");
-            PackageInfo pInfo = null;
-            try {
-                pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            String version = pInfo.versionName;
+
             app_version.setSummary(version);
         }
     }

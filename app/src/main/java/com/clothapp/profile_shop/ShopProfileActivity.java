@@ -94,6 +94,7 @@ public class ShopProfileActivity extends AppCompatActivity {
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
         }
+        viewPager.setOffscreenPageLimit(5);
 
         loadProfilePicture();
 
