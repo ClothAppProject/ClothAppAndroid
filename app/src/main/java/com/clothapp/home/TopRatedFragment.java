@@ -179,6 +179,12 @@ public class TopRatedFragment extends Fragment {
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
+            // Close the floating action button if it is open
+            if(HomeActivity.menuMultipleActions.isExpanded()) {
+                HomeActivity.menuMultipleActions.collapse();
+                return;
+            }
+
             visibleItemCount = recyclerView.getChildCount();
             totalItemCount = linearLayoutManager.getItemCount();
             firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
