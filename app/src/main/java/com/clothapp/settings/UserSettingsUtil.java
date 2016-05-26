@@ -54,6 +54,7 @@ public class UserSettingsUtil {
             try {
                 object = user.getFirst();
             } catch (ParseException e) {
+                if (e != null) return false;
                 e.printStackTrace();
             }
         }else{
@@ -79,6 +80,7 @@ public class UserSettingsUtil {
             try {
                 object = user.getFirst();
             } catch (ParseException e) {
+                if (e != null) return false;
                 e.printStackTrace();
             }
         }else{
@@ -104,6 +106,7 @@ public class UserSettingsUtil {
             try {
                 object = user.getFirst();
             } catch (ParseException e) {
+                if (e != null) return false;
                 e.printStackTrace();
             }
         }else{
