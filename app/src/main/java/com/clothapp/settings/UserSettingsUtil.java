@@ -59,11 +59,7 @@ public class UserSettingsUtil {
         }else{
             object = ParseUser.getCurrentUser();
         }
-        if (object.getString("Settings").charAt(1) == '1') {
-            return true;
-        }else{
-            return false;
-        }
+        return object.getString("Settings").charAt(1) == '1';
     }
 
     //Settare notifiche like
@@ -88,12 +84,7 @@ public class UserSettingsUtil {
         }else{
             object = ParseUser.getCurrentUser();
         }
-
-        if (object.getString("Settings").charAt(2) == '1') {
-            return true;
-        }else{
-            return false;
-        }
+        return object.getString("Settings").charAt(2) == '1';
     }
 
     //Settare notifiche follower
@@ -118,12 +109,7 @@ public class UserSettingsUtil {
         }else{
             object = ParseUser.getCurrentUser();
         }
-
-        if (object.getString("Settings").charAt(3) == '1') {
-            return true;
-        }else{
-            return false;
-        }
+        return object.getString("Settings").charAt(3) == '1';
     }
 
     //Settare notifiche follower

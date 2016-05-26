@@ -17,45 +17,63 @@ import java.util.List;
 public class NotificationsUtils {
 
     // Send a push notification to a user with username = receiver
-    public static void sendNotification(final String receiver, String type, final String objectid) {
-        String message = null;
-        boolean check = false;
+    public static void sendNotification(final String receiver, final String type, final String objectid) {
         switch (type)   {
             case "like":
                 //caso in cui devo inviare notifica per like
-                message = ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!";
-                //controllo se l'utente ha attiva la ricezione le notifiche per like
-                check = UserSettingsUtil.checkNotificationLike(receiver);
-                send(check, receiver, message,objectid); //obectid della foto
+                //creo thread per evitare chiamate bloccanti quadno faccio la
+                Thread like = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = ParseUser.getCurrentUser().getUsername() + " ha messo \"Mi Piace\" a una tua foto!";
+                        //controllo se l'utente ha attiva la ricezione le notifiche per like
+                        boolean check = UserSettingsUtil.checkNotificationLike(receiver);
+                        send(check, receiver, message, objectid); //obectid della foto
+                    }
+                });
+                like.start();
                 break;
             case "follow":
                 //caso in cui devo inviare notifica per follow
-                message = ParseUser.getCurrentUser().getUsername() + " ha cominciato a seguirti!";
-                //controllo se l'utente ha attiva la ricezione di notifiche per followers
-                check = UserSettingsUtil.checkNotificationFollower(receiver);
-                send(check, receiver, message,objectid); //obectid del profilo
-                break;
-            case "newPhoto":
-                //caso in cui devo inviare notifica per nuova foto caricata
-                final String photoMessage = ParseUser.getCurrentUser().getUsername() + " ha caricato una nuova foto!";
-
-                //ottengo follower ai quali inviare la foto
-                ParseQuery<ParseObject> notifyFollowers = new ParseQuery<>("Follow");
-                notifyFollowers.whereEqualTo("to",ParseUser.getCurrentUser().getUsername());
-                notifyFollowers.findInBackground(new FindCallback<ParseObject>() {
+                //creo thread per evitare chiamate bloccanti
+                Thread follow = new Thread(new Runnable() {
                     @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
-                        if (e==null)    {
-                            for (ParseObject o : objects)    {
-
-                                //controllo se l'utente ha attiva la ricezione di notifiche per nuove foto di persone che segue
-                                boolean check = UserSettingsUtil.checkNotificationNewPhoto(o.getString("from"));
-                                send(check, o.getString("from"), photoMessage,objectid); //obectid della foto
-                            }
-                        }
+                    public void run() {
+                        String message = ParseUser.getCurrentUser().getUsername() + " ha cominciato a seguirti!";
+                        //controllo se l'utente ha attiva la ricezione di notifiche per followers
+                        boolean check = UserSettingsUtil.checkNotificationFollower(receiver);
+                        send(check, receiver, message, objectid); //obectid del profilo
                     }
                 });
+                follow.start();
+                break;
+            case "newPhoto":
+                //caso in cui devo inviare notifica per nuova foto caricate
+                // creo thread per evitare chiamate bloccanti
+                Thread newPhoto = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String photoMessage = ParseUser.getCurrentUser().getUsername() + " ha caricato una nuova foto!";
 
+                        //ottengo follower ai quali inviare la foto
+                        ParseQuery<ParseObject> notifyFollowers = new ParseQuery<>("Follow");
+                        notifyFollowers.whereEqualTo("to", ParseUser.getCurrentUser().getUsername());
+                        notifyFollowers.findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> objects, ParseException e) {
+                                if (e == null) {
+                                    for (ParseObject o : objects) {
+
+                                        //controllo se l'utente ha attiva la ricezione di notifiche per nuove foto di persone che segue
+                                        boolean check = UserSettingsUtil.checkNotificationNewPhoto(o.getString("from"));
+                                        send(check, o.getString("from"), photoMessage, objectid); //obectid della foto
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                newPhoto.start();
                 break;
 
         }
