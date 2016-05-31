@@ -94,7 +94,6 @@ public class ShopProfileActivity extends AppCompatActivity {
         if (viewPager != null) {
             setupViewPagerContent(viewPager);
         }
-        viewPager.setOffscreenPageLimit(5);
 
         loadProfilePicture();
 
@@ -146,17 +145,24 @@ public class ShopProfileActivity extends AppCompatActivity {
 
     private void setupViewPagerContent(ViewPager viewPager) {
 
+
         // Create new adapter for ViewPager
         SectionsPagerAdapterShop sectionsPagerAdapter = new SectionsPagerAdapterShop(getSupportFragmentManager(),getApplicationContext(), username);
+        viewPager.setOffscreenPageLimit(4);
+
 
         // Set ViewPager adapter
         viewPager.setAdapter(sectionsPagerAdapter);
 
         viewPager.setCurrentItem(1, false);
 
+
         // Set up TabLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        ProfileUtils.removeMapTab(username, sectionsPagerAdapter, viewPager, tabLayout);
+
     }
 
     private void loadProfilePicture() {

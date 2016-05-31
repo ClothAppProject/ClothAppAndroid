@@ -7,14 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.clothapp.R;
 import com.clothapp.profile.fragments.PlaceholderFragment;
-import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile_shop.fragments.*;
 
 // PagerAdapter for tabs and associated fragments.
 public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     private Context context;
     private String username;
-    private int numberPage=5;
+    private int numberPage = 5;
 
     public SectionsPagerAdapterShop(FragmentManager fm, Context context, String username) {
         super(fm);
@@ -45,11 +44,11 @@ public class SectionsPagerAdapterShop extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Number of pages.
-        return numberPage;//7;
+        return this.numberPage;
     }
 
-    public void setNumberPage(int n){
-        numberPage=n;
+    public void setCount(int n) {
+        this.numberPage = n;
     }
 
     @Override

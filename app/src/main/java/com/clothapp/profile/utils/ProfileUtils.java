@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,12 +20,14 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.http.Get;
 import com.clothapp.image_detail.ZoomPhoto;
+import com.clothapp.profile.adapters.SectionsPagerAdapter;
 import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
 import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
+import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
@@ -341,6 +345,26 @@ public class ProfileUtils {
                 } else {
                     e.printStackTrace();
                     // showDialog(context, "Error", "Failed to retrieve shop info. Check your Internet connection.");
+                }
+            }
+        });
+    }
+
+    public static void removeMapTab(String username, final SectionsPagerAdapterShop sectionsPagerAdapter,
+                                    final ViewPager viewPager, final TabLayout tabLayout) {
+        ParseQuery<ParseObject> q = new ParseQuery<>("LocalShop");
+        q.whereEqualTo("username", username);
+        q.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    if (object.getString("address") == null || object.getString("address").toString().equals("")) {
+                        //shop has no address, remove that tab
+                        sectionsPagerAdapter.setCount(4);
+                        tabLayout.removeTabAt(4);
+                        sectionsPagerAdapter.notifyDataSetChanged();
+                        viewPager.setOffscreenPageLimit(4);
+                    }
                 }
             }
         });
