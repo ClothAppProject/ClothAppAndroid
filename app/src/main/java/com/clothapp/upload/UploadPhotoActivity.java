@@ -862,6 +862,22 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
         dialogDelete.show();
     }
 
+    // Questa funzione serve nel caso in cui dopo aver chiamato la fotocamera, l'attività upload si chiude
+    // quindi ci dobbiamo salvare la variabile first, altrimenti quando l'attività UploadCameraActivity viene riaperta
+    // rilancia di nuovo l'attività fotocamera e quindi è un ciclo continuo
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Salva la variabile first=false nell'istanza, che non viene eliminata quando l'attività upload viene chiusa
+        savedInstanceState.putBoolean("first", false);
+
+        // Inoltre salvo anche il nome del file, perchè tra un'activity e l'altra potrebbero passare millisecondi
+        savedInstanceState.putString("photoFileName", photoFileName);
+
+        Log.d("UploadPhotoActivity", "First è stato messo a false");
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     // Ritorna l'Uri dell'immagine su disco
     public Uri getPhotoFileUri(String fileName) {
         // Continua solamente se la memoria SD è montata
