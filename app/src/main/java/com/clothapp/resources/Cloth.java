@@ -16,6 +16,7 @@ public class Cloth implements Parcelable {
     private String brand = "";
     private Float price;
     private int id;
+    private String objectId;
 
     public Cloth(String cloth, String address, Float price, String shop, String shopUsername, String brand) {
         this.cloth = cloth;
@@ -84,6 +85,14 @@ public class Cloth implements Parcelable {
 
     public void setPrize(Float price) {
         this.price = price;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     protected Cloth(Parcel in) {

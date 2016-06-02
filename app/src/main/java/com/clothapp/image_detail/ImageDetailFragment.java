@@ -80,7 +80,7 @@ public class ImageDetailFragment extends Fragment {
     private String Id;
     private Image immagine;
     private static Context context;
-    private List<Cloth> vestiti;
+    private ArrayList<Cloth> vestiti;
     private List<User> likeList;
     private SearchAdapterUser likeAdapter;
     private boolean canLoad = false;
@@ -280,36 +280,50 @@ public class ImageDetailFragment extends Fragment {
 
             //per ogni vestito cerco le informazioni
             List arrayList = immagine.getIdVestiti();
+            System.out.println(arrayList+ " arraylist");
             if (arrayList == null) arrayList = new ArrayList<>();
             vestiti = new ArrayList<>(arrayList.size());
-            for (int i = 0; i < arrayList.size(); i++) {
-                ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
-                query1.whereEqualTo("objectId", arrayList.get(i));
-                query1.getFirstInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject info, ParseException e) {
-                        if (e == null) {
-                            Float fl = null;
-                            if (info.get("prezzo") != null) {
-                                if (info.get("prezzo").getClass() != Float.class)
-                                    fl = Float.parseFloat(info.get("prezzo").toString());
-                                else fl = (float) info.get("prezzo");
+            synchronized (vestiti) {
+                System.out.println(arrayList.size() + " array list size");
+                for (int i = 0; i < arrayList.size(); i++) {
+                    System.out.println(i + " i");
+                    ParseQuery<ParseObject> query1 = new ParseQuery<>("Vestito");
+                    query1.whereEqualTo("objectId", arrayList.get(i));
+                    final int finalI = i;
+                    query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject info, ParseException e) {
+                            System.out.println(info.getString("tipo") +" iii");
+                            if (e == null) {
+                                System.out.println("trovato");
+                                Float fl = null;
+                                if (info.get("prezzo") != null) {
+                                    if (info.get("prezzo").getClass() != Float.class)
+                                        fl = Float.parseFloat(info.get("prezzo").toString());
+                                    else fl = (float) info.get("prezzo");
+                                }
+                                Cloth c = new Cloth(info.getString("tipo"),
+                                        info.getString("luogoAcquisto"),
+                                        fl,
+                                        info.getString("shop"),
+                                        info.getString("shopUsername"),
+                                        info.getString("brand"));
+                                c.setObjectId(info.getObjectId());
+                                if (!isPresent(vestiti,c)) {
+                                    System.out.println("aggiungo "+c);
+                                    vestiti.add(c);
+                                }else {
+                                    System.out.println("no");
+                                    System.out.println(c+" is in "+vestiti);
+                                }
+                                MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
+                                listView.setAdapter(adapter);
+                                setListViewHeightBasedOnItems(listView);
                             }
-                            Cloth c = new Cloth(info.getString("tipo"),
-                                    info.getString("luogoAcquisto"),
-                                    fl,
-                                    info.getString("shop"),
-                                    info.getString("shopUsername"),
-                                    info.getString("brand"));
-                            if (!vestiti.contains(c)) {
-                                vestiti.add(c);
-                            }
-                            MyCardListAdapter adapter = new MyCardListAdapter(context, vestiti);
-                            listView.setAdapter(adapter);
-                            setListViewHeightBasedOnItems(listView);
+                            else System.out.println("errore");
                         }
-                    }
-                });
+                    });
+                }
             }
 
             //chiamo funzione del testo dei like
@@ -343,7 +357,12 @@ public class ImageDetailFragment extends Fragment {
             });
         }
     }
-
+    private boolean isPresent(ArrayList<Cloth> l,Cloth c){
+        for(int i=0;i<l.size();i++){
+            if(l.get(i).getObjectId().equals(c.getObjectId())) return true;
+        }
+        return false;
+    }
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
@@ -500,6 +519,7 @@ public class ImageDetailFragment extends Fragment {
             // Get total height of all items.
             int totalItemsHeight = 0;
             int itemPos;
+            System.out.println(numberOfItems+" number item");
             for (itemPos = 0; itemPos < numberOfItems; itemPos++) {
                 View item = listAdapter.getView(itemPos, null, listView);
                 item.measure(0, 0);
@@ -511,6 +531,7 @@ public class ImageDetailFragment extends Fragment {
                 //int brand=item.findViewById(R.id.brand).getMeasuredHeight();
                 //int price=item.findViewById(R.id.price).getMeasuredHeight();
                 totalItemsHeight += item.getMeasuredHeight();
+                System.out.println(totalItemsHeight+" totalhaight");
             }
 
             // Get total height of all item dividers.
