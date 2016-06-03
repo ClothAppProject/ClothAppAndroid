@@ -1,4 +1,6 @@
-<img href="http://www.clothapp.it" src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%">
+<a href="http://www.clothapp.it"><img src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%"></a>
+
+<a href="https://play.google.com/store/apps/details?id=com.clothapp"><img src="https://www.hilti.it/medias/sys_master/ha1/h97/9153847263262/googleplay.png" height="30%" width="30%"></a>
 # ClothApp
 
 An easy way to connect people and clothes shops.
@@ -30,18 +32,13 @@ Through a following and followers system between users and shops, through the "v
 
 * <a href="https://drive.google.com/open?id=0B9L9fgnPwZntd1ZZWkFwUkFxWm8">Milestone 3 Video (held during the Codemotion event at "Roma3 University" on March 18th)</a>
 
-* <a href="https://play.google.com/apps/testing/com.clothapp">Link to partecipate to the test version </a>
-
-* <a href="https://play.google.com/apps/testing/com.clothapp">Download the BETA version</a> 
-
 
 ##Final Submission
 
 * <a href="https://drive.google.com/open?id=0B8lgowbEWlfnc1lHa202ckg3Y2M">Documentation and User Guide</a>
 
-* <a href="https://play.google.com/apps/testing/com.clothapp">Download the APP</a>
-
 * <a href="https://drive.google.com/open?id=0B4CzQl36yBnQeG1jMk92NjhrVXc">Installation instruction</a>
 
 * <a href="https://clothapp.firebaseapp.com/">Web Client</a>
 
+* <a href="https://play.google.com/store/apps/details?id=com.clothapp">Download the App</a>
