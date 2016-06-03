@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.R;
+import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.utils.ProfileInfoListItem;
 import com.clothapp.profile.utils.ProfileUtils;
-import com.clothapp.profile_shop.ShopProfileActivity;
-import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
 
 import java.util.ArrayList;
 
@@ -70,7 +69,7 @@ public class ProfileShopInfoFragment extends Fragment {
         items.add(itemSite);
 
         // Create a new adapter for the recycler view
-        ProfileShopInfoAdapter adapter = new ProfileShopInfoAdapter(items, username);
+        ProfileInfoAdapter adapter = new ProfileInfoAdapter(items, username);
         viewProfileInfo.setAdapter(adapter);
 
         // Get user info from Parse

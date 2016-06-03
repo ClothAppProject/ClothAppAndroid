@@ -53,8 +53,10 @@ public class ProfileInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             case ITEM_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-                String username = this.username.substring(0, 1).toUpperCase() + this.username.substring(1);
-                headerViewHolder.txtUsername.setText(username);
+                if (this.username != null) {
+                    String username = this.username.substring(0, 1).toUpperCase() + this.username.substring(1);
+                    headerViewHolder.txtUsername.setText(username);
+                }
 
                 break;
 

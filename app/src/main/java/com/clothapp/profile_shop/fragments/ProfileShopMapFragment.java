@@ -4,24 +4,16 @@ package com.clothapp.profile_shop.fragments;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.clothapp.R;
-import com.clothapp.profile.utils.ProfileInfoListItem;
-import com.clothapp.profile.utils.ProfileUtils;
-import com.clothapp.profile_shop.ShopProfileActivity;
-import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
-import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -30,9 +22,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -1,10 +1,8 @@
 package com.clothapp.profile.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -20,15 +18,11 @@ import com.bumptech.glide.Glide;
 import com.clothapp.R;
 import com.clothapp.http.Get;
 import com.clothapp.image_detail.ZoomPhoto;
-import com.clothapp.profile.adapters.SectionsPagerAdapter;
-import com.clothapp.profile.fragments.ProfileUploadedPhotosFragment;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.profile.adapters.ProfileInfoAdapter;
 import com.clothapp.profile.UserProfileActivity;
 import com.clothapp.profile.adapters.ProfileUploadedPhotosAdapter;
-import com.clothapp.profile_shop.adapters.ProfileShopInfoAdapter;
 import com.clothapp.profile_shop.adapters.SectionsPagerAdapterShop;
-import com.clothapp.profile_shop.fragments.ProfileShopUploadedPhotosFragment;
 import com.clothapp.resources.CircleTransform;
 import com.clothapp.resources.Image;
 import com.clothapp.upload.UploadProfilePictureActivity;
@@ -42,12 +36,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.clothapp.resources.ExceptionCheck.check;
@@ -386,7 +376,7 @@ public class ProfileUtils {
 
     private static void updateShopListItem(int position, String text, RecyclerView viewProfileInfo) {
 
-        ProfileShopInfoAdapter adapter = (ProfileShopInfoAdapter) viewProfileInfo.getAdapter();
+        ProfileInfoAdapter adapter = (ProfileInfoAdapter) viewProfileInfo.getAdapter();
 
         int toGet = position + 1 - (SHOP_INFO_COUNT - adapter.items.size() + 1);
 
