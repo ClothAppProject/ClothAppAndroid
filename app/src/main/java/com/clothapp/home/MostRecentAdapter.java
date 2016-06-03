@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.clothapp.image_detail.ImageActivity;
 import com.clothapp.R;
 import com.clothapp.profile.UserProfileActivity;
+import com.clothapp.profile.utils.ProfileUtils;
 import com.clothapp.profile_shop.ShopProfileActivity;
 import com.clothapp.resources.Image;
 import com.clothapp.parse.notifications.LikeRes;
@@ -197,17 +198,7 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        if(flag!=null && flag.equals("Negozio")) {
-                            Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
-                            intent.putExtra("user", user.getText());
-                            HomeActivity.activity.startActivity(intent);
-                        }
-                        else{
-                            System.out.println("click");
-                            Intent intent = new Intent(HomeActivity.context, UserProfileActivity.class);
-                            intent.putExtra("user", user.getText());
-                            HomeActivity.activity.startActivity(intent);
-                        }
+                        ProfileUtils.goToProfile(HomeActivity.context, (String) user.getText());
                     }
 
                 }
@@ -221,16 +212,8 @@ public class MostRecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (HomeActivity.menuMultipleActions.isExpanded()) {
                         HomeActivity.menuMultipleActions.collapse();
                     } else {
-                        if(flag!=null && flag.equals("Negozio")) {
-                            Intent intent = new Intent(HomeActivity.context, ShopProfileActivity.class);
-                            intent.putExtra("user", user.getText());
-                            HomeActivity.activity.startActivity(intent);
-                        }
-                        else{
-                            Intent intent = new Intent(HomeActivity.context, UserProfileActivity.class);
-                            intent.putExtra("user", user.getText());
-                            HomeActivity.activity.startActivity(intent);
-                        }
+                        Image image = itemList.get(MostRecentItemViewHolder.this.getAdapterPosition());
+                        ProfileUtils.goToProfile(HomeActivity.context, image.getUser());
                     }
 
                 }
