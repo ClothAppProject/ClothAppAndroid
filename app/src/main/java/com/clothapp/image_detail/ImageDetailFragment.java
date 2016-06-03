@@ -373,10 +373,12 @@ public class ImageDetailFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate menu to add items to action bar if it is present.
         inflater.inflate(R.menu.image_fragment, menu);
-        menu.findItem(R.id.report).setVisible(!immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
-        menu.findItem(R.id.edit).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
-        menu.findItem(R.id.delete).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
-        menu.findItem(R.id.set_profile_picture).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        if (immagine != null) {
+            menu.findItem(R.id.report).setVisible(!immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+            menu.findItem(R.id.edit).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+            menu.findItem(R.id.delete).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+            menu.findItem(R.id.set_profile_picture).setVisible(immagine.getUser().equals(ParseUser.getCurrentUser().getUsername()));
+        }
     }
 
     @Override
