@@ -139,10 +139,25 @@ public class Image implements Parcelable {
         StringBuilder sb = new StringBuilder();
 
         for (String tag : hashtag) {
-            sb.append(tag.substring(0, 1))
-                    .append(tag.substring(1, 2).toUpperCase())
-                    .append(tag.substring(2))
+            if (tag.length() == 1) {
+                //one character
+                sb.append(tag.substring(0, 1))
                     .append(" ");
+            } else {
+                //more characters
+                if (tag.charAt(0) == '#') {
+                    //starts with #
+                    sb.append(tag.substring(0, 1))
+                            .append(tag.substring(1, 2).toUpperCase())
+                            .append(tag.substring(2))
+                            .append(" ");
+                } else {
+                    //doesn't start with #
+                    sb.append(tag.substring(0, 1).toUpperCase())
+                            .append(tag.substring(1))
+                            .append(" ");
+                }
+            }
         }
 
         return sb.toString();
