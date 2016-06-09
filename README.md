@@ -42,3 +42,6 @@ Through a following and followers system between users and shops, through the "v
 * <a href="https://clothapp.firebaseapp.com/">Web Client</a>
 
 * <a href="https://play.google.com/store/apps/details?id=com.clothapp">Download the App</a>
+
+##Google Tel Aviv
+* <a href="https://docs.google.com/presentation/d/1vxroO_U2jFm2UReg84j5RnRD_50KdiIz8kYa9mr6-lA/edit?usp=sharing">Google Tel Aviv Presentation</a>
