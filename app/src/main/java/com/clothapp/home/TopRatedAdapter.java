@@ -71,7 +71,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         holder.setUsername(image.getUser());
         holder.setItemName(image.getTypeVestiti());
-        holder.setHashtags(image.getHashtag());
+        holder.setHashtags(image);
         holder.setLikeCount(image.getNumLike());
         holder.setPhoto(image.getFile());
 
@@ -218,22 +218,9 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         // Set the hashtags for the current view. Example: #Hashtag1, #Hashtag2
-        public void setHashtags(List<String> hashtagList) {
+        public void setHashtags(Image img) {
 
-            if (hashtagList == null) return;
-
-            StringBuilder sb = new StringBuilder();
-
-            for (String hashtag : hashtagList) {
-                if (!hashtag.isEmpty()) {
-                    sb.append(hashtag.substring(0, 1))
-                            .append(hashtag.substring(1, 2).toUpperCase())
-                            .append(hashtag.substring(2))
-                            .append(" ");
-                }
-            }
-
-            txtHashtags.setText(sb.toString());
+            txtHashtags.setText(img.getHashtagToString());
         }
 
         // Set the photo for the Photo ImageView of the current view with the given File

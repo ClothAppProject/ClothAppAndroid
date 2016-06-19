@@ -29,8 +29,8 @@
     <string name="signup">Registrati</string>
     <string name="main_login_facebook">Login with Facebook</string>
     <string name="main_login_twitter">Login with Twitter</string>
-    <string name="main_forgot_password"><u>Forgot password?</u></string>
-    <string name="main_signup"><u>New here? Sign up!</u></string>
+    <string name="main_forgot_password"><u>Password dimenticata?</u></string>
+    <string name="main_signup"><u>Sei nuovo? Registrati!</u></string>
     <string name="email">Email</string>
     <string name="invalid_email">Email non valida</string>
     <string name="empty_field">I campi non possono essere vuoti</string>
