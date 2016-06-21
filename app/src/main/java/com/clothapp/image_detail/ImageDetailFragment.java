@@ -293,9 +293,8 @@ public class ImageDetailFragment extends Fragment {
                     query1.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
                         public void done(ParseObject info, ParseException e) {
-                            System.out.println(info.getString("tipo") +" iii");
                             if (e == null) {
-                                System.out.println("trovato");
+                                System.out.println(info.getString("tipo") + " trovato");
                                 Float fl = null;
                                 if (info.get("prezzo") != null) {
                                     if (info.get("prezzo").getClass() != Float.class)
@@ -357,6 +356,7 @@ public class ImageDetailFragment extends Fragment {
             });
         }
     }
+
     private boolean isPresent(ArrayList<Cloth> l,Cloth c){
         for(int i=0;i<l.size();i++){
             if(l.get(i).getObjectId().equals(c.getObjectId())) return true;
@@ -471,6 +471,7 @@ public class ImageDetailFragment extends Fragment {
                 Intent i = new Intent(context, EditImageActivity.class);
                 //System.out.println("id1="+immagine.getObjectId());
                 i.putExtra("objectId", immagine.getObjectId());
+                i.putExtra("image", immagine);
                 startActivity(i);
                 return true;
             case R.id.set_profile_picture:

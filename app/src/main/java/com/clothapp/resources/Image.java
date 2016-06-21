@@ -106,6 +106,14 @@ public class Image implements Parcelable {
         return idClothes;
     }
 
+    public void setIdVestiti(List<String> clothes) {
+        idClothes = clothes;
+    }
+
+    public void setHashtags(List<String> hashtags) {
+        this.hashtag = hashtags;
+    }
+
     public List<String> getTypeVestiti() {
         return typeClothes;
     }

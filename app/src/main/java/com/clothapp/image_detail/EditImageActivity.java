@@ -36,6 +36,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import java.util.ArrayList;
@@ -59,19 +61,21 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
         id = getIntent().getStringExtra("objectId");
+        Bundle b = getIntent().getExtras();
+        immagine = b.getParcelable("image");
         System.out.println("id="+id);
 
         vestiti=new ArrayList<>();
         parseVestiti=new ArrayList<>();
-        ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
+        /*ParseQuery<ParseObject> queryFoto = new ParseQuery<ParseObject>("Photo");
         queryFoto.whereEqualTo("objectId",id);
         queryFoto.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if(e==null && object!=null) {
                     parseImmagine=object;
-                    immagine = new Image(object);
-                    for (String s : (ArrayList<String>) object.get("vestiti")) {
+                    immagine = new Image(object);*/
+        for (String s : immagine.getIdVestiti()) {
                         ParseQuery<ParseObject> queryVestiti = new ParseQuery<ParseObject>("Vestito");
                         queryVestiti.whereEqualTo("objectId", s);
                         try {
@@ -81,11 +85,15 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
+        }
+        parseImmagine = ParseObject.createWithoutData("Photo", immagine.getObjectId());
+        ParseFile file = parseImmagine.getParseFile("thumbnail");
 
-
-
+        try {
+            takenPhotoUri = Uri.fromFile(file.getFile());
+        } catch (ParseException e) {
+            e.printStackTrace();
                     }
-                    takenPhotoUri=Uri.fromFile(immagine.getFile());
                     // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
                     // setSupportActionBar(toolbar);
                     // Create the adapter that will return a fragment for each of the three
@@ -97,11 +105,11 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
                     mViewPager.setAdapter(mSectionsPagerAdapter);
                     mViewPager.setOffscreenPageLimit(3);
                     System.out.println(immagine.getFile());
-                }
+                /*}
                 else if(object==null) System.out.println("oggetto null");
                 else System.out.println("errore");
             }
-        });
+        });*/
 
 
 
@@ -526,10 +534,12 @@ public class EditImageActivity extends AppCompatActivity implements GoogleApiCli
 
                                 final View vi = v;
 
-
                                 parseImmagine.put("vestiti",id);
+                                immagine.setIdVestiti(id);
+
                                 final String[] hashtags = sectionsPagerAdapter.getHashtag().split(" ");
                                 parseImmagine.put("hashtag",Arrays.asList(hashtags));
+                                immagine.setHashtags(Arrays.asList(hashtags));
                                 try {
                                     parseImmagine.save();
                                 } catch (ParseException e) {
