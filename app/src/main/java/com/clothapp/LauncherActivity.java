@@ -16,10 +16,19 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.clothapp.login_signup.MainActivity;
+import com.parse.FindCallback;
+import com.parse.GetDataCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class LauncherActivity extends AppCompatActivity {
 
@@ -67,7 +76,6 @@ public class LauncherActivity extends AppCompatActivity {
 
             // Current user initialization. Parse handles all the data on its own.
             ParseUser currentUser = ParseUser.getCurrentUser();
-
             if (currentUser != null) {
                 //update the ParseUser
                 currentUser.fetchInBackground();
@@ -94,6 +102,66 @@ public class LauncherActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+    public void moveAllImages() {
+        final ParseQuery photo = new ParseQuery("Photo");
+        photo.setLimit(150);
+        photo.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null) {
+                    System.out.println("allora Photo=" + objects.size());
+                    for (int i = 0; i < objects.size(); i++) {
+                        try {
+                            ParseFile pPhoto = objects.get(i).getParseFile("photo");
+                            byte[] dataPhoto = pPhoto.getData();
+                            ParseFile fPhoto = new ParseFile(pPhoto.getName(), dataPhoto);
+                            //fPhoto.save();
+                            objects.get(i).put("photo", fPhoto);
+
+                            ParseFile pThumbnail = objects.get(i).getParseFile("thumbnail");
+                            byte[] dataThumbnail = pThumbnail.getData();
+                            ParseFile tPhoto = new ParseFile(pThumbnail.getName(), dataThumbnail);
+                            //tPhoto.save();
+                            objects.get(i).put("thumbnail", tPhoto);
+
+                            //objects.get(i).save();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+        final ParseQuery userPhoto = new ParseQuery("UserPhoto");
+        userPhoto.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e==null) {
+                    System.out.println("allora Userphoto=" + objects.size());
+                    for (int i = 0; i < objects.size(); i++) {
+                        try {
+                            ParseFile pPhoto = objects.get(i).getParseFile("profilePhoto");
+                            byte[] dataPhoto = pPhoto.getData();
+                            ParseFile fPhoto = new ParseFile(pPhoto.getName(), dataPhoto);
+                            //fPhoto.save();
+                            objects.get(i).put("profilePhoto", fPhoto);
+
+                            ParseFile pThumbnail = objects.get(i).getParseFile("thumbnail");
+                            byte[] dataThumbnail = pThumbnail.getData();
+                            ParseFile tPhoto = new ParseFile(pThumbnail.getName(), dataThumbnail);
+                            //tPhoto.save();
+                            objects.get(i).put("thumbnail", tPhoto);
+
+                            //objects.get(i).save();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public boolean isNetworkAvailable() {

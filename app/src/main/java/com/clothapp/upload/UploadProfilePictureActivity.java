@@ -322,7 +322,7 @@ public class UploadProfilePictureActivity extends AppCompatActivity {
                     if (photoType!=RESULT_LOAD_IMG) deleteImage();
 
                     //chiamata get per salvare il thumbnail
-                    String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+picture.getObjectId();
+                    String url = "http://clothapp.westeurope.cloudapp.azure.com/createprofilethumbnail/"+picture.getObjectId();
                     Get g = new Get();
                     g.execute(url);
 

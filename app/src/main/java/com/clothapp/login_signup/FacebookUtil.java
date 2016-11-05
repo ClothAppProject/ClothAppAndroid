@@ -119,7 +119,7 @@ public class FacebookUtil {
                         userPhoto.save();
 
                         //chiamata get per salvare il thumbnail
-                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+userPhoto.getObjectId();
+                        String url = "http://clothapp.westeurope.cloudapp.azure.com/createprofilethumbnail/"+userPhoto.getObjectId();
                         Get g = new Get();
                         g.execute(url);
                     } catch (ParseException e) {

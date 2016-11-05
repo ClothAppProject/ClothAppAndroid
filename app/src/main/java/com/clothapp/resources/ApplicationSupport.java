@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 import android.view.View;
 
+import com.clothapp.R;
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -78,9 +79,13 @@ public class ApplicationSupport extends Application {
 
         // Enable Parse local data store
         Parse.enableLocalDatastore(this);
-
         // Initialize Parse SDK
-        Parse.initialize(this);
+        Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
+                .applicationId(getApplicationContext().getString(R.string.azure_parse_server_app_id))
+                .clientKey(null)
+                .server(getApplicationContext().getString(R.string.azure_parse_server_url))
+                .build()
+        );
 
         // This is needed for push notifications
         // ParseInstallation.getCurrentInstallation().saveInBackground();

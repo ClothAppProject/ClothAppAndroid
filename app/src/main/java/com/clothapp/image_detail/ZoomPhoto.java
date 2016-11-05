@@ -21,9 +21,20 @@ import com.clothapp.resources.Image;
 import com.clothapp.resources.User;
 import com.clothapp.search.FilterActivity;
 import com.clothapp.settings.SettingsActivity;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -37,6 +48,7 @@ public class ZoomPhoto extends AppCompatActivity {
         setContentView(R.layout.activity_zoomphoto);
 
         Uri uri= Uri.parse(getIntent().getStringExtra("url"));
+        System.out.println("url = "+uri.toString());
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         final ImageView photo= (ImageView) findViewById(R.id.photo);
@@ -65,7 +77,6 @@ public class ZoomPhoto extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
     }
 
 }

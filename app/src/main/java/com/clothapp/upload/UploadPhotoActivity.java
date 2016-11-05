@@ -680,7 +680,7 @@ public class UploadPhotoActivity extends AppCompatActivity implements OnConnecti
                                             Log.d("UploadActivity", "Oggetto immagine inviato correttamente");
 
                                             //chiamata get per salvare il thumbnail
-                                            String url = "http://clothapp.parseapp.com/createthumbnail/" + picture.getObjectId();
+                                            String url = "http://clothapp.westeurope.cloudapp.azure.com/createthumbnail/" + picture.getObjectId();
                                             Get g = new Get();
                                             g.execute(url);
 

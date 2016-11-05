@@ -129,7 +129,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 .into(holder.imgProfilePhoto);
                     }else{
                         //chiamata get per salvare il thumbnail
-                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+object.getObjectId();
+                        String url = "http://clothapp.westeurope.cloudapp.azure.com/createprofilethumbnail/"+object.getObjectId();
                         Get g = new Get();
                         g.execute(url);
                     }

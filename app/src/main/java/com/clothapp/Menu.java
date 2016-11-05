@@ -71,7 +71,7 @@ public class Menu {
                         parseFile = photo.getParseFile("profilePhoto");
 
                         //chiamata get per salvare il thumbnail
-                        String url = "http://clothapp.parseapp.com/createprofilethumbnail/"+photo.getObjectId();
+                        String url = "http://clothapp.westeurope.cloudapp.azure.com/createprofilethumbnail/"+photo.getObjectId();
                         Get g = new Get();
                         g.execute(url);
                     }

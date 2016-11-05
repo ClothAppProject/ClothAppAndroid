@@ -44,7 +44,6 @@ public class SplashScreenActivity extends AppCompatActivity {
          */
 
         // This array will be used to store data of the photos.
-        final ArrayList<Image> images = new ArrayList<>();
 
         // Initialize a query to find the 12 most recent photos from Parse.
         final ParseQuery<ParseObject> query = new ParseQuery<>("Photo");
@@ -56,11 +55,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void done(List<ParseObject> photos, ParseException e) {
                 if (e == null) {
-                    Log.d("SplashScreenActivity", "Retrieved " + photos.size() + " photos from Parse.");
+                    Log.d("SplashScreenActivity", "Retrieved " + photos.size() + " photos from Parse");
 
+                    ArrayList<Image> images = new ArrayList<>();
                     for (ParseObject photo : photos) {
                         images.add(new Image(photo));
                     }
+
 
                     ApplicationSupport applicationSupport = ((ApplicationSupport) getApplicationContext());
                     applicationSupport.setPhotos(images);
