@@ -1,4 +1,4 @@
-<a href="http://www.clothapp.it"><img src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%"></a>
+<a href="http://clothapp.westeurope.cloudapp.azure.com"><img src="https://github.com/ClothAppProject/ClothAppAndroid/blob/master/app/src/main/res/mipmap-hdpi/logo.png" height="25%" width="25%"></a>
 
 <a href="https://play.google.com/store/apps/details?id=com.clothapp"><img src="https://www.hilti.it/medias/sys_master/ha1/h97/9153847263262/googleplay.png" height="30%" width="30%"></a>
 # ClothApp
@@ -9,7 +9,7 @@ ClothApp is an application developed for the Google Technologies for Cloud and W
 It's a social platform that lets users and fashion stores be always in touch and connected.
 Through a following and followers system between users and shops, through the "virtual window" of any shop profile, ClothApp allows fashion store to reach a wider number of customers and users to be always updated to their favourite shops catalogs
 
-<a href="http://www.clothapp.it">ClothApp Landing page</a>
+<a href="http://clothapp.westeurope.cloudapp.azure.com">ClothApp Landing page</a>
 
 <a href="https://docs.google.com/presentation/d/1QBCxm5lctJuiceI9O5ATjL4jBBoCHMhk5YnG22vaoBg/edit?usp=sharing">Preliminary presentation</a>
 
